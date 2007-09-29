@@ -25,8 +25,9 @@ class AmazonS3
 	
 	var $keyId;
 	var $secretKey;
-	static $site;
 	var $lastCode = null;
+	var $reponseHeaders = null;
+	var $responseBody = null;
 
 	// simplified error codes
 	const codeError 		= 0;
@@ -34,6 +35,10 @@ class AmazonS3
 	const codeUnauthorized	= 2;
 	const codeNotModified	= 3;	
 	
+	// statics
+	static $timeout = null;
+	static $port = null;
+	static $site = null;
 	
 	public function __construct( $keyId, $secretKey )
 	{
@@ -73,8 +78,10 @@ class AmazonS3
 		if (empty( $document ))
 			return null;
 			
-		preg_match_all("@<Name>(.*?)</Name>@", $document, $matches);
-		
+		$r = preg_match_all("@<Name>(.*?)</Name>@", $document, $matches);
+		if (($r === false) || ($r === 0))
+			return null;
+			
 		return $matches[1];
 	}
 	/**
@@ -82,13 +89,15 @@ class AmazonS3
 	 */
 	public function createBucket( $bucket )
 	{
+		$bucket = urlencode( $bucket );
+		
 		$req = array(	"verb"		=> "PUT",
 						"md5"		=> null,
 						"type"		=> null,
 						"headers"	=> null,
 						"resource"	=> "/$bucket",
 					);
-		$result = $this->doRequest( $req );
+		$result = $this->doRequest( $req, null, $document );
 
 		return $this->isOk($result);
 	}
@@ -97,17 +106,21 @@ class AmazonS3
 	 */
 	public function deleteBucket( $bucket )
 	{
+		$bucket = urlencode( $bucket );
+				
 		$req = array(	"verb"		=> "DELETE",
 						"md5"		=> null,
 						"type"		=> null,
 						"headers"	=> null,
 						"resource"	=> "/$bucket",
 					);
-		$result = $this->doRequest( $req );
+					
+		$result = $this->doRequest( $req, null, $document );
 		return $this->isOk($result);
 	}
 	
 	/**
+		Returns the size of a specific $bucket/$prefix
 	 */
 	public function getDirectorySize( $bucket, $prefix = "" )
 	{
@@ -125,6 +138,7 @@ class AmazonS3
 	}
 
 	/**
+		Returns the content of a specific bucket
 	 */
 	// FIXME !!!
 	function getBucketContents(	$bucket, 
@@ -133,6 +147,8 @@ class AmazonS3
 								$marker = null  )
 	{
 		$bucket = urlencode( $bucket );
+		$prefix = urlencode( $prefix );
+		
 		$req = array(	"verb"		=> "GET",
 						"md5"		=> null,
 						"type"		=> null,
@@ -150,7 +166,6 @@ class AmazonS3
 							
 		$result = $this->doRequest($req, $params, $document );		
 
-		$lastKey = "";
 		$keys = array();
 		
 		// don't waste time
@@ -161,11 +176,13 @@ class AmazonS3
 		if ( ( $r === false) || ( $r === 0 ))
 			return $keys; // empty array
 		
-		if (!empty( $matches ))
+		if (!empty( $matches )) // paranoia
 			foreach($matches[1] as $match)
 			{
-				preg_match_all('@<(.*?)>(.*?)</\1>@', $match, $keyInfo);
-	
+				$r = preg_match_all('@<(.*?)>(.*?)</\1>@', $match, $keyInfo);
+				if (($r === false) || ($r === 0))
+					continue;
+					
 				list($name, $date, $hash, $size) = $keyInfo[2];
 				$hash = str_replace("&quot;", "", $hash);
 				$keys[] = array(	"name" => $name, 
@@ -173,13 +190,11 @@ class AmazonS3
 									"hash" => $hash, 
 									"size" => $size, 
 									"type" => "key"  );
-				if(trim($name) != "") 
-					$lastKey = $name;
 			}
 
 		$r = preg_match_all("@<Prefix>(.*?)</Prefix>@", $document, $matches);
 		
-		// return out result up to here
+		// return our results up to here
 		if ( ( $r === false) || ( $r === 0 ))
 			return $keys;
 		
@@ -198,6 +213,8 @@ class AmazonS3
 		return $keys;
 	}
 	
+	/**
+	 */
 	function bucketExists( $bucket )
 	{
 		$buckets = $this->getBuckets();
@@ -215,9 +232,12 @@ class AmazonS3
 
 	public function getObject( $bucket, $object, &$document )
 	{
+		$bucket = urlencore( $bucket );
+		
 		$obj = trim( $object );
 		if($obj[0] != "/" ) 
 			$obj = "/$obj";
+		$obj = urlencode( $obj );
 			
 		$req = array(	"verb"		=> "GET",
 						"md5"		=> null,
@@ -225,7 +245,7 @@ class AmazonS3
 						"headers"	=> null,
 						"resource"	=> "/$bucket" . $object,
 					);
-		$result = $this->doRequest($req, $document );
+		$result = $this->doRequest($req, null, $document );
 		
 		return $result;
 	}
@@ -244,6 +264,9 @@ class AmazonS3
 		if(substr($obj, 0, 1) != "/" ) 
 			$obj = "/$obj";
 			
+		$bucket = urlencode( $bucket );
+		$obj = urlencode( $obj );
+			
 		$req = array(	"verb"		=> "PUT",
 						"md5"		=> null,
 						"type"		=> null,
@@ -253,18 +276,21 @@ class AmazonS3
 						"disposition" => $disposition,
 						"acl"		=> $acl,
 					);
-		$result = $this->doRequest($req, $document, true );
+		$result = $this->doRequest($req, null, $document, true );
 		
 		$info = $this->getObjectInfo( $bucket, $obj );
 
 		return ($info['hash'] == md5($document));
 	}
 
-	public function deleteObject()
+	public function deleteObject( $bucket, $object )
 	{
 		if(trim($object[0]) != "/" ) 
 			$object = "/$object";
 			
+		$object = urlencode( $object );
+		$bucket = urlencode( $bucket );
+		
 		$req = array(	"verb"		=> "DELETE",
 						"md5"		=> null,
 						"type"		=> null,
@@ -272,16 +298,19 @@ class AmazonS3
 						"resource"	=> "/$bucket" . $object,
 					);
 					
-		$result = $this->doRequest( $req );
+		$result = $this->doRequest( $req, null, $document );
 		return !$this->objectExists($bucket, $object);
 	}
 
 	public function getObjectInfo( $bucket, $object )
 	{
-		$ret = array();
 		$object = $this->getBucketContents($bucket, $object);
-		if(count($object) == 0) return false;
-		if($object[0]['type'] == "prefix") return false;
+		if(count($object) == 0) 
+			return false;
+			
+		if($object[0]['type'] == "prefix") 
+			return false;
+			
 		return $object[0];
 	}
 
@@ -291,10 +320,13 @@ class AmazonS3
 	function getObjectHead($bucket, $object)
 	{
 		$bucket = urlencode( $bucket ); 
-		$object = urlencode( trim( $object ) );
-		
+	
+		$object = trim( $object );
 		if(substr($object, 0, 1) != "/" ) 
 			$object = "/$object";
+
+		$object = urlencode( trim( $object ) );
+					
 		$req = array(	"verb"		=> "HEAD",
 						"md5"		=> null,
 						"type"		=> null,
@@ -302,9 +334,8 @@ class AmazonS3
 						"resource"	=> "/$bucket" . $object,
 					);
 
-		// FIXME
-		$result = $this->doRequest($req);
-		return $result;
+		$result = $this->doRequest( $req, null, $document );
+		return $document;
 	}
 
 	/**
@@ -314,23 +345,6 @@ class AmazonS3
 		return ($this->getObjectInfo($bucket, $object) !== false);
 	}
 	
-	
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-// ACL RELATED
-	public function getBucketAcl()
-	{
-		
-	}
-
-	public function getObjectAcl()
-	{}
-	
-	public function setBucketAcl()
-	{}
-	
-	public function setObjectAcl()
-	{}
-	
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 	/**
@@ -338,20 +352,22 @@ class AmazonS3
 	// FIXME
 	function isOk($result)
 	{
-		if(preg_match("@<Error>.*?<Message>(.*?)</Message>.*?</Error>@", $result, $matches))
+		$r = preg_match("@<Error>.*?<Message>(.*?)</Message>.*?</Error>@", $result, $matches);
+		
+		if(($r !== false) && ($r !== 0))
 		{
 			$this->_error = $matches[1];
 			return false;
 		}
-		else
-			return true;
+
+		return true;
 	}
 
 	/**
 		This method handles *all* requests to AmazonS3.
 	 */
 	public function doRequest(	&$req, 
-								&$params = null,	// uri level parameters
+								$params = null,	// uri level parameters
 								&$document = null, 	// as input: only used in PUT request
 								$putBody = false )	// signals a PUT request									
 	{
@@ -390,7 +406,8 @@ class AmazonS3
 		}
 	
 		// Prepare Request object
-		$request =& new HTTP_Request( self::amazon_site . $req['resource'] . $parameters );
+		$request =& new HTTP_Request( self::$site . $req['resource'] . $parameters );
+		$request->_timeout = self::$timeout;
 		
 		$request->setMethod( $req['verb'] );
 
@@ -402,16 +419,14 @@ class AmazonS3
 		if ($putBody)
 			$request->setBody( $document );
 
-		$request->setOptions( array(	'port' 		=> $this->port,
-										'timeout'	=> $this->timeout
-						) );
-						
-		$request->sendRequest();
+		$error = $request->sendRequest();
 
 		// return all response headers.
-	    $responseHeaders =			$request->getResponseHeader();
-		$document = 				$request->getResponseBody();
-		$code = self::$lastCode = 	$request->getResponseCode();
+	    $this->responseHeaders = $request->getResponseHeader();
+		$this->responseBody = $document = $request->getResponseBody();
+		$code = $this->lastCode = 	$request->getResponseCode();
+		
+#echo __METHOD__." code=".$code."\n";
 		
 		return $code;
 	}
