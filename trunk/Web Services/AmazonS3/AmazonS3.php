@@ -14,6 +14,7 @@
 // are installed and accessible.
 // Use Pear to grab these.
 require_once 'HTTP/Request.php';
+require_once 'Crypt/HMAC.php';
 
 class AmazonS3
 {
@@ -21,14 +22,16 @@ class AmazonS3
 	const c_timeout = 5;
 	const c_port = 80;
 	
-	const amazon_site = 'http://s3.amazonaws.com/';
+	const amazon_site = 'http://s3.amazonaws.com';
+#	const amazon_site = 'http://aws.amazon.com/s3';	
 	
 	var $keyId;
 	var $secretKey;
-	var $lastCode = null;
+	
 	var $reponseHeaders = null;
 	var $responseBody = null;
 	var $responseCode = null;
+	var $requestHeaders = null;
 
 	// simplified error codes
 	const codeError 		= 0;
@@ -44,7 +47,7 @@ class AmazonS3
 	public function __construct( $keyId, $secretKey )
 	{
 		$this->keyId = $keyId;
-		$this->secretKey = $secret_key;
+		$this->secretKey = $secretKey;
 		
 		$this->init();
 	}
@@ -72,6 +75,7 @@ class AmazonS3
 						"md5"		=> null,
 						"type"		=> null,
 						"headers"	=> null,
+						"acl"		=> null,
 						"resource"	=> "/",
 					);
 		$result = $this->doRequest($req, null /*no parameters*/, $document );
@@ -377,26 +381,29 @@ class AmazonS3
 			$req['resource'] = urlencode($req['resource']);
 			$req['resource'] = str_replace("%2F", "/", $req['resource']);
 		}
-	
-		$sig = $this->signature($req);
+
+		$verb = $req['verb'];
+    	$date = gmdate(DATE_RFC2822);
+
+		$sig = $this->signature($req, $date, $this->secretKey );
 		
 		$args = array();
-		$args[] = array( "Date: "  => $this->_date);
-		$args[] = array( "Authorization: AWS" => "{$this->keyId}:$sig");
+		$args['Date'] = $date;
+		$args["Authorization"] = "AWS "."{$this->keyId}".":".$sig;
 		
 		if(isset($req['acl']))	
-			$args[] = array( "x-amz-acl: " => $req['acl']);
+			$args["x-amz-acl"] = $req['acl'];
 		if(isset($req['type']))
-			$args[] = array( "Content-Type: " => $req['type']);
+			$args["content-Type"] = $req['type'];
 		if(isset($req['md5']))
-			$args[] = array( "Content-Md5: " => $req['md5']);
+			$args["Content-Md5"] = $req['md5'];
 		if(isset($req['disposition'])) 
-			$args[] = array( 'Content-Disposition: attachment; filename=\"' => $req['disposition'] . '\"');
+			$args['Content-Disposition: attachment; filename=\"'] = $req['disposition'] . '\"';
 	
 		if(is_array($req['headers']))
 			foreach($req['headers'] as $key => $val)
-				$args[] = array( "$key: " => "$val" );
-	
+				$args[$key] =$val;
+
 		// deal with parameters
 		$parameters = null;
 		if(is_array($params))
@@ -409,8 +416,9 @@ class AmazonS3
 		// Prepare Request object
 		$request =& new HTTP_Request( self::$site . $req['resource'] . $parameters );
 		$request->_timeout = self::$timeout;
+#		$request->_allowRedirects = true;
 		
-		$request->setMethod( $req['verb'] );
+		$request->setMethod( $verb );
 
 		// do headers
 		foreach( $args as $key => $value )
@@ -423,6 +431,7 @@ class AmazonS3
 		$error = $request->sendRequest();
 
 		// return all response headers.
+		$this->requestHeaders = $args;
 	    $this->responseHeaders =$request->getResponseHeader();
 		$this->responseBody =	$document = $request->getResponseBody();
 		$this->responseCode =	$code = 	$request->getResponseCode();
@@ -431,63 +440,61 @@ class AmazonS3
 	}
 	/**
 	 */
-	function signature( &$req )
+	function signature( &$req, $date, $secretKey )
 	{
-		// Format and sort x-amz headers
-		$arrHeaders = array();
-		if(!is_array($req['headers'])) $req['headers'] = array();
-		if(isset($req['acl'])) $req['headers']["x-amz-acl"] = $req['acl'];
-		foreach($req['headers'] as $key => $val)
-		{
-			$key = trim(strtolower($key));
-			$val = trim($val);
-			if(strpos($key, "x-amz") !== false)
-			{
-				if(isset($arrHeaders[$key]))
-					$arrHeaders[$key] .= ",$val";
-				else
-					$arrHeaders[$key] = "$key:$val";
-			}
-		}
-		ksort($arrHeaders);
-		$headers = implode("\n", $arrHeaders);
-		if(!empty($headers)) $headers = "\n$headers";
-		
-		if(isset($req['date']))
-			$this->_date = gmdate("D, d M Y H:i:s T", strtotime($req['date']));
+		if (isset($req['acl']) && !empty( $req['acl']))
+			$acl = 'x-amz-acl:'.$req['acl']."\n";
 		else
-			$this->_date = gmdate("D, d M Y H:i:s T");
-
+			$acl = null;
+			
 		// Build and sign the string
-		$str  = strtoupper($req['verb']) . "\n" . $req['md5']  . "\n" . $req['type'] . "\n" . $this->_date . $headers . "\n" . $req['resource'];
-		$sha1 = $this->hasher($str);
-		$sig  = $this->base64($sha1);
-		return $sig;
+		$str  = 			$req['verb'] . "\n" . 
+							$req['md5']  . "\n" . 
+							$req['type'] . "\n" . 
+							$date        . "\n".
+							$acl. 
+							$req['resource'];
+
+		$this->str = $str;
+		
+	    $hasher =& new Crypt_HMAC($secretKey, "sha1");
+	    return $this->hex2b64($hasher->hash($str));
 	}
 	/**
 	 */
-	function hasher($data)
+	function hex2b64($str) 
 	{
-		// Algorithm adapted (stolen) from http://pear.php.net/package/Crypt_HMAC/)
-		$key = $this->secretKey;
-		if(strlen($key) > 64)
-			$key = pack("H40", sha1($key));
-		if(strlen($key) < 64)
-			$key = str_pad($key, 64, chr(0));
-		$ipad = (substr($key, 0, 64) ^ str_repeat(chr(0x36), 64));
-		$opad = (substr($key, 0, 64) ^ str_repeat(chr(0x5C), 64));
-		return sha1($opad . pack("H40", sha1($ipad . $data)));
+	    $raw = '';
+	    for ($i=0; $i < strlen($str); $i+=2)
+	        $raw .= chr(hexdec(substr($str, $i, 2)));
+	    return base64_encode($raw);
 	}
 	/**
+		DEBUG function
 	 */
-	function base64($str)
+	function ByteToString( $str )
 	{
-		$ret = "";
-		for($i = 0; $i < strlen($str); $i += 2)
-			$ret .= chr(hexdec(substr($str, $i, 2)));
-		return base64_encode($ret);
+		$ret = null;
+		$liste = explode(" ", $str );
+		foreach( $liste as $char )
+			$ret .= chr( hexdec($char) );
+		return $ret;
+	}
+	function StringToByte( $str )
+	{
+		$a = str_split( $str );
+		
+		$callback = create_function('$i','return dechex( ord( $i ));');
+		$b = array_map( $callback, $a );
+		
+		$str = implode(" ", $b );
+		
+		return $str;
 	}
 	
+// 47 45 54 0a 0a 0a 53 61 74 2c 20 32 39 20 53 65 70 20 32 30 30 37 20 32 31 3a 31 31 3a 30 31 20 2b 30 30 30 30 0a 2f
+// 47 45 54 0a 0a 0a 53 61 74 2c 20 32 39 20 53 65 70 20 32 30 30 37 20 32 31 3a 31 31 3a 30 31 20 2b 30 30 30 30 0a 2f
+
 	/**
 	 */
 	public static function translateCode( $code1, $code2 = true )
