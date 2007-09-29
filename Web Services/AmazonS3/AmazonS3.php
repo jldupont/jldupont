@@ -28,6 +28,7 @@ class AmazonS3
 	var $lastCode = null;
 	var $reponseHeaders = null;
 	var $responseBody = null;
+	var $responseCode = null;
 
 	// simplified error codes
 	const codeError 		= 0;
@@ -422,12 +423,10 @@ class AmazonS3
 		$error = $request->sendRequest();
 
 		// return all response headers.
-	    $this->responseHeaders = $request->getResponseHeader();
-		$this->responseBody = $document = $request->getResponseBody();
-		$code = $this->lastCode = 	$request->getResponseCode();
-		
-#echo __METHOD__." code=".$code."\n";
-		
+	    $this->responseHeaders =$request->getResponseHeader();
+		$this->responseBody =	$document = $request->getResponseBody();
+		$this->responseCode =	$code = 	$request->getResponseCode();
+	
 		return $code;
 	}
 	/**
