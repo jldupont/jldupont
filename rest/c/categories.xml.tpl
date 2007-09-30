@@ -8,6 +8,5 @@
 
 <ch>jldupont.googlecode.com/svn</ch> <!-- not read by list-all command -->
 
-<c xlink:href="/rest/c/Amazon/info.xml">Amazon</c>
-
+$contents
 </a>
