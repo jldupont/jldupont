@@ -1,16 +1,16 @@
 <?php
 /*
-	PEAR Channel Update Tool: update 'categories.xml' file
+	PEAR Channel Update Tool: update 'allmaintainers.xml' file
 	Command Line Utility
 	@author: Jean-Lou Dupont
 	$Id$
 */
 //<source lang=php>
 
-$template_file_name = 'categories.xml.tpl';
-$template_line 		= '<c xlink:href="/rest/c/$category/info.xml">$category</c>'."\n";
-$target_file_name	= 'categories.xml';
-$replacement 		= '$category';
+$template_file_name = 'maintainers.xml.tpl';
+$template_line = '<h xlink:href="/rest/m/$maintainer">$maintainer</h>'."\n";
+$target_file_name	= 'allmaintainers.xml';
+$replacement 		= '$maintainer';
 
 // ------------------------------
 $cdir = dirname( __FILE__ );

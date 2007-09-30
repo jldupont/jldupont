@@ -9,6 +9,5 @@
 <c>jldupont.googlecode.com/svn</c>
 
 <!-- do not touch from here -->
-<p>amazons3</p>
-
+$contents
 </a>
