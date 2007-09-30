@@ -23,12 +23,11 @@ class AmazonS3
 	const c_port = 80;
 	
 	const amazon_site = 'http://s3.amazonaws.com';
-#	const amazon_site = 'http://aws.amazon.com/s3';	
 	
 	var $keyId;
 	var $secretKey;
 	
-	var $reponseHeaders = null;
+	var $responseHeaders = null;
 	var $responseBody = null;
 	var $responseCode = null;
 	var $requestHeaders = null;
@@ -94,6 +93,7 @@ class AmazonS3
 	 */
 	public function createBucket( $bucket )
 	{
+		// security measure		
 		$bucket = urlencode( $bucket );
 		
 		$req = array(	"verb"		=> "PUT",
@@ -111,6 +111,7 @@ class AmazonS3
 	 */
 	public function deleteBucket( $bucket )
 	{
+		// security measure		
 		$bucket = urlencode( $bucket );
 				
 		$req = array(	"verb"		=> "DELETE",
@@ -145,12 +146,12 @@ class AmazonS3
 	/**
 		Returns the content of a specific bucket
 	 */
-	// FIXME !!!
 	function getBucketContents(	$bucket, 
 								$prefix = null, 
 								$delim = null, 
 								$marker = null  )
 	{
+		// security measures		
 		$bucket = urlencode( $bucket );
 		$prefix = urlencode( $prefix );
 		
@@ -232,17 +233,19 @@ class AmazonS3
 
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // OBJECT RELATED
-	public function listObjects()
-	{}
 
+	/**
+		Get a single object.
+	 */
 	public function getObject( $bucket, $object, &$document )
 	{
-		$bucket = urlencore( $bucket );
-		
 		$obj = trim( $object );
 		if($obj[0] != "/" ) 
 			$obj = "/$obj";
+			
+		// security measures					
 		$obj = urlencode( $obj );
+		$bucket = urlencore( $bucket );
 			
 		$req = array(	"verb"		=> "GET",
 						"md5"		=> null,
@@ -250,16 +253,14 @@ class AmazonS3
 						"headers"	=> null,
 						"resource"	=> "/$bucket" . $object,
 					);
-		$result = $this->doRequest($req, null, $document );
-		
-		return $result;
+		return $this->doRequest($req, null, $document );
 	}
-	
+	/**
+	 */	
 	public function putObject(	$bucket, 
 								$object, 
 								&$document, 
-								$public = null, 
-								$disposition = null  )
+								$public = null )
 	{
 		$type = isset($this->mime_types[$ext]) ? $this->mime_types[$ext] : "application/octet-stream";
 	
@@ -269,6 +270,7 @@ class AmazonS3
 		if(substr($obj, 0, 1) != "/" ) 
 			$obj = "/$obj";
 			
+		// security measures
 		$bucket = urlencode( $bucket );
 		$obj = urlencode( $obj );
 			
@@ -278,7 +280,6 @@ class AmazonS3
 						"headers"	=> null,
 						"resource"	=> "/$bucket" . $object,
 						"type" 		=> $type,
-						"disposition" => $disposition,
 						"acl"		=> $acl,
 					);
 		$result = $this->doRequest($req, null, $document, true );
@@ -287,12 +288,16 @@ class AmazonS3
 
 		return ($info['hash'] == md5($document));
 	}
-
+	/**
+		Delete a single object.
+	 */
 	public function deleteObject( $bucket, $object )
 	{
+		$object = trim( $object );
 		if(trim($object[0]) != "/" ) 
 			$object = "/$object";
 			
+		// security measures					
 		$object = urlencode( $object );
 		$bucket = urlencode( $bucket );
 		
@@ -306,7 +311,8 @@ class AmazonS3
 		$result = $this->doRequest( $req, null, $document );
 		return !$this->objectExists($bucket, $object);
 	}
-
+	/**
+	 */
 	public function getObjectInfo( $bucket, $object )
 	{
 		$object = $this->getBucketContents($bucket, $object);
@@ -322,16 +328,15 @@ class AmazonS3
 	/**
 	
 	 */
-	function getObjectHead($bucket, $object)
+	function getObjectHead($bucket, $object, &$document )
 	{
-		$bucket = urlencode( $bucket ); 
-	
 		$object = trim( $object );
 		if(substr($object, 0, 1) != "/" ) 
 			$object = "/$object";
 
 		$object = urlencode( trim( $object ) );
-					
+		$bucket = urlencode( $bucket ); 
+							
 		$req = array(	"verb"		=> "HEAD",
 						"md5"		=> null,
 						"type"		=> null,
@@ -339,8 +344,7 @@ class AmazonS3
 						"resource"	=> "/$bucket" . $object,
 					);
 
-		$result = $this->doRequest( $req, null, $document );
-		return $document;
+		return $this->doRequest( $req, null, $document );
 	}
 
 	/**
@@ -354,7 +358,6 @@ class AmazonS3
 
 	/**
 	 */
-	// FIXME
 	function isOk($result)
 	{
 		$r = preg_match("@<Error>.*?<Message>(.*?)</Message>.*?</Error>@", $result, $matches);
@@ -372,7 +375,7 @@ class AmazonS3
 		This method handles *all* requests to AmazonS3.
 	 */
 	public function doRequest(	&$req, 
-								$params = null,	// uri level parameters
+								$params = null,		// uri level parameters
 								&$document = null, 	// as input: only used in PUT request
 								$putBody = false )	// signals a PUT request									
 	{
@@ -389,7 +392,10 @@ class AmazonS3
 		
 		$args = array();
 		$args['Date'] = $date;
-		$args["Authorization"] = "AWS "."{$this->keyId}".":".$sig;
+		$args["Authorization"] = "AWS ".
+								"{$this->keyId}".	// keep the "" !!!
+								":".
+								$sig;
 		
 		if(isset($req['acl']))	
 			$args["x-amz-acl"] = $req['acl'];
@@ -397,8 +403,6 @@ class AmazonS3
 			$args["content-Type"] = $req['type'];
 		if(isset($req['md5']))
 			$args["Content-Md5"] = $req['md5'];
-		if(isset($req['disposition'])) 
-			$args['Content-Disposition: attachment; filename=\"'] = $req['disposition'] . '\"';
 	
 		if(is_array($req['headers']))
 			foreach($req['headers'] as $key => $val)
@@ -416,7 +420,6 @@ class AmazonS3
 		// Prepare Request object
 		$request =& new HTTP_Request( self::$site . $req['resource'] . $parameters );
 		$request->_timeout = self::$timeout;
-#		$request->_allowRedirects = true;
 		
 		$request->setMethod( $verb );
 
@@ -439,10 +442,11 @@ class AmazonS3
 		return $code;
 	}
 	/**
+		Sign the request.
 	 */
 	function signature( &$req, $date, $secretKey )
 	{
-		if (isset($req['acl']) && !empty( $req['acl']))
+		if (isset($req['acl']))
 			$acl = 'x-amz-acl:'.$req['acl']."\n";
 		else
 			$acl = null;
@@ -454,9 +458,7 @@ class AmazonS3
 							$date        . "\n".
 							$acl. 
 							$req['resource'];
-
-		$this->str = $str;
-		
+							
 	    $hasher =& new Crypt_HMAC($secretKey, "sha1");
 	    return $this->hex2b64($hasher->hash($str));
 	}
@@ -490,19 +492,6 @@ class AmazonS3
 		$str = implode(" ", $b );
 		
 		return $str;
-	}
-	
-// 47 45 54 0a 0a 0a 53 61 74 2c 20 32 39 20 53 65 70 20 32 30 30 37 20 32 31 3a 31 31 3a 30 31 20 2b 30 30 30 30 0a 2f
-// 47 45 54 0a 0a 0a 53 61 74 2c 20 32 39 20 53 65 70 20 32 30 30 37 20 32 31 3a 31 31 3a 30 31 20 2b 30 30 30 30 0a 2f
-
-	/**
-	 */
-	public static function translateCode( $code1, $code2 = true )
-	{
-		if ( ($code1->isSuccessful()) && ($code === true) )
-			return true;
-			
-		return false;
 	}
 
 /**
