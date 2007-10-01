@@ -13,8 +13,6 @@ var baseUri = 'http://jldupont.googlecode.com/svn/scripts/';
 // ------------------------
 jQuery.getScript( baseUri+'chili/jquery.chili.pack.js' );
 jQuery.getScript( baseUri+'chili/recipes.js' );
-ChiliBook.automaticSelector = 'source';
-ChiliBook.attributeSelector = 'lang';
 
 (function(){
 	var s = document.createElement ('link');
