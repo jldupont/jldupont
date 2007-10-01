@@ -6,6 +6,9 @@
 	@author: Jean-Lou Dupont
 	
 	Aptana:  "${project_loc}/rest/r/generate.deps.txt.php"  "${resource_loc}"
+	
+	- Execute the above Aptana/Eclipse 'external tools' command using PHP.
+	- Select target resource e.g. package.0.1.0.xml
 */
 
 @require "PEAR/XMLParser.php";
@@ -61,6 +64,7 @@ echo 'Serialized dependencies: '.$s_deps."\n";
 
 $bytes_written = file_put_contents( $cdir."/".$target_file_name, $s_deps );
 
+// Make sure that the number of bytes written matches!
 $ok = (strlen( $s_deps ) === $bytes_written );
 
 $msg = $ok ? 'Success!':'Failure to write to target file!';

@@ -4,6 +4,8 @@
 	Command Line Utility
 	@author: Jean-Lou Dupont
 	$Id$
+	
+	Execute from within the SVN directory in the REST/p directory.
 */
 //<source lang=php>
 
