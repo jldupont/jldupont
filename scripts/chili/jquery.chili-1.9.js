@@ -27,7 +27,7 @@ ChiliBook = { //implied global
 	, automaticSelector:  "source"
 
 	, codeLanguage:       function( el ) {
-		var recipeName = $( el ).attr( attributeSelector );		// JLD change here
+		var recipeName = $( el ).attr( ChiliBook.attributeSelector );		// JLD change here
 		return recipeName ? recipeName : '';
 	}
 
@@ -337,7 +337,7 @@ $( function() {
 			if( ChiliBook.elementClass ) {
 				ChiliBook.codeLanguage = function ( el ) {
 					var selectClass = new RegExp( "\\b" + ChiliBook.elementClass + "\\b", "gi" );
-					var elClass = $( el ).attr( attributeSelector );		// JLD change here
+					var elClass = $( el ).attr( ChiliBook.attributeSelector );		// JLD change here
 					if( ! elClass ) { 
 						return ''; 
 					}
