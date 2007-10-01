@@ -80,35 +80,11 @@
     <name>*</name>
    </os>
   </installconditions>
-  <filelist>
-   <install as="HTTP.php" name="Auth_HTTP.php" />
-  </filelist>
  </phprelease>
 
 <!-- 
 CHANGELOG 
 Just a copy of the previous <release> sections
 -->
-
- <changelog>
- 
- <!-- foreach release {{ -->
-  <release>
-   <version>
-    <release>$release_old1</release>
-    <api>$api_release_old1</api>
-   </version>
-   <stability>
-    <release>$stability_old1</release>
-    <api>$api_stability_old1</api>
-   </stability>
-   <date>$date_old1</date>
-   <license uri="http://www.php.net/license">PHP License</license>
-   <notes>$notes_old1</notes>
-  </release>
-
-<!-- }} -->
-
- </changelog>
 
 </package>
