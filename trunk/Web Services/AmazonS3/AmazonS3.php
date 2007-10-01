@@ -82,7 +82,7 @@ class AmazonS3
 		if (empty( $document ))
 			return null;
 			
-		$r = preg_match_all("@<Name>(.*?)</Name>@", $document, $matches);
+		$r = preg_match_all("@<"."Name>(.*?)<"."/Name>@", $document, $matches);
 		if (($r === false) || ($r === 0))
 			return null;
 			
@@ -178,7 +178,7 @@ class AmazonS3
 		if (empty( $document ))
 			return $keys; // empty array
 		
-		$r = preg_match_all("@<Contents>(.*?)</Contents>@", $document, $matches);
+		$r = preg_match_all("@<"."Contents>(.*?)</"."Contents>@", $document, $matches);
 		if ( ( $r === false) || ( $r === 0 ))
 			return $keys; // empty array
 		
@@ -190,7 +190,7 @@ class AmazonS3
 					continue;
 					
 				list($name, $date, $hash, $size) = $keyInfo[2];
-				$hash = str_replace("&quot;", "", $hash);
+				$hash = str_replace("&"."quot;", "", $hash);
 				$keys[] = array(	"name" => $name, 
 									"date" => $date, 
 									"hash" => $hash, 
@@ -198,7 +198,7 @@ class AmazonS3
 									"type" => "key"  );
 			}
 
-		$r = preg_match_all("@<Prefix>(.*?)</Prefix>@", $document, $matches);
+		$r = preg_match_all("@<"."Prefix>(.*?)<"."/Prefix>@", $document, $matches);
 		
 		// return our results up to here
 		if ( ( $r === false) || ( $r === 0 ))
@@ -208,11 +208,11 @@ class AmazonS3
 		foreach($matches[1] as $match)
 			$keys[] = array( "name" => $match, "type" => "prefix" );
 
-		$r = preg_match('@<NextMarker>(.*?)</NextMarker>@', $document, $matches);
+		$r = preg_match('@<'.'NextMarker>(.*?)<'.'/NextMarker>@', $document, $matches);
 
 		if(isset($matches[1]) && strlen($matches[1]) > 0)
 		{
-			preg_match('@<NextMarker>(.*?)</NextMarker>@', $result, $matches);
+			preg_match('@<'.'NextMarker>(.*?)<'.'/NextMarker>@', $result, $matches);
 			$keys = array_merge($keys, $this->getBucketContents($bucket, $prefix, $delim, $matches[1]));
 		}
 
