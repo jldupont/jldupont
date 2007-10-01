@@ -190,7 +190,7 @@ class AmazonS3
 					continue;
 					
 				list($name, $date, $hash, $size) = $keyInfo[2];
-				$hash = str_replace("&"."quot;", "", $hash);
+				$hash = str_replace("&"."quot".";", "", $hash);
 				$keys[] = array(	"name" => $name, 
 									"date" => $date, 
 									"hash" => $hash, 
