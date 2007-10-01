@@ -42,6 +42,7 @@
   <dir name="/">
 
 	<!-- file list begin {{ -->
+	<!-- baseinstalldir: the target directory on the target machine -->
    <file baseinstalldir="AmazonS3" name="AmazonS3.php" role="php" />
     <!-- }} -->
 

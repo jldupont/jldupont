@@ -4,6 +4,8 @@
 	xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" 
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
+<!-- this file is the same as the one provided in the download package i.e. $package.tgz -->
+
  <!-- customize here -->
  <channel>jldupont.googlecode.com/svn</channel>	
  <name>$package</name>
@@ -41,6 +43,7 @@
   <dir name="/">
 
 	<!-- file list begin {{ -->
+	<!-- md5sum attribute is optional -->
    <file baseinstalldir="Auth/HTTP" md5sum="9b7fe356f6793ccab49df1e3e39e2c6e" name="tests/sample.sql" role="test" />
     <!-- }} -->
   </dir>

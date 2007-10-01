@@ -21,6 +21,7 @@
  <n>$notes</n>
  <f>$size</f>
 
+ <!-- download URI -->
  <g>http://jldupont.googlecode.com/svn/tags/$package-$version</g>
  <x xlink:href="package.$version.xml"/>
 </r>

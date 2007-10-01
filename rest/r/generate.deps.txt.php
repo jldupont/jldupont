@@ -18,6 +18,12 @@ if (!class_exists('PEAR_XMLParser'))
 	die(0);
 }
 
+if (!isset( $argv[1]))
+{
+	echo 'Requires the filename of the package.xml file for which to generate deps.$version.txt file!'."\n";	
+	die(0);
+}
+
 // grab the source file from the command line
 $source_file_name = basename( $argv[1],".xml" );
 
