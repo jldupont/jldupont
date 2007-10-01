@@ -42,7 +42,7 @@
   <dir name="/">
 
 	<!-- file list begin {{ -->
-   <file baseinstalldir="AmazonS3" name="/AmazonS3-0.1.0/AmazonS3.php" role="php" />
+   <file baseinstalldir="/" name="AmazonS3.php" role="php" />
     <!-- }} -->
 
   </dir>
