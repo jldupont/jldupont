@@ -21,7 +21,7 @@
 <!-- }} -->
 
  <date>09/30/07</date>
- <time>$time</time>
+ <time></time>
 
  <version>
   <release>0.1.0</release>
@@ -41,7 +41,7 @@
   <dir name="/">
 
 	<!-- file list begin {{ -->
-   <file baseinstalldir="Auth/HTTP" md5sum="9b7fe356f6793ccab49df1e3e39e2c6e" name="tests/sample.sql" role="test" />
+   <file baseinstalldir="AmazonS3" md5sum="9b7fe356f6793ccab49df1e3e39e2c6e" name="AmazonS3.php" role="php" />
     <!-- }} -->
 
   </dir>
