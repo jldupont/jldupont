@@ -21,10 +21,10 @@ ChiliBook = { //implied global
 
 	  version:            "1.9" // 2007-09-24
 
-	, attributeSelector:  'class'								// JLD change here
+	, attributeSelector:  'lang'								// JLD change here
 
 	, automatic:          true
-	, automaticSelector:  "code"
+	, automaticSelector:  "source"
 
 	, codeLanguage:       function( el ) {
 		var recipeName = $( el ).attr( attributeSelector );		// JLD change here
