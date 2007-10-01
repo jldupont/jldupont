@@ -21,8 +21,8 @@
  </lead>
 <!-- }} -->
 
- <date>09/30/07</date>
- <time></time>
+ <date>2007-10-01</date>
+ <time>09:55:00</time>
 
  <version>
   <release>0.1.0</release>
@@ -42,7 +42,7 @@
   <dir name="/">
 
 	<!-- file list begin {{ -->
-   <file baseinstalldir="AmazonS3" name="AmazonS3.php" role="php" />
+   <file baseinstalldir="AmazonS3" name="/AmazonS3-0.1.0/AmazonS3.php" role="php" />
     <!-- }} -->
 
   </dir>
