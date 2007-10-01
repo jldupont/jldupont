@@ -20,7 +20,7 @@ var scripts = new Array(
 		var s = document.createElement ('link');
 		s.type = 'text/css';
 		s.rel = 'stylesheet';
-		s.href = baseUri+"chili/"+script;
+		s.href = script;
 		document.getElementsByTagName('head')[0].appendChild(s);
 	}
 })();
