@@ -6,21 +6,26 @@
     http://pear.php.net/dtd/rest.categorypackageinfo.xsd">
 <pi>
 	<p>
-	 <n>AmazonS3</n>
+	 <!-- customize here -->
 	 <c>jldupont.googlecode.com/svn</c>
-	 <ca xlink:href="/rest/c/Amazon">Amazon</ca>
-	 <l></l>
-	 <s>Class for handling REST request to Amazon S3</s>
-	 <d></d>
-	 <r xlink:href="/rest/r/amazons3"/>
+	 <n>$package</n>
+	 <!-- put category of extension here -->
+	 <ca xlink:href="/rest/c/$category">$category</ca>
+	 
+	 <l>$license</l>
+	 <s>$summary</s>
+	 <d>$description</d>
+	 
+	 <!-- release REST directory -->
+	 <r xlink:href="/rest/r/$package"/>
 	</p>
 	<a>
 	 <!-- put latest release information here -->
-	 <!-- This is the information that appears when doing list-all command -->
+	 <!-- This is the information that appears when doing list-all command -->	 
 	 <r>
-		<v>0.1.0</v>
-		<s>beta</s>
-	</r>
+	 	<v>$version</v>
+	 	<s>$stability</s>
+ 	</r>
 	</a>
 </pi>
 </f>
