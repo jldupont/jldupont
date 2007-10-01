@@ -41,7 +41,7 @@
   <dir name="/">
 
 	<!-- file list begin {{ -->
-   <file baseinstalldir="AmazonS3" md5sum="9b7fe356f6793ccab49df1e3e39e2c6e" name="AmazonS3.php" role="php" />
+   <file baseinstalldir="AmazonS3" name="AmazonS3.php" role="php" />
     <!-- }} -->
 
   </dir>
