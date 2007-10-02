@@ -33,7 +33,8 @@ $(document).ready(
 	function()
 	{
 		arr = $("source[lang]");
-		alert( typeof arr );
+		alert( "Element?"+(arr instanceof Element) );
+		alert( "Array?"+(arr instanceof Array) );		
 		
 		function dump(arr,level) 
 		{
