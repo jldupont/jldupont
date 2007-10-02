@@ -7,7 +7,7 @@
 // Customization section.
 // {{
 var baseUri = 'http://jldupont.googlecode.com/svn/scripts';
-var timeBase = 250; // in ms.
+var timeBase = 50; // in ms.
 // }}
 
 var DOMloaded = false;
