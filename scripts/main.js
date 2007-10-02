@@ -21,10 +21,9 @@ jQuery.getScript( baseUri+'/chili/jquery.chili-1.9.js',
 		ChiliBook.automaticSelector = 'source';
 		// don't start without having swapped 
 		// the 'lang' attribute for 'class' ones! (see below)
-		ChiliBook.automatic = false;	
-		
-		evs = evs + 'chili ';
-		alert( evs );	
+
+		if (DOMloaded !== true)
+			ChiliBook.automatic = false;	
 	}
 );
 jQuery.getScript( baseUri+'/chili/recipes.js' );
@@ -45,22 +44,17 @@ $(document).ready(
 			{
 				a = this.getAttributeNode('lang').nodeValue; 
 				this.setAttribute("class", a);
-
 			}
 		);
 
-		evs = evs + 'SWAP ';
-		alert( evs );	
+		DOMloaded = true;
 	}// document.ready
 );
+
+// END chili initialization
 
 $(document).ready(
 	function()
 	{
-		// alert('almost done! ChiliBook=' + ChiliBook );
-		DOMloaded = true;
-		evs = evs + 'DOM ';
-		alert( evs );	
 	}
 );
-// END chili initialization
