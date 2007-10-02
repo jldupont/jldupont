@@ -48,8 +48,8 @@ $(document).ready(
 		
 		for (el in arr )
 		{
-			a = el.attr('lang');
-			el.attr("class", a);
+			a = el.getAttributeNode('lang').nodeValue; 
+			el.setAttribute("class", a);
 		}
 		
 		ChiliBook.chili();
