@@ -11,15 +11,17 @@ var baseUri = 'http://jldupont.googlecode.com/svn/scripts';
 
 // Load Chili Syntax Highlighter
 // -----------------------------
-var ChiliBook;
 //jQuery.getScript( baseUri+'/chili/jquery.chili.pack.js' );
 jQuery.getScript( baseUri+'/chili/jquery.chili.pack.js',
+	function() { alert('loaded'); }
+/*
 	function(){
 		ChiliBook.automaticSelector = 'source';
 		// don't start without having swapped 
 		// the 'lang' attribute for 'class' ones! (see below)
 		ChiliBook.automatic = false;		
 	} 
+*/
 );
 
 //jQuery.getScript( baseUri+'/chili/recipes.js' );
