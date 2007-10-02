@@ -43,7 +43,7 @@ $(document).ready(
 		}//end function var_dump
 		
 		
-		var_dump( arr );
+		alert( var_dump( arr ) );
 		
 		for (el in arr )
 		{
