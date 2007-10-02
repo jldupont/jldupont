@@ -32,7 +32,7 @@ schedulerTick = function( timer )
 
 // Load Chili Syntax Highlighter
 // -----------------------------
-var ChiliBook;
+var ChiliBook = {};
 ChiliBook.recipesLoaded = false;
 ChiliBook.loaded = false;
 
