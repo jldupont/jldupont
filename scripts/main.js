@@ -13,19 +13,9 @@ var baseUri = 'http://jldupont.googlecode.com/svn/scripts/';
 // ------------------------
 jQuery.getScript( baseUri+'chili/jquery.chili.pack.js',
 	function(){
-		ChiliBook.elementPath = 'source';
-		arr = $("source").attr("lang");
-		for ( el in arr )
-		{
-			alert( el );
-/*
-			el.each(	function( obj, index ){
-						old_value = obj.attr(obj, 'class');
-						obj.attr(obj, 'class', old_value );
-					})
-*/					
-		};
-	} );
+		//ChiliBook.elementPath = 'source';
+	} 
+);
 jQuery.getScript( baseUri+'chili/recipes.js' );
 
 (function(){
