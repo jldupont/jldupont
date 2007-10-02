@@ -24,6 +24,7 @@ jQuery.getScript( baseUri+'/chili/jquery.chili-1.9.js',
 
 		if (DOMloaded === true)
 		{
+			alert('highlighting ?');
 			ChiliBook.automatic = false;
 			$( 'source' ).chili();
 		}
