@@ -15,7 +15,7 @@ var ChiliBook;
 //jQuery.getScript( baseUri+'/chili/jquery.chili.pack.js' );
 jQuery.getScript( baseUri+'/chili/jquery.chili.pack.js',
 	function(){
-		ChiliBook.elementPath = 'source';
+		ChiliBook.automaticSelector = 'source';
 		// don't start without having swapped 
 		// the 'lang' attribute for 'class' ones! (see below)
 		ChiliBook.automatic = false;		
