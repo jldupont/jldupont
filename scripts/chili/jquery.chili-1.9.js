@@ -150,7 +150,7 @@ $.fn.chili = function( options ) {
 			var epilog = arguments[ arguments.length - 3 ];
 			if (! epilog) {
 				var step;
-				while( step = steps[ i++ ] ) {
+				while( (step = steps[ i++ ]) == true ) {
 					var aux = arguments; // this unmasks chef's arguments inside the next function
 					if( aux[ j ] ) {
 						var pattern = /(\\\$)|(?:\$\$)|(?:\$(\d+))/g;
@@ -181,6 +181,7 @@ $.fn.chili = function( options ) {
 			else {
 				return filter( epilog );
 			}
+			return null;
 		} // function chef()
 
 		var replaceSpace = book.replaceSpace;
