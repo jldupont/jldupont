@@ -35,6 +35,8 @@ $(document).ready(
 		arr = $("source[lang]");
 		alert( "Element?"+(arr instanceof Element) );
 		alert( "Array?"+(arr instanceof Array) );		
+		alert( "Object?"+(arr instanceof Object) );			
+		alert( "jQuery?"+(arr instanceof jQuery) );					
 		
 		function dump(arr,level) 
 		{
@@ -68,7 +70,7 @@ $(document).ready(
 		
 		for (el in arr )
 		{
-			alert( dump( el ) );
+//			alert( dump( el ) );
 			
 			a = el.getAttributeNode('lang').nodeValue; 
 			el.setAttribute("class", a);
