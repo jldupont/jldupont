@@ -19,8 +19,8 @@ jQuery.getScript( baseUri+'/chili/jquery.chili.pack.js',
 		ChiliBook.automatic = false;		
 	} 
 );
-jQuery.getScript( baseUri+'/chili/recipes.js' );
-
+//jQuery.getScript( baseUri+'/chili/recipes.js' );
+/*
 (function(){
 	var s = document.createElement ('link');
 	s.type = 'text/css';
@@ -47,4 +47,5 @@ $(document).ready(
 
 	}// document.ready
 );
+*/
 // END chili initialization
