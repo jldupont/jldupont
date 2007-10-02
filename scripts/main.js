@@ -17,10 +17,13 @@ jQuery.getScript( baseUri+'chili/jquery.chili.pack.js',
 		arr = $("source").attr("lang");
 		for ( el in arr )
 		{
+			alert( el );
+/*
 			el.each(	function( obj, index ){
 						old_value = obj.attr(obj, 'class');
 						obj.attr(obj, 'class', old_value );
 					})
+*/					
 		};
 	} );
 jQuery.getScript( baseUri+'chili/recipes.js' );
