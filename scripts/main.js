@@ -45,18 +45,13 @@ $(document).ready(
 	
 		$(arr).each( function()
 			{
-				alert("Element?"+(this instanceof Element));
+//				alert("Element?"+(this instanceof Element));
+				a = this.getAttributeNode('lang').nodeValue; 
+				this.setAttribute("class", a);
+
 			}
 		);
 		
-		for (el in arr )
-		{
-//			alert( dump( el ) );
-			
-//			a = el.getAttributeNode('lang').nodeValue; 
-//			el.setAttribute("class", a);
-		}
-		
-		$.fn.chili();
+		$arr.chili();
 	}
 );
