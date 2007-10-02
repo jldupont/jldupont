@@ -93,11 +93,10 @@ function doChili()
 
 	if ((ChiliBook.loaded == false) || (ChiliBook.loaded == undefined))
 		return false;
-	
-	alert('doing chili!');
-	$('source').chili();
 
 	ChiliDone = true;
+		
+	$('source').chili();
 
 	return true;
 }
