@@ -43,12 +43,13 @@ $(document).ready(
 		}//end function var_dump
 		
 		
-		alert( var_dump( arr ) );
-		alert( "is array?"+arr instanceof Array );
+//		alert( var_dump( arr ) );
+//		alert( "is array?"+arr instanceof Array );
 		
 		for (el in arr )
 		{
-			// alert( el );
+			a = el.attr('lang');
+			el.attr("class", a);
 		}
 		
 		ChiliBook.chili();
