@@ -50,8 +50,7 @@ $(document).ready(
 				this.setAttribute("class", a);
 
 			}
-		);
-		
-		$(arr).chili();
+		).
+		chili();
 	}
 );
