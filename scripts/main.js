@@ -12,23 +12,17 @@ var baseUri = 'http://jldupont.googlecode.com/svn/scripts';
 // Load Chili Syntax Highlighter
 // -----------------------------
 var ChiliBook;
-//jQuery.getScript( baseUri+'/chili/jquery.chili-1.9.js' );
 jQuery.getScript( baseUri+'/chili/jquery.chili-1.9.js',
-	function() { alert('Loaded ChiliBook='+ChiliBook ); }
-);
-
-/*
-	function(){
+	function() 
+	{ 
 		ChiliBook.automaticSelector = 'source';
 		// don't start without having swapped 
 		// the 'lang' attribute for 'class' ones! (see below)
 		ChiliBook.automatic = false;		
-	} 
-*/
+	}
+);
+jQuery.getScript( baseUri+'/chili/recipes.js' );
 
-
-//jQuery.getScript( baseUri+'/chili/recipes.js' );
-/*
 (function(){
 	var s = document.createElement ('link');
 	s.type = 'text/css';
@@ -49,11 +43,11 @@ $(document).ready(
 			}
 		);
 
-		//alert( ChiliBook );
+		alert( ChiliBook );
 
 		//$("source").chili();
 
 	}// document.ready
 );
-*/
+
 // END chili initialization
