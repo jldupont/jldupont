@@ -43,8 +43,8 @@ jQuery.getScript( baseUri+'/chili/jquery.chili-1.9.js',
 		// don't start without having swapped 
 		// the 'lang' attribute for 'class' ones! (see below)
 		ChiliBook.automatic = false;
-		
 		ChiliBook.loaded = true;
+		doChili();		
 	}
 );
 (function(){
@@ -59,6 +59,7 @@ jQuery.getScript( baseUri+'/chili/recipes.js',
 	function()
 	{
 		ChiliBook.recipesLoaded = true;
+		doChili();		
 	}
 );
 
@@ -74,6 +75,7 @@ $(document).ready(
 		);
 
 		DOMloaded = true;
+		doChili();
 	}// document.ready
 );
 
