@@ -13,8 +13,8 @@ var baseUri = 'http://jldupont.googlecode.com/svn/scripts';
 // -----------------------------
 var ChiliBook;
 //jQuery.getScript( baseUri+'/chili/jquery.chili.pack.js' );
-jQuery.getScript( baseUri+'/chili/jquery.chili.pack.js',
-	function() { alert('loaded'); }
+jQuery.getScript( baseUri+'/chili/jquery.chili.pack.js');
+
 /*
 	function(){
 		ChiliBook.automaticSelector = 'source';
@@ -23,7 +23,7 @@ jQuery.getScript( baseUri+'/chili/jquery.chili.pack.js',
 		ChiliBook.automatic = false;		
 	} 
 */
-);
+
 
 //jQuery.getScript( baseUri+'/chili/recipes.js' );
 /*
