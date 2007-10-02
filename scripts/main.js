@@ -42,12 +42,13 @@ $(document).ready(
 
 			}
 		);
-
-		alert( window.ChiliBook );
-
-		//$("source").chili();
-
 	}// document.ready
 );
 
+$(document).ready(
+	function()
+	{
+		alert('almost done!');
+	}
+);
 // END chili initialization
