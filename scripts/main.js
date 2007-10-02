@@ -82,8 +82,13 @@ $(document).ready(
 
 function doChili()
 {
-	if (ChiliDone == true)
+	var done = false;
+	
+	if (done == true)
 		return true;
+	
+	//if (ChiliDone == true)
+	//	return true;
 
 	if ((DOMloaded == false) || (DOMloaded == undefined ))
 		return false;
@@ -94,9 +99,11 @@ function doChili()
 	if ((ChiliBook.loaded == false) || (ChiliBook.loaded == undefined))
 		return false;
 	
+	alert('doing chili!');
 	$('source').chili();
 
 	ChiliDone = true;
+	done = true;
 
 	return true;
 }
