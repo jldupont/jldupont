@@ -97,6 +97,7 @@ doChili = function()
 	if (ChiliBook.loaded === false)
 		return false;
 	
+	alert('doing chili!');
 	$('source').chili();
 
 	return true;
