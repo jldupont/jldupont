@@ -16,7 +16,7 @@ var DOMloaded = false;
 jQuery.getScript( baseUri+'/timer/jquery.timer.js',
 	function() 
 	{ 
-		$.timer( timeBase, schedulerTick );
+		//$.timer( timeBase, schedulerTick );
 	}
 );
 
