@@ -52,6 +52,6 @@ $(document).ready(
 			}
 		);
 		
-		arr.fn.chili();
+		$(arr).chili();
 	}
 );
