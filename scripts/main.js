@@ -57,6 +57,6 @@ $(document).ready(
 //			el.setAttribute("class", a);
 		}
 		
-		$( ChiliBook.chili );
+		$.chili();
 	}
 );
