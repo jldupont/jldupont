@@ -11,6 +11,7 @@ var timeBase = 1000; // in ms.
 // }}
 
 var DOMloaded = false;
+var ChiliDone = false;
 
 // Grab our timer
 jQuery.getScript( baseUri+'/timer/jquery.timer.js',
@@ -81,13 +82,9 @@ $(document).ready(
 
 doChili = function()
 {
-	var done = false;
-	
-	if (done === true)
+	if (ChiliDone === true)
 		return true;
 
-	done = true;
-	
 	if (DOMloaded === false)
 		return false;
 		
@@ -97,8 +94,9 @@ doChili = function()
 	if (ChiliBook.loaded === false)
 		return false;
 	
-	alert('doing chili!');
 	$('source').chili();
+
+	ChiliDone = true;
 
 	return true;
 }
