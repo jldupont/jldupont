@@ -21,7 +21,7 @@ jQuery.getScript( baseUri+'/timer/jquery.timer.js',
 	}
 );
 
-schedulerTick = function( timer )
+function schedulerTick( timer )
 {
 	var stop_timer;
 	
