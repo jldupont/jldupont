@@ -50,7 +50,7 @@ $(document).ready(
 				this.setAttribute("class", a);
 
 			}
-		).
-		chili();
+		);
+
 	}
 );
