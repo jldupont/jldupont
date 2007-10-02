@@ -9,10 +9,22 @@
 */
 //<source lang=php>
 
-$template_file_name = 'packages.xml.tpl';
-$template_line 		= '<p>$package</p>'."\n";
+require (realpath(dirname(__FILE__).'/../../parse.channel.php'));
+
+if (empty(Channel::$uri))
+{
+	echo 'Unable to derive URI of channel using channel.xml file!'."\n";	
+	var_dump( Channel::$data );
+	die(0);
+}
+
+echo 'Channel uri='.Channel::$uri."\n";
+
+$template_file_name	= 'packages.xml.tpl';
+$template_line		= '<p>$package</p>';
 $target_file_name	= 'packages.xml';
 $replacement 		= '$package';
+$replacement_uri		= '$uri';
 
 // ------------------------------
 $cdir = dirname( __FILE__ );
@@ -57,19 +69,20 @@ if (empty( $dirs ))
 foreach( $dirs as $dir )
 {
 	$c = str_replace( $replacement, $dir, $template_line );
-	$contents .= $c;
+	$contents .= $c."\n";
 }
 
 #echo $contents; // debug
 
 // now, replace $contents in the template file
 $new_contents = str_replace('$contents', $contents, $tpl );
+$final_contents = str_replace( $replacement_uri, Channel::$uri, $new_contents );
 
 // Finally, write the template in the target file
 $path = $cdir.'/'.$target_file_name;
-$bytesWritten = file_put_contents( $path, $new_contents );
+$bytesWritten = file_put_contents( $path, $final_contents );
 
-$ok = (strlen($new_contents) === $bytesWritten);
+$ok = (strlen($final_contents) === $bytesWritten);
 $msg = $ok ? "Success!":"Failure to write target file!";
 
 echo $msg;

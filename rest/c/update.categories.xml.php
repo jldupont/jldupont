@@ -9,10 +9,22 @@
 */
 //<source lang=php>
 
+require (realpath(dirname(__FILE__).'/../../parse.channel.php'));
+
+if (empty(Channel::$uri))
+{
+	echo 'Unable to derive URI of channel using channel.xml file!'."\n";	
+	var_dump( Channel::$data );
+	die(0);
+}
+
+echo 'Channel uri='.Channel::$uri."\n";
+
 $template_file_name = 'categories.xml.tpl';
 $template_line 		= '<c xlink:href="/rest/c/$category/info.xml">$category</c>'."\n";
 $target_file_name	= 'categories.xml';
 $replacement 		= '$category';
+$replacementUri 	= '$uri';
 
 // ------------------------------
 $cdir = dirname( __FILE__ );
@@ -65,11 +77,13 @@ foreach( $dirs as $dir )
 // now, replace $contents in the template file
 $new_contents = str_replace('$contents', $contents, $tpl );
 
+$final_contents = str_replace($replacementUri, Channel::$uri, $new_contents );
+
 // Finally, write the template in the target file
 $path = $cdir.'/'.$target_file_name;
-$bytesWritten = file_put_contents( $path, $new_contents );
+$bytesWritten = file_put_contents( $path, $final_contents );
 
-$ok = (strlen($new_contents) === $bytesWritten);
+$ok = (strlen($final_contents) === $bytesWritten);
 $msg = $ok ? "Success!":"Failure to write target file!";
 
 echo $msg;

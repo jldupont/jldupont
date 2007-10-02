@@ -4,10 +4,8 @@
     xmlns:xlink="http://www.w3.org/1999/xlink"
     xsi:schemaLocation="http://pear.php.net/dtd/rest.allpackages
     http://pear.php.net/dtd/rest.allpackages.xsd">
-    
-<!-- customize here -->
-<c>jldupont.googlecode.com/svn</c>
 
-<!-- do not touch from here -->
+<!-- do not touch from here -->    
+<c>$uri</c>
 $contents
 </a>

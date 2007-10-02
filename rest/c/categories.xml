@@ -6,8 +6,8 @@
     xsi:schemaLocation="http://pear.php.net/dtd/rest.allcategories
     http://pear.php.net/dtd/rest.allcategories.xsd">
 
+<!-- DO NOT EDIT BELOW HERE -->
 <ch>jldupont.googlecode.com/svn</ch> <!-- not read by list-all command -->
-
 <c xlink:href="/rest/c/Amazon/info.xml">Amazon</c>
 
 </a>

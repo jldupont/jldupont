@@ -6,9 +6,7 @@
     xsi:schemaLocation="http://pear.php.net/dtd/rest.allcategories
     http://pear.php.net/dtd/rest.allcategories.xsd">
 
-<!-- customize here -->
-<ch>jldupont.googlecode.com/svn</ch> <!-- not read by list-all command -->
-
-<!-- DO NOT BELOW HERE -->
+<!-- DO NOT EDIT BELOW HERE -->
+<ch>$uri</ch> <!-- not read by list-all command -->
 $contents
 </a>
