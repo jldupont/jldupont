@@ -82,16 +82,16 @@ $(document).ready(
 
 function doChili()
 {
-	if (ChiliDone === true)
+	if (ChiliDone == true)
 		return true;
 
-	if (DOMloaded === false)
+	if ((DOMloaded == false) || (DOMloaded == undefined ))
 		return false;
 		
-	if (ChiliBook.recipesLoaded === false)
+	if ((ChiliBook.recipesLoaded == false) || (ChiliBook.recipesLoaded == undefined))
 		return false;
 
-	if (ChiliBook.loaded === false)
+	if ((ChiliBook.loaded == false) || (ChiliBook.loaded == undefined))
 		return false;
 	
 	$('source').chili();
