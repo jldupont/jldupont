@@ -80,7 +80,7 @@ $(document).ready(
 	}// document.ready
 );
 
-doChili = function()
+function doChili()
 {
 	if (ChiliDone === true)
 		return true;
