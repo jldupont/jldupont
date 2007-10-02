@@ -48,6 +48,8 @@ $(document).ready(
 		
 		for (el in arr )
 		{
+			alert( el instanceof Element );
+			
 			a = el.getAttributeNode('lang').nodeValue; 
 			el.setAttribute("class", a);
 		}
