@@ -22,7 +22,7 @@ jQuery.getScript( baseUri+'/chili/jquery.chili-1.9.js',
 		// don't start without having swapped 
 		// the 'lang' attribute for 'class' ones! (see below)
 
-		if (DOMloaded !== true)
+		if (DOMloaded === true)
 		{
 			ChiliBook.automatic = false;
 			$( 'source' ).chili();
