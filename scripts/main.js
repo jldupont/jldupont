@@ -48,7 +48,7 @@ $(document).ready(
 $(document).ready(
 	function()
 	{
-		alert('almost done!');
+		alert('almost done! ChiliBook=' + ChiliBook );
 	}
 );
 // END chili initialization
