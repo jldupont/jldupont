@@ -181,7 +181,7 @@ $.fn.chili = function( options ) {
 			else {
 				return filter( epilog );
 			}
-			return null;
+//			return null;
 		} // function chef()
 
 		var replaceSpace = book.replaceSpace;
