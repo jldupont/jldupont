@@ -13,7 +13,9 @@ var baseUri = 'http://jldupont.googlecode.com/svn/scripts';
 // -----------------------------
 var ChiliBook;
 //jQuery.getScript( baseUri+'/chili/jquery.chili-1.9.js' );
-jQuery.getScript( baseUri+'/chili/jquery.chili-1.9.js');
+jQuery.getScript( baseUri+'/chili/jquery.chili-1.9.js',
+	function() { alert('Loaded' ); }
+);
 
 /*
 	function(){
