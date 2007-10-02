@@ -23,7 +23,10 @@ jQuery.getScript( baseUri+'/chili/jquery.chili-1.9.js',
 		// the 'lang' attribute for 'class' ones! (see below)
 
 		if (DOMloaded !== true)
-			ChiliBook.automatic = false;	
+		{
+			ChiliBook.automatic = false;
+			$( 'source' ).chili();
+		}
 	}
 );
 jQuery.getScript( baseUri+'/chili/recipes.js' );
