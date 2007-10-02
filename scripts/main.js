@@ -13,6 +13,7 @@ var baseUri = 'http://jldupont.googlecode.com/svn/scripts';
 // -----------------------------
 var ChiliBook;
 var DOMloaded = false;
+var evs = '';
 
 jQuery.getScript( baseUri+'/chili/jquery.chili-1.9.js',
 	function() 
@@ -22,7 +23,8 @@ jQuery.getScript( baseUri+'/chili/jquery.chili-1.9.js',
 		// the 'lang' attribute for 'class' ones! (see below)
 		ChiliBook.automatic = false;	
 		
-		alert('DOMloaded='+DOMloaded );	
+		evs = evs + 'chili ';
+		alert( evs );	
 	}
 );
 jQuery.getScript( baseUri+'/chili/recipes.js' );
@@ -46,6 +48,9 @@ $(document).ready(
 
 			}
 		);
+
+		evs = evs + 'SWAP ';
+		alert( evs );	
 	}// document.ready
 );
 
@@ -54,6 +59,8 @@ $(document).ready(
 	{
 		// alert('almost done! ChiliBook=' + ChiliBook );
 		DOMloaded = true;
+		evs = evs + 'DOM ';
+		alert( evs );	
 	}
 );
 // END chili initialization
