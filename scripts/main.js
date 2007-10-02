@@ -44,6 +44,7 @@ $(document).ready(
 		
 		
 		alert( var_dump( arr ) );
+		alert( "is array?"+arr instanceof Array );
 		
 		for (el in arr )
 		{
