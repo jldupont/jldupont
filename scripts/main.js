@@ -7,7 +7,7 @@
 // Customization section.
 // {{
 var baseUri = 'http://jldupont.googlecode.com/svn/scripts';
-var timeBase = 50; // in ms.
+var timeBase = 250; // in ms.
 // }}
 
 var DOMloaded = false;
@@ -23,6 +23,8 @@ jQuery.getScript( baseUri+'/timer/jquery.timer.js',
 schedulerTick = function( timer )
 {
 	var stop_timer;
+	
+	alert('tick!');
 	
 	stop_timer = doChili();
 		
