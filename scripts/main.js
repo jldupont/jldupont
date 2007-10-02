@@ -32,7 +32,7 @@ jQuery.getScript( baseUri+'chili/recipes.js' );
 $(document).ready(
 	function()
 	{
-		arr = $("source").attr('lang');
+		arr = $("source[lang]");
 		
 		function var_dump(obj) {
 		   if(typeof obj == "object") {
