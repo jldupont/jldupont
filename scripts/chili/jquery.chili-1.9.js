@@ -7,11 +7,6 @@ WEBSITE: http://noteslog.com/chili/
 
 											   Copyright 2007 / Andrea Ercolino
 ===============================================================================
-{{
-Modified by: Jean-Lou Dupont
-History:
-- Added customizable attribute instead of hard-coded 'class'
-}}
 */
 
 
@@ -21,13 +16,11 @@ ChiliBook = { //implied global
 
 	  version:            "1.9" // 2007-09-24
 
-	, attributeSelector:  'lang'								// JLD change here
-
 	, automatic:          true
-	, automaticSelector:  "source"
+	, automaticSelector:  "code"
 
 	, codeLanguage:       function( el ) {
-		var recipeName = $( el ).attr( ChiliBook.attributeSelector );		// JLD change here
+		var recipeName = $( el ).attr( "class" );
 		return recipeName ? recipeName : '';
 	}
 
@@ -337,7 +330,7 @@ $( function() {
 			if( ChiliBook.elementClass ) {
 				ChiliBook.codeLanguage = function ( el ) {
 					var selectClass = new RegExp( "\\b" + ChiliBook.elementClass + "\\b", "gi" );
-					var elClass = $( el ).attr( ChiliBook.attributeSelector );		// JLD change here
+					var elClass = $( el ).attr( "class" );
 					if( ! elClass ) { 
 						return ''; 
 					}

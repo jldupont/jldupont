@@ -11,7 +11,10 @@ var baseUri = 'http://jldupont.googlecode.com/svn/scripts/';
 
 // Chili Syntax Highlighter
 // ------------------------
-jQuery.getScript( baseUri+'chili/jquery.chili-1.9.js' );
+jQuery.getScript( baseUri+'chili/jquery.chili.pack.js',
+	function(){
+		ChiliBook.elementPath = 'source';
+} );
 jQuery.getScript( baseUri+'chili/recipes.js' );
 
 (function(){
