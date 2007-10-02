@@ -33,9 +33,11 @@ $(document).ready(
 	function()
 	{
 		arr = $("source").attr('lang');
+		
+		alert( arr );
 		for (el in arr )
 		{
-			alert( el );
+			// alert( el );
 		}
 		
 		ChiliBook.chili();
