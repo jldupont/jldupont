@@ -32,25 +32,16 @@ jQuery.getScript( baseUri+'chili/recipes.js' );
 $(document).ready(
 	function()
 	{
-		arr = $("source[lang]");
-		
-//		alert( "Element?"+(arr instanceof Element) );
-//		alert( "Array?"+(arr instanceof Array) );		
-//		alert( "Object?"+(arr instanceof Object) );			
-//		alert( "jQuery?"+(arr instanceof jQuery) );					
-		
-		
-//		alert( var_dump( arr ) );
-//		alert( "is array?"+arr instanceof Array );
-	
-		$(arr).each( function()
+		$("source[lang]").
+			each( function()
 			{
-//				alert("Element?"+(this instanceof Element));
 				a = this.getAttributeNode('lang').nodeValue; 
 				this.setAttribute("class", a);
 
 			}
 		);
 
-	}
+		$("source").chili();
+
+	}// document.ready
 );
