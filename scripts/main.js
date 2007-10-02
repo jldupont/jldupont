@@ -43,7 +43,7 @@ $(document).ready(
 			}
 		);
 
-		alert( ChiliBook );
+		alert( window.ChiliBook );
 
 		//$("source").chili();
 
