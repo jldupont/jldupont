@@ -9,13 +9,13 @@
 var baseUri = 'http://jldupont.googlecode.com/svn/scripts/';
 // }}
 
-// Chili Syntax Highlighter
-// ------------------------
+// Load Chili Syntax Highlighter
+// -----------------------------
 jQuery.getScript( baseUri+'chili/jquery.chili.pack.js',
 	function(){
 		ChiliBook.elementPath = 'source';
 		// don't start without having swapped 
-		// the 'lang' attribute for 'class' ones!
+		// the 'lang' attribute for 'class' ones! (see below)
 		ChiliBook.automatic = false;		
 	} 
 );
@@ -41,7 +41,10 @@ $(document).ready(
 			}
 		);
 
+		alert( ChiliBook );
+
 		$("source").chili();
 
 	}// document.ready
 );
+// END chili initialization
