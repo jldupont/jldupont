@@ -22,6 +22,8 @@ jQuery.getScript( baseUri+'/timer/jquery.timer.js',
 
 schedulerTick = function( timer )
 {
+	var stop_timer;
+	
 	stop_timer = doChili();
 		
 	if (stop_timer === true)
@@ -40,6 +42,8 @@ jQuery.getScript( baseUri+'/chili/jquery.chili-1.9.js',
 		ChiliBook.automaticSelector = 'source';
 		// don't start without having swapped 
 		// the 'lang' attribute for 'class' ones! (see below)
+		ChiliBook.automatic = false;
+		
 		ChiliBook.loaded = true;
 	}
 );
