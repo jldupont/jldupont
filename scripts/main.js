@@ -11,7 +11,6 @@ var timeBase = 250; // in ms.
 // }}
 
 var DOMloaded = false;
-var tasks = new Array;
 
 // Grab our timer
 jQuery.getScript( baseUri+'/timer/jquery.timer.js',
@@ -23,8 +22,7 @@ jQuery.getScript( baseUri+'/timer/jquery.timer.js',
 
 schedulerTick = function( timer )
 {
-	for (task in tasks)
-		stop_timer = task.call( this );
+	stop_timer = doChili();
 		
 	if (stop_timer === true)
 		timer.stop();
@@ -78,20 +76,18 @@ $(document).ready(
 doChili = function()
 {
 	if (DOMloaded === false)
-		return;
+		return false;
 		
 	if (ChiliBook.recipesLoaded === false)
-		return;
+		return false;
 
 	if (ChiliBook.loaded === false)
-		return;
+		return false;
 	
 	$('source').chili();
 	
 	return true;
 }
-
-tasks[0] = doChili;
 
 // END chili initialization
 
