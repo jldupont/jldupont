@@ -85,6 +85,8 @@ doChili = function()
 	
 	if (done === true)
 		return true;
+
+	done = true;
 	
 	if (DOMloaded === false)
 		return false;
@@ -97,8 +99,6 @@ doChili = function()
 	
 	$('source').chili();
 
-	done = true;
-	
 	return true;
 }
 
