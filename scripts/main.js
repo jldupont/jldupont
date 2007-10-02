@@ -13,7 +13,6 @@ var baseUri = 'http://jldupont.googlecode.com/svn/scripts';
 // -----------------------------
 var ChiliBook;
 var DOMloaded = false;
-var evs = '';
 
 jQuery.getScript( baseUri+'/chili/jquery.chili-1.9.js',
 	function() 
@@ -24,13 +23,18 @@ jQuery.getScript( baseUri+'/chili/jquery.chili-1.9.js',
 
 		if (DOMloaded === true)
 		{
-			alert('highlighting ?');
+			alert('recipes loaded ?' + ChiliBook.recipesLoaded );
 			ChiliBook.automatic = false;
 			$( 'source' ).chili();
 		}
 	}
 );
-jQuery.getScript( baseUri+'/chili/recipes.js' );
+jQuery.getScript( baseUri+'/chili/recipes.js',
+	function()
+	{
+		ChiliBook.recipesLoaded = true;
+	}
+);
 
 (function(){
 	var s = document.createElement ('link');
