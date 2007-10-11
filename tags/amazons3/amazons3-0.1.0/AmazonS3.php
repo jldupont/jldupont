@@ -261,7 +261,7 @@ class AmazonS3
 	public function putObject(	$bucket, 
 								$object, 
 								&$document,
-								$type = null,
+								$ext = null,
 								$public = null )
 	{
 		$type = isset($this->mime_types[$ext]) ? $this->mime_types[$ext] : "application/octet-stream";
