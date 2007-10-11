@@ -29,6 +29,7 @@ class AmazonS3
 	
 	var $responseHeaders = null;
 	var $responseBody = null;
+	var $put_responseBody = null;
 	var $responseCode = null;
 	var $requestHeaders = null;
 
@@ -284,6 +285,8 @@ class AmazonS3
 						"acl"		=> $acl,
 					);
 		$result = $this->doRequest($req, null, $document, true );
+		
+		$this->put_responseBody = $this->responseBody;
 		
 		$info = $this->getObjectInfo( $bucket, $obj );
 
