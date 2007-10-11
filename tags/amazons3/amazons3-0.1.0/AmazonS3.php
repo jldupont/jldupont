@@ -1,18 +1,16 @@
 <?php
+/**
+ * @author Jean-Lou Dupont
+ * @package AmazonS3
+ * @version $Id$
 /*
-<!--<wikitext>-->
- <file>
-  <name>AmazonS3.body.php</name>
-  <version>$Id$</version>
-  <package>Extension.AmazonS3</package>
- </file>
-<!--</wikitext>-->
-*/
 // <source lang=php>
 
-// This class assumes that the following extensions
-// are installed and accessible.
-// Use Pear to grab these.
+/*
+   This class assumes that the following extensions
+   are installed and accessible.
+   Use Pear to grab these.
+*/
 require_once 'HTTP/Request.php';
 require_once 'Crypt/HMAC.php';
 
@@ -29,17 +27,11 @@ class AmazonS3
 	
 	var $responseHeaders = null;
 	var $responseBody = null;
-	var $put_responseBody = null;
+	var $put_responseBody = null; // debug.
 	var $responseCode = null;
 	var $requestHeaders = null;
-	var $put_requestHeaders = null;
+	var $put_requestHeaders = null; // debug.
 
-	// simplified error codes
-	const codeError 		= 0;
-	const codeOK 			= 1;
-	const codeUnauthorized	= 2;
-	const codeNotModified	= 3;	
-	
 	// statics
 	static $timeout = null;
 	static $port = null;
@@ -52,7 +44,9 @@ class AmazonS3
 		
 		$this->init();
 	}
-	
+	/**
+	 * Initialization of the static variables.
+	 */
 	public function init()
 	{
 		// initialize the defaults.
@@ -60,15 +54,15 @@ class AmazonS3
 		self::$port = self::c_port;
 		self::$site = self::amazon_site;
 	}
-	public static function setTimeout( $t ) { self::$timeout = $t; }
-	public static function setPort( $p ) { self::$port = $p; }
-	public static function setSite( $s ) { self::$site = $s; }
+	public static function setTimeout( $t ) { self::$timeout = $t;	}
+	public static function setPort( $p )	{ self::$port = $p; 	}
+	public static function setSite( $s )	{ self::$site = $s; 	}
 
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 // BUCKET RELATED
 
 	/**
-		GET BUCKETS
+	 * GET BUCKETS
 	 */
 	public function getBuckets( )
 	{
@@ -79,43 +73,36 @@ class AmazonS3
 						"acl"		=> null,
 						"resource"	=> "/",
 					);
-		$result = $this->doRequest($req, null /*no parameters*/, $document );
+		$result = $this->doRequest($req, null /*no parameters*/ );
 		
-		if (empty( $document ))
+		if (empty( $this->responseBody ))
 			return null;
 			
-		$r = preg_match_all("@<"."Name>(.*?)<"."/Name>@", $document, $matches);
+		$r = preg_match_all("@<"."Name>(.*?)<"."/Name>@", $this->responseBody, $matches);
 		if (($r === false) || ($r === 0))
 			return null;
 			
 		return $matches[1];
 	}
 	/**
-		CREATE BUCKET
+	 * CREATE BUCKET
 	 */
 	public function createBucket( $bucket )
 	{
-		// security measure		
-		$bucket = urlencode( $bucket );
-		
 		$req = array(	"verb"		=> "PUT",
 						"md5"		=> null,
 						"type"		=> null,
 						"headers"	=> null,
 						"resource"	=> "/$bucket",
 					);
-		$result = $this->doRequest( $req, null, $document );
-
+		$result = $this->doRequest( $req );
 		return $this->isOk($result);
 	}
 	/**
-		DELETE BUCKET
+	 * DELETE BUCKET
 	 */
 	public function deleteBucket( $bucket )
 	{
-		// security measure		
-		$bucket = urlencode( $bucket );
-				
 		$req = array(	"verb"		=> "DELETE",
 						"md5"		=> null,
 						"type"		=> null,
@@ -123,12 +110,12 @@ class AmazonS3
 						"resource"	=> "/$bucket",
 					);
 					
-		$result = $this->doRequest( $req, null, $document );
+		$result = $this->doRequest( $req );
 		return $this->isOk($result);
 	}
 	
 	/**
-		Returns the size of a specific $bucket/$prefix
+	 * Returns the size of a specific $bucket/$prefix
 	 */
 	public function getDirectorySize( $bucket, $prefix = "" )
 	{
@@ -146,17 +133,13 @@ class AmazonS3
 	}
 
 	/**
-		Returns the content of a specific bucket
+	 * Returns the content of a specific bucket
 	 */
 	function getBucketContents(	$bucket, 
 								$prefix = null, 
 								$delim = null, 
 								$marker = null  )
 	{
-		// security measures		
-		$bucket = urlencode( $bucket );
-		$prefix = urlencode( $prefix );
-		
 		$req = array(	"verb"		=> "GET",
 						"md5"		=> null,
 						"type"		=> null,
@@ -172,7 +155,9 @@ class AmazonS3
 							"marker"	=> $marker, 
 							"delimiter" => $delim );
 							
-		$result = $this->doRequest($req, $params, $document );		
+		$result = $this->doRequest($req, $params );		
+
+		$document = $this->responseBody;
 
 		$keys = array();
 		
@@ -222,6 +207,7 @@ class AmazonS3
 	}
 	
 	/**
+	 * Verifies the existence of a specific bucket
 	 */
 	function bucketExists( $bucket )
 	{
@@ -233,22 +219,16 @@ class AmazonS3
 		return in_array($bucket, $buckets );
 	}
 
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 // OBJECT RELATED
 
 	/**
-		Get a single object.
+	 * GET OBJECT
 	 */
 	public function getObject( $bucket, $object, &$document )
 	{
-		$obj = trim( $object );
-		if($obj[0] != "/" ) 
-			$obj = "/$obj";
-			
-		// security measures					
-		$obj = urlencode( $obj );
-		$bucket = urlencore( $bucket );
-			
+		self::formatObject( $object );
+					
 		$req = array(	"verb"		=> "GET",
 						"md5"		=> null,
 						"type"		=> null,
@@ -258,6 +238,7 @@ class AmazonS3
 		return $this->doRequest($req, null, $document );
 	}
 	/**
+	 * PUT OBJECT
 	 */	
 	public function putObject(	$bucket, 
 								$object, 
@@ -265,47 +246,37 @@ class AmazonS3
 								$ext = null,
 								$public = null )
 	{
-		$type = isset($this->mime_types[$ext]) ? $this->mime_types[$ext] : "application/octet-stream";
+		$type = isset(self::$mime_types[$ext]) ? self::$mime_types[$ext] : 
+												"application/octet-stream";
 	
 		$acl = isset($public) ? "public-read" : null;
 
-		$obj = trim( $object );	
-		if(substr($obj, 0, 1) != "/" ) 
-			$obj = "/$obj";
-			
-		// security measures
-		$bucket = urlencode( $bucket );
-		$obj = urlencode( $obj );
-			
+		self::formatObject( $object );
+					
 		$req = array(	"verb"		=> "PUT",
 						"md5"		=> null,
 						"type"		=> null,
 						"headers"	=> null,
-						"resource"	=> "/$bucket" . $obj,
+						"resource"	=> "/$bucket" . $object,
 						"type" 		=> $type,
 						"acl"		=> $acl,
 					);
+					
 		$result = $this->doRequest($req, null, $document, true );
 		
 		$this->put_responseBody   = $this->responseBody;
 		$this->put_requestHeaders = $this->requestHeaders;
 		
-		$info = $this->getObjectInfo( $bucket, $obj );
+		$info = $this->getObjectInfo( $bucket, $object );
 
 		return ($info['hash'] == md5($document));
 	}
 	/**
-		Delete a single object.
+	 * DELETE OBJECT
 	 */
 	public function deleteObject( $bucket, $object )
 	{
-		$object = trim( $object );
-		if(trim($object[0]) != "/" ) 
-			$object = "/$object";
-			
-		// security measures					
-		$object = urlencode( $object );
-		$bucket = urlencode( $bucket );
+		self::formatObject( $object );			
 		
 		$req = array(	"verb"		=> "DELETE",
 						"md5"		=> null,
@@ -318,6 +289,38 @@ class AmazonS3
 		return !$this->objectExists($bucket, $object);
 	}
 	/**
+	 * HEAD OBJECT	
+	 *
+	 * 'x-amz-id-2'
+	 * 'x-amz-request-id'
+	 * 'date'
+	 * 'last-modified'
+	 * 'etag'
+	 * 'content-type'
+	 * 'content-length'
+	 * 'server'
+	 */
+	function getObjectHead($bucket, $object, &$responseHeaders )
+	{
+		self::formatObject( $object );
+
+		$req = array(	"verb"		=> "HEAD",
+						"md5"		=> null,
+						"type"		=> null,
+						"headers"	=> null,
+						"resource"	=> "/$bucket" . $object,
+					);
+
+		$result = $this->doRequest( $req );
+		
+		$responseHeaders = $this->responseHeaders;
+		
+		return $result;
+	}
+	/**
+	 * Gets information about a specific object
+	 *
+	 * 'name', 'date', 'hash', 'size', 'type'
 	 */
 	public function getObjectInfo( $bucket, $object )
 	{
@@ -330,30 +333,9 @@ class AmazonS3
 			
 		return $object[0];
 	}
-
 	/**
-	
-	 */
-	function getObjectHead($bucket, $object, &$document )
-	{
-		$object = trim( $object );
-		if(substr($object, 0, 1) != "/" ) 
-			$object = "/$object";
-
-		$object = urlencode( trim( $object ) );
-		$bucket = urlencode( $bucket ); 
-							
-		$req = array(	"verb"		=> "HEAD",
-						"md5"		=> null,
-						"type"		=> null,
-						"headers"	=> null,
-						"resource"	=> "/$bucket" . $object,
-					);
-
-		return $this->doRequest( $req, null, $document );
-	}
-
-	/**
+	 * Returns the existence status of an object.
+	 *
 	 */
 	function objectExists($bucket, $object)
 	{
@@ -363,7 +345,7 @@ class AmazonS3
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 	/**
-		This method handles *all* requests to AmazonS3.
+	 * This method handles *all* requests to AmazonS3.
 	 */
 	public function doRequest(	&$req, 
 								$params = null,		// uri level parameters
@@ -371,13 +353,10 @@ class AmazonS3
 								$putBody = false )	// signals a PUT request									
 	{
 		if(isset($req['resource']))
-		{
-			$req['resource'] = urlencode($req['resource']);
-			$req['resource'] = str_replace("%2F", "/", $req['resource']);
-		}
+			$req['resource'] = self::urlencodeClean( $req['resource'] );
 
 		$verb = $req['verb'];
-    	$date = gmdate(DATE_RFC2822);
+    	$date = gmdate( DATE_RFC2822 );
 
 		$sig = $this->signature($req, $date, $this->secretKey );
 		
@@ -425,16 +404,17 @@ class AmazonS3
 		$error = $request->sendRequest();
 
 		// return all response headers.
-		$this->requestHeaders = $args;
-	    $this->responseHeaders =$request->getResponseHeader();
-		$this->responseBody =	$document = $request->getResponseBody();
-		$this->responseCode =	$code = 	$request->getResponseCode();
+		$this->requestHeaders	= $args;
+	    $this->responseHeaders	= 			$request->getResponseHeader();
+		$this->responseBody		= $document = $request->getResponseBody();
+		$this->responseCode		= $code 	= $request->getResponseCode();
 	
 		return $code;
 	}
 	/**
+	 * Verifies if the operation went without errors.
 	 */
-	function isOk($result)
+	function isOk( &$result )
 	{
 		$r = preg_match("@<Error>.*?<Message>(.*?)</Message>.*?</Error>@", $result, $matches);
 		
@@ -446,9 +426,8 @@ class AmazonS3
 
 		return true;
 	}
-
 	/**
-		Sign the request.
+	 * Sign a request.
 	 */
 	function signature( &$req, $date, $secretKey )
 	{
@@ -469,6 +448,7 @@ class AmazonS3
 	    return $this->hex2b64($hasher->hash($str));
 	}
 	/**
+	 * Helper for the signature method.
 	 */
 	function hex2b64($str) 
 	{
@@ -477,8 +457,38 @@ class AmazonS3
 	        $raw .= chr(hexdec(substr($str, $i, 2)));
 	    return base64_encode($raw);
 	}
+
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 	/**
-		DEBUG function
+	 *  Special urlencode
+	 */
+	static function urlencodeClean( &$input )
+	{
+		$input = urlencode( $input );
+		$input = str_replace( "%2F", "/", $input );
+		
+		return $input;
+	}
+
+	/**
+	 * Format an object.
+	 */
+	static function formatObject( &$object )
+	{
+		$object = trim( $object );
+		if(substr($object, 0, 1) != "/" ) 
+			$object = "/$object";
+			
+		return $object;
+	}
+	
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	
+	
+	/**
+	 * DEBUG function
 	 */
 	function ByteToString( $str )
 	{
@@ -488,6 +498,9 @@ class AmazonS3
 			$ret .= chr( hexdec($char) );
 		return $ret;
 	}
+	/**
+	 * DEBUG function
+	 */
 	function StringToByte( $str )
 	{
 		$a = str_split( $str );
@@ -501,6 +514,9 @@ class AmazonS3
 	}
 
 /**
+ * MIME types
+ *
+ * Helper table.
  */	
 static $mime_types = array(
 "323" => "text/h323", 
