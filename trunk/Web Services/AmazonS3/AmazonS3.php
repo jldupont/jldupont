@@ -95,9 +95,6 @@ class AmazonS3
 	 */
 	public function createBucket( $bucket )
 	{
-		// security measure		
-		$bucket = urlencode( $bucket );
-		
 		$req = array(	"verb"		=> "PUT",
 						"md5"		=> null,
 						"type"		=> null,
@@ -113,9 +110,6 @@ class AmazonS3
 	 */
 	public function deleteBucket( $bucket )
 	{
-		// security measure		
-		$bucket = urlencode( $bucket );
-				
 		$req = array(	"verb"		=> "DELETE",
 						"md5"		=> null,
 						"type"		=> null,
@@ -153,10 +147,6 @@ class AmazonS3
 								$delim = null, 
 								$marker = null  )
 	{
-		// security measures		
-		$bucket = urlencode( $bucket );
-		$prefix = urlencode( $prefix );
-		
 		$req = array(	"verb"		=> "GET",
 						"md5"		=> null,
 						"type"		=> null,
@@ -241,13 +231,9 @@ class AmazonS3
 	 */
 	public function getObject( $bucket, $object, &$document )
 	{
-		$obj = trim( $object );
-		if($obj[0] != "/" ) 
-			$obj = "/$obj";
-			
-		// security measures					
-		$obj = urlencode( $obj );
-		$bucket = urlencore( $bucket );
+		$object = trim( $object );	
+		if(substr($obj, 0, 1) != "/" ) 
+			$object = "/$object";
 			
 		$req = array(	"verb"		=> "GET",
 						"md5"		=> null,
@@ -265,32 +251,29 @@ class AmazonS3
 								$ext = null,
 								$public = null )
 	{
-		$type = isset($this->mime_types[$ext]) ? $this->mime_types[$ext] : "application/octet-stream";
+		$type = isset(self::$mime_types[$ext]) ? self::$mime_types[$ext] : "application/octet-stream";
 	
 		$acl = isset($public) ? "public-read" : null;
 
-		$obj = trim( $object );	
+		$object = trim( $object );	
 		if(substr($obj, 0, 1) != "/" ) 
-			$obj = "/$obj";
-			
-		// security measures
-		$bucket = urlencode( $bucket );
-		$obj = urlencode( $obj );
+			$object = "/$object";
 			
 		$req = array(	"verb"		=> "PUT",
 						"md5"		=> null,
 						"type"		=> null,
 						"headers"	=> null,
-						"resource"	=> "/$bucket" . $obj,
+						"resource"	=> "/$bucket" . $object,
 						"type" 		=> $type,
 						"acl"		=> $acl,
 					);
+					
 		$result = $this->doRequest($req, null, $document, true );
 		
 		$this->put_responseBody   = $this->responseBody;
 		$this->put_requestHeaders = $this->requestHeaders;
 		
-		$info = $this->getObjectInfo( $bucket, $obj );
+		$info = $this->getObjectInfo( $bucket, $object );
 
 		return ($info['hash'] == md5($document));
 	}
@@ -303,10 +286,6 @@ class AmazonS3
 		if(trim($object[0]) != "/" ) 
 			$object = "/$object";
 			
-		// security measures					
-		$object = urlencode( $object );
-		$bucket = urlencode( $bucket );
-		
 		$req = array(	"verb"		=> "DELETE",
 						"md5"		=> null,
 						"type"		=> null,
@@ -340,9 +319,6 @@ class AmazonS3
 		if(substr($object, 0, 1) != "/" ) 
 			$object = "/$object";
 
-		$object = urlencode( trim( $object ) );
-		$bucket = urlencode( $bucket ); 
-							
 		$req = array(	"verb"		=> "HEAD",
 						"md5"		=> null,
 						"type"		=> null,
