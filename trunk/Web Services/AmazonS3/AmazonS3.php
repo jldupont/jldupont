@@ -32,6 +32,7 @@ class AmazonS3
 	var $put_responseBody = null;
 	var $responseCode = null;
 	var $requestHeaders = null;
+	var $put_requestHeaders = null;
 
 	// simplified error codes
 	const codeError 		= 0;
@@ -286,7 +287,8 @@ class AmazonS3
 					);
 		$result = $this->doRequest($req, null, $document, true );
 		
-		$this->put_responseBody = $this->responseBody;
+		$this->put_responseBody   = $this->responseBody;
+		$this->put_requestHeaders = $this->requestHeaders;
 		
 		$info = $this->getObjectInfo( $bucket, $obj );
 
@@ -361,21 +363,6 @@ class AmazonS3
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 	/**
-	 */
-	function isOk($result)
-	{
-		$r = preg_match("@<Error>.*?<Message>(.*?)</Message>.*?</Error>@", $result, $matches);
-		
-		if(($r !== false) && ($r !== 0))
-		{
-			$this->_error = $matches[1];
-			return false;
-		}
-
-		return true;
-	}
-
-	/**
 		This method handles *all* requests to AmazonS3.
 	 */
 	public function doRequest(	&$req, 
@@ -445,6 +432,21 @@ class AmazonS3
 	
 		return $code;
 	}
+	/**
+	 */
+	function isOk($result)
+	{
+		$r = preg_match("@<Error>.*?<Message>(.*?)</Message>.*?</Error>@", $result, $matches);
+		
+		if(($r !== false) && ($r !== 0))
+		{
+			$this->_error = $matches[1];
+			return false;
+		}
+
+		return true;
+	}
+
 	/**
 		Sign the request.
 	 */
