@@ -608,6 +608,7 @@ static $mime_types = array(
 "pdf" => "application/pdf", 
 "pfx" => "application/x-pkcs12",
 "pgm" => "image/x-portable-graymap", 
+"php" => "text/x-php",
 "pko" => "application/ynd.ms-pkipko", 
 "pma" => "application/x-perfmon", 
 "pmc" => "application/x-perfmon", 
