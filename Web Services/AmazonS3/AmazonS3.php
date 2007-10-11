@@ -29,6 +29,7 @@ class AmazonS3
 	
 	var $responseHeaders = null;
 	var $responseBody = null;
+	var $put_responseBody = null;
 	var $responseCode = null;
 	var $requestHeaders = null;
 
@@ -259,7 +260,8 @@ class AmazonS3
 	 */	
 	public function putObject(	$bucket, 
 								$object, 
-								&$document, 
+								&$document,
+								$ext = null,
 								$public = null )
 	{
 		$type = isset($this->mime_types[$ext]) ? $this->mime_types[$ext] : "application/octet-stream";
@@ -283,6 +285,8 @@ class AmazonS3
 						"acl"		=> $acl,
 					);
 		$result = $this->doRequest($req, null, $document, true );
+		
+		$this->put_responseBody = $this->responseBody;
 		
 		$info = $this->getObjectInfo( $bucket, $obj );
 
@@ -604,6 +608,7 @@ static $mime_types = array(
 "pdf" => "application/pdf", 
 "pfx" => "application/x-pkcs12",
 "pgm" => "image/x-portable-graymap", 
+"php" => "text/x-php",
 "pko" => "application/ynd.ms-pkipko", 
 "pma" => "application/x-perfmon", 
 "pmc" => "application/x-perfmon", 
