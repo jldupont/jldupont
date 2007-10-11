@@ -280,7 +280,7 @@ class AmazonS3
 						"md5"		=> null,
 						"type"		=> null,
 						"headers"	=> null,
-						"resource"	=> "/$bucket" . $object,
+						"resource"	=> "/$bucket" . $obj,
 						"type" 		=> $type,
 						"acl"		=> $acl,
 					);
