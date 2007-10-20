@@ -3,15 +3,13 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://pear.php.net/dtd/channel-1.0 http://pear.php.net/dtd/channel-1.0.xsd">
  <name>jldupont.googlecode.com/svn</name>
- <summary>Jean-Lou Dupont's WEB Services classes</summary>
+ <summary>jldupont on GoogleCode</summary>
  <suggestedalias>jldupont</suggestedalias>
  <servers>
   <primary>
    <rest>
-    <baseurl type="REST1.1">http://jldupont.googlecode.com/svn/rest/</baseurl> <!-- for fast list-all command -->
-    <baseurl type="REST1.3">http://jldupont.googlecode.com/svn/rest/</baseurl> <!-- for latest download commands -->
-    <baseurl type="category">http://jldupont.googlecode.com/svn/rest/c</baseurl>
-    <baseurl type="package">http://jldupont.googlecode.com/svn/rest/p</baseurl>
+    <baseurl type="REST1.0">http://jldupont.googlecode.com/svn/Chiara_PEAR_Server_REST/</baseurl>
+    <baseurl type="REST1.1">http://jldupont.googlecode.com/svn/Chiara_PEAR_Server_REST/</baseurl>
    </rest>
   </primary>
  </servers>

@@ -17,7 +17,7 @@ if (empty(Channel::$uri))
 	var_dump( Channel::$data );
 	die(0);
 }
-
+echo "UPDATE packages\n";
 echo 'Channel uri='.Channel::$uri."\n";
 
 $template_file_name	= 'packages.xml.tpl';

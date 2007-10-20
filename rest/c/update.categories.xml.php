@@ -18,6 +18,7 @@ if (empty(Channel::$uri))
 	die(0);
 }
 
+echo "UPDATE categories\n";
 echo 'Channel uri='.Channel::$uri."\n";
 
 $template_file_name = 'categories.xml.tpl';

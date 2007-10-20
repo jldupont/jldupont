@@ -12,7 +12,7 @@
 	- Execute the above Aptana/Eclipse 'external tools' command using PHP.
 	- Select target resource e.g. package.0.1.0.xml
 */
-
+echo "PROCESS package.xml\n";
 if (!isset( $argv[1]))
 {
 	echo "Requires the filename of the package.xml file!\n";	
