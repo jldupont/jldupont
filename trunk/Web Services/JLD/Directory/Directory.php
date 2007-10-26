@@ -62,6 +62,9 @@ class JLD_Directory
 			if ( ('.' == $files) || ('..' == $files) && $filterDots )
 				continue;
 
+			if ( ($info !== 'dir' ) && $justDirs)
+				continue;
+
 			if ( '.' == $file )	$info = 'dir';
 			if ( '..' == $file )$info = 'dir';
 
