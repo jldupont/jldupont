@@ -43,6 +43,9 @@ class JLD_Registry extends JLD_Object
 
 	public function __construct() 
 	{
+		if (self::$instance !== null)
+			die( __CLASS__.': only one instance of this class can be created.' );
+			
 		self::$S3SecretKeyCacheKeyName = __CLASS__.':AmazonS3:secretKey';
 		self::$S3AccessKeyCacheKeyName = __CLASS__.':AmazonS3:accessKey';		
 		self::$S3BucketNameCacheKeyName = __CLASS__.':AmazonS3:registrybucketName';				
@@ -71,22 +74,58 @@ class JLD_Registry extends JLD_Object
 									self::$S3accessKey );
 	}
 	/**
+	 *  Returns the registry value in $value
+	 *  
+	 *  Returns 'true' if $value is in 'PHP format'
+	 *  Returns 'false' if $key was not found
+	 *  Returns 'null' if $value retrieved is in 'raw' format
+	 *   i.e. coming straight from the S3 store.
+	 *
+	 *  When the data comes directly from the S3 store,
+	 *  it is the responsibility of the requester to 'parse' the document
+	 *  to a usage format.
 	 */
-	public function get( $key )
+	public function get( $key, &$value )
 	{
+		// check if we can get lucky with the session scoped cached.
+		if (isset( self::$entries[ $key ] ))
+		{
+			$value = self::$entries[ $key ];
+			return true;
+		}
+			
+		// next, try with the system scoped cache
+		$value = $this->cache( $key );
+		if ( $value !== false )
+			return true;
 		
+		// lastly, pull from S3 store...
+		$result = $this->s3->getObject( self::$bucketName, $key, $value );
+		if ($result !== true)
+			return null;
 	}
 	/**
-	 *  This method will set the session, local cache & S3 store
-	 *  with the required [$key] = $value pair.
+	 *  This method will set the LOCAL session & local caches
+	 *  with the required [$key => $value] pair.
 	 *
-	 *  If there was a failure whilst storing to S3, 'false' is returned.
+	 *  NOTE: this method DOES NOT update the 'permanent' registry on S3.
 	 */
-	public function set( $key, $value )
+	public function setLocal( $key, $value )
 	{
 		self::$entries[ $key ] = $value;
-		$cache->set( $key, $value, self::$expiry );
 		
+		// this shouldn't fail... some init check has already been done.
+		$this->cache->set( $key, $value, self::$expiry );
+
+		return true;		
+	}
+	/**
+	 *  This function is used to update the S3 store.
+	 *  If there was a failure whilst storing to S3, 'false' is returned.	 
+	 */
+	public function update( $key, $value, $MIMEType = null )
+	{
+		return $this->s3->putObject( self::$bucketName, $key, $value, $MIMEType );		
 	}
 	
 } // end class
