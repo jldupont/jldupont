@@ -37,7 +37,10 @@ class JLD_Cache_Manager
 			self::init();	
 		}
 	}
-
+	public static function isFake()
+	{
+		return (self::$cache instanceof JLD_Cache_Fake);	
+	}
 	protected function init()
 	{
 		foreach ( self::$classes as $classe )
