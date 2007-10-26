@@ -15,7 +15,7 @@
 require 'JLD/Cache/Cache.php';
 require 'JLD/Registry/Registry.php';
 require 'JLD/Request/Request.php';
-require 'JLD/api/api_main.php';
+require 'JLD/Api/Api_main.php';
 
 
 /* Construct an ApiMain with the arguments passed via the URL. What we get back
