@@ -7,6 +7,9 @@
  */
 //<source lang=php> 
 
+/**
+ * This is a static class.
+ */
 class JLD_Directory
 {
 
@@ -115,6 +118,8 @@ class JLD_Directory
 	/**
 	 * There can only be one 'entry' in the include path
 	 * with the keyword 'pear' (or 'PEAR') in it.
+	 *
+	 * This shouldn't be a problem with most standard installs.
 	 */
 	protected static function getPearIncludePath()
 	{
