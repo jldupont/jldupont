@@ -14,6 +14,7 @@ require 'JLD/Directory/Directory.php';
 class JLD_AutoLoader extends JLD_Object
 {
 	const thisCacheKeyVar = 'liste';
+	const thisVersion = '$Id$';
 	
 	static $expiry = 86400; //1day.
 	static $cList = array();
@@ -25,7 +26,7 @@ class JLD_AutoLoader extends JLD_Object
 	}
 	public static function singleton()
 	{
-		return parent::singleton( __CLASS__ );	
+		return parent::singleton( __CLASS__, self::thisVersion );	
 	}
 	public static function getList()
 	{
