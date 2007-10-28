@@ -31,32 +31,21 @@ class JLD_Registry extends JLD_Object
 	var $cache = null;
 
 	// S3 related.
-	static $S3SecretKeyCacheKeyName = null;
-	static $S3AccessKeyCacheKeyName = null;
-	static $S3BucketNameCacheKeyName = null;
-	
 	static $S3accessKey = null;
 	static $S3secretKey = null;
 	static $S3bucketName = null;
 	
-	var $s3;
+	static $s3;
 
 	public function __construct() 
 	{
 		if (self::$instance !== null)
 			die( __CLASS__.': only one instance of this class can be created.' );
 			
-		self::$S3SecretKeyCacheKeyName = __CLASS__.':AmazonS3:secretKey';
-		self::$S3AccessKeyCacheKeyName = __CLASS__.':AmazonS3:accessKey';		
-		self::$S3BucketNameCacheKeyName = __CLASS__.':AmazonS3:registrybucketName';				
-		
 		if (JLD_Cache_Manager::isFake())
 			die( __CLASS__.':'.__METHOD__.' requires a real cache for performance consideration' );
 			
 		$this->cache = JLD_Cache_Manager::getCache();
-		
-		// Init S3 support.
-		$this->initS3();
 	}
 	public static function singleton()
 	{
@@ -64,13 +53,13 @@ class JLD_Registry extends JLD_Object
 	}
 	/**
 	 */
-	protected function initS3()
+	protected static function initS3( $accessKey, $secretKey, $bucketName )
 	{
-		self::$S3accessKey = $this->cache->get( self::$S3AccessKeyCacheKeyName );
-		self::$S3secretKey = $this->cache->get( self::$S3SecretKeyCacheKeyName );		
-		self::$S3bucketName = $this->cache->get( self::$S3BucketNameCacheKeyName );		
+		self::$S3accessKey = $accessKey;
+		self::$S3secretKey = $secretKey;		
+		self::$S3bucketName = $bucketName;		
 		
-		$this->s3 = new AmazonS3(	self::$S3secretKey,
+		self::$s3 = new AmazonS3(	self::$S3secretKey,
 									self::$S3accessKey );
 	}
 	/**
@@ -100,7 +89,7 @@ class JLD_Registry extends JLD_Object
 			return true;
 		
 		// lastly, pull from S3 store...
-		$result = $this->s3->getObject( self::$bucketName, $key, $value );
+		$result = self::$s3->getObject( self::$bucketName, $key, $value );
 		if ($result !== true)
 			return null;
 	}
@@ -125,7 +114,7 @@ class JLD_Registry extends JLD_Object
 	 */
 	public function update( $key, $value, $MIMEType = null )
 	{
-		return $this->s3->putObject( self::$bucketName, $key, $value, $MIMEType );		
+		return self::$s3->putObject( self::$bucketName, $key, $value, $MIMEType );		
 	}
 	
 } // end class
