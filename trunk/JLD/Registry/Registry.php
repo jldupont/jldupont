@@ -28,7 +28,7 @@ class JLD_Registry extends JLD_Object
 
 	// session based cache.
 	static $entries = null;
-	var $cache = null;
+	static $cache = null;
 
 	// S3 related.
 	static $S3accessKey = null;
@@ -45,7 +45,7 @@ class JLD_Registry extends JLD_Object
 		if (JLD_Cache_Manager::isFake())
 			die( __CLASS__.':'.__METHOD__.' requires a real cache for performance consideration' );
 			
-		$this->cache = JLD_Cache_Manager::getCache();
+		self::$cache = JLD_Cache_Manager::getCache();
 	}
 	public static function singleton()
 	{
@@ -74,9 +74,15 @@ class JLD_Registry extends JLD_Object
 	 *  it is the responsibility of the requester to 'parse' the document
 	 *  to a usage format.
 	 */
-	public function get( $key, &$value )
+	public static function get( $key, &$value )
 	{
-		// check if we can get lucky with the session scoped cached.
+		if (is_null(self::$cache))
+			die(__CLASS__.": cache object must be initialized.\n");
+
+		if (is_null(self::$s3))
+			die(__CLASS__.": S3 object must be initialized.\n");
+			
+		// check if we can get lucky with the transaction scoped cached.
 		if (isset( self::$entries[ $key ] ))
 		{
 			$value = self::$entries[ $key ];
@@ -84,7 +90,7 @@ class JLD_Registry extends JLD_Object
 		}
 			
 		// next, try with the system scoped cache
-		$value = $this->cache( $key );
+		$value = self::$cache( $key );
 		if ( $value !== false )
 			return true;
 		
@@ -92,6 +98,8 @@ class JLD_Registry extends JLD_Object
 		$result = self::$s3->getObject( self::$bucketName, $key, $value );
 		if ($result !== true)
 			return null;
+			
+		return true;
 	}
 	/**
 	 *  This method will set the LOCAL session & local caches
@@ -99,12 +107,15 @@ class JLD_Registry extends JLD_Object
 	 *
 	 *  NOTE: this method DOES NOT update the 'permanent' registry on S3.
 	 */
-	public function setLocal( $key, $value )
+	public static function setLocal( $key, $value )
 	{
+		if (is_null(self::$cache))
+			die(__CLASS__.": cache object must be initialized.\n");
+
 		self::$entries[ $key ] = $value;
 		
 		// this shouldn't fail... some init check has already been done.
-		$this->cache->set( $key, $value, self::$expiry );
+		self::$cache->set( $key, $value, self::$expiry );
 
 		return true;		
 	}
@@ -114,6 +125,9 @@ class JLD_Registry extends JLD_Object
 	 */
 	public function update( $key, $value, $MIMEType = null )
 	{
+		if (is_null(self::$s3))
+			die(__CLASS__.": S3 object must be initialized.\n");
+		
 		return self::$s3->putObject( self::$bucketName, $key, $value, $MIMEType );		
 	}
 	
