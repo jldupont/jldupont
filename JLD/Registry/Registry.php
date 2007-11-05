@@ -137,7 +137,7 @@ class JLD_Registry extends JLD_Object
 	 *  This function is used to update the S3 store.
 	 *  If there was a failure whilst storing to S3, 'false' is returned.	 
 	 */
-	public function update( $key, $value, $MIMEType = null )
+	public static function update( $key, $value, $MIMEType = null )
 	{
 		if (is_null(self::$s3))
 			die(__CLASS__.": S3 object must be initialized.\n");
