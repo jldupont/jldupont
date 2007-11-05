@@ -63,6 +63,20 @@ class JLD_Registry extends JLD_Object
 									self::$S3accessKey );
 	}
 	/**
+	 * Returns the default expiry time
+	 */
+	public function getDefaultExpiry()
+	{
+		return self::$expiry;
+	}
+	/**
+	 * Sets the default expiry time
+	 */
+	public function setDefaultExpiry( $expiry )
+	{
+		return (self::$expiry = $expiry);
+	}
+	/**
 	 *  Returns the registry value in $value
 	 *  
 	 *  Returns 'true' if $value is in 'PHP format'
@@ -82,7 +96,7 @@ class JLD_Registry extends JLD_Object
 		if (is_null(self::$s3))
 			die(__CLASS__.": S3 object must be initialized.\n");
 			
-		// check if we can get lucky with the transaction scoped cached.
+		// check if we can get lucky with the transaction scoped cache.
 		if (isset( self::$entries[ $key ] ))
 		{
 			$value = self::$entries[ $key ];
