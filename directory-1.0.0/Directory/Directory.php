@@ -58,12 +58,18 @@ class JLD_Directory
 		if (empty( $files ))
 			return null;
 		
-		foreach( $files as &$file )
+		foreach( $files as $index => &$file )
 		{
 			$info = @filetype( $dir.'/'.$file );
 
-			if ( ('.' == $files) || ('..' == $files) && $filterDots )
+			// filter all entries beginning with a '.'
+			// This is useful for getting rid of '.', '..' and '.*' entries
+			// such as '.svn'.
+			if ( ('.' == $file[0]) && $filterDots )
+			{
+				unset( $files[ $index ] );
 				continue;
+			}
 
 			if ( ($info !== 'dir' ) && $justDirs)
 				continue;
@@ -121,13 +127,13 @@ class JLD_Directory
 	 *
 	 * This shouldn't be a problem with most standard installs.
 	 */
-	protected static function getPearIncludePath()
+	public static function getPearIncludePath()
 	{
 		$liste = get_include_path();
-		$a = explode( ':', $liste );
+		$a = explode( PATH_SEPARATOR, $liste );
 		
 		foreach( $a as $e )
-			if (strpos( 'pear', strtolower( $e ) ) !== false)
+			if (strpos( strtolower( $e ), 'pear' ) !== false)
 				return $e;
 				
 		return null;
