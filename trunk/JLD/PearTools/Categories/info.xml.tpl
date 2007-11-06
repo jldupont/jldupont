@@ -4,13 +4,13 @@
     http://pear.php.net/dtd/rest.category.xsd">
 
  <!-- category -->
- <n>Amazon</n>
+ <n>$name$</n>
  
   <!-- channel -->
- <c>localhost</c>
+ <c>$channel$</c>
  
   <!-- alias -->
- <a>amz</a>
+ <a>$alias$</a>
  <d></d>
  
 </c>

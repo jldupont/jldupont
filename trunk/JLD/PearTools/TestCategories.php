@@ -21,6 +21,14 @@ $cs->init( $c );
 
 $cats = $cs->getAll();
 
-var_dump( $cats );
+#var_dump( $cats );
+try
+{
+	$cs->addRelease( 'Amazon', 'AmazonS3', '2.0' );
+}
+catch (PEAR_Exception $e) 
+{
+	print $e;
+}
 
 //</source>
