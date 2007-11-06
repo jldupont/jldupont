@@ -1,0 +1,137 @@
+<?php
+/**
+ * @author Jean-Lou Dupont
+ * @package JLD
+ * @subpackage Directory
+ * @version $Id$
+ */
+//<source lang=php> 
+
+/**
+ * This is a static class.
+ */
+class JLD_Directory
+{
+
+	/**
+	 *
+	 *
+	 * Format of the returned information:
+	 *
+		e.g.
+		array (
+				0 =>
+				array (
+				'name' => '.',
+				'type' => 'dir',
+				'mtime' => 1186483435,
+				),
+				1 =>
+				array (
+				'name' => '..',
+				'type' => 'dir',
+				'mtime' => false,			# NOTE HERE
+				),
+				2 =>
+				array (
+				'name' => '.htaccess',
+				'type' => 'file',
+				'mtime' => 1181832196,
+				),
+				3 =>
+				array (
+				'name' => 'AdminSettings.php',
+				'type' => 'file',
+				'mtime' => 1178738087,
+				),
+			...
+	 */
+	public static function getDirectoryInformation( &$dir, &$base, 
+													$filterDots = false, 
+													$justDirs = false )
+	{
+		$files = @scandir( $dir );
+			
+		$upDir = self::getDotDotFile( $dir, $base );
+		$thisDir = self::getRelativePath( $dir, $base );
+		
+		if (empty( $files ))
+			return null;
+		
+		foreach( $files as &$file )
+		{
+			$info = @filetype( $dir.'/'.$file );
+
+			if ( ('.' == $files) || ('..' == $files) && $filterDots )
+				continue;
+
+			if ( ($info !== 'dir' ) && $justDirs)
+				continue;
+
+			if ( '.' == $file )	$info = 'dir';
+			if ( '..' == $file )$info = 'dir';
+
+			$filename = $file;
+			$mtime = @filemtime( $dir.'/'.$file );
+		
+			if ( $file != '.' && $file != '..' && $thisDir != '/' )
+				$filename = $thisDir.'/'.$filename;
+
+			$file = array( 'name' => $filename, 'type' => $info , 'mtime' => $mtime );
+		}
+	
+		return $files;
+	}
+	/**
+		Returns the filename (directory name really) correspondig to '..'
+	 */
+	public static function getDotDotFile( &$dir, &$base )
+	{
+		$d = str_replace( "\\", '/', $dir );
+
+		$pathInfo = pathinfo( $d );
+		
+		$p = $pathInfo['dirname'];		
+
+		// now remove the base.
+		$s = self::getRelativePath( $p, $base );
+
+		// make sure we haven't reached the root.
+		if (empty($s))
+			return '/';
+			
+		return $s;
+	}
+
+	public static function getRelativePath( &$dir, &$base )
+	{
+		$d = str_replace( "\\", '/', $dir );
+
+		return substr( $d, strlen($base)+1 );
+	}
+
+	public static function getDirectoryTimestamp( &$dir )
+	{
+		return @filemtime( $dir );	
+	}
+
+	/**
+	 * There can only be one 'entry' in the include path
+	 * with the keyword 'pear' (or 'PEAR') in it.
+	 *
+	 * This shouldn't be a problem with most standard installs.
+	 */
+	protected static function getPearIncludePath()
+	{
+		$liste = get_include_path();
+		$a = explode( ':', $liste );
+		
+		foreach( $a as $e )
+			if (strpos( 'pear', strtolower( $e ) ) !== false)
+				return $e;
+				
+		return null;
+	}
+
+} // end class
+//</source> 

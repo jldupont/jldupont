@@ -9,6 +9,16 @@
 
 require 'JLD/Object/Object.php';
 
+class JLD_Db_Manager
+{
+	
+} // JLD_Db_Manager
+
+
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 class JLD_Db extends JLD_Object
 {
 	const thisVersion = '$Id$';
@@ -37,6 +47,7 @@ class JLD_Db extends JLD_Object
 		$this->password = $password;
 	}
 	/**
+	 * Opens a database
 	 */
 	public function open()
 	{
@@ -60,6 +71,7 @@ class JLD_Db extends JLD_Object
 		return true;
 	}
 	/**
+	 * Closes a database
 	 */
 	public function close()
 	{
@@ -150,8 +162,6 @@ abstract class JLD_Db_Table extends JLD_Object
 		return $this->rows;	
 		
 	}
-
-
 	/**
 	 *
 	 */
