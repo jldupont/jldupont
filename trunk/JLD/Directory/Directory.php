@@ -48,11 +48,11 @@ class JLD_Directory
 	 */
 	public static function getDirectoryInformation( &$dir, &$base, 
 													$filterDots = false, 
-													$justDirs = false )
+													$justDirs = false
+													)
 	{
 		$files = @scandir( $dir );
 			
-		$upDir = self::getDotDotFile( $dir, $base );
 		$thisDir = self::getRelativePath( $dir, $base );
 		
 		if (empty( $files ))
@@ -137,6 +137,27 @@ class JLD_Directory
 				return $e;
 				
 		return null;
+	}
+
+	public static function getDirectoryInformationRecursive( $dir, &$base, 
+													$filterDots = false, 
+													$justDirs = false )
+	{
+		$all_files = array();
+		
+		$files = self::getDirectoryInformation( $dir, $base, $filterDots, $justDirs );
+		if (!empty( $files ))
+			foreach ( $files as $file )
+			{
+				$all_files[] = $file;				
+				if ( $file['type'] == 'dir' )
+				{
+					$other_files = self::getDirectoryInformationRecursive( $base.'/'.$file['name'], $base, $filterDots, $justDirs );
+					if (!empty( $other_files))
+						$all_files = array_merge( $all_files, $other_files );
+				}
+			}	
+		return $all_files;
 	}
 
 } // end class
