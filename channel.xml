@@ -8,8 +8,8 @@
  <servers>
   <primary>
    <rest>
-    <baseurl type="REST1.0">http://jldupont.googlecode.com/svn/Chiara_PEAR_Server_REST/</baseurl>
-    <baseurl type="REST1.1">http://jldupont.googlecode.com/svn/Chiara_PEAR_Server_REST/</baseurl>
+    <baseurl type="REST1.0">http://jldupont.googlecode.com/svn/rest/</baseurl>
+    <baseurl type="REST1.1">http://jldupont.googlecode.com/svn/rest/</baseurl>
    </rest>
   </primary>
  </servers>
