@@ -8,24 +8,25 @@
 
 abstract class JLD_Object
 {
-	static $pClass = null;
-	static $instance = null;
-	static $version = null;
+	static $instance = array();
+	var $version = null;
+	
+	public function __construct( $version )
+	{
+		$this->version = $version;
+	}
 	
 	public static function singleton( $pClass = null, $version = null)
 	{
-		if ( self::$instance !== null)	
-			return self::$instance;
+		if ( self::$instance[$pClass] !== null)	
+			return self::$instance[$pClass];
 		
 		if (empty($pClass))
 			die (__CLASS__.':'.__METHOD__." requires a valid class name." );
 		
-		self::$version = $version;
-		self::$pClass = $pClass;
+		self::$instance[$pClass] = new $pClass( $version );
 		
-		self::$instance = new $pClass;
-		
-		return self::$instance;
+		return self::$instance[$pClass];
 	}
 	
 	protected static function getCacheKey( $var )
