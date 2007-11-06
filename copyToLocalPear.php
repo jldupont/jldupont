@@ -36,7 +36,10 @@ echo 'Source directory: '.$sdir."\n";
 echo 'Parent directory: '.$pdir."\n";
 echo 'PEAR directory: '.$pearDir."\n";
 
-$files = JLD_Directory::getDirectoryInformation( &$sdir, &$pdir, true );
+$files = JLD_Directory::getDirectoryInformationRecursive( &$sdir, &$pdir, true );
+
+#var_dump( $files );
+#die;
 
 $bpname = basename($pdir);
 
@@ -48,22 +51,24 @@ foreach( $files as $file )
 {
 	$dir = $pearDir.'/'.$bpname.'/'.$file['name'];
 	// create target directory if necessary.
-	if ( ($file['type'] == 'dir') && (!is_dir( $dir )))
+	if ( ($file['type'] == 'dir'))
 	{
-		echo 'Creating directory: '.$dir." ... ";
-		$result = mkdir( $dir );
-		echo ($result) ? 'success':'failure';
-		echo "\n";
-		if (!$result)
-			die(0);
-			
+		if (!is_dir( $dir ) )
+		{
+			echo 'Creating directory: '.$dir." ... ";
+			$result = mkdir( $dir );
+			echo ($result) ? 'success':'failure';
+			echo "\n";
+			if (!$result)
+				die(0);
+		}	
 		continue;
 	}
 	// not a directory, then it is a file.
 	$sfile = $pdir.'/'.$file['name'];
 	$dfile = $pearDir.'/'.$bpname.'/'.$file['name'];
 	echo 'Copying file: '.$file['name']." ... ";
-	$result = copy( $sfile, $dfile );
+	$result = @copy( $sfile, $dfile );
 		echo ($result) ? 'success':'failure';
 		echo "\n";
 		if (!$result)
