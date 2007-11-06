@@ -7,15 +7,20 @@
 //<source lang=php>
 
 require_once "PEAR/XMLParser.php";
-require_once 'JLD/Object.php';
+require_once 'JLD/Object/Object.php';
 require_once 'JLD/PearTools/Channel.php';
 require_once 'JLD/Directory/Directory.php';
 
 // use a class for namespace management.
 class JLD_PearTools_Categories extends JLD_Object implements Iterator
 {
+	const thisVersion = '$Id$';
+	static $baseCategories = '/c';
+	
 	var $channel = null;
 	var $categories = array();
+	
+	public function getAll() { return $this->categories; }
 	
 	// Iterator Interface
 	public function current() { return $this->categories->current(); }
@@ -24,7 +29,10 @@ class JLD_PearTools_Categories extends JLD_Object implements Iterator
 	public function rewind() { return $this->categories->rewind(); }
 	public function valid() { return $this->categories->valid(); }	
 	
-	public function __construct() {}
+	public function __construct( $version ) 
+	{
+		return parent::__construct( $version );		
+	}
 	public static function singleton()
 	{
 		return parent::singleton( __CLASS__, self::thisVersion );	
@@ -42,9 +50,10 @@ class JLD_PearTools_Categories extends JLD_Object implements Iterator
 	{
 		$rootPath = $this->channel->getRootPath();
 		$baseREST = $this->channel->getRESTPath();
-		$restPath = $rootPath . $baseREST;
+		$restPath = $rootPath . $baseREST . self::$baseCategories;
 		
-		return JLD_Directory::getDirectoryInformation( $restPath, $rootPath, true, true );
+		// no need to get resursive here.
+		return JLD_Directory::getDirectoryInformation( $restPath, $restPath, true, true );
 	}
 }
 //</source>

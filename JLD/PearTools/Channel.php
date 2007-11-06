@@ -7,12 +7,14 @@
 */
 //<source lang=php>
 
-require "PEAR/XMLParser.php";
-require 'JLD/Object.php';
+require_once "PEAR/XMLParser.php";
+require_once 'JLD/Object/Object.php';
 
 // use a class for namespace management.
 class JLD_PearTools_Channel extends JLD_Object
 {
+	const thisVersion = '$Id$';
+	
 	// REST related
 	static $baseREST = '/rest';
 	static $baseTAGS = '/tags';
@@ -28,10 +30,9 @@ class JLD_PearTools_Channel extends JLD_Object
 	// this variable will hold the channel's uri
 	var $uri = null;
 	
-	public function __construct() 
+	public function __construct( $version ) 
 	{
-		if (self::$instance !== null)
-			die( __CLASS__.': only one instance of this class can be created.' );
+		return parent::__construct( $version );
 	}
 	public static function singleton()
 	{

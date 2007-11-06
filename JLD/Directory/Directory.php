@@ -70,10 +70,13 @@ class JLD_Directory
 				unset( $files[ $index ] );
 				continue;
 			}
-
+			// just keep the directories if we are asked to.
 			if ( ($info !== 'dir' ) && $justDirs)
+			{
+				unset( $files[ $index ] );
 				continue;
-
+			}
+			
 			if ( '.' == $file )	$info = 'dir';
 			if ( '..' == $file )$info = 'dir';
 
@@ -149,7 +152,9 @@ class JLD_Directory
 		if (!empty( $files ))
 			foreach ( $files as $file )
 			{
-				$all_files[] = $file;				
+				if ( (($file['type'] == 'dir') && $justDirs) || !$justDirs )
+					$all_files[] = $file;
+					
 				if ( $file['type'] == 'dir' )
 				{
 					$other_files = self::getDirectoryInformationRecursive( $base.'/'.$file['name'], $base, $filterDots, $justDirs );
