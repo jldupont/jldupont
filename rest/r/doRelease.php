@@ -49,6 +49,8 @@ $c = JLD_PearTools_Channel::singleton();
 $c->init( $prjRoot );
 echo 'Channel name: '.$c->getURI()."\n";
 
+// CATEGORIES
+
 $cs = JLD_PearTools_Categories::singleton();
 $cs->init( $c );
 
@@ -60,4 +62,11 @@ if ($cname === false)
 }
 echo 'Category name: '.$cname."\n";
 
-
+// RELEASE.TXT file must be in the source directory.
+$version = @file_get_contents( $sdir.'/release.txt' );
+if (empty( $version ))
+{
+	echo '* Error: reading "release.txt" file from source directory!'."\n";
+	die(0);
+}
+echo 'Assuming release version: '.$version."\n";
