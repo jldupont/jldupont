@@ -66,7 +66,7 @@ class JLD_PearTools_Releases extends JLD_Object
 
 		return ($len === $bytes_written);
 	}
-	protected function genFilePath( $packageName )
+	public function genFilePath( $packageName )
 	{
 		return $this->restPathR . '/' . strtolower( $packageName );
 	}
@@ -97,5 +97,44 @@ class JLD_PearTools_Releases extends JLD_Object
 
 		return ($len === $bytes_written);
 	}
+
+	const markerPattern = '<!--$release:%packagename%$-->';
+	const releasePattern = "\t\t\t<r>\n\t\t\t\t<v>%version%</v>\n\t\t\t\t<s>%stability%</s>\n\t\t\t</r>\n";
+	
+	public function updateAllReleasesFile( $packageName, $version, $stability, &$msg )
+	{
+		$msg = '';
+		
+		$file = $this->genFilePath( $packageName ).'/'."allreleases.xml";
+		
+		$msg = 'getting contents of "allreleases.xml" file.';
+		$contents = @file_get_contents( $file );
+		if (empty( $contents ))
+			return false;
+		
+		$this->addRelease( $contents, $packageName, $version, $stability );
+		
+		$msg = 'error writing "allreleases.xml" file';
+		$len = strlen( $contents );
+		$bytes_written = @file_put_contents( $file, $contents );
+
+		return ($len === $bytes_written);
+	}
+	/**
+	 * This method constitutes the main raison d'etre of this whole file.
+	 */
+	protected function addRelease( &$c, $packageName, $version, $stability = 'stable' )
+	{
+		$r = str_replace('%version%', $version, self::releasePattern );
+		$r = str_replace('%stability%', $stability, $r );
+		$this->replaceMarker( $c, $packageName, $r );
+	}
+	protected function replaceMarker( &$c, &$packageName, &$replacement )
+	{
+		$p = str_replace('%packagename%', $packageName, self::markerPattern );
+		$r = $p."\n".$replacement;
+		$c = str_replace( $p, $r, $c );		
+	}	
+	
 }
 //</source>

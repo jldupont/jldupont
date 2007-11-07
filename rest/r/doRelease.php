@@ -104,6 +104,28 @@ if ($result === false)
 }
 echo 'success!'."\n";
 
+// Updating source package.xml
+echo "Updating 'package.xml' file ... ";
+$result = $package->updateFile();
+if ($result === false)
+{
+	echo '* Error: '.$msg."\n";	
+	die(0);
+}
+echo 'success!'."\n";
+
+// Copying package.xml FILE to /r/$pname directory --> $file = package.$version.xml
+$btarget = "package.$version.xml";
+$target = $r->genFilePath( $pname ) . '/' . $btarget;
+echo "Copying 'package.xml' file to $btarget ... ";
+$result = @copy( $package_file, $target );
+if ($result === false)
+{
+	echo '* Error: '.$msg."\n";	
+	die(0);
+}
+echo 'success!'."\n";
+
 // UPDATING packagesinfo.xml in /c
 echo 'Updating "packagesinfo.xml" of category: '.$cname.' ... ';
 $pif = $cs->getPackageInfoObject( $cname );
@@ -113,11 +135,20 @@ if (!is_object( $pif ))
 	die(0);
 }
 $pif->addRelease( $pname, $version );
-$r = $cs->updatePackageInfoFile( $pif );
-if (!$r)
+$result = $cs->updatePackageInfoFile( $pif );
+if (!$result)
 {
 	echo "* Error: updating 'packagesinfo.xml' \n";	
 	die(0);
 }
 echo 'success!'."\n";
 
+// UPDATE 'allreleases.xml' FILE
+echo 'Updating "allreleases.xml" ... ';
+$r->updateAllReleasesFile( $pname, $version, 'stable', &$msg );
+if ($result === false)
+{
+	echo '* Error: '.$msg."\n";	
+	die(0);
+}
+echo 'success!'."\n";
