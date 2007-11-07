@@ -7,23 +7,6 @@
 // <source lang=php>
 
 /*
-  	getBuckets
-	createBucket( $bucket )   
-	deleteBucket( $bucket )	
-	getDirectorySize( $bucket, $prefix = "" )	
-	getBucketContents(	$bucket, $prefix = null, $delim = null, $marker = null  )	
-	bucketExists( $bucket )	
-	
-	getObject( $bucket, $object, &$document )	
-	putObject(	$bucket, $object, &$document, $ext = null, $public = null )
-	deleteObject( $bucket, $object )	
-	getObjectHead($bucket, $object, &$responseHeaders )	
-	getObjectInfo( $bucket, $object )	
-	deleteObject( $bucket, $object )	
-	objectExists($bucket, $object)	
-*/
-
-/*
    This class assumes that the following extensions
    are installed and accessible.
    Use Pear to grab these.
@@ -317,7 +300,7 @@ class AmazonS3
 	 * 'content-length'
 	 * 'server'
 	 */
-	public function getObjectHead($bucket, $object, &$responseHeaders )
+	function getObjectHead($bucket, $object, &$responseHeaders )
 	{
 		self::formatObject( $object );
 
@@ -426,9 +409,7 @@ class AmazonS3
 		$this->responseBody		= $document = $request->getResponseBody();
 		$this->responseCode		= $code 	= $request->getResponseCode();
 	
-		// if one requires the raw returned code, then use
-		// $this->responseCode
-		return ($code === 200);
+		return $code;
 	}
 	/**
 	 * Verifies if the operation went without errors.
