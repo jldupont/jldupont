@@ -59,23 +59,23 @@ class JLD_PearTools_Categories extends JLD_Object implements Iterator
 		$this->rootPath = $this->channel->getRootPath();
 		$this->baseREST = $this->channel->getRESTPath();
 		$this->restPathC = $this->rootPath . $this->baseREST . self::$baseCategories;
-		$this->categories = $this->readAll();
+		$this->raw = $this->readAll();
 	}
 	/**
 	 */
 	protected function readAll()
 	{
 		// no need to get resursive here.
-		$this->raw = JLD_Directory::getDirectoryInformation( $this->restPathC, $this->restPathC, true, true );
+		$raw = JLD_Directory::getDirectoryInformation( $this->restPathC, $this->restPathC, true, true );
 		
 		// strip off leading /
-		foreach( $this->raw as &$e )
+		foreach( $raw as &$e )
 		{
 			$e['name'] = substr( $e['name'], 1);
 			$this->cats[] = $e['name'];
 		}
 		
-		return $this->raw;
+		return $raw;
 	}
 	/**
 	 */
@@ -121,6 +121,7 @@ class JLD_PearTools_Categories extends JLD_Object implements Iterator
 	 */
 	public function findCategoryNameForPackageName( $packageName, &$msg )	
 	{
+		$msg = 'package not found OR release marker not found.';
 		if (empty( $this->cats ))
 		{
 			$msg = 'no categories found';
@@ -129,6 +130,8 @@ class JLD_PearTools_Categories extends JLD_Object implements Iterator
 		$result = false;
 		foreach ( $this->cats as &$cat )
 		{
+#			echo __METHOD__." cat: ".$cat."\n";
+			
 			$o = $this->getPackageInfoObject( $cat );
 			if (!is_object( $o ))
 			{
