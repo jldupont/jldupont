@@ -19,6 +19,7 @@ require 'JLD/Directory/Directory.php';
 require 'JLD/PearTools/Channel.php';
 require 'JLD/PearTools/Categories.php';
 require 'JLD/PearTools/Releases.php';
+require 'JLD/PearTools/Package.php';
 
 if (!isset( $argv[1]))
 {
@@ -63,14 +64,20 @@ if ($cname === false)
 }
 echo 'Category name: '.$cname."\n";
 
-// RELEASE.TXT file must be in the source directory.
-$version = @file_get_contents( $sdir.'/release.txt' );
-if (empty( $version ))
+// package.xml file must be in the source directory.
+$package_file = $sdir.'/package.xml';
+$package_file_contents = @file_get_contents( $package_file );
+if (empty( $package_file_contents ))
 {
-	echo '* Error: reading "release.txt" file from source directory!'."\n";
+	echo '* Error: reading "package.xml" file from source directory!'."\n";
 	die(0);
 }
-echo 'Assuming release version: '.$version."\n";
+$package = new JLD_PearTools_Package( $package_file_contents, $package_file );
+$version = $package->getVersion();
+
+#var_dump( $package->getData() );
+
+echo 'Assuming release version: '.$version."\n\n";
 
 // $version.xml FILE
 $r = JLD_PearTools_Releases::singleton();
@@ -84,3 +91,33 @@ if ($result === false)
 	die(0);
 }
 echo 'success!'."\n";
+
+// deps.$version.txt FILE
+$deps = $package->getSerializedDependencies();
+
+echo 'Creating '."deps.$version.txt file ... ";
+$result = $r->generateDepsFile( $pname, $version, $deps, $msg );
+if ($result === false)
+{
+	echo '* Error: '.$msg."\n";	
+	die(0);
+}
+echo 'success!'."\n";
+
+// UPDATING packagesinfo.xml in /c
+echo 'Updating "packagesinfo.xml" of category: '.$cname.' ... ';
+$pif = $cs->getPackageInfoObject( $cname );
+if (!is_object( $pif ))
+{
+	echo "* Error: accessing 'packagesinfo.xml' \n";	
+	die(0);
+}
+$pif->addRelease( $pname, $version );
+$r = $cs->updatePackageInfoFile( $pif );
+if (!$r)
+{
+	echo "* Error: updating 'packagesinfo.xml' \n";	
+	die(0);
+}
+echo 'success!'."\n";
+

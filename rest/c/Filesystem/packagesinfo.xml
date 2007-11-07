@@ -19,10 +19,10 @@
 	 <!-- This is the information that appears when doing list-all command -->
 
 	<!--$release:Directory$-->
-	 <r>
-		<v>1.0.0</v>
-		<s>stable</s>
-	</r>
+		 <r>
+			<v>1.0.0</v>
+			<s>stable</s>
+		</r>
 	</a>
 </pi>
 </f>
