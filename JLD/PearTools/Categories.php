@@ -95,27 +95,31 @@ class JLD_PearTools_Categories extends JLD_Object implements Iterator
 	}
 	/**
 	 */
-
+	protected function writePackageInfoFile( $cName, &$contents )
+	{
+		$file = $this->restPathC.'/'.$cName.'/packagesinfo.xml';
+		return @file_put_contents( $file, $contents );
+	}
 }
 
 class JLD_Packagesinfo extends JLD_PearTools_Xml
 {
 static $map = array(
 // Elements found in 'packagesinfo.xml'
-'f|attribs'		=> array( 'type' => 'attr','tpl' => '<f %attribs% >%n%%contents%%n%' ),
-'f|pi' 			=> array( 'type' => 'br',	'tpl' => '<pi>%n%%contents%%n%</pi>%n%'),
-'f|pi|p' 		=> array( 'type' => 'br',	'tpl' => '<p>%n%%contents%%n%</p>%n%'),	
-'f|pi|p|n' 		=> array( 'type' => 'leaf',	'tpl' => '<n>%contents%</n>%n%'),								
-'f|pi|p|c'		=> array( 'type' => 'leaf',	'tpl' => '<c>%contents%</c>%n%'),								
-'f|pi|p|ca'		=> array( 'type' => 'attr',	'tpl' => '<ca %attribs%>%contents%</ca>%n%'),
-'f|pi|p|l'		=> array( 'type' => 'leaf', 'tpl' => '<l>%contents%</l>%n%'),
-'f|pi|p|s'		=> array( 'type' => 'leaf', 'tpl' => '<s>%contents%</s>%n%'),
-'f|pi|p|d'		=> array( 'type' => 'leaf', 'tpl' => '<d>%contents%</d>%n%'),
-'f|pi|p|r'		=> array( 'type' => 'attr', 'tpl' => '<r %attribs% />%n%'),
-'f|pi|a' 		=> array( 'type' => 'br', 	'tpl' => '<a>%n%%contents%%n%</a>%n%'),
-'f|pi|a|r'		=> array( 'type' => 'br', 	'tpl' => '<r>%n%%contents%%n%</r>%n%'),
-'f|pi|a|r|v'	=> array( 'type' => 'leaf', 'tpl' => '<v>%contents%</v>%n%'),
-'f|pi|a|r|s' 	=> array( 'type' => 'leaf', 'tpl' => '<s>%contents%</s>%n%'),
+'f|attribs'		=> array( 'type' => 'attr',	'tpl' => '<f %attribs% >%n%%contents%%n%' ),
+'f|pi' 			=> array( 'type' => 'br',	'tpl' => '%t%<pi>%n%%contents%%n%%t%</pi>%n%'),
+'f|pi|p' 		=> array( 'type' => 'br',	'tpl' => '%t%%t%<p>%n%%contents%%n%%t%%t%</p>%n%'),	
+'f|pi|p|n' 		=> array( 'type' => 'leaf',	'tpl' => '%t%%t%%t%<n>%contents%</n>%n%'),								
+'f|pi|p|c'		=> array( 'type' => 'leaf',	'tpl' => '%t%%t%%t%<c>%contents%</c>%n%'),								
+'f|pi|p|ca'		=> array( 'type' => 'attr',	'tpl' => '%t%%t%%t%<ca %attribs%>%contents%</ca>%n%'),
+'f|pi|p|l'		=> array( 'type' => 'leaf', 'tpl' => '%t%%t%%t%<l>%contents%</l>%n%'),
+'f|pi|p|s'		=> array( 'type' => 'leaf', 'tpl' => '%t%%t%%t%<s>%contents%</s>%n%'),
+'f|pi|p|d'		=> array( 'type' => 'leaf', 'tpl' => '%t%%t%%t%<d>%contents%</d>%n%'),
+'f|pi|p|r'		=> array( 'type' => 'attr', 'tpl' => '%t%%t%%t%<r %attribs% />%n%'),
+'f|pi|a' 		=> array( 'type' => 'br', 	'tpl' => '%t%%t%<a>%n%%contents%%n%%t%%t%</a>%n%'),
+'f|pi|a|r'		=> array( 'type' => 'br', 	'tpl' => '%t%%t%%t%<r>%n%%contents%%n%%t%%t%%t%</r>%n%'),
+'f|pi|a|r|v'	=> array( 'type' => 'leaf', 'tpl' => '%t%%t%%t%%t%<v>%contents%</v>%n%'),
+'f|pi|a|r|s' 	=> array( 'type' => 'leaf', 'tpl' => '%t%%t%%t%%t%<s>%contents%</s>%n%'),
 );
 
 	public function __construct( &$contents )
@@ -134,8 +138,35 @@ static $map = array(
 	{
 		$this->emap = self::$map;
 		$result = $this->getXML( 'f', $this->data );
-		$result .= "\n</f>\n";
+		$result .= "\n<"."/f>\n";
 		return $result;
+	}
+	
+	static $addReleaseCommand = array(
+		array( 'type' => 'match',	'key' => 'f|pi',	'value' => '*',	'action' => '' ),	
+		array( 'type' => 'match',	'key' => 'f|pi',	'value' => '*',	'action' => '' ),			
+		array( 'type' => 'match',	'key' => 'f|pi|p|n','value' => '$package$'),
+		array( 'type' => 'end',		'key' => 'f',		'value' => '*'),		
+	);
+	
+	/**
+	 * To add a release to a given package, one must parse
+	 * the data for the target <pi> <p> <n>
+	 */
+	public function addRelease( $version, $stability = 'stable' )
+	{
+		if (empty( $this->data ))
+			return false;
+			
+		$new = array();	
+		foreach ( $this->data as $key => &$value )
+		{
+			if ( 'pi' !== $key )
+			{
+				array_push( $new, array( $key, $value ));
+				continue;
+			}
+		}
 	}
 }
 
