@@ -130,6 +130,11 @@ class JLD_PearTools_Categories extends JLD_Object implements Iterator
 		foreach ( $this->cats as &$cat )
 		{
 			$o = $this->getPackageInfoObject( $cat );
+			if (!is_object( $o ))
+			{
+				$msg = 'error reading "packageinfo.xml"';
+				return false;
+			}
 			$r = $o->existsReleaseMarker( $packageName );
 			if ($r === true)
 			{
