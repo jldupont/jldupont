@@ -11,7 +11,7 @@
  <p xlink:href="/rest/p/amazons3">AmazonS3</p>
 
  <v>0.1.0</v>
- <st>beta</st>
+ <st>stable</st>
  <l>PHP License</l>
 
  <m>jldupont</m>
