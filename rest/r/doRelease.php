@@ -59,3 +59,5 @@ if ($cname === false)
 	die (0);
 }
 echo 'Category name: '.$cname."\n";
+
+
