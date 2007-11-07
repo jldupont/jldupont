@@ -18,6 +18,7 @@
 require 'JLD/Directory/Directory.php';
 require 'JLD/PearTools/Channel.php';
 require 'JLD/PearTools/Categories.php';
+require 'JLD/PearTools/Releases.php';
 
 if (!isset( $argv[1]))
 {
@@ -57,7 +58,7 @@ $cs->init( $c );
 $cname = $cs->findCategoryNameForPackageName( $pname, $msg );
 if ($cname === false)
 {
-	echo '* Error: category name not found!'."\n";
+	echo '* Error: category name not found: '.$msg."\n";
 	die (0);
 }
 echo 'Category name: '.$cname."\n";
@@ -70,3 +71,16 @@ if (empty( $version ))
 	die(0);
 }
 echo 'Assuming release version: '.$version."\n";
+
+// $version.xml FILE
+$r = JLD_PearTools_Releases::singleton();
+$r->init( $c );
+
+echo 'Creating '."$version.xml file ... ";
+$result = $r->createVersionFile( $pname, $version, 'stable', &$msg );
+if ($result === false)
+{
+	echo '* Error: '.$msg."\n";	
+	die(0);
+}
+echo 'success!'."\n";
