@@ -85,5 +85,17 @@ class JLD_PearTools_Releases extends JLD_Object
 		$tpl = str_replace( '$stability$', $stability, $tpl);		
 						
 	}
+	public function generateDepsFile( $packageName, $version, &$contents, &$msg )
+	{
+		$msg = '';
+		
+		$file = $this->genFilePath( $packageName ).'/'."deps.$version.txt";
+		
+		$msg = 'error writing '."deps.$version.txt file";
+		$len = strlen( $contents );
+		$bytes_written = @file_put_contents( $file, $contents );
+
+		return ($len === $bytes_written);
+	}
 }
 //</source>
