@@ -58,7 +58,7 @@
    </php>
 
    <pearinstaller>
-    <min>1.4.0a2</min>
+    <min>1.6.2</min>
    </pearinstaller>
    
    <package>
