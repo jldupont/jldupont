@@ -75,6 +75,13 @@ abstract class JLD_PearTools_Xml
 		$tpl = str_replace('%attribs%',	$attribs,	$tpl );		
 		$tpl = str_replace('%contents%',$contents,	$tpl );		
 		$tpl = str_replace('%n%', 		"\n", 		$tpl );
+		$tpl = str_replace('%t%', 		"\t", 		$tpl );		
+	}
+	/**
+	 */
+	public function processCommands( $level, &$source, &$commands )
+	{
+		
 	}
 }
 //</source>
