@@ -4,8 +4,11 @@
     xmlns:xlink="http://www.w3.org/1999/xlink"
     xsi:schemaLocation="http://pear.php.net/dtd/rest.release
     http://pear.php.net/dtd/rest.release.xsd">
- <p xlink:href="/rest/p/directory">Directory</p>
+ <!-- customize here -->
  <c>jldupont.googlecode.com/svn</c>
+
+ <p xlink:href="/rest/p/directory">Directory</p>
+
  <v>1.0.0</v>
  <st>stable</st>
  <l>PHP License</l>
