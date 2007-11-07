@@ -4,7 +4,7 @@
 	xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" 
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
- <name>amazons3</name>
+ <name>AmazonS3</name>
 
  <!-- customize here -->
  <channel>jldupont.googlecode.com/svn</channel>	
