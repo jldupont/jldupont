@@ -4,7 +4,7 @@
 	xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" 
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
- <name>amazons3</name>
+ <name>AmazonS3</name>
 
  <!-- customize here -->
  <channel>jldupont.googlecode.com/svn</channel>	
@@ -21,8 +21,8 @@
  </lead>
 <!-- }} -->
 
- <date>2007-10-01</date>
- <time>09:55:00</time>
+ <date>2007-11-07</date>
+ <time>15:27:46</time>
 
  <version>
   <release>0.1.0</release>
