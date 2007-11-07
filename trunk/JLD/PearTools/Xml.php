@@ -9,9 +9,13 @@ abstract class JLD_PearTools_Xml
 {
 	var $emap;
 	
+	var $raw;
 	var $data = null; 
 	
-	public function getXML( $level, &$data )
+	public function __construct()
+	{
+	}
+	public function get( $level, &$data )
 	{
 		$result = '';
 		
@@ -34,7 +38,7 @@ abstract class JLD_PearTools_Xml
 	{
 		foreach( $value as $k => &$v )
 		{
-			$result = $this->getXML( $key, $value );
+			$result = $this->get( $key, $value );
 			$this->replaceMagicWords( $tpl, $result );
 		}
 	}

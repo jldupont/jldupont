@@ -3,6 +3,9 @@
 	PEAR Channel Tool: parses the 'categories' folder of the REST interface.
 	@author: Jean-Lou Dupont
 	$Id$
+	
+	The main purpose of these classes is to be able to add a release
+	to a 'packagesinfo.xml' file of a given REST category.
 */
 //<source lang=php>
 
@@ -11,7 +14,6 @@ require_once 'JLD/Object/Object.php';
 require_once 'JLD/PearTools/Channel.php';
 require_once 'JLD/Directory/Directory.php';
 require_once 'JLD/PearTools/Xml.php';
-require_once 'PEAR/Exception.php';
 
 // use a class for namespace management.
 class JLD_PearTools_Categories extends JLD_Object implements Iterator
@@ -21,6 +23,7 @@ class JLD_PearTools_Categories extends JLD_Object implements Iterator
 	
 	var $channel = null;
 	var $categories = array();
+	var $raw;
 	
 	static $thisDir;
 	static $tplDir = '/Categories';
@@ -33,11 +36,11 @@ class JLD_PearTools_Categories extends JLD_Object implements Iterator
 	public function getAll() { return $this->categories; }
 	
 	// Iterator Interface
-	public function current() { return $this->categories->current(); }
-	public function key() { return $this->categories->key(); }
-	public function next() { return $this->categories->next(); }
-	public function rewind() { return $this->categories->rewind(); }
-	public function valid() { return $this->categories->valid(); }	
+	public function current()	{ return $this->cats->current(); }
+	public function key()		{ return $this->cats->key(); }
+	public function next()		{ return $this->cats->next(); }
+	public function rewind()	{ return $this->cats->rewind(); }
+	public function valid()		{ return $this->cats->valid(); }	
 	
 	public function __construct( $version ) 
 	{
@@ -63,32 +66,43 @@ class JLD_PearTools_Categories extends JLD_Object implements Iterator
 	protected function readAll()
 	{
 		// no need to get resursive here.
-		$cats = JLD_Directory::getDirectoryInformation( $this->restPathC, $this->restPathC, true, true );
+		$this->raw = JLD_Directory::getDirectoryInformation( $this->restPathC, $this->restPathC, true, true );
 		
 		// strip off leading /
-		foreach( $cats as &$cat )
-			$cat['name'] = substr( $cat['name'], 1);
+		foreach( $this->raw as &$e )
+		{
+			$e['name'] = substr( $e['name'], 1);
+			$this->cats[] = $e['name'];
+		}
 		
-		return $cats;
+		return $this->raw;
 	}
 	/**
-	 *
 	 */
-	public function addRelease( $categoryName, $packageName, $release )
+	public function & getPackageInfoObject( $categoryName )
 	{
+		$file = null;
 		// get the 'packageinfo.xml' file from the desired category.
-		$contents = $this->getPackageInfoFile( $categoryName );
+		$contents = $this->getPackageInfoFile( $categoryName, $file );
 		if (empty( $contents ))
-			throw new PEAR_Exception( 'packageinfo.xml file is empty', 0 );
+			return null;
 		
-		$pif = new JLD_Packagesinfo( $contents );
-		
-		echo $pif->get();
-		
+		return new JLD_SimplePackagesinfo( $categoryName, $contents, $file );		
+	}	
+	public function updatePackageInfoFile( &$pif )
+	{
+		$cname = $pif->getCategoryName();
+		return $this->writePackageInfoFile( $cname, $pif->get() );
 	}
 	/**
 	 */
-	public function getPackageInfoFile( $cName )
+	public function existsCategory( $categoryName )	
+	{
+		return (in_array( $categoryName, $this->cats ));
+	}
+	/**
+	 */
+	public function getPackageInfoFile( $cName, &$file )
 	{
 		$file = $this->restPathC.'/'.$cName.'/packagesinfo.xml';
 		return @file_get_contents( $file );
@@ -98,9 +112,87 @@ class JLD_PearTools_Categories extends JLD_Object implements Iterator
 	protected function writePackageInfoFile( $cName, &$contents )
 	{
 		$file = $this->restPathC.'/'.$cName.'/packagesinfo.xml';
-		return @file_put_contents( $file, $contents );
+		$len = strlen( $contents );
+		$bytes_written = @file_put_contents( $file, $contents );
+		return ( $bytes_written === $len );
 	}
+	/**
+	 * Need to scan through all packagesinfo.xml files to find the match...
+	 */
+	public function findCategoryNameForPackageName( $packageName, &$msg )	
+	{
+		if (empty( $this->cats ))
+		{
+			$msg = 'no categories found';
+			return false;
+		}
+		$result = false;
+		foreach ( $this->cats as &$cat )
+		{
+			$o = $this->getPackageInfoObject( $cat );
+			$r = $o->existsReleaseMarker( $packageName );
+			if ($r === true)
+			{
+				$result = $cat;
+				break;
+			}
+		}
+		
+		return $result;
+	}
+
 }
+
+class JLD_SimplePackagesinfo
+{
+	const markerPattern = '<!--$release:%packagename%$-->';
+	const releasePattern = "\t\t\t<r>\n\t\t\t\t<v>%version%</v>\n\t\t\t\t<s>%stability%</s>\n\t\t\t</r>\n";
+	
+	var $raw = null;
+	var $file = null;
+	var $category = null;
+	
+	public function __construct( $categoryName, &$s, &$file )
+	{
+		$this->category = $categoryName;
+		$this->raw = $s;	
+		$this->file = $file;
+	}
+	public function getCategoryName() { return $this->category; }
+	public function getFileName() { return $this->file; }
+	public function existsReleaseMarker( &$packageName )
+	{
+		$p = str_replace('%packagename%', $packageName, self::markerPattern );
+		$r = strpos( $this->raw, $p );
+		
+		return ($r === false) ? false:true;
+	}
+	/**
+	 * This method constitutes the main raison d'etre of this whole file.
+	 */
+	public function addRelease( $packageName, $version, $stability = 'stable' )
+	{
+		$r = str_replace('%version%', $version, self::releasePattern );
+		$r = str_replace('%stability%', $stability, $r );
+		$this->replaceMarker( $packageName, $r );
+	}
+	public function replaceMarker( &$packageName, &$replacement )
+	{
+		$p = str_replace('%packagename%', $packageName, self::markerPattern );
+		$r = $p."\n".$replacement;
+		$this->raw = str_replace( $p, $r, $this->raw );		
+	}	
+	/**
+	 */
+	public function & get(){ return $this->raw; }
+	
+} // end class
+
+
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+// not used at the moment.
 
 class JLD_Packagesinfo extends JLD_PearTools_Xml
 {
@@ -124,6 +216,7 @@ static $map = array(
 
 	public function __construct( &$contents )
 	{
+		$this->raw = $contents;
 		$this->data = $this->parse( $contents );
 	}
 	protected function parse( &$contents )
@@ -134,40 +227,15 @@ static $map = array(
 			return false;
 		return $parser->getData();
 	}
-	public function get()
+	public function getRaw() { return $this->data; }
+	public function getXML()
 	{
 		$this->emap = self::$map;
-		$result = $this->getXML( 'f', $this->data );
+		$result = $this->get( 'f', $this->data );
 		$result .= "\n<"."/f>\n";
 		return $result;
 	}
 	
-	static $addReleaseCommand = array(
-		array( 'type' => 'match',	'key' => 'f|pi',	'value' => '*',	'action' => '' ),	
-		array( 'type' => 'match',	'key' => 'f|pi',	'value' => '*',	'action' => '' ),			
-		array( 'type' => 'match',	'key' => 'f|pi|p|n','value' => '$package$'),
-		array( 'type' => 'end',		'key' => 'f',		'value' => '*'),		
-	);
-	
-	/**
-	 * To add a release to a given package, one must parse
-	 * the data for the target <pi> <p> <n>
-	 */
-	public function addRelease( $version, $stability = 'stable' )
-	{
-		if (empty( $this->data ))
-			return false;
-			
-		$new = array();	
-		foreach ( $this->data as $key => &$value )
-		{
-			if ( 'pi' !== $key )
-			{
-				array_push( $new, array( $key, $value ));
-				continue;
-			}
-		}
-	}
-}
+}// end class
 
 //</source>

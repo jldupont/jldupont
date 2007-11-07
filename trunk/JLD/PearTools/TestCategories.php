@@ -22,13 +22,15 @@ $cs->init( $c );
 $cats = $cs->getAll();
 
 #var_dump( $cats );
-try
-{
-	$cs->addRelease( 'Amazon', 'AmazonS3', '2.0' );
-}
-catch (PEAR_Exception $e) 
-{
-	print $e;
-}
+echo " category 'Amazon' exists? ".$cs->existsCategory('Amazon')."\n";
+
+$pif = $cs->getPackageInfoObject( 'Amazon' );
+$pif->addRelease( 'AmazonS3', '2.0' );
+$r = $cs->updatePackageInfoFile( $pif );
+
+echo "result: ".$r."\n";
+
+#echo ' exists Amazon/AmazonS3: '.$cs->existsPackage( 'Amazon', 'AmazonS3' )."\n";
+#$cs->addRelease( 'Amazon', 'AmazonS3', '2.0' );
 
 //</source>

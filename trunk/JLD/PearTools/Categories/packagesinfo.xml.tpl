@@ -10,6 +10,7 @@
 			 <!-- customize here -->
 			 <c>$channel$</c>
 			 <n>$package$</n>
+			 
 			 <!-- put category of extension here -->
 			 <ca xlink:href="/rest/c/$category$">$category$</ca>
 			 
@@ -23,8 +24,15 @@
 		<a>
 		 <!-- put latest release information here -->
 		 <!-- This is the information that appears when doing list-all command -->	 
-	
-		$releases$
+
+			<!-- marker for easy insertion -->
+			$release:packagename$
+
+			<!-- example entry below -->
+			<r>
+				<v>$version$</v>
+				<s>$stability</s>
+			</r>
 	
 		</a>
 	</pi>
