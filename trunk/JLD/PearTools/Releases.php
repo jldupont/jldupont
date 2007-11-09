@@ -112,6 +112,11 @@ class JLD_PearTools_Releases extends JLD_Object
 		if (empty( $contents ))
 			return false;
 		
+		$msg = 'marker pattern not found';;
+		$result = $this->existsMarker( $contents, $packageName );
+		if ( !$result)
+			return false;
+		
 		$this->addRelease( $contents, $packageName, $version, $stability );
 		
 		$msg = 'error writing "allreleases.xml" file';
@@ -135,6 +140,12 @@ class JLD_PearTools_Releases extends JLD_Object
 		$r = $p."\n".$replacement;
 		$c = str_replace( $p, $r, $c );		
 	}	
-	
+	protected function existsMarker( &$c, $packageName )
+	{
+		$p = str_replace('%packagename%', $packageName, self::markerPattern );
+		$r = strpos( $c, $p );
+		
+		return ($r === false) ? false:true;
+	}
 }
 //</source>
