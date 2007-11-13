@@ -5,16 +5,40 @@
 	Jean-Lou Dupont
 	$Id$
 
-	Builds a PEAR package
-	* reads information from PEAR package
+	Builds a PEAR package & PHP Docs
+
+	PART I:
+	* Reads information from PEAR package.xml [name, category, version, stability]
+	* Updates package.xml [date, time]
+	* Creates archive [TAR + GZIP] with name $package-$version.tgz
+	* Copies archive in /tags/$package
+	* Copies package files in /tags/$package-$version
+	PART II:
+	* Add category to /c
+	* Add package to /c/$category/info.xml
+	* Add package release to /c/$category/packagesinfo.xml
+	PART III:
+	* Add package to /p
+	PART IV:
+	* Add package to /r
+	* Add $package-$version.xml to /r/$package
+	* Add $version.xml to /r/$package
+	* Create serialized dependencies from $package-$version.xml
+	* Create Deps.$version.txt to /r/$package
+
+	PART V:
 	* creates docs
-	* creates package release
-	* updates REST information
 -->
 
 <project name="JLD/Directory" basedir="." default='all'>
 
-	<target name='prepare'>
+	<target name='findroot'>
+		<taskdef classname='JLD.PearTools.phing.ChannelFindTask' name='channelfind' />
+		<channelfind RootPath='channel.root' StartPath='${project.basedir}' />
+		<echo>Channel root path: ${channel.root}</echo>
+	</target>
+
+	<target name='prepare' depends='findroot' >
 		<resolvepath propertyName="project.path" file="${project.basedir}" />
 		<property name='package.file' value='${project.path}/package.xml' />
 	</target>

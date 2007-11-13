@@ -61,10 +61,12 @@ class JLD_PearTools_Channel extends JLD_PearObject
 		
 		$this->contents = @file_get_contents( $this->getVar('file') );
 		if (empty( $this->contents ))
-			return;
+			return false;
 			
 		$uri = $this->parse( $this->contents );
 		$this->setVar( 'uri', $uri );
+		
+		return $uri;
 	}
 	/**
 	 */
