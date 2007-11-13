@@ -66,12 +66,27 @@ class JLD_PearTools_Package extends JLD_Object
 	{
 		return @$this->data['version']['release'];
 	}
+	/**	
+	 * Returns the package release stability
+	 */
+	public function getStability()
+	{
+		return @$this->data['stability']['release'];
+	}
 	/**
 	 * Returns the package name
 	 */
 	public function getName()
 	{
 		return @$this->data['name'];
+	}
+	/**
+	 * Returns the package category name
+	 * WARNING: non-standard field.
+	 */
+	public function getCategory()
+	{
+		return @$this->data['category'];
 	}
 	/**
 	 */

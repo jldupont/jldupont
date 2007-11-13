@@ -26,7 +26,6 @@ class JLD_PearTools_Categories extends JLD_Object implements Iterator
 	var $raw;
 	
 	static $thisDir;
-	static $tplDir = '/Categories';
 	
 	//
 	var $rootPath = null;

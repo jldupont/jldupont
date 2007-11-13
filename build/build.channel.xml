@@ -29,14 +29,14 @@
 		<echo>Project root path:      ${project.path}</echo>
 
 		<!-- build the channel.xml file -->
-		<taskdef classname='JLD.PearTools.phing.ChannelTask' name='channel' />
+		<taskdef classname='JLD.PearTools.phing.ChannelBuildTask' name='channel' />
 		<channel	name="${channel.name}" 
 					alias="${channel.alias}" 
 					uri="${channel.uri}" 
 					path="${project.path}"
 		/>
 		<!-- create the REST directories if not already created -->
-		<taskdef classname='JLD.PearTools.phing.ChannelRestTask' name='channelrest' />
+		<taskdef classname='JLD.PearTools.phing.ChannelBuildRestTask' name='channelrest' />
 		<channelrest path='${project.path}' />
 	</target>
 

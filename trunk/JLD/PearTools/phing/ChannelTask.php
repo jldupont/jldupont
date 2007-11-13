@@ -3,6 +3,10 @@
  * @author Jean-Lou Dupont
  * @package JLD
  * @version $Id$
+ *
+ * PHING task
+ *  Creates a PEAR channel object in the current project.
+ *  Other tasks will use this object to manage the REST interface.
  */
 //<source lang=php> 
 
@@ -12,10 +16,7 @@ require_once "JLD/PearTools/Channel.php";
 class ChannelTask extends JLD_PhingTools_Task
 {
 	// Attributes interface
-	public function setName( $val ) { $this->__set('name', $val ); }
-	public function setAlias( $val ) { $this->__set('alias', $val ); }
-	public function setUri( $val ) { $this->__set('uri', $val ); }	
-	public function setPath( $val ) { $this->__set('path', $val ); }	
+	public function setPath( $val ) { $this->__set('path', $val ); }
 		
     /**
      * The init method: Do init steps.
@@ -30,18 +31,13 @@ class ChannelTask extends JLD_PhingTools_Task
     public function main() 
 	{
 		$c = JLD_PearTools_Channel::singleton();
-
-		$c->name = $this->name;
-		$c->alias = $this->alias;
-		$c->uri = $this->uri;
-		$c->file = $this->path.'/channel.xml';
-		
-		$result = $c->create();
+		$result = $c->init( $this->path );
 		if (!$result)
-			throw new BuildException( 'error building channel.xml file' );
+			throw new BuildException( 'channel object could not be created because channel.xml was not found' );
 		
-		$result = $c->write();		
-		if (!$result)
-			throw new BuildException( 'error writing channel.xml file' );
+		// store the channel object in the current project.
+		// Other tasks will leverage this object.
+		$this->project->setProperty( 'channel', $c );
     }
 }
+//</source>

@@ -3,6 +3,9 @@
  * @author Jean-Lou Dupont
  * @package JLD
  * @version $Id$
+ *
+ * This PHING task creates the 'channel.xml' file from a template.
+ *
  */
 //<source lang=php> 
 
