@@ -7,7 +7,6 @@
 //<source lang=php> 
 
 require_once "JLD/PhingTools/Task.php";
-require_once "JLD/PhingTools/Path.php";
 require_once "JLD/PearTools/Channel.php";
 
 class ChannelTask extends JLD_PhingTools_Task
@@ -31,12 +30,11 @@ class ChannelTask extends JLD_PhingTools_Task
     public function main() 
 	{
 		$c = JLD_PearTools_Channel::singleton();
-		$p = JLD_PhingTools_Path::resolve( $this->path );
 
 		$c->name = $this->name;
 		$c->alias = $this->alias;
 		$c->uri = $this->uri;
-		$c->file = $p.'/channel.xml';
+		$c->file = $this->path.'/channel.xml';
 		
 		$result = $c->create();
 		if (!$result)
