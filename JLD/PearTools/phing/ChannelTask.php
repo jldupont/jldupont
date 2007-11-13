@@ -16,7 +16,7 @@ require_once "JLD/PearTools/Channel.php";
 class ChannelTask extends JLD_PhingTools_Task
 {
 	// Attributes interface
-	public function setPath( $val ) { $this->__set('path', $val ); }
+	public function setPath( $val ) { $this->__set('path', $val ); }	
 		
     /**
      * The init method: Do init steps.
@@ -37,7 +37,11 @@ class ChannelTask extends JLD_PhingTools_Task
 		
 		// store the channel object in the current project.
 		// Other tasks will leverage this object.
-		$this->project->setProperty( 'channel', $c );
+		$this->project->setProperty( 'channel.uri', $c->getURI() );
+		$this->project->setProperty( 'channel.name', $c->getName() );		
+		$this->project->setProperty( 'channel.alias', $c->getAlias() );				
+		$this->project->setProperty( 'channel.tagspath', $c->getTAGSPath() );				
+		$this->project->setProperty( 'channel.restpath', $c->getRESTPath() );						
     }
 }
 //</source>

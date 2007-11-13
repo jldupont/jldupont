@@ -44,7 +44,8 @@ class JLD_PearTools_Channel extends JLD_PearObject
 		return parent::singleton( __CLASS__, self::thisVersion );	
 	}
 	public function getURI() { return $this->getVar('uri'); }
-	
+	public function getName() { return $this->getVar('name'); }	
+	public function getAlias() { return $this->getVar('alias'); }		
 	public function getRootPath() { return $this->dir; }
 	public function getRESTPath() { return self::$baseREST; }
 	public function getTAGSPath() { return self::$baseTAGS; }	
@@ -63,10 +64,9 @@ class JLD_PearTools_Channel extends JLD_PearObject
 		if (empty( $this->contents ))
 			return false;
 			
-		$uri = $this->parse( $this->contents );
-		$this->setVar( 'uri', $uri );
-		
-		return $uri;
+		$name = $this->parse( $this->contents );
+		$this->setVar( 'alias', @$this->data['suggestedalias'] );
+		return $name;
 	}
 	/**
 	 */
@@ -76,12 +76,12 @@ class JLD_PearTools_Channel extends JLD_PearObject
 		$result = $parser->parse( $contents );
 		if (!$result)
 			return false;
-		$data = $parser->getData();
+		$this->data = $parser->getData();
 		
-		if (isset($data['name']))
+		if (isset($this->data['name']))
 		{
-			$this->setVar('name', $data['name'] );
-			return $data['name'];
+			$this->setVar('name', $this->data['name'] );
+			return $this->data['name'];
 		}
 			
 		return null;

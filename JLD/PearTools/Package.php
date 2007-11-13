@@ -81,12 +81,16 @@ class JLD_PearTools_Package extends JLD_Object
 		return @$this->data['name'];
 	}
 	/**
-	 * Returns the package category name
-	 * WARNING: non-standard field.
 	 */
-	public function getCategory()
+	public function getSummary()
 	{
-		return @$this->data['category'];
+		return @$this->data['summary'];
+	}
+	/**
+	 */
+	public function getDescription()
+	{
+		return @$this->data['description'];
 	}
 	/**
 	 */
