@@ -5,6 +5,6 @@
     xsi:schemaLocation="http://pear.php.net/dtd/rest.categorypackageinfo
     http://pear.php.net/dtd/rest.categorypackageinfo.xsd">
 
-	$packages_info$
+	$all_packages$
 	
 </f>
