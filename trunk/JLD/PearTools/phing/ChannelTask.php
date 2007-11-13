@@ -35,8 +35,6 @@ class ChannelTask extends JLD_PhingTools_Task
 		if (!$result)
 			throw new BuildException( 'channel object could not be created because channel.xml was not found' );
 		
-		// store the channel object in the current project.
-		// Other tasks will leverage this object.
 		$this->project->setProperty( 'channel.uri', $c->getURI() );
 		$this->project->setProperty( 'channel.name', $c->getName() );		
 		$this->project->setProperty( 'channel.alias', $c->getAlias() );				

@@ -12,6 +12,11 @@ abstract class JLD_PearObject extends JLD_Object
 {
 	var $vars = array();
 	
+	static $std_magic_words = array(
+		'$tab$'		=> "\t",
+		'$newline$' => "\n",
+	);
+	
 	public function getVar( $var ) { return @$this->vars[$var]; }
 	public function setVar( $var, $value ) { return $this->vars[$var] = $value; }
 	
@@ -31,7 +36,19 @@ abstract class JLD_PearObject extends JLD_Object
 	{
 		foreach ( $magic_words as $mg => $varname )
 			$tpl = str_replace( $mg, $this->getVar( $varname ), $tpl );
-	}
 
+		foreach ( self::$std_magic_words as $mg => $value )
+			$tpl = str_replace( $mg, $value, $tpl );
+	}
+	protected function replaceMagicWords2( $tpl, &$magic_words )
+	{
+		foreach ( $magic_words as $mg => $varname )
+			$tpl = str_replace( $mg, $this->getVar( $varname ), $tpl );
+
+		foreach ( self::$std_magic_words as $mg => $value )
+			$tpl = str_replace( $mg, $value, $tpl );
+		
+		return $tpl;
+	}
 }
 //</source>
