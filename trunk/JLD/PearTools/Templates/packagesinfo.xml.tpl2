@@ -6,7 +6,7 @@
 			 <l>$license$</l>
 			 <s>$summary$</s>
 			 <d>$description$</d>
-			 <r xlink:href="$releases_path$"/>
+			 <r xlink:href="$base_rest$$base_releases$/$package_name$"/>
 		</p>
 		<a>
 			$all_releases$

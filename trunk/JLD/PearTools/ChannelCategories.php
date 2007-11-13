@@ -21,10 +21,13 @@ class JLD_PearTools_ChannelCategories extends JLD_PearObject
 	const tpl_c2= '/Templates/categories.xml.tpl2';	
 	
 	const tpl_i = '/Templates/info.xml.tpl';	
-	const tpl_p = '/Templates/packagesinfo.xml.tpl';
+	const tpl_p = '/Templates/packagesinfo.xml.tpl';  // top level
+	const tpl_p2= '/Templates/packagesinfo.xml.tpl2'; // package instance
+	const tpl_p3= '/Templates/packagesinfo.xml.tpl3'; // release instance
 	
 	// relative to the REST structure; this is standard.
 	static $baseCategories = '/c';
+	static $baseReleases = '/r'; // because of packagesinfo.xml file...
 	var $rootPath  = null;
 	var $baseREST  = null;
 	var $restPathC = null;
@@ -39,6 +42,7 @@ class JLD_PearTools_ChannelCategories extends JLD_PearObject
 		'$category_name$'	=> 'category_name',  // for categories.xml
 		'$base_rest$'		=> 'base_rest',      // for categories.xml
 		'$base_categories$'	=> 'base_categories',// for categories.xml		
+		'$base_releases$'	=> 'base_releases',  // for packagesinfo.xml				
 	);
 	
 	public function __construct( $version ) 
@@ -60,10 +64,12 @@ class JLD_PearTools_ChannelCategories extends JLD_PearObject
 		$this->setVar('channel_name',	$this->channel->getName());
 		$this->setVar('base_rest', 		$this->channel->getRESTPath());
 		$this->setVar('base_categories',self::$baseCategories );		
+		$this->setVar('base_releases',  self::$baseReleases );		
 		
 		$this->rootPath = $this->channel->getRootPath();
 		$this->baseREST = $this->channel->getRESTPath();
 		$this->restPathC = $this->rootPath . $this->baseREST . self::$baseCategories;
+		$this->restPathR = $this->rootPath . $this->baseREST . self::$baseReleases;		
 	}
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -104,6 +110,7 @@ class JLD_PearTools_ChannelCategories extends JLD_PearObject
 		$result = @mkdir( $dir );	
 		if ($result)
 			$this->cats[] = $name;
+			
 		return $result;
 	}
 	/**
@@ -163,6 +170,10 @@ class JLD_PearTools_ChannelCategories extends JLD_PearObject
 		$file = $this->restPathC.'/'.$name.'/info.xml';
 		return $this->writeFile( $file, $tpl );
 	}
+	
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	
 	/**
 	 * Updates / creates the 'packagesinfo.xml' file in the REST structure.
 	 * Must read in the current file, parse it & then add the specified information.
@@ -180,11 +191,48 @@ class JLD_PearTools_ChannelCategories extends JLD_PearObject
 		// the file exists... the 'fun' begins...
 		$p = $this->parse( $c );
 		
+		var_dump( $p );
 	}
 	/**
-	 *
+	 * Creates a new packageinfo.xml file from scratch.
 	 */
 	public function createPackageInfo( $name, $packagename, $packageversion, $packagestability )
+	{
+		$pi = $this->createPackageInstance( );
+	}
+	/**
+		<pi>
+			<p>
+				 <n>$package_name$</n>
+				 <c>$channel_name$</c>
+				 <ca xlink:href="$category_path$">$category_name$</ca>
+				 <l>$license$</l>
+				 <s>$summary$</s>
+				 <d>$description$</d>
+				 <r xlink:href="$base_rest$$base_releases$/$package_name$"/>
+			</p>
+			<a>
+				$all_releases$
+			</a>
+		</pi>
+	 */
+	public function createPackageInstance( $packageName )
+	{
+		$tpl = $this->getTemplate( self:tpl_p2 );
+		$r   = $this->replaceMagicWords2( $tpl, self::$magic_words );
+	}	 
+	/**
+	 * Inserts $contents in the top level template
+	 * for the 'packagesinfo.xml' file
+	 */
+	public function insertTopPackagesInfo( &$contents )
+	{
+		$tpl = $this->getTemplate( self::tpl_p );
+		if (empty( $tpl ))
+			throw new Exception( 'could not access top level "packagesinfo.xml" template' );
+		return str_replace( '$all_packages$', $contents, $tpl );
+	}
+	public function addPackage( &$contents, &$tpl )
 	{
 		
 	}
@@ -213,3 +261,80 @@ class JLD_PearTools_ChannelCategories extends JLD_PearObject
 	}
 		
 }
+//</source>
+/* Example 'packagesinfo.xml' file
+
+array(2) 
+{
+  
+  ["attribs"]=>
+  array(4) {
+    ["xmlns"]=>
+    string(48) "http://pear.php.net/dtd/rest.categorypackageinfo"
+    ["xmlns:xsi"]=>
+    string(41) "http://www.w3.org/2001/XMLSchema-instance"
+    ["xmlns:xlink"]=>
+    string(28) "http://www.w3.org/1999/xlink"
+    ["xsi:schemaLocation"]=>
+    string(105) "http://pear.php.net/dtd/rest.categorypackageinfo     http://pear.php.net/dtd/rest.categorypackageinfo.xsd"
+  }
+  
+  ["pi"]=>
+  array(2) {
+    ["p"]=>
+    array(7) {
+      ["n"]=>
+      string(9) "Directory"
+      ["c"]=>
+      string(27) "jldupont.googlecode.com/svn"
+      ["ca"]=>
+      array(2) {
+        ["attribs"]=>
+        array(1) {
+          ["xlink:href"]=>
+          string(18) "/rest/c/Filesystem"
+        }
+        ["_content"]=>
+        string(10) "Filesystem"
+      }
+      ["l"]=>
+      string(0) ""
+      ["s"]=>
+      string(50) "Helper class for manipulating directory structures"
+      ["d"]=>
+      string(0) ""
+      ["r"]=>
+      array(1) {
+        ["attribs"]=>
+        array(1) {
+          ["xlink:href"]=>
+          string(17) "/rest/r/directory"
+        }
+      }
+    } //end p
+	
+    ["a"]=>
+    array(1) {
+      ["r"]=>
+      array(2) {
+        [0]=>
+        array(2) {
+          ["v"]=>
+          string(5) "1.0.1"
+          ["s"]=>
+          string(6) "stable"
+        }
+        [1]=>
+        array(2) {
+          ["v"]=>
+          string(5) "1.0.0"
+          ["s"]=>
+          string(6) "stable"
+        }
+      }
+    }// end a
+	
+  }// end pi
+
+}//end
+*/
