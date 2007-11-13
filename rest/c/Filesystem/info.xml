@@ -6,6 +6,6 @@
     http://pear.php.net/dtd/rest.category.xsd">
  <n>Filesystem</n>
  <c>jldupont.googlecode.com/svn</c>
- <a>Filesystem</a>
- <d>Filesystem related classes</d>
+ <a>Filesystem</a> <!-- alias? -->
+ <d>$description$</d>
 </c>

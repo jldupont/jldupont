@@ -15,9 +15,9 @@
 	*(T15) Copies archive in /tags/$package
 	*(T16) Copies package files in /tags/$package-$version
 	PART II:
-	(T21) Add category directory to /c
-	(T22) Add category to categories.xml file in /c
-	(T23) Add package to /c/$category/info.xml  [if !exist, create]
+	*(T21) Add category directory to /c
+	*(T22) Add category to categories.xml file in /c
+	*(T23) Add package to /c/$category/info.xml  [if !exist, create]
 	(T24) Add package release to /c/$category/packagesinfo.xml [if !exist, create]
 	PART III:
 	* Add package to /p
@@ -107,10 +107,14 @@
 			</fileset>
 		</copy>
 		<echo>Processing categories</echo>
-		<!-- T21 -->
-		<echo>Adding package category to REST</echo>
+		<!-- T21, T22, T23 -->
+		<echo>Adding package's category and release information to REST categories</echo>
 		<taskdef classname='JLD.PearTools.phing.CategoriesTask' name='categories' />
-		<categories catname="${package.category}" packagename="${package.name}"/>
+		<categories	channelroot="${channel.root}" 
+					catname="${package.category}" 
+					packagename="${package.name}"
+					packagereleaseversion="${package.version}" 
+					packagereleasestability="${package.stability}" />
 	</target>
 
 	<target name='docs'>

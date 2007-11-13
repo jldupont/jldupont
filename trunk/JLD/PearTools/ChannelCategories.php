@@ -51,7 +51,7 @@ class JLD_PearTools_ChannelCategories extends JLD_PearObject
 	}
 	public function init( &$channel )
 	{
-		if (!is_object( $this->channel ))
+		if (!is_object( $channel ))
 			throw new Exception('invalid channel object');
 		
 		$this->channel = $channel;
@@ -97,7 +97,11 @@ class JLD_PearTools_ChannelCategories extends JLD_PearObject
 	 */
 	public function addCategoryDirectory( $name )
 	{
-		$result = @mkdir( $this->restPathC.'/'.$name );	
+		$dir = $this->restPathC.'/'.$name;
+		if (is_dir( $dir ))
+			return true;
+			
+		$result = @mkdir( $dir );	
 		if ($result)
 			$this->cats[] = $name;
 		return $result;
@@ -133,12 +137,57 @@ class JLD_PearTools_ChannelCategories extends JLD_PearObject
 		$final_result = $this->replaceMagicWords2( $tpl, self::$magic_words );
 		
 		// finally, write the file!
-		$file = $this->$this->restPathC.'/categories.xml';
+		$file = $this->restPathC.'/categories.xml';
 		$result = $this->writeFile( $file, $final_result );
 		
 		return $result;
 	}
-
+	/**
+	 * Updates / creates the 'info.xml' file associated with a category.
+	 * Make sure the category directory exists prior to using this method.
+	 * <n>$category_name$</n>
+	 * <c>$channel_name$</c>
+	 * <a>$category_name$</a> <!-- alias? -->
+	 * <d>$description$</d>
+	 */
+	public function updateCategoryInfo( $name )
+	{
+		$tpl = $this->getTemplate( self::tpl_i );	
+		if (empty( $tpl ))
+			throw new Exception( 'template file for "info.xml" appears invalid or non-existent');
+		
+		$this->__set( 'category_name', $name );
+		$this->replaceMagicWords( $tpl, self::$magic_words );
+		
+		// write the file
+		$file = $this->restPathC.'/'.$name.'/info.xml';
+		return $this->writeFile( $file, $tpl );
+	}
+	/**
+	 * Updates / creates the 'packagesinfo.xml' file in the REST structure.
+	 * Must read in the current file, parse it & then add the specified information.
+	 */
+	public function updatePackagesInfo(	$name, $packagename, $packageversion, $packagestability ) 
+	{
+		$file = $this->restPathC.'/'.$name.'/packagesinfo.xml';
+		$c = @file_get_contents( $file );
+		
+		// if the file does not exists, then create one
+		// from the template.
+		if (empty( $c ))
+			return $this->createPackageInfo( $name, $packagename, $packageversion, $packagestability );
+		
+		// the file exists... the 'fun' begins...
+		$p = $this->parse( $c );
+		
+	}
+	/**
+	 *
+	 */
+	public function createPackageInfo( $name, $packagename, $packageversion, $packagestability )
+	{
+		
+	}
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

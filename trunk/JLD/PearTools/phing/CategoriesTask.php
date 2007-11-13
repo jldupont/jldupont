@@ -7,7 +7,9 @@
  * PHING task
  *
  * <taskdef classname='JLD.PearTools.phing.CategoriesTask' name='categories' />
- * <categories catname="${package.categoryname}" packagename="${package.name}" />
+ * <categories channelroot= "${channel.root}" 
+ *             catname="${package.categoryname}" 
+ *             packagename="${package.name}" />
  */
 //<source lang=php> 
 
@@ -19,8 +21,11 @@ class CategoriesTask extends JLD_PhingTools_Task
 {
 	// Attributes interface
 	// Name of category to add + package name
+	public function setChannelRoot( $val ) { $this->__set('channelroot', $val); }
 	public function setCatName( $val ) { $this->__set('catname', $val ); }	
 	public function setPackageName( $val ) { $this->__set('packagename', $val ); }		
+	public function setPackageReleaseVersion( $val ) { $this->__set('packageversion', $val ); }			
+	public function setPackageReleaseStability( $val ) { $this->__set('packagestability', $val ); }				
 		
     /**
      * The init method: Do init steps.
@@ -33,11 +38,11 @@ class CategoriesTask extends JLD_PhingTools_Task
     public function main() 
 	{
 		$c = JLD_PearTools_Channel::singleton();
-		$result = $c->init( $this->path );
+		$result = $c->init( $this->__get('channelroot') );
 		if (!$result)
 			throw new BuildException( 'channel object could not be created because channel.xml was not found' );
 		
-		$cs = new JLD_PearTools_ChannelCategories;
+		$cs = JLD_PearTools_ChannelCategories::singleton();
 		try
 		{
 			$cs->init( $c );
@@ -63,6 +68,20 @@ class CategoriesTask extends JLD_PhingTools_Task
 		{
 			throw new BuildException( $e->getMessage() );
 		}
+		// 3- update 'info.xml'
+		$result = $cs->updateCategoryInfo( $this->__get('catname') );
+		if (!$result)
+			throw new BuildException( 'could not update "info.xml" file in the REST structure' );
+
+		// 4- update 'packagesinfo.xml'
+		$result = $cs->updatePackagesInfo(	$this->__get('catname'), 
+											$this->__get('packagename'), 
+											$this->__get('packageversion'), 
+											$this->__get('packagestability') 											
+											);
+		if (!$result)
+			throw new BuildException( 'could not update "packagesinfo.xml" file in the REST structure' );
+		
     }
 }
 //</source>
