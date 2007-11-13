@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+
+<!--
+	PHING build file
+	
+	This build system assumes to be located
+	in /build.
+
+	1) Builds the PEAR channel
+	* Builds 'channel.xml'
+	* Builds the REST interface
+
+	) Builds the root file 'index.html'
+	* Gets the tags docs
+	* Gets the tags tests
+	* Gets the trunk docs
+	* Gets the trunk tests
+-->
+
+<project name="jldupont" basedir="." default='all' >
+
+	<target name='all'>
+		<echo>Building all targets</echo>
+		<phing phingfile="build.channel.xml" inheritRefs="true" target="channel" />
+	</target>
+
+</project>

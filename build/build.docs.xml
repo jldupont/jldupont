@@ -1,0 +1,3 @@
+
+<-- Call target "xslttest" from buildfile "alternativebuildfile.xml" -->
+ <phing phingfile="alternativebuild.xml" inheritRefs="true" target="xslttest" />

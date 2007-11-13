@@ -8,27 +8,32 @@
 //<source lang=php>
 
 require_once "PEAR/XMLParser.php";
-require_once 'JLD/Object/Object.php';
+require_once 'JLD/PearTools/PearObject.php';
 
 // use a class for namespace management.
-class JLD_PearTools_Channel extends JLD_Object
+class JLD_PearTools_Channel extends JLD_PearObject
 {
 	const thisVersion = '$Id$';
+	const tpl = '/Templates/channel.xml.tpl';
+	
+	// Template related
+	static $magic_words = array(
+	'$name$' 	=> 'name',
+	'$alias$'	=> 'alias',
+	'$uri$'		=> 'uri',
+	);
 	
 	// REST related
 	static $baseREST = '/rest';
 	static $baseTAGS = '/tags';
 	static $file_name = 'channel.xml';
+	static $rest_directories = array( '/c', '/m', '/p', '/r' );
 	
 	// filesystem absolute path to channel
 	var $dir = null; 
 	
 	var $contents = null;
-	var $file = null;
 	var $data = null; // parsed file.
-	
-	// this variable will hold the channel's uri
-	var $uri = null;
 	
 	public function __construct( $version ) 
 	{
@@ -38,7 +43,8 @@ class JLD_PearTools_Channel extends JLD_Object
 	{
 		return parent::singleton( __CLASS__, self::thisVersion );	
 	}
-	public function getURI() { return $this->uri; }
+	public function getURI() { return $this->getVar('uri'); }
+	
 	public function getRootPath() { return $this->dir; }
 	public function getRESTPath() { return self::$baseREST; }
 	public function getTAGSPath() { return self::$baseTAGS; }	
@@ -51,13 +57,14 @@ class JLD_PearTools_Channel extends JLD_Object
 	{
 		$this->dir = $rootPath;
 
-		$this->file = $this->dir.'/'.self::$file_name;
+		$this->setVar( 'file', $this->dir.'/'.self::$file_name );
 		
-		$this->contents = @file_get_contents( $this->file );
+		$this->contents = @file_get_contents( $this->getVar('file') );
 		if (empty( $this->contents ))
 			return;
 			
-		$this->uri = $this->parse( $this->contents );
+		$uri = $this->parse( $this->contents );
+		$this->setVar( 'uri', $uri );
 	}
 	/**
 	 */
@@ -70,9 +77,50 @@ class JLD_PearTools_Channel extends JLD_Object
 		$data = $parser->getData();
 		
 		if (isset($data['name']))
+		{
+			$this->setVar('name', $data['name'] );
 			return $data['name'];
+		}
 			
 		return null;
 	}
+	
+	/**
+	 * This method creates the 'channel.xml' file based on the
+	 * template.
+	 *
+	 * The parameters must have been set beforehand
+	 */
+	public function create( )
+	{
+		$tpl = $this->getTemplate( self::tpl );
+		if (empty( $tpl ))
+			return false;
+		$this->replaceMagicWords( $tpl, self::$magic_words );
+		$this->setVar( 'tpl', $tpl );
+		
+		return true;
+	}
+	/**
+	 */
+	public function write()
+	{
+		$contents = $this->getVar( 'tpl' );	
+		$file = $this->getVar('file');
+		$bytes_written = @file_put_contents( $file, $contents );
+		return (strlen( $contents ) === $bytes_written );
+	}
+	/**
+	 * Creates the REST directory structure
+	 */
+	public function createRest()
+	{
+		$base = $this->getVar('path');
+		foreach( self::$rest_directories as $dir )
+			if (mkdir( $base.$dir ) === false)
+				return false;
+				
+		return true;	
+	}	
 }
 //</source>

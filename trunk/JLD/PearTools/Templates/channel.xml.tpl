@@ -2,14 +2,14 @@
 <channel version="1.0" xmlns="http://pear.php.net/channel-1.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://pear.php.net/dtd/channel-1.0 http://pear.php.net/dtd/channel-1.0.xsd">
- <name>Jean-Lou Dupont's PEAR channel</name>
+ <name>$name$</name>
  <summary>$summary$</summary>
- <suggestedalias>jldupont</suggestedalias>
+ <suggestedalias>$alias$</suggestedalias>
  <servers>
   <primary>
    <rest>
-    <baseurl type="REST1.0">http://jldupont.googlecode.com/svn/rest/</baseurl>
-    <baseurl type="REST1.1">http://jldupont.googlecode.com/svn/rest/</baseurl>
+    <baseurl type="REST1.0">$uri$</baseurl>
+    <baseurl type="REST1.1">$uri$</baseurl>
    </rest>
   </primary>
  </servers>
