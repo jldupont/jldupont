@@ -125,6 +125,20 @@ class JLD_Directory
 	}
 
 	/**
+	 */
+	public static function getIncludePath( $fragment )
+	{
+		$liste = get_include_path();
+		$a = explode( PATH_SEPARATOR, $liste );
+		
+		foreach( $a as $e )
+			if (strpos( strtolower( $e ), $fragment ) !== false)
+				return $e;
+				
+		return null;
+	}
+
+	/**
 	 * There can only be one 'entry' in the include path
 	 * with the keyword 'pear' (or 'PEAR') in it.
 	 *
@@ -132,14 +146,18 @@ class JLD_Directory
 	 */
 	public static function getPearIncludePath()
 	{
-		$liste = get_include_path();
-		$a = explode( PATH_SEPARATOR, $liste );
-		
-		foreach( $a as $e )
-			if (strpos( strtolower( $e ), 'pear' ) !== false)
-				return $e;
-				
-		return null;
+		return self::getIncludePath( 'pear' );
+	}
+
+	/**
+	 * There can only be one 'entry' in the include path
+	 * with the keyword 'phing' (or 'phing') in it.
+	 *
+	 * This shouldn't be a problem with most standard installs.
+	 */
+	public static function getPhingIncludePath()
+	{
+		return self::getIncludePath( 'phing' );		
 	}
 
 	public static function getDirectoryInformationRecursive( $dir, &$base, 
