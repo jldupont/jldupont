@@ -27,7 +27,7 @@ class JLD_PearTools_Channel extends JLD_PearObject
 	static $baseREST = '/rest';
 	static $baseTAGS = '/tags';
 	static $file_name = 'channel.xml';
-	static $rest_directories = array( '/c', '/m', '/p', '/r' );
+	static $rest_directories = array( '/c', '/m', '/p', '/r', '/tags' );
 	
 	// filesystem absolute path to channel
 	var $dir = null; 
@@ -117,9 +117,12 @@ class JLD_PearTools_Channel extends JLD_PearObject
 	{
 		$base = $this->getVar('path');
 		foreach( self::$rest_directories as $dir )
+		{
+			if (is_dir( $dir ))
+				continue;
 			if (mkdir( $base.$dir ) === false)
 				return false;
-				
+		}		
 		return true;	
 	}	
 }

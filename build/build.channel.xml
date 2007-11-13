@@ -2,11 +2,12 @@
 
 <!--
 	PHING build file
+	Jean-Lou Dupont
+	$Id$
 
 	Builds the PEAR channel
 	* Builds 'channel.xml'
-	* Builds /rest directory
-	* Builds the REST interface
+	* Builds /rest directory structure
 -->
 
 <project name="pear_channel" basedir="." default='channel'>
@@ -21,17 +22,22 @@
 		<echo>Assuming channel name:  ${channel.name}</echo>
 		<echo>Assuming channel alias: ${channel.alias}</echo>
 		<echo>Assuming channel URI:   ${channel.uri}</echo>
-		<echo>Build path:             ${project.basedir}/../</echo>
-		<taskdef classname='JLD.PearTools.phing.ChannelTask' name='channel' />
 
+		<property name="relative_project_path" value=".." />		
+		<resolvepath propertyName="project.path" file="${relative_project_path}" />
+
+		<echo>Project root path:      ${project.path}</echo>
+
+		<!-- build the channel.xml file -->
+		<taskdef classname='JLD.PearTools.phing.ChannelTask' name='channel' />
 		<channel	name="${channel.name}" 
 					alias="${channel.alias}" 
 					uri="${channel.uri}" 
-					path="${project.basedir}/../"
+					path="${project.path}"
 		/>
-
+		<!-- create the REST directories if not already created -->
 		<taskdef classname='JLD.PearTools.phing.ChannelRestTask' name='channelrest' />
-		<channelrest path='${project.basedir}/../' />
+		<channelrest path='${project.path}' />
 	</target>
 
 </project>
