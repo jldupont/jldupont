@@ -18,13 +18,21 @@ class JLD_PearTools_Package extends JLD_Object
 	var $file;
 	var $data = null;
 	var $raw;
+	var $valid = false;
 	
 	public function __construct( &$contents, $filename )
 	{
 		$this->raw = $contents;
 		$this->file = $filename;
 		
+		if (empty( $contents ))
+			$this->raw = $this->readFile( $filename );
+		
 		$this->parse( );
+	}
+	public function readFile( $filename )
+	{
+		return @file_get_contents( $filename );
 	}
 	public function updateFile()
 	{
@@ -37,18 +45,33 @@ class JLD_PearTools_Package extends JLD_Object
 	protected function & parse( )
 	{
 		if ( empty($this->raw ))
-			return;
+			return false;
 		$parser = new PEAR_XMLParser;
-		$result = $parser->parse( $this->raw );
-		if (!$result)
+		$this->valid = $parser->parse( $this->raw );
+		if (!$this->valid)
 			return false;
 		$this->data = $parser->getData();
 	}
+	/**
+	 * Returns TRUE if the parsed package appears valid
+	 */
+	public function isValid()
+	{
+		return $this->valid;
+	}
 	/**	
+	 * Returns the package release version
 	 */
 	public function getVersion()
 	{
 		return @$this->data['version']['release'];
+	}
+	/**
+	 * Returns the package name
+	 */
+	public function getName()
+	{
+		return @$this->data['name'];
 	}
 	/**
 	 */
