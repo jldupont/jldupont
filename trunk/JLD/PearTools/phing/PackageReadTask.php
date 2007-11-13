@@ -16,7 +16,8 @@ class PackageReadTask extends JLD_PhingTools_Task
 	public function setPropertyPackageName( $val ) { $this->__set('propertyPackageName', $val ); }
 	public function setPropertyPackageVersion( $val ) { $this->__set('propertyPackageVersion', $val ); }	
 	public function setPropertyPackageStability( $val ) { $this->__set('propertyPackageStability', $val ); }	
-	public function setPropertyPackageCategory( $val ) { $this->__set('propertyPackageCategory', $val ); }	
+	public function setPropertyPackageSummary( $val ) { $this->__set('propertyPackageSummary', $val ); }		
+	public function setPropertyPackageDescription( $val ) { $this->__set('propertyPackageDescription', $val ); }			
 	public function setPropertyPackageFile( $val ) { $this->__set('propertyPackageFile', $val ); }	
 		
     /**
@@ -39,6 +40,7 @@ class PackageReadTask extends JLD_PhingTools_Task
 		$this->project->setProperty($this->propertyPackageName, $p->getName() );		
 		$this->project->setProperty($this->propertyPackageVersion, $p->getVersion() );				
 		$this->project->setProperty($this->propertyPackageStability, $p->getStability() );						
-		$this->project->setProperty($this->propertyPackageCategory, $p->getCategory() );						
+		$this->project->setProperty($this->propertyPackageSummary, $p->getSummary() );						
+		$this->project->setProperty($this->propertyPackageDescription, $p->getDescription() );
     }
 }
