@@ -1,0 +1,49 @@
+<?xml version="1.0" ?>
+
+<!--
+	PHING build file
+	Jean-Lou Dupont
+	$Id$
+
+	Builds a PEAR package
+	* reads information from PEAR package
+	* creates docs
+	* creates package release
+	* updates REST information
+-->
+
+<project name="JLD/Directory" basedir="." default='all'>
+
+	<target name='prepare'>
+		<resolvepath propertyName="project.path" file="${project.basedir}" />
+		<property name='package.file' value='${project.path}/package.xml' />
+	</target>
+	<!--
+		Initialization:
+		- retrieve package name
+		- retrieve version number
+	-->
+	<target name='readpackage' depends='prepare'>
+		<taskdef classname='JLD.PearTools.phing.PackageReadTask' name='packageread' />
+		<packageread	propertyPackageFile="${package.file}"
+						propertyPackageName='package.name' 
+						propertyPackageVersion='package.version' />
+		<echo>Package name: ${package.name}</echo>
+		<echo>Package name: ${package.version}</echo>
+	</target>
+
+	<target name='package' depends='readpackage'>
+		<echo>Processing package</echo>
+		<taskdef classname='JLD.PearTools.phing.PackageUpdateTask' name='packageupdate' />
+		<echo>Updating package</echo>
+		<packageupdate propertyPackageFile="${package.file}" />
+	</target>
+
+	<target name='docs'>
+	</target>
+
+	<target name='all' depends='package'>
+		<echo>Building all</echo>
+	</target>
+
+</project>
