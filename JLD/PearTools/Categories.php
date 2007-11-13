@@ -32,7 +32,7 @@ class JLD_PearTools_Categories extends JLD_Object implements Iterator
 	var $baseREST = null;
 	var $restPathC = null;
 	
-	public function getAll() { return $this->categories; }
+	public function getAll() 	{ return $this->categories; }
 	
 	// Iterator Interface
 	public function current()	{ return $this->cats->current(); }

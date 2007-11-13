@@ -13,11 +13,12 @@
 	*(T13) Updates package.xml [date, time]
 	*(T14) Creates archive [TAR + GZIP] with name $package-$version.tgz
 	*(T15) Copies archive in /tags/$package
-	(T16) Copies package files in /tags/$package-$version
+	*(T16) Copies package files in /tags/$package-$version
 	PART II:
-	* Add category to /c
-	* Add package to /c/$category/info.xml
-	* Add package release to /c/$category/packagesinfo.xml
+	(T21) Add category directory to /c
+	(T22) Add category to categories.xml file in /c
+	(T23) Add package to /c/$category/info.xml  [if !exist, create]
+	(T24) Add package release to /c/$category/packagesinfo.xml [if !exist, create]
 	PART III:
 	* Add package to /p
 	PART IV:
@@ -33,13 +34,13 @@
 
 <project name="JLD/Directory" basedir="." default='all'>
 
-	<target name='findchannelroot'>
+	<target name='find_channel_root_path'>
 		<taskdef classname='JLD.PearTools.phing.ChannelFindTask' name='channelfind' />
 		<channelfind RootPath='channel.root' StartPath='${project.basedir}' />
 		<echo>Channel root path: ${channel.root}</echo>
 	</target>
 
-	<target name='initchannel' depends='findchannelroot'>
+	<target name='init_channel' depends='find_channel_root_path'>
 		<taskdef classname='JLD.PearTools.phing.ChannelTask' name='channel' />
 		<echo>Initializing Channel</echo>
 		<channel path="${channel.root}" />
@@ -49,7 +50,7 @@
 		<echo>Channel REST path: "${channel.restpath}"</echo>
 	</target>
 
-	<target name='prepare' depends='initchannel' >
+	<target name='prepare' depends='init_channel' >
 		<resolvepath propertyName="project.path" file="${project.basedir}" />
 		<property name='package.file' value='${project.path}/package.xml' />
 	</target>
@@ -58,7 +59,7 @@
 		- retrieve package name
 		- retrieve version number
 	-->
-	<target name='readpackage' depends='prepare'>
+	<target name='Read_package_xml' depends='prepare'>
 		<!-- T12 -->
 		<property file="./build.properties" />
 		<taskdef classname='JLD.PearTools.phing.PackageReadTask' name='packageread' />
@@ -78,7 +79,7 @@
 		<echo>Package description: ${package.description}</echo>
 	</target>
 
-	<target name='package' depends='readpackage'>
+	<target name='package' depends='Read_package_xml'>
 		<echo>Processing package</echo>
 		<taskdef classname='JLD.PearTools.phing.PackageUpdateTask' name='packageupdate' />
 		<echo>Updating package</echo>
@@ -105,13 +106,17 @@
 				<include name="**/**" />
 			</fileset>
 		</copy>
-
+		<echo>Processing categories</echo>
+		<!-- T21 -->
+		<echo>Adding package category to REST</echo>
+		<taskdef classname='JLD.PearTools.phing.CategoriesTask' name='categories' />
+		<categories catname="${package.category}" packagename="${package.name}"/>
 	</target>
 
 	<target name='docs'>
 	</target>
 
-	<target name='all' depends='package'>
+	<target name='all' depends='package, docs'>
 		<echo>Building all</echo>
 	</target>
 
