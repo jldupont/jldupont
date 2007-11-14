@@ -35,18 +35,6 @@ class JLD_PearTools_ChannelCategories extends JLD_PearObject
 	// categories
 	var $cats = array();
 
-	// Magic Words: used for filling the templates
-	static $magic_words = array(
-		'$channel_name$'	=> 'channel_name',	 // for categories.xml
-		'$all_categories$'	=> 'all_categories', // for categories.xml
-		'$category_name$'	=> 'category_name',  // for categories.xml
-		'$base_rest$'		=> 'base_rest',      // for categories.xml
-		'$base_categories$'	=> 'base_categories',// for categories.xml		
-		'$base_releases$'	=> 'base_releases',  // for packagesinfo.xml
-		'$package_name$'	=> 'package_name',	 // for packagesinfo.xml
-		'$all_releases$'	=> 'all_releases',	 // for packagesinfo.xml		
-	);
-	
 	public function __construct( $version ) 
 	{
 		return parent::__construct( $version );
@@ -138,12 +126,12 @@ class JLD_PearTools_ChannelCategories extends JLD_PearObject
 			$this->setVar( 'category_name', $cat );
 			
 			// format one line
-			$result .= $this->replaceMagicWords2( $tpl2, self::$magic_words );	
+			$result .= $this->replaceMagicWords2( $tpl2 );	
 		}
 		// do replacement in the base template
 		// the channel name parameter was already set.		
 		$this->setVar( 'all_categories', $result );
-		$final_result = $this->replaceMagicWords2( $tpl, self::$magic_words );
+		$final_result = $this->replaceMagicWords2( $tpl );
 		
 		// finally, write the file!
 		$file = $this->restPathC.'/categories.xml';
@@ -166,7 +154,7 @@ class JLD_PearTools_ChannelCategories extends JLD_PearObject
 			throw new Exception( 'template file for "info.xml" appears invalid or non-existent');
 		
 		$this->__set( 'category_name', $name );
-		$this->replaceMagicWords( $tpl, self::$magic_words );
+		$this->replaceMagicWords( $tpl );
 		
 		// write the file
 		$file = $this->restPathC.'/'.$name.'/info.xml';
@@ -224,25 +212,14 @@ class JLD_PearTools_ChannelCategories extends JLD_PearObject
 			break;
 		}//end foreach
 		
-		if (!found_pi)
+		if (!$found_pi)
 			throw new Exception( 'error in "packagesinfo.xml" file: package instance not found or malformed' );
 			
-		#var_dump( $p );
 		// format the packageinfo file 
 		$x = $this->toXML( 'f', $p );
 		
-		echo $x;
-		return true;
-		
 		// finally, write the file!
-		return $this->writePackageInfoFile( $packageName, &$x );
-	}
-	/**
-	 * Formats a packageinfo array to XML
-	 */
-	protected function packageInfoToXML( &$p )
-	{
-		
+		return $this->writePackageInfoFile( $name, &$x );
 	}
 	/**
 	 * Creates a new packageinfo.xml file from scratch.
@@ -267,7 +244,7 @@ class JLD_PearTools_ChannelCategories extends JLD_PearObject
 		$tpl = $this->getTemplate( self::tpl_p2 );
 		if (empty( $tpl ))
 			throw new Exception( 'could not access "packagesinfo.xml" template#2' );
-		return $this->replaceMagicWords2( $tpl, self::$magic_words );
+		return $this->replaceMagicWords2( $tpl );
 	}
 	/**
 	 * Creates a release section for inclusion in
@@ -278,15 +255,15 @@ class JLD_PearTools_ChannelCategories extends JLD_PearObject
 		$tpl = $this->getTemplate( self::tpl_p3 );
 		if (empty( $tpl ))
 			throw new Exception( 'could not access "packagesinfo.xml" template#3' );
-		return $this->replaceMagicWords2( $tpl, self::$magic_words );
+		return $this->replaceMagicWords2( $tpl );
 	}
 	/**
 	 * Writes a complete 'packageinfo.xml' file.
 	 */
-	public function writePackageInfoFile( $packageName, &$r )
+	public function writePackageInfoFile( $categoryName, &$r )
 	{
 		$len = strlen( $r );
-		$file= $this->restPathC.'/'.$packageName.'/packagesinfo.xml';
+		$file= $this->restPathC.'/'.$categoryName.'/packagesinfo.xml';
 		$bytes_written = @file_put_contents( $file, $r );
 		return ( $len === $bytes_written );
 	}	 

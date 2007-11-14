@@ -11,7 +11,21 @@ require_once 'JLD/Object/Object.php';
 abstract class JLD_PearObject extends JLD_Object
 {
 	var $vars = array();
-	
+
+	// Magic Words: used for filling the templates
+	static $magic_words = array(
+		'$channel_name$'	=> 'channel_name',	 // for categories.xml
+		'$all_categories$'	=> 'all_categories', // for categories.xml
+		'$category_name$'	=> 'category_name',  // for categories.xml
+		'$base_rest$'		=> 'base_rest',      // for categories.xml
+		'$base_categories$'	=> 'base_categories',// for categories.xml		
+		'$base_packages$'	=> 'base_packages',  // 
+		'$base_releases$'	=> 'base_releases',  // for packagesinfo.xml
+		'$package_name$'	=> 'package_name',	 // for packagesinfo.xml
+		'$package_name_L$'	=> 'package_name',	 // for info.xml		
+		'$all_releases$'	=> 'all_releases',	 // for packagesinfo.xml		
+	);
+
 	static $std_magic_words = array(
 		'$tab$'		=> "\t",
 		'$newline$' => "\n",
@@ -32,19 +46,31 @@ abstract class JLD_PearObject extends JLD_Object
 	{
 		return @file_get_contents(dirname(__FILE__).$tpl );
 	}
-	protected function replaceMagicWords( &$tpl, &$magic_words )
+	protected function replaceMagicWords( &$tpl )
 	{
-		foreach ( $magic_words as $mg => $varname )
-			$tpl = str_replace( $mg, $this->getVar( $varname ), $tpl );
+		foreach ( self::$magic_words as $mg => $varname )
+		{
+			$var = $this->getVar( $varname );
+			$lowercase = strpos($mg, '_L');
+			if ( $lowercase !== false )
+				$var = strtolower( $var );
 
+			$tpl = str_replace( $mg, $var, $tpl );
+		}
 		foreach ( self::$std_magic_words as $mg => $value )
 			$tpl = str_replace( $mg, $value, $tpl );
 	}
-	protected function replaceMagicWords2( $tpl, &$magic_words )
+	protected function replaceMagicWords2( $tpl )
 	{
-		foreach ( $magic_words as $mg => $varname )
-			$tpl = str_replace( $mg, $this->getVar( $varname ), $tpl );
+		foreach ( self::$magic_words as $mg => $varname )
+		{
+			$var = $this->getVar( $varname );
+			$lowercase = strpos($mg, '_L');
+			if ( $lowercase !== false )
+				$var = strtolower( $var );
 
+			$tpl = str_replace( $mg, $var, $tpl );
+		}
 		foreach ( self::$std_magic_words as $mg => $value )
 			$tpl = str_replace( $mg, $value, $tpl );
 		
@@ -53,90 +79,93 @@ abstract class JLD_PearObject extends JLD_Object
 	/**
 	 * Generates an XML file from a XML-ish array structure.
 	 */
-	protected function toXML( $top, &$s, $level = 0 )
+	protected function toXML( $top, $s, $level = 0 )
 	{
-		echo __METHOD__." top=".$top." level=".$level."\n";
-		
+		$r = null;
 		if ($level === 0)
-			$r .= '<?xml version="1.0" encoding="UTF-8" ?>'."\n";
-		else
-			$r = null;
+			$r .= '<'.'?xml version="1.0" encoding="UTF-8" ?>'."\n";
 
-		// terminal node?
-		if (!is_array( $s ))
-			return $s;
+		// case where: 
+		// < r> xxx < /r>
+		// < r> xxx < /r>
+		if (is_array( $s ))		
+			if ( is_numeric( key( $s ) ) )
+				return $this->expandList( $top, $s, $level );
 
-		do
+		$_attribs = null;
+		if ( is_array( $s ) && (key( $s ) === 'attribs') )
 		{
-			$_attribs = null;
-			$_content = null;			
-			
-			if (empty( $s ))
-				break;
-
-			reset( $s );
-				
-			// <tag attribs...>
-			if ( key($s) === 'attribs')
-			{
-				$_attribs = current( $s );
-				
-				array_shift( $s );
-				$r .= $this->openTag( $top, $level, $_attribs );
-				$top = key( $s );				
-			}
-
-			// <tag attribs ...>contents</tag>
-			if (key($s) === '_content')
-			{
-				$_content = current( $s );
-				array_shift( $s );
-				$r .= $_content;
-				$r .= $this->closeTag( $top, $level );
-				continue;
-			}
-			else
-				$r .= $this->openTag( $top, $level );
-				
-			$t = key( $s );
-			$v = current( $s );
+			$_attribs = current( $s );
 			array_shift( $s );
-			
-			$r .= $this->toXML( $t, $v, $level+1 );
-			$r .= $this->closeTag( $top, $level );
-			
-			$top = key( $s );
+		}
 
-		} while( true ); 
+		$r .= $this->openTag( $top, $level, $_attribs );					
+
+		if ( is_array( $s ) && (key( $s ) === '_content') )
+			$s = current( $s );
+
+		$shortClose = false;
+		if (!is_array( $s ))
+		{
+			$r .= $s;
+			$shortClose = true;
+		}
+		
+		while( is_array( $s ) && !empty( $s ) )
+		{
+			$t =     key( $s );
+			$c = current( $s );
+		
+			$r .= $this->toXML( $t, $c, $level+1 );
+			
+			// NEXT		
+			array_shift( $s );					
+		};
+
+		$r .= $this->closeTag( $top, $level, $shortClose );
 		
 		return $r;
+
 	}//function
+	/**
+	 * Expand list
+	 */
+	protected function expandList( $top, &$liste, $level )
+	{
+		$r = null;
+		if (!is_array(current( $liste )))
+		{
+			foreach( $liste as $tag => &$value )
+			{
+				$r .= $this->openTag( $tag, $level );
+				$r .= $value;
+				$r .= $this->closeTag( $tag, $level, true );
+			}
+			return $r;
+		}
+		foreach( $liste as &$entry )
+		{
+			$r .= $this->openTag( $top, $level );
+			$r .= $this->expandList( $top, $entry, $level+1 );
+			$r .= $this->closeTag( $top, $level, false );			
+			
+		}
+		return $r;
+	}
 	protected function openTag( $tag, $level, $attribs = null )
 	{
-		echo __METHOD__." tag=".$tag."\n";
 		$r  = "\n".str_repeat("\t", $level );	
 		$r .= '<'.$tag;
 		if (!empty( $attribs ))
 			foreach( $attribs as $key => &$value )
-				$r .= " $key='$value'";
+				$r .= " $key=".'"'.$value.'"';
 		$r .= '>';		
 		return $r;
 	}
-	protected function openAndCloseTag( $tag, $level, $attribs, $content )
+	protected function closeTag( $tag, $level, $shortClose = true )
 	{
-		echo __METHOD__." tag=".$tag." content=".$content."\n";
-		$r  = "\n".str_repeat("\t", $level );	
-		$r .= '<'.$tag;		
-		if (!empty( $attribs ))
-			foreach( $attribs as $key => &$value )
-				$r .= " $key='$value'";
-		$r .= '>'.$content;
-		$r .= '</'.$tag.'>';
-		return $r;
-	}
-	protected function closeTag( $tag, $level )
-	{
-		echo __METHOD__." tag=".$tag."\n";		
+		if (!$shortClose)
+			$r  = "\n".str_repeat("\t", $level );			
 		$r .= '</'.$tag.'>';
 		return $r;
 	}
