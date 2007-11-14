@@ -2,7 +2,7 @@
 		<p>
 			 <n>$package_name$</n>
 			 <c>$channel_name$</c>
-			 <ca xlink:href="$category_path$">$category_name$</ca>
+			 <ca xlink:href="$base_rest$$base_categories$/$category_name$">$category_name$</ca>
 			 <l>$license$</l>
 			 <s>$summary$</s>
 			 <d>$description$</d>
