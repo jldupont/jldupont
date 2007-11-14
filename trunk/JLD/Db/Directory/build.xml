@@ -18,10 +18,10 @@
 	*(T21) Add category directory to /c
 	*(T22) Add category to categories.xml file in /c
 	*(T23) Add package to /c/$category/info.xml  [if !exist, create]
-	* (T24) Add package release to /c/$category/packagesinfo.xml [if !exist, create]
+	*(T24) Add package release to /c/$category/packagesinfo.xml [if !exist, create]
 	PART III:
-	*(T31) Add package's directory to REST structure
-	*(T32) Add package's info.xml file to REST structure
+	(T31) add package directory to /p
+	(T32) Add package to /p
 	PART IV:
 	* Add package to /r
 	* Add $package-$version.xml to /r/$package
@@ -111,20 +111,12 @@
 		<echo>Processing categories</echo>
 		<!-- T21, T22, T23 -->
 		<echo>Adding package's category and release information to REST categories</echo>
-		<taskdef classname='JLD.PearTools.phing.CategoriesTask' name='categories' />
+		<taskdef classname='JLD.PearTools.phing.ChannelCategoriesTask' name='categories' />
 		<categories	channelroot="${channel.root}" 
 					catname="${package.category}" 
 					packagename="${package.name}"
 					packagereleaseversion="${package.version}" 
 					packagereleasestability="${package.stability}" />
-
-		<!-- T31, T32 -->
-		<echo>Adding package's directory and info.xml file in REST packages</echo>
-		<taskdef classname='JLD.PearTools.phing.ChannelPackagesTask' name='packages' />
-		<packages	channelroot="${channel.root}" 
-					catname="${package.category}" 
-					packagename="${package.name}" />
-
 
 	</target>
 
