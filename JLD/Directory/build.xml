@@ -27,6 +27,7 @@
 	* Add $version.xml to /r/$package
 	* Create serialized dependencies from $package-$version.xml
 	* Create Deps.$version.txt to /r/$package
+	* Update 'allrelease.xml' file
 
 	PART V:
 	* creates docs

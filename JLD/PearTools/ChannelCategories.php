@@ -42,7 +42,9 @@ class JLD_PearTools_ChannelCategories extends JLD_PearObject
 		'$category_name$'	=> 'category_name',  // for categories.xml
 		'$base_rest$'		=> 'base_rest',      // for categories.xml
 		'$base_categories$'	=> 'base_categories',// for categories.xml		
-		'$base_releases$'	=> 'base_releases',  // for packagesinfo.xml				
+		'$base_releases$'	=> 'base_releases',  // for packagesinfo.xml
+		'$package_name$'	=> 'package_name',	 // for packagesinfo.xml
+		'$all_releases$'	=> 'all_releases',	 // for packagesinfo.xml		
 	);
 	
 	public function __construct( $version ) 
@@ -178,48 +180,111 @@ class JLD_PearTools_ChannelCategories extends JLD_PearObject
 	 * Updates / creates the 'packagesinfo.xml' file in the REST structure.
 	 * Must read in the current file, parse it & then add the specified information.
 	 */
-	public function updatePackagesInfo(	$name, $packagename, $packageversion, $packagestability ) 
+	public function updatePackagesInfo(	$name, $packageName, $packageVersion, $packageStability ) 
 	{
 		$file = $this->restPathC.'/'.$name.'/packagesinfo.xml';
 		$c = @file_get_contents( $file );
-		
+
+		$this->__set( 'package_name', $packageName );		
+				
 		// if the file does not exists, then create one
 		// from the template.
 		if (empty( $c ))
-			return $this->createPackageInfo( $name, $packagename, $packageversion, $packagestability );
+			return $this->createPackageInfo( $name, $packageName, $packageVersion, $packageStability );
+		
+		// create release section hoping we will succeed the operation that follows.
+		$r = array( 'v' => $packageVersion, 'r' => $packageStability );
 		
 		// the file exists... the 'fun' begins...
 		$p = $this->parse( $c );
 		
-		var_dump( $p );
+		$found_pi = false;
+		// we need to insert a release in the specified package...
+		foreach( $p as $key => &$value )
+		{
+			if ( !isset($key['pi']))
+				continue;
+			if ( !isset( $value['p'] ))
+				continue;
+			if ( !isset( $value['p']['n'] ))
+				continue;
+			$current_name = $value['p']['n'];
+			if ($current_name !== $packageName)
+				continue;
+				
+			$found_pi = true;
+			// at this point, we should have found the proper <pi> section
+			// to insert the release information into.
+			if ( !isset( $value['a']['r']))
+				throw new Exception( 'malformed "packagesinfo.xml" file: missing <r> section' );
+
+			// push the entry at the top...
+			array_unshift( $value['a']['r'], $r );
+			// bail out
+			break;
+		}//end foreach
+		
+		if (!found_pi)
+			throw new Exception( 'error in "packagesinfo.xml" file: package instance not found or malformed' );
+			
+		// format the packageinfo file 
+		$x = $this->packageInfoToXML( $p );
+		
+		// finally, write the file!
+		return $this->writePackageInfoFile( $packageName, &$x );
+	}
+	/**
+	 * Formats a packageinfo array to XML
+	 */
+	protected function packageInfoToXML( &$p )
+	{
+		
 	}
 	/**
 	 * Creates a new packageinfo.xml file from scratch.
 	 */
-	public function createPackageInfo( $name, $packagename, $packageversion, $packagestability )
+	public function createPackageInfo( $name, $packageName, $packageVersion, $packageStability )
 	{
-		$pi = $this->createPackageInstance( );
+		$rs = $this->createReleaseSection( $packageVersion, $packageStability );
+		$this->__set( 'all_releases', $rs );
+				
+		// we just have one release to take care.
+		$pi = $this->createPackageInstance( $packageName );
+			
+		$c = $this->insertTopPackagesInfo( $pi );
+		return $this->writePackageInfoFile( $packageName, $c );		
 	}
 	/**
-		<pi>
-			<p>
-				 <n>$package_name$</n>
-				 <c>$channel_name$</c>
-				 <ca xlink:href="$category_path$">$category_name$</ca>
-				 <l>$license$</l>
-				 <s>$summary$</s>
-				 <d>$description$</d>
-				 <r xlink:href="$base_rest$$base_releases$/$package_name$"/>
-			</p>
-			<a>
-				$all_releases$
-			</a>
-		</pi>
+	 * Creates a <pi> section.
+	 * The <r> sections should be ready before using this method.
 	 */
 	public function createPackageInstance( $packageName )
 	{
-		$tpl = $this->getTemplate( self:tpl_p2 );
-		$r   = $this->replaceMagicWords2( $tpl, self::$magic_words );
+		$tpl = $this->getTemplate( self::tpl_p2 );
+		if (empty( $tpl ))
+			throw new Exception( 'could not access "packagesinfo.xml" template#2' );
+		return $this->replaceMagicWords2( $tpl, self::$magic_words );
+	}
+	/**
+	 * Creates a release section for inclusion in
+	 * the 'packageinfo.xml' file.
+	 */
+	public function createReleaseSection( $version, $stability )
+	{
+		$tpl = $this->getTemplate( self::tpl_p3 );
+		if (empty( $tpl ))
+			throw new Exception( 'could not access "packagesinfo.xml" template#3' );
+		return $this->replaceMagicWords2( $tpl, self::$magic_words );
+	}
+	/**
+	 * Writes a complete 'packageinfo.xml' file.
+	 */
+	public function writePackageInfoFile( $packageName, &$r )
+	{
+		$len = strlen( $r );
+		$file= $this->restPathC.'/'.$packageName.'/packagesinfo.xml';
+		$bytes_written = @file_put_contents( $file, $r );
+		return ( $len === $bytes_written );
 	}	 
 	/**
 	 * Inserts $contents in the top level template
