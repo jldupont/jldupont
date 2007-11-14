@@ -193,7 +193,7 @@ class JLD_PearTools_ChannelCategories extends JLD_PearObject
 			return $this->createPackageInfo( $name, $packageName, $packageVersion, $packageStability );
 		
 		// create release section hoping we will succeed the operation that follows.
-		$r = array( 'v' => $packageVersion, 'r' => $packageStability );
+		$r = array( 'v' => $packageVersion, 's' => $packageStability );
 		
 		// the file exists... the 'fun' begins...
 		$p = $this->parse( $c );
@@ -227,8 +227,12 @@ class JLD_PearTools_ChannelCategories extends JLD_PearObject
 		if (!found_pi)
 			throw new Exception( 'error in "packagesinfo.xml" file: package instance not found or malformed' );
 			
+		#var_dump( $p );
 		// format the packageinfo file 
-		$x = $this->packageInfoToXML( $p );
+		$x = $this->toXML( 'f', $p );
+		
+		echo $x;
+		return true;
 		
 		// finally, write the file!
 		return $this->writePackageInfoFile( $packageName, &$x );
