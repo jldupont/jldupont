@@ -76,6 +76,7 @@
 		<!-- T11 -->
 		<packageread	propertyPackageFile="${package.file}"
 						propertyPackageName='package.name' 
+						propertyPackageNameL='package.namel' 
 						propertyPackageVersion='package.version' 
 						propertyPackageStability='package.stability' 
 						propertyPackageSummary='package.summary' 
@@ -140,7 +141,7 @@
 
 		<!-- T31 -->
 		<echo>Creating the package's package directory in the /p REST structure</echo>
-		<mkdir dir="${channel.root}/${channel.rest}/p/${package.name}"/>
+		<mkdir dir="${channel.root}/${channel.rest}/p/${package.namel}"/>
 
 		<!-- T32 -->
 		<echo>Adding package's directory and info.xml file in REST packages</echo>
@@ -156,7 +157,7 @@
 
 		<!-- T41 -->
 		<echo>Creating package's releases directory in /r REST structure</echo>
-		<mkdir dir="${channel.root}/${channel.rest}/r/${package.name}"/>
+		<mkdir dir="${channel.root}/${channel.rest}/r/${package.namel}"/>
 		<!-- T42 -->
 		<echo>Copying "package.xml" to package-${package.version}.xml in REST directory</echo>
 		<copy	file="package.xml"
