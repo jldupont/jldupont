@@ -1,10 +1,9 @@
 <?php
-/*
-	PEAR Channel Tool
-
-	@author: Jean-Lou Dupont
-	$Id$
-*/
+/**
+ * @package PearTools
+ * @author Jean-Lou Dupont
+ * @version $Id$
+ */
 //<source lang=php>
 
 require_once "PEAR/XMLParser.php";

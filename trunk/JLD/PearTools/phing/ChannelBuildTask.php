@@ -1,7 +1,10 @@
 <?php
 /**
+ * PHING task which creates the 'channel.xml' PEAR REST channel definition file.
+ *
  * @author Jean-Lou Dupont
- * @package JLD
+ * @package PearTools
+ * @subpackage phing
  * @version $Id$
  */
 //<source lang=php> 

@@ -1,12 +1,10 @@
 <?php
-/*
-	PEAR Channel Tool: parses 'channel.xml' file given the root directory.
-	Command Line Utility
-	@author: Jean-Lou Dupont
-	$Id$
-*/
+/**
+ * @package PearTools
+ * @author Jean-Lou Dupont
+ * @version $Id$
+ */
 //<source lang=php>
-
 require_once "PEAR/XMLParser.php";
 require_once 'JLD/PearTools/PearObject.php';
 
@@ -51,8 +49,8 @@ class JLD_PearTools_Channel extends JLD_PearObject
 	public function getTAGSPath() { return self::$baseTAGS; }	
 		
 	/**
+	 * Inits the root path relative to the filesystem.
 	 *
-	 * @input provide the root path of the channel.
 	 */
 	function init( $rootPath )
 	{
@@ -68,7 +66,8 @@ class JLD_PearTools_Channel extends JLD_PearObject
 		$this->setVar( 'alias', @$this->data['suggestedalias'] );
 		return $name;
 	}
-	/**
+	/** 
+	 * Parses the 'channel.xml' file
 	 */
 	protected function parse( &$contents )
 	{
@@ -104,6 +103,7 @@ class JLD_PearTools_Channel extends JLD_PearObject
 		return true;
 	}
 	/**
+	 * This function writes a file to the filesystem.
 	 */
 	public function write()
 	{
@@ -114,6 +114,7 @@ class JLD_PearTools_Channel extends JLD_PearObject
 	}
 	/**
 	 * Creates the REST directory structure
+	 * i.e. /c, /m, /p, /r and /tags
 	 */
 	public function createRest()
 	{

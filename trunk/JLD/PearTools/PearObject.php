@@ -1,8 +1,7 @@
 <?php
 /**
+ * @package PearTools
  * @author Jean-Lou Dupont
- * @package JLD
- * @subpackage Directory
  * @version $Id$
  */
 //<source lang=php> 

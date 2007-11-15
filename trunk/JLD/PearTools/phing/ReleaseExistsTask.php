@@ -1,10 +1,11 @@
 <?php
 /**
  * @author Jean-Lou Dupont
- * @package JLD
+ * @package PearTools 
+ * @subpackage phing
  * @version $Id$
  *
- * PHING task
+ * PHING task which determines the package's release status.
  *
  	<taskdef classname='JLD.PearTools.phing.ReleaseExistsTask' name='release_exists' />
 	<release_exists	
@@ -17,7 +18,7 @@
 				packagename="${package.name}" 
 				packageversion="${package.version}" 
 				packagestability="${package.stability}" 
-				packagereleasestatus="${package.releasestatus}" />
+				packagereleasestatus="package.releasestatus" />
 				
  */
 //<source lang=php> 

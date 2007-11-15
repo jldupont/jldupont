@@ -1,10 +1,12 @@
 <?php
 /**
  * @author Jean-Lou Dupont
- * @package JLD
+ * @package PearTools 
+ * @subpackage phing
  * @version $Id$
- */
- /*
+ *
+ * PHING task which reads and parses in a 'package.xml' package file from the project directory.
+ *
 		<taskdef classname='JLD.PearTools.phing.PackageReadTask' name='packageread' />
 		<!-- T11 -->
 		<packageread	propertyPackageFile="${package.file}"

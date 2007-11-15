@@ -105,6 +105,10 @@
 					packagereleasestatus="package.releasestatus"  />
 
 		<echo>Package release status: ${package.releasestatus}</echo>
+	</target>
+
+
+	<target name='validate_package' depends="Read_package_xml">
 		<if>
 			<equals arg1="1" arg2="${package.releasestatus}" />
 			<then>
@@ -113,10 +117,11 @@
 			</then>
 		</if>
 	</target>
+
 	<!--
 		Package level processing.
 	-->
-	<target name='package' depends='Read_package_xml'>
+	<target name='package' depends='validate_package'>
 		<echo>Processing package</echo>
 		<taskdef classname='JLD.PearTools.phing.PackageUpdateTask' name='packageupdate' />
 		<echo>Updating package</echo>
@@ -212,7 +217,15 @@
 	</target>
 
 	<!-- TODO !!! -->
-	<target name='docs'>
+	<target name='docs' depends="Read_package_xml">
+		<phpdoc title="Documentation for package ${package.name}"
+				destdir="./docs"
+				output="HTML:Smarty:PHP">
+			<fileset dir=".">
+				<include name="**/**" />
+				<exclude name="**/build*.*" />
+			</fileset>
+		</phpdoc>
 	</target>
 
 	<target name='all' depends='package, docs'>

@@ -1,8 +1,11 @@
 <?php
 /**
  * @author Jean-Lou Dupont
- * @package JLD
+ * @package PearTools 
+ * @subpackage phing
  * @version $Id$
+ *
+ * PHING task which helps updating the 'package.xml' file in a project directory.
  */
 //<source lang=php> 
 
