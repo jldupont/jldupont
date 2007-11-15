@@ -2,6 +2,7 @@
 /**
  * @author Jean-Lou Dupont
  * @package JLD
+ * @sub-package PhingTools
  * @version $Id$
  */
 //<source lang=php> 
@@ -10,15 +11,23 @@ require_once "phing/Task.php";
 class JLD_PhingTools_Task extends Task
 {
 	var $vars;
-	
+	/**
+	 * Catch-all 'set' interface
+	 */
 	public function __set( $nm, $val )
 	{
 		return $this->vars[ $nm ] = $val;
 	}
+	/**
+	 * Catch-all 'get' interface
+	 */
 	public function __get( $nm )
 	{
 		return @$this->vars[ $nm ];
 	}
+	/**
+	 *
+	 */
 	public function getVars() { return $this->vars; }
 	/**
 	 * This interface does not seem to work with the current
