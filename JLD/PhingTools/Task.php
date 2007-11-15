@@ -7,7 +7,7 @@
 //<source lang=php> 
 require_once "phing/Task.php";
 
-abstract class JLD_PhingTools_Task extends Task
+class JLD_PhingTools_Task extends Task
 {
 	var $vars;
 	
@@ -19,10 +19,12 @@ abstract class JLD_PhingTools_Task extends Task
 	{
 		return @$this->vars[ $nm ];
 	}
+	public function getVars() { return $this->vars; }
 	/**
 	 * This interface does not seem to work with the current
 	 * version of phing...
 	 */
+	/*
 	public function __call( $method, $args )
 	{
 		$action = substr( $method, 0, 3);
@@ -36,5 +38,6 @@ abstract class JLD_PhingTools_Task extends Task
 	
 		throw new Exception( __CLASS__.': unknown method' );
 	}
+	*/
 }
 //</source>
