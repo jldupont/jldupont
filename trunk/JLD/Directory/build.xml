@@ -100,13 +100,24 @@
 		<echo>Updating package</echo>
 		<!-- T13 -->
 		<packageupdate propertyPackageFile="${package.file}" />
+
 		<!-- T14 -->
 		<echo>Creating archive file</echo>
+		<!-- this step requires creating a temporary directory
+		-->
+		<copy todir="${package.name}-${package.version}" overwrite='true'>
+			<fileset dir=".">
+				<include name="**/**" />
+				<exclude name="package.xml" />
+			</fileset>
+		</copy>
 		<tar destfile="${package.name}-${package.version}.tgz" compression='gzip'>
 			<fileset dir='.'>
-				<include name="**/**" />
+				<include name="${package.name}-${package.version}/**" />
+				<include name="package.xml"/>
 			</fileset>
 		</tar>
+		<delete dir="${package.name}-${package.version}" failonerror='true' />
 		<!-- T15 -->
 		<echo>Moving archive to TAGS directory</echo>
 		<move	file="${package.name}-${package.version}.tgz" 
