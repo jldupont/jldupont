@@ -28,7 +28,9 @@ abstract class JLD_PearObject extends JLD_Object
 		'$package_version$'   => 'package_version',// for $version.xml
 		'$package_stability$' => 'package_stability',// for $version.xml			
 		'$channel_uri$'		=> 'channel_uri',	// for $version.xml
-		'$base_tags$'		=> 'base_tags'		// for $version.xml
+		'$base_tags$'		=> 'base_tags',		// for $version.xml
+		
+		'$all_packages$'	=> 'all_packages',	// for packages.xml
 	);
 
 	static $std_magic_words = array(
@@ -79,7 +81,11 @@ abstract class JLD_PearObject extends JLD_Object
 	}
 	protected function getTemplate( $tpl )
 	{
-		return @file_get_contents(dirname(__FILE__).$tpl );
+		$r = @file_get_contents(dirname(__FILE__).$tpl );
+		// a template file can't be empty !!!
+		if (empty( $r ))
+			throw new Exception( 'error reading template file: '.$tpl );
+		return $r;
 	}
 	protected function writeFile( $file, &$c )
 	{
@@ -208,6 +214,19 @@ abstract class JLD_PearObject extends JLD_Object
 		if (!$shortClose)
 			$r  = "\n".str_repeat("\t", $level );			
 		$r .= '</'.$tag.'>';
+		return $r;
+	}
+	protected function toXMLlist( $tag, &$liste, $level )
+	{
+		if (empty( $liste ))
+			return null;
+		$r = null;
+		foreach( $liste as &$e )
+		{
+			$r .= $this->openTag( $tag, $level );
+			$r .= $e;
+			$r .= $this->closeTag( $tag, $level );
+		}
 		return $r;
 	}
 }//end class

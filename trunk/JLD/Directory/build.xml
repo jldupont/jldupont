@@ -130,15 +130,23 @@
 					packagereleaseversion="${package.version}" 
 					packagereleasestability="${package.stability}" />
 
-		<!-- T31, T32 -->
+		<!-- T31 -->
+		<echo>Creating the package's package directory in the /p REST structure</echo>
+		<mkdir dir="${channel.root}/${channel.rest}/p/${package.name}"/>
+
+		<!-- T32 -->
 		<echo>Adding package's directory and info.xml file in REST packages</echo>
 		<taskdef classname='JLD.PearTools.phing.ChannelPackagesTask' name='packages' />
 		<packages	channelroot="${channel.root}" 
-					catname="${package.category}" 
+					channelname="${channel.name}" 
+					channeluri="${channel.uri}" 
+					channelrest="${channel.rest}" 
+					channeltags="${channel.tags}"
+					categoryname="${package.category}" 
 					packagename="${package.name}" />
 
 		<!-- T41 -->
-		<echo>Creating package's releases directory in REST directory</echo>
+		<echo>Creating package's releases directory in /r REST structure</echo>
 		<mkdir dir="${channel.root}/${channel.rest}/r/${package.name}"/>
 		<!-- T42 -->
 		<echo>Copying "package.xml" to package-${package.version}.xml in REST directory</echo>
