@@ -5,10 +5,6 @@
     xsi:schemaLocation="http://pear.php.net/dtd/rest.allpackages
     http://pear.php.net/dtd/rest.allpackages.xsd">
 
-	<c>jldupont.googlecode.com/svn</c>
-	
-	<p>amazons3</p>
-	<p>directory</p>
-	<p>peartools</p>
-	<p>phingtools</p>
+	<c>$channel_name$</c>
+	$all_packages$
 </a>

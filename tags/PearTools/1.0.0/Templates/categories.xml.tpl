@@ -7,10 +7,6 @@
     http://pear.php.net/dtd/rest.allcategories.xsd">
 
 <!-- DO NOT EDIT BELOW HERE -->
-<ch>jldupont.googlecode.com/svn</ch> <!-- not read by list-all command -->
-	<c xlink:href="/rest/c/Amazon/info.xml">Amazon</c>
-	<c xlink:href="/rest/c/Filesystem/info.xml">Filesystem</c>
-	<c xlink:href="/rest/c/Pear/info.xml">Pear</c>
-	<c xlink:href="/rest/c/Phing/info.xml">Phing</c>
-
+<ch>$channel_name$</ch> <!-- not read by list-all command -->
+$all_categories$
 </a>
