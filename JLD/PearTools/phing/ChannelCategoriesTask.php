@@ -1,17 +1,20 @@
 <?php
 /**
+ *
+ * PHING task to add/update the categories /c PEAR REST structure.
+ *
+ * Example: 
+ *			<taskdef classname='JLD.PearTools.phing.CategoriesTask' name='categories' />
+ *			<categories	channelroot="${channel.root}" 
+ *						catname="${package.category}" 
+ *						packagename="${package.name}"
+ *						packagereleaseversion="${package.version}" 
+ *						packagereleasestability="${package.stability}" />
+ * 
  * @author Jean-Lou Dupont
- * @package JLD
+ * @package PearTools
+ * @subpackage phing
  * @version $Id$
- *
- * PHING task
- *
-	<taskdef classname='JLD.PearTools.phing.CategoriesTask' name='categories' />
-	<categories	channelroot="${channel.root}" 
-				catname="${package.category}" 
-				packagename="${package.name}"
-				packagereleaseversion="${package.version}" 
-				packagereleasestability="${package.stability}" />
  */
 //<source lang=php> 
 

@@ -1,10 +1,11 @@
 <?php
 /**
  * @author Jean-Lou Dupont
- * @package JLD
+ * @package PearTools 
+ * @subpackage phing
  * @version $Id$
  *
- * PHING task
+ * PHING task which helps add/update the /p PEAR REST structure.
  *
 	<echo>Adding package's directory and info.xml file in REST packages</echo>
 	<taskdef classname='JLD.PearTools.phing.ChannelPackagesTask' name='packages' />

@@ -1,10 +1,12 @@
 <?php
 /**
+ * This PHING task creates the 'channel.xml' file from a template.
+ *
  * @author Jean-Lou Dupont
- * @package JLD
+ * @package PearTools
+ * @subpackage phing
  * @version $Id$
  *
- * This PHING task creates the 'channel.xml' file from a template.
  *
  */
 //<source lang=php> 

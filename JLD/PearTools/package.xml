@@ -10,8 +10,8 @@
   <!-- $Id -->
  <name>PearTools</name>
  <channel>jldupont.googlecode.com/svn</channel>
- <summary>PHING tools</summary>
- <description>Description...</description>
+ <summary>PEAR tools</summary>
+ <description>PHING tasks, PEAR REST channel objects etc.</description>
 
  <lead>
   <name>Jean-Lou Dupont</name>

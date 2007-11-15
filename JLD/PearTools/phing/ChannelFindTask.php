@@ -1,7 +1,8 @@
 <?php
 /**
  * @author Jean-Lou Dupont
- * @package JLD
+ * @package PearTools
+ * @subpackage phing
  * @version $Id$
  *
  * This PHING task finds the root path of the channel.
