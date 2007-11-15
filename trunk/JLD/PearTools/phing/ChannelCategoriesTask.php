@@ -6,10 +6,12 @@
  *
  * PHING task
  *
- * <taskdef classname='JLD.PearTools.phing.CategoriesTask' name='categories' />
- * <categories channelroot= "${channel.root}" 
- *             catname="${package.categoryname}" 
- *             packagename="${package.name}" />
+	<taskdef classname='JLD.PearTools.phing.CategoriesTask' name='categories' />
+	<categories	channelroot="${channel.root}" 
+				catname="${package.category}" 
+				packagename="${package.name}"
+				packagereleaseversion="${package.version}" 
+				packagereleasestability="${package.stability}" />
  */
 //<source lang=php> 
 

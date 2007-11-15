@@ -83,7 +83,6 @@ abstract class JLD_PearObject extends JLD_Object
 	}
 	protected function writeFile( $file, &$c )
 	{
-		echo __METHOD__."file=".$file." => ".$c;
 		$len = strlen( $c );
 		$bytes_written = @file_put_contents( $file, $c );
 		return ( $len === $bytes_written );
