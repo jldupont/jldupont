@@ -14,14 +14,15 @@
 	*(T14) Creates archive [TAR + GZIP] with name $package-$version.tgz
 	*(T15) Copies archive in /tags/$package
 	*(T16) Copies package files in /tags/$package-$version
-	PART II:
+	PART II: (/c)
 	*(T21) Add category directory to /c
 	*(T22) Add category to categories.xml file in /c
 	*(T23) Add package to /c/$category/info.xml  [if !exist, create]
 	* (T24) Add package release to /c/$category/packagesinfo.xml [if !exist, create]
-	PART III:
+	PART III: (/p)
 	*(T31) Add package's directory to REST structure
 	*(T32) Add package's info.xml file to REST structure
+	(T33) Update /p/packages.xml
 	PART IV:
 	*(T41) Add package's releases directory to REST structure
 	*(T42) Copy package.xml to $package-$version.xml to /r/$package
