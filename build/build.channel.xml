@@ -1,28 +1,70 @@
 <?xml version="1.0" ?>
 
 <!--
-	PHING build file
-	Jean-Lou Dupont
-	$Id$
-
-	Builds the PEAR channel
+	PHING build file for creating the basic structure of a PEAR Channel
+	* Builds REST directory structure
 	* Builds 'channel.xml'
-	* Builds /rest directory structure
+	
+	Dependencies:
+	- Tested on PHING v2.3
+
+	@author Jean-Lou Dupont
+	@version $Id$
+
 -->
 
 <project name="pear_channel" basedir="." default='channel'>
 
 	<property file="./channel.properties" />
 
+	<target name='Start'>
+		<echo>
+			PEAR Channel REST structure creator
+			@author Jean-Lou Dupont
+			@version $Id$
+			-----------------------------------
+
+			This PHING build file assumes to be located in a directory
+			one level down from the actual target location of the PEAR
+			Channel.
+			E.g. channel needs to be located in $root
+			     build files located in $root/.build/
+
+			This build file was tested on PHING v2.3.
+
+			INSTRUCTIONS:
+			=============
+			1) be sure to set the channel properties in the file
+			  'channel.properties'.
+			2) be sure to have the 'write' access rights to the
+			  directory structure.
+
+		</echo>
+	</target>
+
+	<target name='AskPermission' depends='Start'>
+		<input propertyname="permission.granted" validargs="y,n">
+			Would you like to proceed?
+		</input>
+		<echo>${permission.granted}</echo>
+		<if>
+			<equals arg1="${permission.granted}" arg2='y' />
+			<then>
+				<property name="do.build" value="1" />
+			</then>
+		</if>
+	</target>
+
 	<!--
 		Channel		
 	-->
-	<target name='channel'>
+	<target name='channel' if="do.build" depends='AskPermission'>
 		<echo>Building PEAR Channel</echo>
 		<echo>Assuming channel name:  ${channel.name}</echo>
 		<echo>Assuming channel alias: ${channel.alias}</echo>
 		<echo>Assuming channel URI:   ${channel.uri}</echo>
 
+		<!-- channel will be located one level down in the directory structure -->
 		<property name="relative_project_path" value=".." />		
 		<resolvepath propertyName="project.path" file="${relative_project_path}" />
 

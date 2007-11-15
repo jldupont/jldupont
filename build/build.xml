@@ -1,20 +1,10 @@
 <?xml version="1.0" ?>
 
 <!--
-	PHING build file
+	PHING build file for creating the basic structure of a PEAR Channel
 	
-	This build system assumes to be located
-	in /build.
-
-	1) Builds the PEAR channel
-	* Builds 'channel.xml'
-	* Builds the REST interface
-
-	) Builds the root file 'index.html'
-	* Gets the tags docs
-	* Gets the tags tests
-	* Gets the trunk docs
-	* Gets the trunk tests
+	@author Jean-Lou Dupont
+	@version $Id$
 -->
 
 <project name="jldupont" basedir="." default='all' >
