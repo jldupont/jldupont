@@ -10,6 +10,5 @@
 <ch>jldupont.googlecode.com/svn</ch> <!-- not read by list-all command -->
 	<c xlink:href="/rest/c/Amazon/info.xml">Amazon</c>
 	<c xlink:href="/rest/c/Filesystem/info.xml">Filesystem</c>
-	<c xlink:href="/rest/c/Phing/info.xml">Phing</c>
 
 </a>
