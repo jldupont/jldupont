@@ -1,4 +1,4 @@
 		<r>
-			<v>$version$</v>
-			<s>$stability$</s>
+			<v>$package_version$</v>
+			<s>$package_stability$</s>
 		</r>

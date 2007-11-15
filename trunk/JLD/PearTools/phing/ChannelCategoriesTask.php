@@ -64,11 +64,7 @@ class ChannelCategoriesTask extends JLD_PhingTools_Task
 			throw new BuildException( 'could not update "info.xml" file in the REST structure' );
 
 		// 4- update 'packagesinfo.xml'
-		$result = $cs->updatePackagesInfo(	$this->__get('category_name'), 
-											$this->__get('package_name'), 
-											$this->__get('package_version'), 
-											$this->__get('package_stability') 											
-											);
+		$result = $cs->updatePackagesInfo(	);
 		if (!$result)
 			throw new BuildException( 'could not update "packagesinfo.xml" file in the REST structure' );
 		

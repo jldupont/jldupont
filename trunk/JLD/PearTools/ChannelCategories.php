@@ -132,20 +132,20 @@ class JLD_PearTools_ChannelCategories extends JLD_PearObject
 	 * Updates / creates the 'packagesinfo.xml' file in the REST structure.
 	 * Must read in the current file, parse it & then add the specified information.
 	 */
-	public function updatePackagesInfo(	$name, $packageName, $packageVersion, $packageStability ) 
+	public function updatePackagesInfo(	) 
 	{
-		$file = $this->buildFileSystemRestPath( self::$baseCategories ).'/'.$name.'/packagesinfo.xml';
+		$this->__set( 'base_releases', '/r' );
+		
+		$file = $this->buildFileSystemRestPath( self::$baseCategories ).'/'.$this->category_name.'/packagesinfo.xml';
 		$c = @file_get_contents( $file );
 
-		$this->__set( 'package_name', $packageName );		
-				
 		// if the file does not exists, then create one
 		// from the template.
 		if (empty( $c ))
-			return $this->createPackageInfo( $name, $packageName, $packageVersion, $packageStability );
+			return $this->createPackageInfo( );
 		
 		// create release section hoping we will succeed the operation that follows.
-		$r = array( 'v' => $packageVersion, 's' => $packageStability );
+		$r = array( 'v' => $this->package_version, 's' => $this->package_stability );
 		
 		// the file exists... the 'fun' begins...
 		$p = $this->parse( $c );
@@ -161,7 +161,7 @@ class JLD_PearTools_ChannelCategories extends JLD_PearObject
 			if ( !isset( $value['p']['n'] ))
 				continue;
 			$current_name = $value['p']['n'];
-			if ($current_name !== $packageName)
+			if ($current_name !== $this->package_name)
 				continue;
 				
 			$found_pi = true;
@@ -183,42 +183,38 @@ class JLD_PearTools_ChannelCategories extends JLD_PearObject
 		$x = $this->toXML( 'f', $p );
 		
 		// finally, write the file!
-		return $this->writePackageInfoFile( $name, &$x );
+		return $this->writePackageInfoFile( $this->category_name, &$x );
 	}
 	/**
 	 * Creates a new packageinfo.xml file from scratch.
 	 */
-	public function createPackageInfo( $name, $packageName, $packageVersion, $packageStability )
+	public function createPackageInfo( )
 	{
-		$rs = $this->createReleaseSection( $packageVersion, $packageStability );
+		$rs = $this->createReleaseSection( );
 		$this->__set( 'all_releases', $rs );
 				
 		// we just have one release to take care.
-		$pi = $this->createPackageInstance( $packageName );
+		$pi = $this->createPackageInstance( );
 			
 		$c = $this->insertTopPackagesInfo( $pi );
-		return $this->writePackageInfoFile( $packageName, $c );		
+		return $this->writePackageInfoFile( $this->category_name, $c );		
 	}
 	/**
 	 * Creates a <pi> section.
 	 * The <r> sections should be ready before using this method.
 	 */
-	public function createPackageInstance( $packageName )
+	public function createPackageInstance( )
 	{
 		$tpl = $this->getTemplate( self::tpl_p2 );
-		if (empty( $tpl ))
-			throw new Exception( 'could not access "packagesinfo.xml" template#2' );
 		return $this->replaceMagicWords2( $tpl );
 	}
 	/**
 	 * Creates a release section for inclusion in
 	 * the 'packageinfo.xml' file.
 	 */
-	public function createReleaseSection( $version, $stability )
+	public function createReleaseSection( )
 	{
 		$tpl = $this->getTemplate( self::tpl_p3 );
-		if (empty( $tpl ))
-			throw new Exception( 'could not access "packagesinfo.xml" template#3' );
 		return $this->replaceMagicWords2( $tpl );
 	}
 	/**
