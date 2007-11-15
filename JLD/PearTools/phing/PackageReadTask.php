@@ -26,6 +26,7 @@ class PackageReadTask extends JLD_PhingTools_Task
 	// Attributes interface
 	// Property names that will contain the desired properties read from the package file.
 	public function setPropertyPackageName( $val ) { $this->__set('propertyPackageName', $val ); }
+	public function setPropertyPackageNameL( $val ) { $this->__set('propertyPackageNameL', $val ); }	
 	public function setPropertyPackageVersion( $val ) { $this->__set('propertyPackageVersion', $val ); }	
 	public function setPropertyPackageStability( $val ) { $this->__set('propertyPackageStability', $val ); }	
 	public function setPropertyPackageSummary( $val ) { $this->__set('propertyPackageSummary', $val ); }		
@@ -51,6 +52,7 @@ class PackageReadTask extends JLD_PhingTools_Task
 			throw new BuildException( 'package file appears invalid' );
 
 		$this->project->setProperty($this->propertyPackageName, $p->getName() );		
+		$this->project->setProperty($this->propertyPackageNameL, strtolower($p->getName() ));
 		$this->project->setProperty($this->propertyPackageVersion, $p->getVersion() );				
 		$this->project->setProperty($this->propertyPackageStability, $p->getStability() );						
 		$this->project->setProperty($this->propertyPackageSummary, $p->getSummary() );						
