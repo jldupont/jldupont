@@ -43,35 +43,19 @@ class JLD_PearTools_ChannelCategories extends JLD_PearObject
 	{
 		return parent::singleton( __CLASS__, self::thisVersion );	
 	}
-	public function init( &$channel )
-	{
-		if (!is_object( $channel ))
-			throw new Exception('invalid channel object');
-		
-		$this->channel = $channel;
-		
-		// we'll be needing these parameters in the templating process...
-		$this->setVar('channel_name',	$this->channel->getName());
-		$this->setVar('base_rest', 		$this->channel->getRESTPath());
-		$this->setVar('base_categories',self::$baseCategories );		
-		$this->setVar('base_releases',  self::$baseReleases );		
-		
-		$this->rootPath = $this->channel->getRootPath();
-		$this->baseREST = $this->channel->getRESTPath();
-		$this->restPathC = $this->rootPath . $this->baseREST . self::$baseCategories;
-		$this->restPathR = $this->rootPath . $this->baseREST . self::$baseReleases;		
-	}
+
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 	/**
 	 * Reads all the categories from the directory structure 
 	 * in the REST channel.
 	 */
 	public function readAll()
 	{
+		$path  = $this->buildFileSystemRestPath( self::$baseCategories );
 		// no need to get resursive here.
-		$raw = JLD_Directory::getDirectoryInformation(	$this->restPathC, 
-														$this->restPathC, true, true );
+		$raw = JLD_Directory::getDirectoryInformation(	$path, $path, true, true );
 		
 		// strip off leading /
 		foreach( $raw as &$e )
@@ -84,24 +68,9 @@ class JLD_PearTools_ChannelCategories extends JLD_PearObject
 	 * Returns TRUE if the specified category exists
 	 * in the current instance.
 	 */
-	public function existsCategory( $categoryName )	
+	public function existsCategory( )	
 	{
-		return (in_array( $categoryName, $this->cats ));
-	}
-	/**
-	 * Adds a category directory in the REST structure
-	 */
-	public function addCategoryDirectory( $name )
-	{
-		$dir = $this->restPathC.'/'.$name;
-		if (is_dir( $dir ))
-			return true;
-			
-		$result = @mkdir( $dir );	
-		if ($result)
-			$this->cats[] = $name;
-			
-		return $result;
+		return (in_array( $this->category_name, $this->cats ));
 	}
 	/**
 	 * Updates the 'categories.xml' file according to the
@@ -113,17 +82,16 @@ class JLD_PearTools_ChannelCategories extends JLD_PearObject
 			return null;
 			
 		$tpl = $this->getTemplate( self::tpl_c );	
-		if (empty( $tpl ))
-			throw new Exception( 'template file#1 for "categories.xml" appears invalid or non-existent');
-
 		$tpl2 = $this->getTemplate( self::tpl_c2 );	
-		if (empty( $tpl2 ))
-			throw new Exception( 'template file#2 for "categories.xml" appears invalid or non-existent');
+		
+		$this->__set( 'base_categories', self::$baseCategories );
 		
 		$result = '';
 		foreach ($this->cats as $cat)
 		{
-			$this->setVar( 'category_name', $cat );
+			// we are not using 'category_name' in order
+			// not to disrupt the rest of the class.
+			$this->setVar( 'category1_name', $cat );
 			
 			// format one line
 			$result .= $this->replaceMagicWords2( $tpl2 );	
@@ -132,12 +100,10 @@ class JLD_PearTools_ChannelCategories extends JLD_PearObject
 		// the channel name parameter was already set.		
 		$this->setVar( 'all_categories', $result );
 		$final_result = $this->replaceMagicWords2( $tpl );
-		
-		// finally, write the file!
-		$file = $this->restPathC.'/categories.xml';
-		$result = $this->writeFile( $file, $final_result );
-		
-		return $result;
+
+		// finally, write the file!		
+		$file  = $this->buildFileSystemRestPath( self::$baseCategories ).'/categories.xml';
+		return $this->writeFile( $file, $final_result );
 	}
 	/**
 	 * Updates / creates the 'info.xml' file associated with a category.
@@ -150,14 +116,12 @@ class JLD_PearTools_ChannelCategories extends JLD_PearObject
 	public function updateCategoryInfo( $name )
 	{
 		$tpl = $this->getTemplate( self::tpl_i );	
-		if (empty( $tpl ))
-			throw new Exception( 'template file for "info.xml" appears invalid or non-existent');
 		
 		$this->__set( 'category_name', $name );
 		$this->replaceMagicWords( $tpl );
 		
 		// write the file
-		$file = $this->restPathC.'/'.$name.'/info.xml';
+		$file  = $this->buildFileSystemRestPath( self::$baseCategories ).'/'.$name.'/info.xml';		
 		return $this->writeFile( $file, $tpl );
 	}
 	
@@ -170,7 +134,7 @@ class JLD_PearTools_ChannelCategories extends JLD_PearObject
 	 */
 	public function updatePackagesInfo(	$name, $packageName, $packageVersion, $packageStability ) 
 	{
-		$file = $this->restPathC.'/'.$name.'/packagesinfo.xml';
+		$file = $this->buildFileSystemRestPath( self::$baseCategories ).'/'.$name.'/packagesinfo.xml';
 		$c = @file_get_contents( $file );
 
 		$this->__set( 'package_name', $packageName );		
@@ -262,10 +226,8 @@ class JLD_PearTools_ChannelCategories extends JLD_PearObject
 	 */
 	public function writePackageInfoFile( $categoryName, &$r )
 	{
-		$len = strlen( $r );
-		$file= $this->restPathC.'/'.$categoryName.'/packagesinfo.xml';
-		$bytes_written = @file_put_contents( $file, $r );
-		return ( $len === $bytes_written );
+		$file= $this->buildFileSystemRestPath( self::$baseCategories ).'/'.$categoryName.'/packagesinfo.xml';
+		return $this->writeFile( $file, $r );
 	}	 
 	/**
 	 * Inserts $contents in the top level template
@@ -274,26 +236,12 @@ class JLD_PearTools_ChannelCategories extends JLD_PearObject
 	public function insertTopPackagesInfo( &$contents )
 	{
 		$tpl = $this->getTemplate( self::tpl_p );
-		if (empty( $tpl ))
-			throw new Exception( 'could not access top level "packagesinfo.xml" template' );
 		return str_replace( '$all_packages$', $contents, $tpl );
 	}
-	public function addPackage( &$contents, &$tpl )
-	{
-		
-	}
+
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-	/**
-	 * Write file.
-	 */
-	protected function writeFile( $file, &$contents )
-	{
-		$len = strlen( $contents );
-		$bytes_written = @file_put_contents( $file, $contents );
-		return ($len === $bytes_written);
-	}
 	/**
 	 * Parses an XML file.
 	 */

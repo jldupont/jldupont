@@ -7,6 +7,7 @@
 		xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd 
 		http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
 
+  <!-- $Id -->
  <name>Directory</name>
  <channel>jldupont.googlecode.com/svn</channel>
  <summary>Summary...</summary>
@@ -20,7 +21,7 @@
  </lead>
 
  <date>2007-11-15</date>
- <time>15:31:58</time>
+ <time>16:00:04</time>
 
  <version>
   <release>1.0.2</release>

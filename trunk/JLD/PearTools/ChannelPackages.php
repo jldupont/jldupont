@@ -41,6 +41,8 @@ class JLD_PearTools_ChannelPackages extends JLD_PearObject
 	 */
 	public function	createPackageInfoFile(  )
 	{
+		$this->__set( 'base_releases', '/r' );
+		
 		$tpl = $this->getTemplate( self::tpl_i );
 		$c = $this->replaceMagicWords2( $tpl );
 

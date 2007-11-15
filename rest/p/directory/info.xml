@@ -9,5 +9,5 @@
  <l>$license$</l>
  <s>$summary$</s>
  <d>$description$</d>
- <r xlink:href="/rest/directory"/>
+ <r xlink:href="/rest/r/directory"/>
 </p>
