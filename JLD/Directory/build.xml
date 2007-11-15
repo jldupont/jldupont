@@ -89,7 +89,29 @@
 		<echo>Package stability:   ${package.stability}</echo>
 		<echo>Package summary:     ${package.summary}</echo>
 		<echo>Package description: ${package.description}</echo>
-		<echo>Package dependencies:${package.dependencies}</echo>
+
+		<!-- verifies the existence of the requested package version in the REST structure -->
+	 	<taskdef classname='JLD.PearTools.phing.ReleaseExistsTask' name='release_exists' />
+		<release_exists	
+					channelroot="${channel.root}" 
+					channelname="${channel.name}" 
+					channeluri="${channel.uri}" 
+					channelrest="${channel.rest}" 
+					channeltags="${channel.tags}" 
+					
+					packagename="${package.name}" 
+					packageversion="${package.version}" 
+					packagestability="${package.stability}" 
+					packagereleasestatus="package.releasestatus"  />
+
+		<echo>Package release status: ${package.releasestatus}</echo>
+		<if>
+			<equals arg1="1" arg2="${package.releasestatus}" />
+			<then>
+				<echo>RELEASE ALREADY EXISTS IN REST STRUCTURE... failing now</echo>
+				<fail message="This REST structure already contains a release of the requested version!" />
+			</then>
+		</if>
 	</target>
 	<!--
 		Package level processing.

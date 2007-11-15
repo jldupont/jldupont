@@ -99,7 +99,7 @@ class JLD_PearTools_ChannelReleases extends JLD_PearObject
 	 * all releases associated with a package. This is accomplished by reading in
 	 * all the files of the pattern 'package.$version.xml'
 	 */
-	public function getAllReleases()
+	public function getAllReleases( &$version_list = null )
 	{
 		$names = $this->getAllPackagesFileNames();
 		if (empty( $names ))
@@ -116,7 +116,11 @@ class JLD_PearTools_ChannelReleases extends JLD_PearObject
 			if (!$p->isValid())
 				throw new Exception( 'invalid package.xml file: '.$baseDir.$name );
 				
-			$e['v'] = $p->getVersion();
+			$v = $p->getVersion();
+			if (is_array( $version_list ))
+				$version_list[] = $v;
+			
+			$e['v'] = $v;
 			$e['s'] = $p->getStability();
 			
 			$all[] = $e;
@@ -124,6 +128,17 @@ class JLD_PearTools_ChannelReleases extends JLD_PearObject
 			$p = null;
 		}
 		return $all;
+	}
+	/**
+	 * Verifies the existence of a given release.
+	 */
+	public function releaseExists( $version )
+	{
+		$liste = array();
+		$this->getAllReleases( $liste );
+		if (empty( $liste ))
+			return false;
+		return (in_array( $version, $liste ));
 	}
 	/**
 	 * Creates the 'allreleases.xml' file taking into account

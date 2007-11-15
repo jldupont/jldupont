@@ -8,7 +8,7 @@
 //<source lang=php> 
 require_once "phing/Task.php";
 
-class JLD_PhingTools_Task extends Task
+abstract class JLD_PhingTools_Task extends Task
 {
 	var $vars;
 	/**
