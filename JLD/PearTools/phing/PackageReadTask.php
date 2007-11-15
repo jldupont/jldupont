@@ -4,6 +4,18 @@
  * @package JLD
  * @version $Id$
  */
+ /*
+		<taskdef classname='JLD.PearTools.phing.PackageReadTask' name='packageread' />
+		<!-- T11 -->
+		<packageread	propertyPackageFile="${package.file}"
+						propertyPackageName='package.name' 
+						propertyPackageVersion='package.version' 
+						propertyPackageStability='package.stability' 
+						propertyPackageSummary='package.summary' 
+						propertyPackageDescription='package.description'
+						propertyPackageDeps='package.dependencies'
+		/>
+ */
 //<source lang=php> 
 
 require_once "JLD/PhingTools/Task.php";

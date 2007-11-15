@@ -6,12 +6,17 @@
  *
  * PHING task
  *
- * <taskdef classname='JLD.PearTools.phing.ChannelReleasesTask' name='releases' />
- * <releases channelroot= "${channel.root}" 
- *             packagename="${package.name}" 
- *             packageversion="${package.version}"  
- *             packagestability="${package.stability}"  
- *	/>
+ 	<taskdef classname='JLD.PearTools.phing.ChannelReleasesTask' name='releases' />
+	<releases	channelroot="${channel.root}" 
+				channelname="${channel.name}" 
+				channeluri="${channel.uri}" 
+				channelrest="${channel.rest}" 
+				channeltags="${channel.tags}" 
+				packagename="${package.name}" 
+				packageversion="${package.version}" 
+				packagestability="${package.stability}" 
+				packagedependencies="${package.dependencies}" 
+	/>
  */
 //<source lang=php> 
 
@@ -25,6 +30,7 @@ class ChannelReleasesTask extends JLD_PhingTools_Task
 	// Name of category to add + package name
 	public function setChannelRoot( $val ) { $this->__set('channel_root', $val); }
 	public function setChannelUri( $val ) { $this->__set('channel_uri', $val); }
+	public function setChannelName( $val ) { $this->__set('channel_name', $val); }	
 	public function setChannelRest( $val ) { $this->__set('base_rest', $val); }	
 	public function setChannelTags( $val ) { $this->__set('base_tags', $val); }	
 	public function setPackageName( $val ) { $this->__set('package_name', $val ); }		
@@ -56,6 +62,9 @@ class ChannelReleasesTask extends JLD_PhingTools_Task
 		if (!$result)
 			throw new BuildException( 'deps.$version.txt could not be created' );
 
+		$result = $cr->createAllReleasesFile( );
+		if (!$result)
+			throw new BuildException( '"allreleases.xml" file could not be created' );
     }
 
 }

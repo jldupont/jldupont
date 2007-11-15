@@ -6,10 +6,11 @@
  *
  * PHING task
  *
- * <taskdef classname='JLD.PearTools.phing.ChannelPackagesTask' name='packages' />
- * <packages channelroot= "${channel.root}" 
- *             catname="${package.categoryname}" 
- *             packagename="${package.name}" />
+	<echo>Adding package's directory and info.xml file in REST packages</echo>
+	<taskdef classname='JLD.PearTools.phing.ChannelPackagesTask' name='packages' />
+	<packages	channelroot="${channel.root}" 
+				catname="${package.category}" 
+				packagename="${package.name}" />
  */
 //<source lang=php> 
 

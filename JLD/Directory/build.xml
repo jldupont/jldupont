@@ -18,7 +18,7 @@
 	*(T21) Add category directory to /c
 	*(T22) Add category to categories.xml file in /c
 	*(T23) Add package to /c/$category/info.xml  [if !exist, create]
-	* (T24) Add package release to /c/$category/packagesinfo.xml [if !exist, create]
+	*(T24) Add package release to /c/$category/packagesinfo.xml [if !exist, create]
 	PART III: (/p)
 	*(T31) Add package's directory to REST structure
 	*(T32) Add package's info.xml file to REST structure
@@ -28,7 +28,7 @@
 	*(T42) Copy package.xml to $package-$version.xml to /r/$package
 	*(T43) Add $version.xml to /r/$package
 	*(T44) Create deps.$version.txt serialized dependencies from $package-$version.xml
-	(T45) Update 'allrelease.xml' file
+	*(T45) Update 'allrelease.xml' file
 
 	PART V:
 	* creates docs
@@ -36,12 +36,18 @@
 
 <project name="JLD/Directory" basedir="." default='all'>
 
+	<!-- 
+		It is imperative that this task should run first;
+		this task searches the 'root' of the channel in the filesystem.
+	-->
 	<target name='find_channel_root_path'>
 		<taskdef classname='JLD.PearTools.phing.ChannelFindTask' name='channelfind' />
 		<channelfind RootPath='channel.root' StartPath='${project.basedir}' />
 		<echo>Channel root path: ${channel.root}</echo>
 	</target>
-
+	<!--
+		This task initializes the base variables for the PEAR channel.
+	-->
 	<target name='init_channel' depends='find_channel_root_path'>
 		<taskdef classname='JLD.PearTools.phing.ChannelTask' name='channel' />
 		<echo>Initializing Channel</echo>
@@ -52,14 +58,16 @@
 		<echo>Channel REST path: "${channel.rest}"</echo>
 	</target>
 
+	<!--
+		This task sets the property corresponding to the
+		current package's file path.
+	-->
 	<target name='prepare' depends='init_channel' >
 		<resolvepath propertyName="project.path" file="${project.basedir}" />
 		<property name='package.file' value='${project.path}/package.xml' />
 	</target>
 	<!--
-		Initialization:
-		- retrieve package name
-		- retrieve version number
+		Package level initialization:
 	-->
 	<target name='Read_package_xml' depends='prepare'>
 		<!-- T12 -->
@@ -82,7 +90,9 @@
 		<echo>Package description: ${package.description}</echo>
 		<echo>Package dependencies:${package.dependencies}</echo>
 	</target>
-
+	<!--
+		Package level processing.
+	-->
 	<target name='package' depends='Read_package_xml'>
 		<echo>Processing package</echo>
 		<taskdef classname='JLD.PearTools.phing.PackageUpdateTask' name='packageupdate' />
@@ -135,10 +145,11 @@
 		<copy	file="package.xml"
 				tofile="${channel.root}/${channel.rest}/r/${package.name}/package.${package.version}.xml" 
 				overwrite="true" />
-		<!-- T43, T44 -->
+		<!-- T43, T44, T45 -->
 		<echo>Adding package's releases directory in REST packages</echo>
 		<taskdef classname='JLD.PearTools.phing.ChannelReleasesTask' name='releases' />
 		<releases	channelroot="${channel.root}" 
+					channelname="${channel.name}" 
 					channeluri="${channel.uri}" 
 					channelrest="${channel.rest}" 
 					channeltags="${channel.tags}" 
