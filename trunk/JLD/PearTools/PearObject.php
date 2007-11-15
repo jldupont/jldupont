@@ -23,14 +23,39 @@ abstract class JLD_PearObject extends JLD_Object
 		'$base_releases$'	=> 'base_releases',  // for packagesinfo.xml
 		'$package_name$'	=> 'package_name',	 // for packagesinfo.xml
 		'$package_name_L$'	=> 'package_name',	 // for info.xml		
-		'$all_releases$'	=> 'all_releases',	 // for packagesinfo.xml		
+		'$all_releases$'	=> 'all_releases',	 // for packagesinfo.xml	
+		
+		'$package_version$'   => 'package_version',// for $version.xml
+		'$package_stability$' => 'package_stability',// for $version.xml			
+		'$channel_uri$'		=> 'channel_uri',	// for $version.xml
+		'$base_tags$'		=> 'base_tags'		// for $version.xml
 	);
 
 	static $std_magic_words = array(
 		'$tab$'		=> "\t",
 		'$newline$' => "\n",
 	);
-	
+	/**
+	 * Adds a specific REST directory in the filesystem
+	 */
+	public function addRestDirectory( $which, $name )
+	{
+		$dir = $this->buildFileSystemRestPath($which).'/'.$name;
+
+		if (is_dir( $dir ))
+			return true;
+			
+		$result = @mkdir( $dir );	
+			
+		return $result;
+	}
+	/**
+	 *
+	 */
+	public function buildFileSystemRestPath( $which )
+	{
+		return $this->channel_root.$this->base_rest.$which;
+	}
 	public function getVar( $var ) { return @$this->vars[$var]; }
 	public function setVar( $var, $value ) { return $this->vars[$var] = $value; }
 	
@@ -42,9 +67,26 @@ abstract class JLD_PearObject extends JLD_Object
 	{
 		return @$this->vars[ $nm ];
 	}
+	/**
+	 * Batch initialization
+	 */
+	public function initVars( &$vars )
+	{
+		if (empty( $vars ))
+			throw new Exception( 'initVars called with invalid parameter' );
+		foreach( $vars as $name => &$value )
+			$this->__set( $name, $value );
+	}
 	protected function getTemplate( $tpl )
 	{
 		return @file_get_contents(dirname(__FILE__).$tpl );
+	}
+	protected function writeFile( $file, &$c )
+	{
+		echo __METHOD__."file=".$file." => ".$c;
+		$len = strlen( $c );
+		$bytes_written = @file_put_contents( $file, $c );
+		return ( $len === $bytes_written );
 	}
 	protected function replaceMagicWords( &$tpl )
 	{

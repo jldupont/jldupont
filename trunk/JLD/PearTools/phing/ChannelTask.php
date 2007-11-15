@@ -35,11 +35,11 @@ class ChannelTask extends JLD_PhingTools_Task
 		if (!$result)
 			throw new BuildException( 'channel object could not be created because channel.xml was not found' );
 		
-		$this->project->setProperty( 'channel.uri', $c->getURI() );
-		$this->project->setProperty( 'channel.name', $c->getName() );		
-		$this->project->setProperty( 'channel.alias', $c->getAlias() );				
-		$this->project->setProperty( 'channel.tagspath', $c->getTAGSPath() );				
-		$this->project->setProperty( 'channel.restpath', $c->getRESTPath() );						
+		$this->project->setProperty( 'channel.uri',		$c->getURI() );
+		$this->project->setProperty( 'channel.name',	$c->getName() );		
+		$this->project->setProperty( 'channel.alias',	$c->getAlias() );				
+		$this->project->setProperty( 'channel.tags',	$c->getTAGSPath() );				
+		$this->project->setProperty( 'channel.rest',	$c->getRESTPath() );						
     }
 }
 //</source>

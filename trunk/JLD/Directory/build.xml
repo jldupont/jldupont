@@ -23,12 +23,11 @@
 	*(T31) Add package's directory to REST structure
 	*(T32) Add package's info.xml file to REST structure
 	PART IV:
-	* Add package to /r
-	* Add $package-$version.xml to /r/$package
-	* Add $version.xml to /r/$package
-	* Create serialized dependencies from $package-$version.xml
-	* Create Deps.$version.txt to /r/$package
-	* Update 'allrelease.xml' file
+	*(T41) Add package's releases directory to REST structure
+	*(T42) Copy package.xml to $package-$version.xml to /r/$package
+	*(T43) Add $version.xml to /r/$package
+	*(T44) Create deps.$version.txt serialized dependencies from $package-$version.xml
+	(T45) Update 'allrelease.xml' file
 
 	PART V:
 	* creates docs
@@ -48,8 +47,8 @@
 		<channel path="${channel.root}" />
 		<echo>Channel name:      "${channel.name}"</echo>
 		<echo>Channel alias:     "${channel.alias}"</echo>
-		<echo>Channel TAGS path: "${channel.tagspath}"</echo>
-		<echo>Channel REST path: "${channel.restpath}"</echo>
+		<echo>Channel TAGS path: "${channel.tags}"</echo>
+		<echo>Channel REST path: "${channel.rest}"</echo>
 	</target>
 
 	<target name='prepare' depends='init_channel' >
@@ -71,7 +70,8 @@
 						propertyPackageVersion='package.version' 
 						propertyPackageStability='package.stability' 
 						propertyPackageSummary='package.summary' 
-						propertyPackageDescription='package.description' 
+						propertyPackageDescription='package.description'
+						propertyPackageDeps='package.dependencies'
 		/>
 		<echo>Package name:        ${package.name}</echo>
 		<echo>Package category:    ${package.category}</echo>
@@ -79,6 +79,7 @@
 		<echo>Package stability:   ${package.stability}</echo>
 		<echo>Package summary:     ${package.summary}</echo>
 		<echo>Package description: ${package.description}</echo>
+		<echo>Package dependencies:${package.dependencies}</echo>
 	</target>
 
 	<target name='package' depends='Read_package_xml'>
@@ -97,12 +98,12 @@
 		<!-- T15 -->
 		<echo>Moving archive to TAGS directory</echo>
 		<move	file="${package.name}-${package.version}.tgz" 
-				todir="${channel.root}/${channel.tagspath}/${package.name}" 
+				todir="${channel.root}/${channel.tags}/${package.name}" 
 				overwrite="true"
 		/>
 		<!-- T16 -->
 		<echo>Copying release files to TAGS directory</echo>
-		<copy	todir="${channel.root}/${channel.tagspath}/${package.name}/${package.version}" 
+		<copy	todir="${channel.root}/${channel.tags}/${package.name}/${package.version}" 
 				overwrite="true">
 			<fileset dir=".">
 				<include name="**/**" />
@@ -125,7 +126,26 @@
 					catname="${package.category}" 
 					packagename="${package.name}" />
 
-
+		<!-- T41 -->
+		<echo>Creating package's releases directory in REST directory</echo>
+		<mkdir dir="${channel.root}/${channel.rest}/r/${package.name}"/>
+		<!-- T42 -->
+		<echo>Copying "package.xml" to package-${package.version}.xml in REST directory</echo>
+		<copy	file="package.xml"
+				tofile="${channel.root}/${channel.rest}/r/${package.name}/package.${package.version}.xml" 
+				overwrite="true" />
+		<!-- T43, T44 -->
+		<echo>Adding package's releases directory in REST packages</echo>
+		<taskdef classname='JLD.PearTools.phing.ChannelReleasesTask' name='releases' />
+		<releases	channelroot="${channel.root}" 
+					channeluri="${channel.uri}" 
+					channelrest="${channel.rest}" 
+					channeltags="${channel.tags}" 
+					packagename="${package.name}" 
+					packageversion="${package.version}" 
+					packagestability="${package.stability}" 
+					packagedependencies="${package.dependencies}" 
+		/>
 	</target>
 
 	<target name='docs'>

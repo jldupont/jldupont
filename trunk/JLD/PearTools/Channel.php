@@ -43,7 +43,7 @@ class JLD_PearTools_Channel extends JLD_PearObject
 	{
 		return parent::singleton( __CLASS__, self::thisVersion );	
 	}
-	public function getURI() { return $this->getVar('uri'); }
+	public function getURI() { return $this->getVar('name'); }  // !!!
 	public function getName() { return $this->getVar('name'); }	
 	public function getAlias() { return $this->getVar('alias'); }		
 	public function getRootPath() { return $this->dir; }

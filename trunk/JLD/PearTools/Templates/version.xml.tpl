@@ -5,20 +5,20 @@
     xsi:schemaLocation="http://pear.php.net/dtd/rest.release
     http://pear.php.net/dtd/rest.release.xsd">
     
- <p xlink:href="/rest/p/$packageL$">$packageH$</p>
- <c>$channel$</c>
+ <p xlink:href="$base_rest$/p/$package_name_L$">$package_name$</p>
+ <c>$channel_name$</c>
  
- <v>$version$</v>
- <st>$stability$</st>
- <l>PHP License</l>
+ <v>$package_version$</v>
+ <st>$package_stability$</st>
+ <l>$license$</l>
  
  <m>jldupont</m>
- <s>/rest/r/$summary</s>
- <d>/rest/r/$description</d>
+ <s>$package_summary$</s>
+ <d>$package_description$</d>
  <da></da>
  <n>Release Notes:</n>
  <f></f>
 
- <g>http://$channel$/tags/$packageH$/$packageH$-$version$</g>
- <x xlink:href="package.$version$.xml"/>
+ <g>http://$channel_uri$$base_tags$/$package_name$/$package_name$-$package_version$</g>
+ <x xlink:href="package.$package_version$.xml"/>
 </r>
