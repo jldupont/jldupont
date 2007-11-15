@@ -19,15 +19,20 @@ require_once "JLD/PhingTools/Task.php";
 require_once "JLD/PearTools/Channel.php";
 require_once "JLD/PearTools/ChannelCategories.php";
 
-class CategoriesTask extends JLD_PhingTools_Task
+class ChannelCategoriesTask extends JLD_PhingTools_Task
 {
 	// Attributes interface
 	// Name of category to add + package name
-	public function setChannelRoot( $val ) { $this->__set('channelroot', $val); }
-	public function setCatName( $val ) { $this->__set('catname', $val ); }	
-	public function setPackageName( $val ) { $this->__set('packagename', $val ); }		
-	public function setPackageReleaseVersion( $val ) { $this->__set('packageversion', $val ); }			
-	public function setPackageReleaseStability( $val ) { $this->__set('packagestability', $val ); }				
+	public function setChannelRoot( $val ) { $this->__set('channel_root', $val); }
+	public function setChannelUri( $val ) { $this->__set('channel_uri', $val); }
+	public function setChannelName( $val ) { $this->__set('channel_name', $val); }	
+	public function setChannelRest( $val ) { $this->__set('base_rest', $val); }	
+	public function setChannelTags( $val ) { $this->__set('base_tags', $val); }	
+	
+	public function setCategoryName( $val ) { $this->__set('category_name', $val ); }	
+	public function setPackageName( $val ) { $this->__set('package_name', $val ); }		
+	public function setPackageReleaseVersion( $val ) { $this->__set('package_version', $val ); }			
+	public function setPackageReleaseStability( $val ) { $this->__set('package_stability', $val ); }				
 		
     /**
      * The init method: Do init steps.
@@ -39,28 +44,11 @@ class CategoriesTask extends JLD_PhingTools_Task
      */
     public function main() 
 	{
-		$c = JLD_PearTools_Channel::singleton();
-		$result = $c->init( $this->__get('channelroot') );
-		if (!$result)
-			throw new BuildException( 'channel object could not be created because channel.xml was not found' );
-		
 		$cs = JLD_PearTools_ChannelCategories::singleton();
-		try
-		{
-			$cs->init( $c );
-		}
-		catch(Exception $e)
-		{
-			throw new BuildException( $e->getMessage() );
-		}
-		// 0- read all the categories in
+		
+		$cs->initVars( $this->vars );
 		$cs->readAll();
 		
-		// 1- add category directory in REST structure
-		//    if the directory already exists, don't alarm.
-		$result = $cs->addCategoryDirectory( $this->__get('catname') );
-		if (!$result)
-			throw new BuildException( 'could not create the category directory in the REST structure' );
 		// 2- add the category to the 'categories.xml' file
 		try
 		{
@@ -71,15 +59,15 @@ class CategoriesTask extends JLD_PhingTools_Task
 			throw new BuildException( $e->getMessage() );
 		}
 		// 3- update 'info.xml'
-		$result = $cs->updateCategoryInfo( $this->__get('catname') );
+		$result = $cs->updateCategoryInfo( $this->__get('category_name') );
 		if (!$result)
 			throw new BuildException( 'could not update "info.xml" file in the REST structure' );
 
 		// 4- update 'packagesinfo.xml'
-		$result = $cs->updatePackagesInfo(	$this->__get('catname'), 
-											$this->__get('packagename'), 
-											$this->__get('packageversion'), 
-											$this->__get('packagestability') 											
+		$result = $cs->updatePackagesInfo(	$this->__get('category_name'), 
+											$this->__get('package_name'), 
+											$this->__get('package_version'), 
+											$this->__get('package_stability') 											
 											);
 		if (!$result)
 			throw new BuildException( 'could not update "packagesinfo.xml" file in the REST structure' );

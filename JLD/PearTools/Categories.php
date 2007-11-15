@@ -6,6 +6,8 @@
 	
 	The main purpose of these classes is to be able to add a release
 	to a 'packagesinfo.xml' file of a given REST category.
+	
+	!!!OBSOLETE!!!
 */
 //<source lang=php>
 

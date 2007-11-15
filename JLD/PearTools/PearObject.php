@@ -17,6 +17,7 @@ abstract class JLD_PearObject extends JLD_Object
 		'$channel_name$'	=> 'channel_name',	 // for categories.xml
 		'$all_categories$'	=> 'all_categories', // for categories.xml
 		'$category_name$'	=> 'category_name',  // for categories.xml
+		'$category1_name$'	=> 'category1_name', // for categories.xml		
 		'$base_rest$'		=> 'base_rest',      // for categories.xml
 		'$base_categories$'	=> 'base_categories',// for categories.xml		
 		'$base_packages$'	=> 'base_packages',  // 
