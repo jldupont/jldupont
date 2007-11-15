@@ -3,7 +3,7 @@
 <!--
 	PHING build file
 	Jean-Lou Dupont
-	$Id$
+	$Id: build.xml 241 2007-11-15 16:03:05Z JeanLou.Dupont $
 
 	Builds a PEAR package & PHP Docs
 
@@ -102,13 +102,12 @@
 					packagename="${package.name}" 
 					packageversion="${package.version}" 
 					packagestability="${package.stability}" 
-					packagereleasestatus="package.releasestatus"  />
+					packagereleasestatus="${package.releasestatus}" />
 
-		<echo>Package release status: ${package.releasestatus}</echo>
+		<echo>Package release status: "${package.releasestatus}"</echo>
 		<if>
 			<equals arg1="1" arg2="${package.releasestatus}" />
 			<then>
-				<echo>RELEASE ALREADY EXISTS IN REST STRUCTURE... failing now</echo>
 				<fail message="This REST structure already contains a release of the requested version!" />
 			</then>
 		</if>
