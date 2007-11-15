@@ -63,6 +63,21 @@ class JLD_PearTools_ChannelReleases extends JLD_PearObject
 		$file .= '/'.$this->package_name."/deps.$v.txt";
 		return $this->writeFile( $file, $this->package_dependencies );
 	}
+	/**
+	 * Scans the package's /r REST directory and find 
+	 * all releases. This is accomplished by reading in
+	 * all the files of the pattern 'package.$version.xml'
+	 */
+	public function getAllReleases()
+	{
+		$pattern = '/package\.(.*)\.xml/';
+		$path = $this->buildFileSystemRestPath( self::$baseReleases );
+		$raw = JLD_Directory::getDirectoryInformation( $path, $path, true, false );		
+		$files = array();
+
+		if ( empty( $raw ) )
+			foreach( $raw as )
+	}
 	
 }//end class
 //</source>
