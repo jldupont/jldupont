@@ -20,6 +20,15 @@ abstract class JLD_RegistryRepository extends JLD_Object
 	 */
 	const thisVersion = '$Id$';
 
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+// HELPER METHODS
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+	
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+// METHODS which must be OVERLOADED	
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	
 	/**
 	 * Gets a value corresponding to a key in the registry.
 	 * @param string $key
@@ -34,6 +43,18 @@ abstract class JLD_RegistryRepository extends JLD_Object
 	 * @return integer Expiry timeout value in seconds.
 	 */
 	public function getExpiry( $key );
+	
+	/**
+	 * Fetches a fresh & complete copy of the registry.
+	 */
+	public function refresh();
+	
+	/**
+	 * Initialization of the configuration parameters
+	 *
+	 * @param mixed $parameters Configuration Array
+	 */
+	public function init( $parameters );
 	
 }//end class
 //</source>
