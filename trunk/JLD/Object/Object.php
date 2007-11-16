@@ -6,7 +6,7 @@
  */
 //<source lang=php> 
 
-require 'JLD/System/Exception.php';
+require_once 'JLD/System/Exception.php';
 
 abstract class JLD_Object
 {
