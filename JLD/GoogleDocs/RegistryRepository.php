@@ -9,13 +9,13 @@
  */
 //<source lang=php> 
 
-require 'JLD/Object/Object.php'; //includes also the 'JLD_System_Exception' class
-require 'JLD/Cache/Cache.php';
-require 'JLD/Registry/RegistryRepository.php';
+require_once 'JLD/Object/Object.php'; //includes also the 'JLD_System_Exception' class
+require_once 'JLD/Cache/Cache.php';
+require_once 'JLD/Registry/RegistryRepository.php';
 
-require 'Zend/Gdata/Spreadsheets.php';
-require 'Zend/Gdata/ClientLogin.php';
-require 'Zend/Exception.php';
+require_once 'Zend/Gdata/Spreadsheets.php';
+require_once 'Zend/Gdata/ClientLogin.php';
+require_once 'Zend/Exception.php';
 
 class JLD_GoogleDocs_RegistryRepository extends JLD_RegistryRepository
 {
@@ -38,6 +38,7 @@ class JLD_GoogleDocs_RegistryRepository extends JLD_RegistryRepository
 	 */
 	var $gs_service = null;
 	var $gs_client = null;
+	var $gs_spreadsheetService = null;
 	
 	public function __construct( ) 
 	{
