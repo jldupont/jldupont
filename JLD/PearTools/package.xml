@@ -24,7 +24,7 @@
  <time>18:24:49</time>
 
  <version>
-  <release>1.0.0</release>
+  <release>1.0.1</release>
   <api>1.0.0</api>
  </version>
  
@@ -51,8 +51,6 @@
    <file baseinstalldir="JLD/PearTools" name="PearObject.php" role="php" />
    <file baseinstalldir="JLD/PearTools" name="Releases.php" role="php" />
 
-   <file baseinstalldir="JLD/PearTools" name="phing/ChannelBuildRestTask.php" role="php" />
-   <file baseinstalldir="JLD/PearTools" name="phing/ChannelBuildTask.php" role="php" />
    <file baseinstalldir="JLD/PearTools" name="phing/ChannelCategoriesTask.php" role="php" />
    <file baseinstalldir="JLD/PearTools" name="phing/ChannelFindTask.php" role="php" />
    <file baseinstalldir="JLD/PearTools" name="phing/ChannelPackagesTask.php" role="php" />
@@ -108,10 +106,12 @@
  </phprelease>
 
 <changelog>
- <release>
-   <license uri="http://www.php.net/license">PHP License</license>
-   <notes></notes>
-  </release>
+	<release>
+		<license uri="http://www.php.net/license">PHP License</license>
+		<notes>
+			* Removed unecessary tasks: Build Channel tasks
+		</notes>
+	</release>
 </changelog>
 
 </package>
