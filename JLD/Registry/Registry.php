@@ -1,5 +1,33 @@
 <?php
 /**
+ * Registry class: used to manage static parameters.
+ * - The consumers of the class have 'read only' access to the
+ *   [key ; value] transaction_cache fetched from the central registry.
+ * - The consumers of the class have 'read/write' access to the
+ *   [key ; value] transaction_cache managed locally.
+ *
+ * This class depends on the availability of a shared memory
+ * manager such as 'APC' or 'eAccelerator'.
+ *
+ * KEY namespace organisation:
+ * ===========================
+ * /$key = /$realm/$class/$subkey
+ *
+ * RESERVED REALMS:
+ * ================
+ * - SYSTEM
+ * - LOCAL
+ * - CACHE
+ * - CONFIG
+ * - DESCRIPTION
+ *
+ * EXPIRY policy for /$key:
+ * =======================
+ * 1) Entry exists for $key/expiry ?
+ * 2) Entry exists for /$realm/$class ?
+ * 3) Entry exists for /CACHE/DEFAULT/expiry ?
+ * 4) DEFAULT: use class level definition
+ *
  * @author Jean-Lou Dupont
  * @package JLD
  * @subpackage Registry
@@ -9,61 +37,49 @@
 
 require 'JLD/Object/Object.php';
 require 'JLD/Cache/Cache.php';
-require 'JLD/AmazonS3/AmazonS3.php';
 
 // only one instance.
 JLD_Registry::singleton();
 
-/*
- *  The Amazon access & secret keys are fetched from the cache.
- *
- *  The registry entries are assumed to be pretty much static 
- *  from a relativistic timescale point of view of $expiry.
- */
 class JLD_Registry extends JLD_Object
 {
 	const thisVersion = '$Id$';
 	
+	/**
+	 * Default expiry timeout for transaction_cache
+	 * @var integer
+	 */
 	static $expiry = 86400; // 1day.
 
-	// session based cache.
-	static $entries = null;
-	static $cache = null;
+	// session based cache related
+	var $transaction_cache = null;
+	var $system_cache = null;
 
-	// S3 related.
-	static $S3accessKey = null;
-	static $S3secretKey = null;
-	static $S3bucketName = null;
-	
-	static $s3;
-
-	public function __construct() 
+	public function __construct( ) 
 	{
 		if (self::$instance !== null)
-			die( __CLASS__.': only one instance of this class can be created.' );
+			throw new JLD_System_Exception( __CLASS__.': only one instance of this class can be created.' );
 			
 		if (JLD_Cache_Manager::isFake())
-			die( __CLASS__.':'.__METHOD__.' requires a real cache for performance consideration' );
+			throw new JLD_System_Exception( __CLASS__.':'.__METHOD__.' requires a real cache for performance consideration' );
 			
-		self::$cache = JLD_Cache_Manager::getCache();
-	}
-	public static function singleton()
-	{
-		return parent::singleton( __CLASS__, self::thisVersion );	
+		$this->system_cache = JLD_Cache_Manager::getCache();
+		
+		// we must make sure we are initialized!
+		$this->init();
+		
+		return parent::__construct( self::thisVersion );
 	}
 	/**
+	 * Singleton interface
 	 */
-	protected static function initS3( $accessKey, $secretKey, $bucketName )
+	public static function singleton()
 	{
-		self::$S3accessKey = $accessKey;
-		self::$S3secretKey = $secretKey;		
-		self::$S3bucketName = $bucketName;		
-		
-		self::$s3 = new AmazonS3(	self::$S3secretKey,
-									self::$S3accessKey );
+		return parent::singleton( __CLASS__ );	
 	}
 	/**
 	 * Returns the default expiry time
+	 * @return integer
 	 */
 	public function getDefaultExpiry()
 	{
@@ -71,78 +87,88 @@ class JLD_Registry extends JLD_Object
 	}
 	/**
 	 * Sets the default expiry time
+	 *
+	 * @param integer $expiry
+	 * @return integer
 	 */
 	public function setDefaultExpiry( $expiry )
 	{
 		return (self::$expiry = $expiry);
 	}
 	/**
+	 * Initialization procedure
+	 * This method is being kept 'lean' for normal transactions
+	 * i.e. usual transactions which do not require querying the
+	 * central registry repository.
+	 * 
+	 */
+	protected function init()
+	{
+		
+	}
+	/**
 	 *  Returns the registry value in $value
 	 *  
-	 *  Returns 'true' if $value is in 'PHP format'
-	 *  Returns 'false' if $key was not found
-	 *  Returns 'null' if $value retrieved is in 'raw' format
-	 *   i.e. coming straight from the S3 store.
-	 *
-	 *  When the data comes directly from the S3 store,
-	 *  it is the responsibility of the requester to 'parse' the document
-	 *  to a usage format.
+	 * @param string $key
+	 * @param mixed $value
+	 * @return bool
 	 */
-	public static function get( $key, &$value )
+	public function get( $key, &$value )
 	{
-		if (is_null(self::$cache))
-			die(__CLASS__.": cache object must be initialized.\n");
-
-		if (is_null(self::$s3))
-			die(__CLASS__.": S3 object must be initialized.\n");
-			
 		// check if we can get lucky with the transaction scoped cache.
-		if (isset( self::$entries[ $key ] ))
+		if (isset( $this->transaction_cache[ $key ] ))
 		{
-			$value = self::$entries[ $key ];
+			$value = $this->transaction_cache[ $key ];
 			return true;
 		}
 			
 		// next, try with the system scoped cache
-		$value = self::$cache( $key );
-		if ( $value !== false )
-			return true;
+		$value = $this->system_cache( $key );
 		
-		// lastly, pull from S3 store...
-		$result = self::$s3->getObject( self::$bucketName, $key, $value );
-		if ($result !== true)
-			return null;
-			
-		return true;
+		// store it in the transaction cache
+		$this->transaction_cache[$key] = $value;
+		
+		return ($value !== false);
 	}
+
 	/**
 	 *  This method will set the LOCAL session & local caches
 	 *  with the required [$key => $value] pair.
 	 *
-	 *  NOTE: this method DOES NOT update the 'permanent' registry on S3.
 	 */
-	public static function setLocal( $key, $value )
+	public function set( $key, $value )
 	{
-		if (is_null(self::$cache))
-			die(__CLASS__.": cache object must be initialized.\n");
-
-		self::$entries[ $key ] = $value;
+		// get it in our transaction cache.
+		$this->transaction_cache[ $key ] = $value;
 		
 		// this shouldn't fail... some init check has already been done.
-		self::$cache->set( $key, $value, self::$expiry );
+		$expiry = $this->getExpiry( $key );
+			
+		// but store it also in the system cache.
+		$this->system_cache->set( $key, $value, $expiry );
 
 		return true;		
 	}
 	/**
-	 *  This function is used to update the S3 store.
-	 *  If there was a failure whilst storing to S3, 'false' is returned.	 
+	 * Returns true if the requested key is 'local'
+	 * i.e. the key only exists locally on this system.
+	 *
+	 * @param string $key
+	 * @return bool
 	 */
-	public static function update( $key, $value, $MIMEType = null )
+	public function isLocal( $key )
 	{
-		if (is_null(self::$s3))
-			die(__CLASS__.": S3 object must be initialized.\n");
+		return ( $this->system_cache->get( $key ) === false );	
+	}
+	/**
+	 * Get expiry timeout for a given key
+	 *
+	 * @param $key
+	 * @return integer The expiry timeout integer value in seconds.
+	 */
+	public function getExpiry( $key )
+	{
 		
-		return self::$s3->putObject( self::$bucketName, $key, $value, $MIMEType );		
 	}
 	
 } // end class

@@ -19,8 +19,8 @@
   <active>yes</active>
  </lead>
 
- <date>2007-11-07</date>
- <time>20:30:19</time>
+ <date>2007-11-16</date>
+ <time>20:01:39</time>
 
  <version>
   <release>1.0.0</release>
@@ -42,6 +42,7 @@
 	<!-- file list begin {{ -->
 	<!-- baseinstalldir: the target directory on the target machine -->
    <file baseinstalldir="JLD/Registry" name="Registry.php" role="php" />
+   <file baseinstalldir="JLD/Registry" name="RegistryRepository.php" role="php" />
     <!-- }} -->
 
   </dir>
@@ -70,13 +71,6 @@
 		<channel>jldupont.googlecode.com/svn</channel>
 		<min>1.0.0</min>
 	</package>
-
-	<package>
-		<name>AmazonS3</name>
-		<channel>jldupont.googlecode.com/svn</channel>
-		<min>0.1.0</min>
-	</package>
-
 
   </required>
  </dependencies>
