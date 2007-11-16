@@ -13,14 +13,73 @@ require 'JLD/Object/Object.php'; //includes also the 'JLD_System_Exception' clas
 require 'JLD/Cache/Cache.php';
 require 'JLD/Registry/RegistryRepository.php';
 
+require 'Zend/Gdata/Spreadsheets.php';
+require 'Zend/Gdata/ClientLogin.php';
+require 'Zend/Exception.php';
+
 class JLD_GoogleDocs_RegistryRepository extends JLD_RegistryRepository
 {
 	const thisVersion = '$Id$';
+	
+	/**
+	 * Mandatory configuration parameters list
+	 */
+	static $configParametersList = array(
+		// Username
+		array( 'r' => true, 'key' => 'gs_user' ),
+		// Password
+		array( 'r' => true, 'key' => 'gs_password' ),
+		// Document		
+		array( 'r' => true, 'key' => 'gs_document' ),		
+		// Worksheet
+		array( 'r' => true, 'key' => 'gs_worksheet' ),
+	);
+	/**
+	 */
+	var $gs_service = null;
+	var $gs_client = null;
 	
 	public function __construct( ) 
 	{
 		
 	}
+	/**
+	 * Initialization of the configuration parameters
+	 *
+	 * @param mixed $parameters Configuration Array
+	 */
+	public function init( $parameters )
+	{
+		if ($this->digestConfiguration( self::$configParametersList, $parameters ) === false)
+			throw new JLD_System_Exception( );
+
+		// let the client deal with any potential error
+		return $this->initGdoc( );
+	}
+	/**
+	 * Init the Gdoc service
+	 */
+	protected function initGdoc()
+	{
+		try 
+		{
+			$this->gs_service = Zend_Gdata_Spreadsheets::AUTH_SERVICE_NAME;
+			$this->gs_client = Zend_Gdata_ClientLogin::getHttpClient( $gs_user, $gs_password, $this->service);
+			$this->gs_spreadsheetService = new Zend_Gdata_Spreadsheets($this->gs_client);
+		}
+		// whatever exception we catch, let's try not to be too dramatic...
+		// let the client layer deal with this.
+		catch( Zend_Exception $e )
+		{
+			return false;	
+		}
+		
+		return true;
+	}
+	
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+// INHERITED METHODS
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 	/**
 	 * Gets a value corresponding to a key in the registry.
@@ -38,6 +97,13 @@ class JLD_GoogleDocs_RegistryRepository extends JLD_RegistryRepository
 	 * @return integer Expiry timeout value in seconds.
 	 */
 	public function getExpiry( $key )
+	{
+		
+	}
+	/**
+	 * Fetches a fresh & complete copy of the registry.
+	 */
+	public function refresh()
 	{
 		
 	}

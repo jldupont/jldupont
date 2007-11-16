@@ -86,6 +86,84 @@ abstract class JLD_Object
 	{
 		return @$this->vars[$key];
 	}
-	
+	/**
+	 * Returns 'true' if the requested variable exists.
+	 * @param string $key
+	 * @return bool
+	 */
+	public function varExists( $key )
+	{
+		return ( isset( $this->vars[ $key ] ));
+	}
+	/**
+	 * Validates the configuration parameters sent to the object.
+	 * - All 'required' parameters must be present
+	 * - Extra parameters are *not* checked
+	 * 
+	 * Structure of the arrays:
+	 *  array( 'r' => true, 'key' => parameter_key_name )
+	 *
+	 * @param array $referenceList The list of expected configuration parameters
+	 * @param array $parameters The list sent to configure the object instance
+	 * @return bool TRUE if the validation was successful OR 
+	 *                   'key' of first missing required parameter
+	 *                 
+	 */
+	protected function validateConfiguration( &$referenceList, &$parameters )
+	{
+		$result = true;
+		
+		if (empty( $referenceList ))
+			throw new JLD_System_Exception();
+
+		if (empty( $parameters ))
+			throw new JLD_System_Exception();
+		
+		foreach ( $referenceList as &$e )
+		{
+			// is the entry 'required' ?
+			if ( $e['r'] === true )
+				if ( !isset( $parameters[ $e['key'] ] ))
+				{
+					// give a hint to the caller of what's missing...
+					$result = $e['key'];
+					break;
+				}
+		}
+		
+		return $result;
+	}
+
+	/**
+	 * This method validates & sets the configuration parameters.
+	 * If a parameter is already set in this object, bail out with error.
+	 *
+	 * Structure of the $params array
+	 *  array( key => value, ... )
+	 *
+	 * @param array $referenceList The list of expected configuration parameters
+	 * @param array $parameters The list sent to configure the object instance
+	 * @return bool TRUE if the validation was successful OR 
+	 *                   'key' of first missing required parameter
+	 */
+	protected function digestConfiguration( &$refList, &$params )
+	{
+		// bail out if we can't pass the validation phase.
+		if ($this->validateConfiguration( $refList, $params ) === false)
+			return false;
+		
+		// now, go through all the configuration parameters
+		// and sets them locally in this object instance
+		foreach ( $this->params as $key => &$value )
+		{
+			// let the client layer handle this sort of error.
+			if ( $this->varExists( $key ) )
+				return false;
+			$this->__set( $key, $value );
+		}
+		
+		return true;
+	}
+
 }//end class
 //</source>
