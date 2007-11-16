@@ -1,8 +1,7 @@
 <?php
 /**
  * @author Jean-Lou Dupont
- * @package JLD
- * @subpackage Object
+ * @package Object
  * @version $Id$
  */
 //<source lang=php> 
