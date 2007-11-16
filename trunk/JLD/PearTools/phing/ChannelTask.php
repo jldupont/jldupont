@@ -5,8 +5,8 @@
  * @subpackage phing
  * @version $Id$
  *
- * PHING task
- *  Creates a PEAR channel object in the current project.
+ * PHING task which reads in the current channel's parameters and makes
+ *  those available in the current PHING project.
  *  Other tasks will use this object to manage the REST interface.
  */
 //<source lang=php> 
