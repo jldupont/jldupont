@@ -9,8 +9,8 @@
 
  <name>Object</name>
  <channel>jldupont.googlecode.com/svn</channel>
- <summary>Summary...</summary>
- <description>Description...</description>
+ <summary>Base class for all JLD namespace</summary>
+ <description></description>
 
  <lead>
   <name>Jean-Lou Dupont</name>

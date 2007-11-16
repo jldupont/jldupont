@@ -3,7 +3,7 @@
 <!--
 	PHING build file
 	Jean-Lou Dupont
-	$Id: build.xml 241 2007-11-15 16:03:05Z JeanLou.Dupont $
+	$Id: build.xml 253 2007-11-15 19:30:42Z JeanLou.Dupont $
 
 	Builds a PEAR package & PHP Docs
 
@@ -36,11 +36,20 @@
 
 <project name="JLD/Directory" basedir="." default='all'>
 
+	<!--
+		The package is located 1 level 'down' from the build file.
+	-->
+	<target name='Config'>
+		<resolvepath propertyName="project.path" file="${project.basedir}/../" /> <!-- 1 level down -->
+		<property name='package.file' value='${project.path}/package.xml' />
+		<echo>Package path: ${project.path}</echo>
+	</target>
+
 	<!-- 
 		It is imperative that this task should run first;
 		this task searches the 'root' of the channel in the filesystem.
 	-->
-	<target name='find_channel_root_path'>
+	<target name='FindChannelRoot' depends='Config'>
 		<taskdef classname='JLD.PearTools.phing.ChannelFindTask' name='channelfind' />
 		<channelfind RootPath='channel.root' StartPath='${project.basedir}' />
 		<echo>Channel root path: ${channel.root}</echo>
@@ -48,7 +57,7 @@
 	<!--
 		This task initializes the base variables for the PEAR channel.
 	-->
-	<target name='init_channel' depends='find_channel_root_path'>
+	<target name='InitChannel' depends='FindChannelRoot'>
 		<taskdef classname='JLD.PearTools.phing.ChannelTask' name='channel' />
 		<echo>Initializing Channel</echo>
 		<channel path="${channel.root}" />
@@ -59,17 +68,9 @@
 	</target>
 
 	<!--
-		This task sets the property corresponding to the
-		current package's file path.
-	-->
-	<target name='prepare' depends='init_channel' >
-		<resolvepath propertyName="project.path" file="${project.basedir}" />
-		<property name='package.file' value='${project.path}/package.xml' />
-	</target>
-	<!--
 		Package level initialization:
 	-->
-	<target name='Read_package_xml' depends='prepare'>
+	<target name='ReadPackageXML' depends='InitChannel'>
 		<!-- T12 -->
 		<property file="./build.properties" />
 		<taskdef classname='JLD.PearTools.phing.PackageReadTask' name='packageread' />
@@ -105,6 +106,10 @@
 					packagereleasestatus="package.releasestatus"  />
 
 		<echo>Package release status: ${package.releasestatus}</echo>
+	</target>
+
+
+	<target name='ValidatePackage' depends="ReadPackageXML">
 		<if>
 			<equals arg1="1" arg2="${package.releasestatus}" />
 			<then>
@@ -113,10 +118,11 @@
 			</then>
 		</if>
 	</target>
+
 	<!--
 		Package level processing.
 	-->
-	<target name='package' depends='Read_package_xml'>
+	<target name='DoPackage' depends='ValidatePackage'>
 		<echo>Processing package</echo>
 		<taskdef classname='JLD.PearTools.phing.PackageUpdateTask' name='packageupdate' />
 		<echo>Updating package</echo>
@@ -127,13 +133,13 @@
 		<echo>Creating archive file</echo>
 		<!-- this step requires creating a temporary directory
 		-->
-		<copy todir="${package.name}-${package.version}" overwrite='true'>
+		<copy todir="${project.path}/${package.name}-${package.version}" overwrite='true'>
 			<fileset dir=".">
 				<include name="**/**" />
 				<exclude name="package.xml" />
 			</fileset>
 		</copy>
-		<tar destfile="${package.name}-${package.version}.tgz" compression='gzip'>
+		<tar destfile="${project.path}/${package.name}-${package.version}.tgz" compression='gzip'>
 			<fileset dir='.'>
 				<include name="${package.name}-${package.version}/**" />
 				<include name="package.xml"/>
@@ -142,7 +148,7 @@
 		<delete dir="${package.name}-${package.version}" failonerror='true' />
 		<!-- T15 -->
 		<echo>Moving archive to TAGS directory</echo>
-		<move	file="${package.name}-${package.version}.tgz" 
+		<move	file="${project.path}/${package.name}-${package.version}.tgz" 
 				todir="${channel.root}/${channel.tags}/${package.name}" 
 				overwrite="true"
 		/>
@@ -150,7 +156,7 @@
 		<echo>Copying release files to TAGS directory</echo>
 		<copy	todir="${channel.root}/${channel.tags}/${package.name}/${package.version}" 
 				overwrite="true">
-			<fileset dir=".">
+			<fileset dir="${project.path}/.">
 				<include name="**/**" />
 			</fileset>
 		</copy>
@@ -193,7 +199,7 @@
 		<mkdir dir="${channel.root}/${channel.rest}/r/${package.namel}"/>
 		<!-- T42 -->
 		<echo>Copying "package.xml" to package-${package.version}.xml in REST directory</echo>
-		<copy	file="package.xml"
+		<copy	file="${project.path}/package.xml"
 				tofile="${channel.root}/${channel.rest}/r/${package.name}/package.${package.version}.xml" 
 				overwrite="true" />
 		<!-- T43, T44, T45 -->
@@ -212,10 +218,18 @@
 	</target>
 
 	<!-- TODO !!! -->
-	<target name='docs'>
+	<target name='docs' depends="ReadPackageXML">
+		<phpdoc title="Documentation for package ${package.name}"
+				destdir="./docs"
+				output="HTML:Smarty:PHP">
+			<fileset dir="${project.path}/.">
+				<include name="**/**" />
+				<exclude name="**/build*.*" />
+			</fileset>
+		</phpdoc>
 	</target>
 
-	<target name='all' depends='package, docs'>
+	<target name='all' depends='DoPackage, docs'>
 		<echo>Building all</echo>
 	</target>
 
