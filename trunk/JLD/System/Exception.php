@@ -7,7 +7,9 @@
  * @subpackage System
  * @version $Id$
  */
-//<source lang=php> 
+//<source lang=php>
+require 'JLD/System/ExceptionList.php';
+
 class JLD_System_Exception extends Exception
 {
 	/**

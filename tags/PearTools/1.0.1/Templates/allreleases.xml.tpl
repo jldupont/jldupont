@@ -7,20 +7,12 @@
 
 <!-- a file of this type must appear in each release directory -->
 
- <c>jldupont.googlecode.com/svn</c>    
- <p>PearTools</p>
+ <c>$channel_name$</c>    
+ <p>$package_name$</p>
 
 <!-- THE ORDER IS IMPORTANT HERE 
      ELSE THE UPGRADE PROCESS WON'T WORK -->
 
-	
-	<r>
-		<v>1.0.1</v>
-		<s>stable</s>
-	</r>
-	<r>
-		<v>1.0.0</v>
-		<s>stable</s>
-	</r>
+	$all_releases$
 
 </a>
