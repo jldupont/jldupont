@@ -233,7 +233,7 @@
 		</phpdoc>
 	</target>
 
-	<target name='all' depends='DoPackage, docs'>
+	<target name='all' depends='DoPackage'>
 		<echo>Building all</echo>
 	</target>
 
