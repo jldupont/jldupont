@@ -21,10 +21,10 @@
  </lead>
 
  <date>2007-11-19</date>
- <time>14:46:27</time>
+ <time>15:04:27</time>
 
  <version>
-  <release>1.0.2</release>
+  <release>1.0.3</release>
   <api>1.0.0</api>
  </version>
  
@@ -42,7 +42,6 @@
 
 	<!-- file list begin {{ -->
 	<!-- baseinstalldir: the target directory on the target machine -->
-   <file baseinstalldir="JLD/PearTools" name="Categories.php" role="php" />
    <file baseinstalldir="JLD/PearTools" name="Channel.php" role="php" />
    <file baseinstalldir="JLD/PearTools" name="ChannelCategories.php" role="php" />
    <file baseinstalldir="JLD/PearTools" name="ChannelPackages.php" role="php" />
@@ -115,7 +114,7 @@
 	<release>
 		<license uri="http://www.php.net/license">PHP License</license>
 		<notes>
-			* Rebuild because of archive failure
+			* Fixed another error in the package.xml file...
 		</notes>
 	</release>
 </changelog>
