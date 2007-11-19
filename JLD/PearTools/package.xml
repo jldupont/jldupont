@@ -21,10 +21,10 @@
  </lead>
 
  <date>2007-11-19</date>
- <time>14:36:28</time>
+ <time>14:46:27</time>
 
  <version>
-  <release>1.0.1</release>
+  <release>1.0.2</release>
   <api>1.0.0</api>
  </version>
  
@@ -115,7 +115,7 @@
 	<release>
 		<license uri="http://www.php.net/license">PHP License</license>
 		<notes>
-			* Removed unecessary tasks: Build Channel tasks
+			* Rebuild because of archive failure
 		</notes>
 	</release>
 </changelog>

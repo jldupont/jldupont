@@ -134,18 +134,18 @@
 		<!-- this step requires creating a temporary directory
 		-->
 		<copy todir="${project.path}/${package.name}-${package.version}" overwrite='true'>
-			<fileset dir=".">
+			<fileset dir="${project.path}/.">
 				<include name="**/**" />
 				<exclude name="package.xml" />
 			</fileset>
 		</copy>
 		<tar destfile="${project.path}/${package.name}-${package.version}.tgz" compression='gzip'>
-			<fileset dir='.'>
+			<fileset dir='${project.path}/.'>
 				<include name="${package.name}-${package.version}/**" />
 				<include name="package.xml"/>
 			</fileset>
 		</tar>
-		<delete dir="${package.name}-${package.version}" failonerror='true' />
+		<delete dir="${project.path}/{package.name}-${package.version}" failonerror='true' />
 		<!-- T15 -->
 		<echo>Moving archive to TAGS directory</echo>
 		<move	file="${project.path}/${package.name}-${package.version}.tgz" 
