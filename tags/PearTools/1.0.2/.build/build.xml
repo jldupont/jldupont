@@ -145,7 +145,7 @@
 				<include name="package.xml"/>
 			</fileset>
 		</tar>
-		<delete dir="${project.path}/{package.name}-${package.version}" failonerror='true' />
+		<delete dir="${package.name}-${package.version}" failonerror='true' />
 		<!-- T15 -->
 		<echo>Moving archive to TAGS directory</echo>
 		<move	file="${project.path}/${package.name}-${package.version}.tgz" 
