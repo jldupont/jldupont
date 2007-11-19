@@ -21,10 +21,10 @@
  </lead>
 
  <date>2007-11-19</date>
- <time>15:04:27</time>
+ <time>15:18:19</time>
 
  <version>
-  <release>1.0.3</release>
+  <release>1.0.4</release>
   <api>1.0.0</api>
  </version>
  
@@ -48,7 +48,6 @@
    <file baseinstalldir="JLD/PearTools" name="ChannelReleases.php" role="php" />
    <file baseinstalldir="JLD/PearTools" name="Package.php" role="php" />
    <file baseinstalldir="JLD/PearTools" name="PearObject.php" role="php" />
-   <file baseinstalldir="JLD/PearTools" name="Releases.php" role="php" />
 
    <file baseinstalldir="JLD/PearTools" name="phing/ChannelCategoriesTask.php" role="php" />
    <file baseinstalldir="JLD/PearTools" name="phing/ChannelFindTask.php" role="php" />
