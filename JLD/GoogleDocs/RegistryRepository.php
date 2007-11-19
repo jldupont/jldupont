@@ -39,6 +39,11 @@ class JLD_GoogleDocs_RegistryRepository extends JLD_RegistryRepository
 	var $gs_service = null;
 	var $gs_client = null;
 	var $gs_spreadsheetService = null;
+	var $list_feed_allrows;
+	/**
+	 * 
+	 */
+	var $data;
 	
 	public function __construct( ) 
 	{
@@ -68,16 +73,76 @@ class JLD_GoogleDocs_RegistryRepository extends JLD_RegistryRepository
 			$this->gs_client = Zend_Gdata_ClientLogin::getHttpClient( $gs_user, $gs_password, $this->service);
 			$this->gs_spreadsheetService = new Zend_Gdata_Spreadsheets($this->gs_client);
 		}
-		// whatever exception we catch, let's try not to be too dramatic...
-		// let the client layer deal with this.
 		catch( Zend_Exception $e )
 		{
-			return false;	
+			throw new JLD_System_Exception(); 
 		}
 		
 		return true;
 	}
+	/**
+	 * Reads in a complete worksheet for the specified document.
+	 */
+	protected function readCompleteWorksheet()
+	{
+		$query = new Zend_Gdata_Spreadsheets_ListQuery();
+		$query->setSpreadsheetKey( $this->gs_document );
+		$query->setWorksheetId( $this->gs_worksheet );
+		try 
+		{
+			// this reads all the rows of the spreadsheet
+			// up until the first empty row.
+			$this->list_feed_allrows = $spreadsheetService->getListFeed( $query );
+		}
+		catch(Zend_Exception $e)
+		{ 
+			throw new JLD_System_Exception(); 
+		}
+		
+		return true;
+	}
+	/**
+	 * Iterates through the list_feed object
+	 * and extracts all [key;value] pairs + type.
+	 */
+	protected function extractVariables()
+	{
+		if (empty( $this->list_feed_allrows ))
+			return false;
+		
+		$this->data = array();
+		
+		try 
+		{
+			// This iterates through all the rows.	
+			foreach( $this->list_feed_allrows->entries as &$entry )
+			{
+				$cellRaw = $entry->getCustom();
 	
+				// the first column should be the 'key'
+				$name0 = strtolower( $cellRaw[0]->getColumnName() );
+				$key = $cellRaw[0]->getText();
+
+				// the second column should be the 'value'
+				$name1 = strtolower( $cellRaw[1]->getColumnName() );
+				$value = $cellRaw[1]->getText();
+				
+				// the third column should be the 'type'
+				$name2 = strtolower( $cellRaw[2]->getColumnName() );
+				$type = $cellRaw[2]->getText();
+				
+				if ( ($name0!=='key') || ($name1!=='value') || ($name2!=='type') )
+					throw new JLD_System_Exception( JLD_GoogleDocs_RegistryRepository_WRONGFORMAT );
+					
+				
+			}
+		} catch( Zend_Exception $e )
+		{
+			throw new JLD_System_Exception( JLD_GoogleDocs_RegistryRepository_ROWDATA );
+		}
+		
+		return true;
+	}
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // INHERITED METHODS
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
