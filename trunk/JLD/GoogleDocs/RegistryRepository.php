@@ -2,6 +2,24 @@
 /**
  * RegistryRepository based on GoogleDocs
  *
+ * Utilisation:
+ * <code>
+ * require 'JLD/GoogleDocs/RegistryRepository.php';
+ *  $r = new JLD_GoogleDocs_RegistryRepository;
+ *  $r->init( array(	'gs_user' 		=> 'user name',
+ *						'gs_password'	=> 'password',
+ *						'gs_document'	=> 'id of spreadsheet document',
+ *						'gs_worksheet'	=> "id of spreadsheet's worksheet",
+ *                    
+ *                 )
+ *  );
+ *
+ *  $value = null;
+ *  $type = null;
+ *  $result = $r->getKey( $key, $value, $type );
+ * 
+ * </code>
+ *
  * @author Jean-Lou Dupont
  * @package GoogleDocs
  * @subpackage RegistryRepository
@@ -40,10 +58,6 @@ class JLD_GoogleDocs_RegistryRepository extends JLD_RegistryRepository
 	var $gs_client = null;
 	var $gs_spreadsheetService = null;
 	var $list_feed_allrows;
-	/**
-	 * 
-	 */
-	var $data;
 	
 	public function __construct( ) 
 	{
@@ -60,7 +74,8 @@ class JLD_GoogleDocs_RegistryRepository extends JLD_RegistryRepository
 			throw new JLD_System_Exception( );
 
 		// let the client deal with any potential error
-		return $this->initGdoc( );
+		$this->initGdoc( );
+		$this->refresh( );
 	}
 	/**
 	 * Init the Gdoc service
@@ -110,7 +125,8 @@ class JLD_GoogleDocs_RegistryRepository extends JLD_RegistryRepository
 		if (empty( $this->list_feed_allrows ))
 			return false;
 		
-		$this->data = array();
+		// clear the array just to start fresh.
+		unset( $this->data );
 		
 		try 
 		{
@@ -134,9 +150,11 @@ class JLD_GoogleDocs_RegistryRepository extends JLD_RegistryRepository
 				if ( ($name0!=='key') || ($name1!=='value') || ($name2!=='type') )
 					throw new JLD_System_Exception( JLD_GoogleDocs_RegistryRepository_WRONGFORMAT );
 					
-				
+				//@todo check key redefinition?
+				$this->data[ $key ] = array( 'v' => $value, 't' => $type );
 			}
-		} catch( Zend_Exception $e )
+		} 
+		catch( Zend_Exception $e )
 		{
 			throw new JLD_System_Exception( JLD_GoogleDocs_RegistryRepository_ROWDATA );
 		}
@@ -148,29 +166,12 @@ class JLD_GoogleDocs_RegistryRepository extends JLD_RegistryRepository
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 	/**
-	 * Gets a value corresponding to a key in the registry.
-	 * @param string $key
-	 * @param object $value reference to a object that will hold the value
-	 * @return bool Returns TRUE/FALSE
-	 */
-	public function getKey( $key, &$value )
-	{
-		
-	}
-	/**
-	 * Gets the integer expiry timeout in seconds associated with a given key.
-	 * @param string $key
-	 * @return integer Expiry timeout value in seconds.
-	 */
-	public function getExpiry( $key )
-	{
-		
-	}
-	/**
 	 * Fetches a fresh & complete copy of the registry.
 	 */
 	public function refresh()
 	{
+		$this->readCompleteWorksheet();
+		$this->extractVariables();
 		
 	}
 

@@ -59,6 +59,13 @@
     <min>1.6.2</min>
    </pearinstaller>
  
+
+	<package>
+		<name>System</name>
+		<channel>jldupont.googlecode.com/svn</channel>
+		<min>1.0.0</min>
+	</package>
+
   </required>
  </dependencies>
 
