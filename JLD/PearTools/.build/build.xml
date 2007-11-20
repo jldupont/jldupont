@@ -147,7 +147,7 @@
 			</fileset>
 		</tar>
 
-		<delete dir="${project.path}/${package.name}-${package.version}" failonerror="true" verbose="true" includeemptydirs="true" />
+		<delete dir="${project.path}/${package.name}-${package.version}" failonerror="true" includeemptydirs="true" />
 
 		<!-- T15 -->
 		<echo>Moving archive to TAGS directory</echo>

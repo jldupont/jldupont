@@ -20,11 +20,11 @@
   <active>yes</active>
  </lead>
 
- <date>2007-11-19</date>
- <time>15:47:16</time>
+ <date>2007-11-20</date>
+ <time>16:24:35</time>
 
  <version>
-  <release>1.0.5</release>
+  <release>1.0.6</release>
   <api>1.0.0</api>
  </version>
  
@@ -113,7 +113,7 @@
 	<release>
 		<license uri="http://www.php.net/license">PHP License</license>
 		<notes>
-			* Fixed another error in the package.xml file...
+		* Fixed bug occuring when multiple packages are in 'packagesinfo.xml' file
 		</notes>
 	</release>
 </changelog>

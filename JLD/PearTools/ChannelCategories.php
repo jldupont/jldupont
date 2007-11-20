@@ -149,40 +149,76 @@ class JLD_PearTools_ChannelCategories extends JLD_PearObject
 		// the file exists... the 'fun' begins...
 		$p = $this->parse( $c );
 		
-		$found_pi = false;
-		// we need to insert a release in the specified package...
-		foreach( $p as $key => &$value )
-		{
-			if ( !isset($key['pi']))
-				continue;
-			if ( !isset( $value['p'] ))
-				continue;
-			if ( !isset( $value['p']['n'] ))
-				continue;
-			$current_name = $value['p']['n'];
-			if ($current_name !== $this->package_name)
-				continue;
-				
-			$found_pi = true;
-			// at this point, we should have found the proper <pi> section
-			// to insert the release information into.
-			if ( !isset( $value['a']['r']))
-				throw new Exception( 'malformed "packagesinfo.xml" file: missing <r> section' );
+		$msg = 'error in "packagesinfo.xml" file: element not found or malformed: ';
 
-			// push the entry at the top...
-			array_unshift( $value['a']['r'], $r );
-			// bail out
-			break;
-		}//end foreach
-		
+		if (!isset( $p['attribs']))
+			throw new Exception( $msg.'missing "attribs" to to "f" tag' );
+
+		if (!isset( $p['pi']))
+			throw new Exception( $msg.'missing "pi" tag' );
+
+		if ( isset( $p['pi']['p'] ))
+		{
+			$found_pi = $this->handlePi( $p['pi'], $this->package_name, $r );
+		}
+		else
+		{		
+			$found_pi = false;
+			// we need to insert a release in the specified package...
+			foreach( $p['pi'] as $key => &$value )
+			{
+				if ( !isset( $value['p'] ))
+					continue;
+				if ( !isset( $value['p']['n'] ))
+					continue;
+				$current_name = $value['p']['n'];
+				if ($current_name !== $this->package_name)
+					continue;
+					
+				$found_pi = true;
+				// at this point, we should have found the proper <pi> section
+				// to insert the release information into.
+				if ( !isset( $value['a']['r']))
+					throw new Exception( 'malformed "packagesinfo.xml" file: missing <r> section' );
+	
+				$value['a']['r']['v'] = $r['v'];
+				$value['a']['r']['s'] = $r['s'];
+				
+				// bail out
+				break;
+			}//end foreach
+		}
+				
 		if (!$found_pi)
 			throw new Exception( 'error in "packagesinfo.xml" file: package instance not found or malformed' );
 			
-		// format the packageinfo file 
+		// format the packageinfo file
 		$x = $this->toXML( 'f', $p );
 		
 		// finally, write the file!
 		return $this->writePackageInfoFile( $this->category_name, &$x );
+	}
+	/**
+	 */
+	protected function handlePi( &$pi, &$target_name, &$r )
+	{
+		if ( !isset( $pi['p'] ))
+			return false;
+		if ( !isset( $pi['p']['n'] ))
+			false;
+		$current_name = $pi['p']['n'];
+		if ($current_name !== $target_name)
+			false;
+			
+		// at this point, we should have found the proper <pi> section
+		// to insert the release information into.
+		if ( !isset( $pi['a']['r']))
+			throw new Exception( 'malformed "packagesinfo.xml" file: missing <r> section' );
+
+		$pi['a']['r']['v'] = $r['v'];
+		$pi['a']['r']['s'] = $r['s'];
+
+		return true;
 	}
 	/**
 	 * Creates a new packageinfo.xml file from scratch.

@@ -7,7 +7,7 @@
 		xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd 
 		http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
 
- <name>Object</name>
+ <name>System</name>
  <channel>jldupont.googlecode.com/svn</channel>
  <summary>Base class for all JLD namespace</summary>
  <description></description>
@@ -41,7 +41,8 @@
 
 	<!-- file list begin {{ -->
 	<!-- baseinstalldir: the target directory on the target machine -->
-   <file baseinstalldir="JLD/Object" name="Object.php" role="php" />
+   <file baseinstalldir="JLD/System" name="Exception.php" role="php" />
+   <file baseinstalldir="JLD/System" name="ExceptionList.php" role="php" />
     <!-- }} -->
 
   </dir>

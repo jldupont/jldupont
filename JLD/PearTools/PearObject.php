@@ -132,21 +132,15 @@ abstract class JLD_PearObject extends JLD_Object
 		if ($level === 0)
 			$r .= '<'.'?xml version="1.0" encoding="UTF-8" ?>'."\n";
 
-		// case where: 
-		// < r> xxx < /r>
-		// < r> xxx < /r>
-		if (is_array( $s ))		
-			if ( is_numeric( key( $s ) ) )
-				return $this->expandList( $top, $s, $level );
-
 		$_attribs = null;
 		if ( is_array( $s ) && (key( $s ) === 'attribs') )
 		{
 			$_attribs = current( $s );
 			array_shift( $s );
 		}
-
-		$r .= $this->openTag( $top, $level, $_attribs );					
+		// are we traversing a array of children?
+		if ( !is_numeric( $top ) )
+			$r .= $this->openTag( $top, $level, $_attribs );					
 
 		if ( is_array( $s ) && (key( $s ) === '_content') )
 			$s = current( $s );
@@ -168,8 +162,9 @@ abstract class JLD_PearObject extends JLD_Object
 			// NEXT		
 			array_shift( $s );					
 		};
-
-		$r .= $this->closeTag( $top, $level, $shortClose );
+		// are we traversing a array of children?
+		if ( !is_numeric( $top ))
+			$r .= $this->closeTag( $top, $level, $shortClose );
 		
 		return $r;
 
