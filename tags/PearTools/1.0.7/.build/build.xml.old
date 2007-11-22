@@ -1,9 +1,11 @@
 <?xml version="1.0" ?>
 
 <!--
-	PHING build file for releasing a 'package' under a PEAR Channel
+	PHING build file
 	Jean-Lou Dupont
 	$Id: build.xml 253 2007-11-15 19:30:42Z JeanLou.Dupont $
+
+	Builds a PEAR package & PHP Docs
 
 	PART I:
 	*(T11) Reads information from PEAR package.xml [name, version, stability, summary, description]
@@ -32,7 +34,7 @@
 	* creates docs
 -->
 
-<project name="PackageRelease" basedir="." default='all'>
+<project name="JLD/Directory" basedir="." default='all'>
 
 	<!--
 		The package is located 1 level 'down' from the build file.
@@ -70,7 +72,7 @@
 	-->
 	<target name='ReadPackageXML' depends='InitChannel'>
 		<!-- T12 -->
-		<!--<property file="./build.properties" />-->
+		<property file="./build.properties" />
 		<taskdef classname='JLD.PearTools.phing.PackageReadTask' name='packageread' />
 		<!-- T11 -->
 		<packageread	propertyPackageFile="${package.file}"
@@ -221,12 +223,12 @@
 	<!-- TODO !!! -->
 	<target name='docs' depends="ReadPackageXML">
 		<phpdoc title="Documentation for package ${package.name}"
-				destdir="../.docs"
+				destdir="./docs"
 				output="HTML:Smarty:PHP">
 			<fileset dir="${project.path}/.">
-				<exclude name="**/build*.*" />
-				<exclude name=".build*/**" />
 				<include name="**/**" />
+				<exclude name="**/build*.*" />
+				<exclude name=".build/**" />
 			</fileset>
 		</phpdoc>
 	</target>
