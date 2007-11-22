@@ -221,12 +221,12 @@
 	<!-- TODO !!! -->
 	<target name='docs' depends="ReadPackageXML">
 		<phpdoc title="Documentation for package ${package.name}"
-				destdir="./docs"
+				destdir="../.docs"
 				output="HTML:Smarty:PHP">
 			<fileset dir="${project.path}/.">
-				<include name="**/**" />
 				<exclude name="**/build*.*" />
-				<exclude name=".build/**" />
+				<exclude name=".build*/**" />
+				<include name="**/**" />
 			</fileset>
 		</phpdoc>
 	</target>
