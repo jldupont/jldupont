@@ -1,8 +1,9 @@
 <?php
 /**
- * @package PearTools
  * @author Jean-Lou Dupont
- * @version $Id$
+ * @package PearTools
+ * @version @@package-version@@
+ * @id $Id$
  */
 //<source lang=php> 
 require_once 'JLD/Object/Object.php';
@@ -138,10 +139,18 @@ abstract class JLD_PearObject extends JLD_Object
 			$_attribs = current( $s );
 			array_shift( $s );
 		}
+		$close = true;
 		// are we traversing a array of children?
-		if ( !is_numeric( $top ) )
-			$r .= $this->openTag( $top, $level, $_attribs );					
-
+		if (is_array( $s ))
+		{
+			if ( ! ( is_numeric( key( $s ) ) && is_string( $top ) ) )
+				$r .= $this->openTag( $top, $level, $_attribs );					
+			else
+				$close = false;
+		}
+		else
+			$r .= $this->openTag( $top, $level, $_attribs );		
+		
 		if ( is_array( $s ) && (key( $s ) === '_content') )
 			$s = current( $s );
 
@@ -157,13 +166,20 @@ abstract class JLD_PearObject extends JLD_Object
 			$t =     key( $s );
 			$c = current( $s );
 
-			$r .= $this->toXML( $t, $c, $level+1 );
+			if (is_numeric( $t ))
+			{
+				$c_top = $top;
+			}
+			else
+				$c_top = $t;
+								
+			$r .= $this->toXML( $c_top, $c, $level+1 );
 			
 			// NEXT		
 			array_shift( $s );					
 		};
 		// are we traversing a array of children?
-		if ( !is_numeric( $top ))
+		if ( $close )
 			$r .= $this->closeTag( $top, $level, $shortClose );
 		
 		return $r;

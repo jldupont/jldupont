@@ -1,8 +1,9 @@
 <?php
 /**
- * @package PearTools
  * @author Jean-Lou Dupont
- * @version $Id$
+ * @package PearTools
+ * @version @@package-version@@
+ * @id $Id$
  */
 //<source lang=php>
 require_once "PEAR/XMLParser.php";

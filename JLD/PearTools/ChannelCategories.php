@@ -1,8 +1,9 @@
 <?php
 /**
- * @package PearTools
  * @author Jean-Lou Dupont
- * @version $Id$
+ * @package PearTools
+ * @version @@package-version@@
+ * @id $Id$
  */
 //<source lang=php>
 
@@ -227,7 +228,6 @@ class JLD_PearTools_ChannelCategories extends JLD_PearObject
 		
 		$new = array(	'attribs' => $p['attribs'], 
 						'pi' => $g_pi );
-		var_dump( $new );
 		
 		// format the packageinfo file
 		$x = $this->toXML( 'f', $new );

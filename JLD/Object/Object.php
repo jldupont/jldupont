@@ -2,7 +2,8 @@
 /**
  * @author Jean-Lou Dupont
  * @package Object
- * @version $Id$
+ * @version @@package-version@@
+ * @id $Id$
  */
 //<source lang=php> 
 
