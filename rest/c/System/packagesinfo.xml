@@ -5,7 +5,7 @@
     xsi:schemaLocation="http://pear.php.net/dtd/rest.categorypackageinfo
     http://pear.php.net/dtd/rest.categorypackageinfo.xsd">
 
-		<pi>
+	<pi>
 		<p>
 			 <n>Object</n>
 			 <c>jldupont.googlecode.com/svn</c>
@@ -16,7 +16,7 @@
 			 <r xlink:href="/rest/r/Object"/>
 		</p>
 		<a>
-					<r>
+		<r>
 			<v>1.0.0</v>
 			<s>stable</s>
 		</r>

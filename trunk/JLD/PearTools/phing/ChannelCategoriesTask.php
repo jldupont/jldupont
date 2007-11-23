@@ -14,7 +14,8 @@
  * @author Jean-Lou Dupont
  * @package PearTools
  * @subpackage phing
- * @version $Id$
+ * @version @@package-version@@
+ * @id $Id$
  */
 //<source lang=php> 
 

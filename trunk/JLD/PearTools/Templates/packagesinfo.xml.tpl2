@@ -9,6 +9,10 @@
 			 <r xlink:href="$base_rest$$base_releases$/$package_name$"/>
 		</p>
 		<a>
+			<!-- 
+				not all releases need to appear here!
+				only the latest one!
+			-->
 			$all_releases$
 		</a>
 	</pi>

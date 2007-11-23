@@ -42,10 +42,10 @@
 	<!-- file list begin {{ -->
 	<!-- baseinstalldir: the target directory on the target machine -->
 	<file baseinstalldir="JLD/System" name="Exception.php" role="php">
-		<tasks:replace from="@@package-version@@" to="version" type="package-info"/>
+		<tasks:replace from="1.0.0" to="version" type="package-info"/>
 	</file>
 	<file baseinstalldir="JLD/System" name="ExceptionList.php" role="php">
-		<tasks:replace from="@@package-version@@" to="version" type="package-info"/>
+		<tasks:replace from="1.0.0" to="version" type="package-info"/>
 	</file>
     <!-- }} -->
 

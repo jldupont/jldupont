@@ -138,6 +138,7 @@ class JLD_PearTools_ChannelCategories extends JLD_PearObject
 		$file = $this->buildFileSystemRestPath( self::$baseCategories ).'/'.$this->category_name.'/packagesinfo.xml';
 		$c = @file_get_contents( $file );
 
+		// CASE 0:
 		// if the file does not exists, then create one
 		// from the template.
 		if (empty( $c ))
@@ -157,12 +158,20 @@ class JLD_PearTools_ChannelCategories extends JLD_PearObject
 		if (!isset( $p['pi']))
 			throw new Exception( $msg.'missing "pi" tag' );
 
+		// assume we have more than 1 PI section
+		// in the current packagesinfo.xml file
+		// until we figure out otherwise.
+		$multiple_pi = true;
+
+		// CASE 1
+		// If the packagesinfo.xml file already exists,
+		// try to find the PI section that corresponds to the
+		// current package.xml. If found, just update the release and quit.
+		// If we can't find it, proceed to CASE 2
 		if ( isset( $p['pi']['p'] ))
 		{
-			$found_pi = $this->handlePi( $p['pi'], $this->package_name, $r );
-		}
-		else
-		{		
+			$multiple_pi = false;
+			
 			$found_pi = false;
 			// we need to insert a release in the specified package...
 			foreach( $p['pi'] as $key => &$value )
@@ -187,13 +196,41 @@ class JLD_PearTools_ChannelCategories extends JLD_PearObject
 				// bail out
 				break;
 			}//end foreach
-		}
+			if ($found_pi)
+			{
+				// format the packageinfo file
+				$x = $this->toXML( 'f', $p );
 				
-		if (!$found_pi)
-			throw new Exception( 'error in "packagesinfo.xml" file: package instance not found or malformed' );
-			
+				// finally, write the file!
+				return $this->writePackageInfoFile( $this->category_name, &$x );
+			}
+		}
+
+		// CASE 2 (last chance!)
+		// The packagesinfo.xml file exists BUT the target PI
+		// section doesn't. Get the existing PI sections from the
+		// file and ADD a new one corresponding to the required PI.
+		$rs = $this->createReleaseSection( );
+		$this->__set( 'all_releases', $rs );
+				
+		// we just have one release to take care.
+		$npi_text = $this->createPackageInstance();
+		$npi = $this->parse( $npi_text );
+		
+		// did we have more than 1 PI section to start with?
+		if ($multiple_pi)
+			$g_pi = $p['pi'];
+		else
+			$g_pi = array( 0 => $p['pi'] );
+
+		array_unshift( $g_pi, $npi );		
+		
+		$new = array(	'attribs' => $p['attribs'], 
+						'pi' => $g_pi );
+		var_dump( $new );
+		
 		// format the packageinfo file
-		$x = $this->toXML( 'f', $p );
+		$x = $this->toXML( 'f', $new );
 		
 		// finally, write the file!
 		return $this->writePackageInfoFile( $this->category_name, &$x );
@@ -205,10 +242,10 @@ class JLD_PearTools_ChannelCategories extends JLD_PearObject
 		if ( !isset( $pi['p'] ))
 			return false;
 		if ( !isset( $pi['p']['n'] ))
-			false;
+			return false;
 		$current_name = $pi['p']['n'];
 		if ($current_name !== $target_name)
-			false;
+			return false;
 			
 		// at this point, we should have found the proper <pi> section
 		// to insert the release information into.
