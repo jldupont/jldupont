@@ -37,40 +37,4 @@
 				</r>
 			</a>
 		</pi>
-		<pi>
-			<p>
-				<n>Object</n>
-				<c>jldupont.googlecode.com/svn</c>
-				<ca xlink:href="/rest/c/System">System</ca>
-				<l>$license$</l>
-				<s>$summary$</s>
-				<d>$description$</d>
-				<r xlink:href="/rest/r/Object">
-				</r>
-			</p>
-			<a>
-				<r>
-					<v>1.0.1</v>
-					<s>stable</s>
-				</r>
-			</a>
-		</pi>
-		<pi>
-			<p>
-				<n>System</n>
-				<c>jldupont.googlecode.com/svn</c>
-				<ca xlink:href="/rest/c/System">System</ca>
-				<l>$license$</l>
-				<s>$summary$</s>
-				<d>$description$</d>
-				<r xlink:href="/rest/r/System">
-				</r>
-			</p>
-			<a>
-				<r>
-					<v>1.0.0</v>
-					<s>stable</s>
-				</r>
-			</a>
-		</pi>
 </f>
