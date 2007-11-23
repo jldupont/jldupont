@@ -14,6 +14,24 @@
 			</p>
 			<a>
 				<r>
+					<v>1.0.10</v>
+					<s>stable</s>
+				</r>
+			</a>
+		</pi>
+		<pi>
+			<p>
+				<n>PearTools</n>
+				<c>jldupont.googlecode.com/svn</c>
+				<ca xlink:href="/rest/c/Pear">Pear</ca>
+				<l>$license$</l>
+				<s>$summary$</s>
+				<d>$description$</d>
+				<r xlink:href="/rest/r/PearTools">
+				</r>
+			</p>
+			<a>
+				<r>
 					<v>1.0.9</v>
 					<s>stable</s>
 				</r>
