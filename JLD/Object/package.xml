@@ -19,11 +19,11 @@
   <active>yes</active>
  </lead>
 
- <date>2007-11-22</date>
- <time>01:47:28</time>
+ <date>2007-11-23</date>
+ <time>21:20:39</time>
 
  <version>
-  <release>1.0.0</release>
+  <release>1.0.1</release>
   <api>1.0.0</api>
  </version>
  
@@ -81,7 +81,7 @@
 	<release>
 		<license uri="http://www.php.net/license">PHP License</license>
 		<notes>
-			* Initial release
+			* Adjusted source files to new format
 		</notes>
 	</release>
 </changelog>
