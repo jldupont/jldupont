@@ -1,25 +1,25 @@
 <?php
 /**
- * @author Jean-Lou Dupont
- * @package PearTools 
- * @subpackage phing
- * @version $Id$
- *
  * PHING task which determines the package's release status.
  *
- 	<taskdef classname='JLD.PearTools.phing.ReleaseExistsTask' name='release_exists' />
-	<release_exists	
-				channelroot="${channel.root}" 
-				channelname="${channel.name}" 
-				channeluri="${channel.uri}" 
-				channelrest="${channel.rest}" 
-				channeltags="${channel.tags}" 
-				
-				packagename="${package.name}" 
-				packageversion="${package.version}" 
-				packagestability="${package.stability}" 
-				packagereleasestatus="package.releasestatus" />
-				
+ * 	<taskdef classname='JLD.PearTools.phing.ReleaseExistsTask' name='release_exists' />
+ *	<release_exists	
+ *				channelroot="${channel.root}" 
+ *				channelname="${channel.name}" 
+ *				channeluri="${channel.uri}" 
+ *				channelrest="${channel.rest}" 
+ *				channeltags="${channel.tags}" 
+ *				
+ *				packagename="${package.name}" 
+ *				packageversion="${package.version}" 
+ *				packagestability="${package.stability}" 
+ *				packagereleasestatus="package.releasestatus" /> 
+ * 
+ * @author Jean-Lou Dupont
+ * @package PearTools
+ * @subpackage phing
+ * @version @@package-version@@
+ * @id $Id$
  */
 //<source lang=php> 
 

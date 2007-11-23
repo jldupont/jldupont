@@ -137,6 +137,11 @@
 				<exclude name="package.xml" />
 				<exclude name="${project.path}/${package.name}-${package.version}/**" />
 			</fileset>
+			<filterchain>
+				<replacetokens begintoken="@@" endtoken="@@">
+				  <token key="package-version" value="${package.version}"/>
+				</replacetokens>
+			</filterchain>
 		</copy>
 		<tar destfile="${project.path}/${package.name}-${package.version}.tgz" compression='gzip'>
 			<fileset dir='${project.path}/.'>
@@ -151,8 +156,8 @@
 		<echo>Moving archive to TAGS directory</echo>
 		<move	file="${project.path}/${package.name}-${package.version}.tgz" 
 				todir="${channel.root}/${channel.tags}/${package.name}" 
-				overwrite="true"
-		/>
+				overwrite="true">
+		</move>
 		<!-- T16 -->
 		<echo>Copying release files to TAGS directory</echo>
 		<copy	todir="${channel.root}/${channel.tags}/${package.name}/${package.version}" 
@@ -160,6 +165,11 @@
 			<fileset dir="${project.path}/.">
 				<include name="**/**" />
 			</fileset>
+			<filterchain>
+				<replacetokens begintoken="@@" endtoken="@@">
+				  <token key="package-version" value="${package.version}"/>
+				</replacetokens>
+			</filterchain>
 		</copy>
 		<!-- T21 -->
 		<echo>Creating the package's category directory in the /c REST structure</echo>
@@ -231,7 +241,7 @@
 		</phpdoc>
 	</target>
 
-	<target name='all' depends='DoPackage, docs'>
+	<target name='all' depends='DoPackage'>
 		<echo>Building all</echo>
 	</target>
 

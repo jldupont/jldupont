@@ -6,7 +6,7 @@
  * @author Jean-Lou Dupont
  * @package JLD
  * @subpackage System
- * @version $Id$
+ * @version @@package-version@@
  */
 //<source lang=php>
 

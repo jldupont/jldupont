@@ -156,7 +156,7 @@ abstract class JLD_PearObject extends JLD_Object
 		{
 			$t =     key( $s );
 			$c = current( $s );
-		
+
 			$r .= $this->toXML( $t, $c, $level+1 );
 			
 			// NEXT		

@@ -1,13 +1,14 @@
 <?php
 /**
- * @author Jean-Lou Dupont
- * @package PearTools 
- * @subpackage phing
- * @version $Id$
- *
  * PHING task which reads in the current channel's parameters and makes
  *  those available in the current PHING project.
  *  Other tasks will use this object to manage the REST interface.
+ *
+ * @author Jean-Lou Dupont
+ * @package PearTools
+ * @subpackage phing
+ * @version @@package-version@@
+ * @id $Id$
  */
 //<source lang=php> 
 

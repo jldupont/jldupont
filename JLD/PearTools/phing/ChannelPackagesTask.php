@@ -1,21 +1,21 @@
 <?php
 /**
- * @author Jean-Lou Dupont
- * @package PearTools 
- * @subpackage phing
- * @version $Id$
- *
  * PHING task which helps add/update the /p PEAR REST structure.
  *
-	<echo>Adding package's directory and info.xml file in REST packages</echo>
-	<taskdef classname='JLD.PearTools.phing.ChannelPackagesTask' name='packages' />
-	<packages	channelroot="${channel.root}" 
-				channelname="${channel.name}" 
-				channeluri="${channel.uri}" 
-				channelrest="${channel.rest}" 
-				channeltags="${channel.tags}"
-				catname="${package.category}" 
-				packagename="${package.name}" />
+ *	<echo>Adding package's directory and info.xml file in REST packages</echo>
+ *	<taskdef classname='JLD.PearTools.phing.ChannelPackagesTask' name='packages' />
+ *	<packages	channelroot="${channel.root}" 
+ *				channelname="${channel.name}" 
+ *				channeluri="${channel.uri}" 
+ *				channelrest="${channel.rest}" 
+ *				channeltags="${channel.tags}"
+ *				catname="${package.category}" 
+ *				packagename="${package.name}" />
+ * @author Jean-Lou Dupont
+ * @package PearTools
+ * @subpackage phing
+ * @version @@package-version@@
+ * @id $Id$
  */
 //<source lang=php> 
 

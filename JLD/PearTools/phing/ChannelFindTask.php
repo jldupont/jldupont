@@ -9,6 +9,11 @@
  * This is accomplishes by 'moving up' the directory hierarchy
  * until the 'channel.xml' file is found or not.
  *
+ * @author Jean-Lou Dupont
+ * @package PearTools
+ * @subpackage phing
+ * @version @@package-version@@
+ * @id $Id$
  */
 //<source lang=php> 
 

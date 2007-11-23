@@ -1,23 +1,23 @@
 <?php
 /**
- * @author Jean-Lou Dupont
- * @package PearTools 
- * @subpackage phing
- * @version $Id$
- *
  * PHING task which helps manage the /r PEAR REST structure.
  *
- 	<taskdef classname='JLD.PearTools.phing.ChannelReleasesTask' name='releases' />
-	<releases	channelroot="${channel.root}" 
-				channelname="${channel.name}" 
-				channeluri="${channel.uri}" 
-				channelrest="${channel.rest}" 
-				channeltags="${channel.tags}" 
-				packagename="${package.name}" 
-				packageversion="${package.version}" 
-				packagestability="${package.stability}" 
-				packagedependencies="${package.dependencies}" 
-	/>
+ * 	<taskdef classname='JLD.PearTools.phing.ChannelReleasesTask' name='releases' />
+ *	<releases	channelroot="${channel.root}" 
+ *				channelname="${channel.name}" 
+ *				channeluri="${channel.uri}" 
+ *				channelrest="${channel.rest}" 
+ *				channeltags="${channel.tags}" 
+ *				packagename="${package.name}" 
+ *				packageversion="${package.version}" 
+ *				packagestability="${package.stability}" 
+ *				packagedependencies="${package.dependencies}" 
+ *	/>
+ * @author Jean-Lou Dupont
+ * @package PearTools
+ * @subpackage phing
+ * @version @@package-version@@
+ * @id $Id$
  */
 //<source lang=php> 
 
