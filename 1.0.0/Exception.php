@@ -5,7 +5,7 @@
  * @author Jean-Lou Dupont
  * @package JLD
  * @subpackage System
- * @version @@package-version@@
+ * @version 1.0.0
  */
 //<source lang=php>
 require 'JLD/System/ExceptionList.php';
