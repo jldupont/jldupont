@@ -60,7 +60,6 @@ class JLD_Directory
 		
 		foreach( $files as $index => &$file )
 		{
-			var_dump( $file );
 			$info = @filetype( $dir.'/'.$file );
 
 			// filter all entries beginning with a '.'
