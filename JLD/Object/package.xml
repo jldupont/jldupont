@@ -10,7 +10,7 @@
  <name>Object</name>
  <channel>jldupont.googlecode.com/svn</channel>
  <summary>Base class for all JLD namespace</summary>
- <description></description>
+ <description>Base class for all JLD namespace</description>
 
  <lead>
   <name>Jean-Lou Dupont</name>
@@ -20,10 +20,10 @@
  </lead>
 
  <date>2007-11-23</date>
- <time>21:20:39</time>
+ <time>21:36:36</time>
 
  <version>
-  <release>1.0.1</release>
+  <release>1.0.2</release>
   <api>1.0.0</api>
  </version>
  
@@ -63,7 +63,7 @@
 	<package>
 		<name>System</name>
 		<channel>jldupont.googlecode.com/svn</channel>
-		<min>1.0.0</min>
+		<min>1.0.1</min>
 	</package>
 
   </required>
@@ -81,7 +81,7 @@
 	<release>
 		<license uri="http://www.php.net/license">PHP License</license>
 		<notes>
-			* Adjusted source files to new format
+			* Corrected package.xml file
 		</notes>
 	</release>
 </changelog>

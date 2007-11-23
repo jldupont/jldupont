@@ -21,10 +21,10 @@
  </lead>
 
  <date>2007-11-23</date>
- <time>21:23:06</time>
+ <time>21:38:47</time>
 
  <version>
-  <release>1.0.9</release>
+  <release>1.0.10</release>
   <api>1.0.0</api>
  </version>
  
@@ -101,7 +101,7 @@
 	<package>
 		<name>Object</name>
 		<channel>jldupont.googlecode.com/svn</channel>
-		<min>1.0.1</min>
+		<min>1.0.2</min>
 	</package>
 
   </required>
@@ -119,7 +119,7 @@
 	<release>
 		<license uri="http://www.php.net/license">PHP License</license>
 		<notes>
-		* Corrected missing dependency 'Object' package
+		* Updated dependencies
 		</notes>
 	</release>
 </changelog>
