@@ -159,52 +159,52 @@ class JLD_PearTools_ChannelCategories extends JLD_PearObject
 		if (!isset( $p['pi']))
 			throw new Exception( $msg.'missing "pi" tag' );
 
-		// assume we have more than 1 PI section
-		// in the current packagesinfo.xml file
-		// until we figure out otherwise.
-		$multiple_pi = true;
-
 		// CASE 1
 		// If the packagesinfo.xml file already exists,
 		// try to find the PI section that corresponds to the
 		// current package.xml. If found, just update the release and quit.
 		// If we can't find it, proceed to CASE 2
-		if ( isset( $p['pi']['p'] ))
+
+		// figure out if we have more than 1 PI section
+		$multiple_pi = !isset( $p['pi']['p'] );
+
+		// normalize the problem
+		$pi_list = ( $multiple_pi ) ? $pi['pi']: array( $p['pi'] );
+
+		$found_pi = false;
+		// we need to insert a release in the specified package...
+		foreach( $pi_list as $index => &$value )
 		{
-			$multiple_pi = false;
+			if ( !isset( $value['p'] ))
+				continue;
+			if ( !isset( $value['p']['n'] ))
+				continue;
+			$current_name = $value['p']['n'];
+			if ($current_name !== $this->package_name)
+				continue;
+				
+			$found_pi = true;
+			// at this point, we should have found the proper <pi> section
+			// to update the release information into.
+			if ( !isset( $value['a']['r']))
+				throw new Exception( 'malformed "packagesinfo.xml" file: missing <r> section' );
+
+			$value['a']['r']['v'] = $r['v'];
+			$value['a']['r']['s'] = $r['s'];
 			
-			$found_pi = false;
-			// we need to insert a release in the specified package...
-			foreach( $p['pi'] as $key => &$value )
-			{
-				if ( !isset( $value['p'] ))
-					continue;
-				if ( !isset( $value['p']['n'] ))
-					continue;
-				$current_name = $value['p']['n'];
-				if ($current_name !== $this->package_name)
-					continue;
-					
-				$found_pi = true;
-				// at this point, we should have found the proper <pi> section
-				// to insert the release information into.
-				if ( !isset( $value['a']['r']))
-					throw new Exception( 'malformed "packagesinfo.xml" file: missing <r> section' );
-	
-				$value['a']['r']['v'] = $r['v'];
-				$value['a']['r']['s'] = $r['s'];
-				
-				// bail out
-				break;
-			}//end foreach
-			if ($found_pi)
-			{
-				// format the packageinfo file
-				$x = $this->toXML( 'f', $p );
-				
-				// finally, write the file!
-				return $this->writePackageInfoFile( $this->category_name, &$x );
-			}
+			// bail out
+			break;
+		}//end foreach
+		if ($found_pi)
+		{
+			$new = array(	'attribs' => $p['attribs'], 
+							'pi' => $pi_list );
+			
+			// format the packageinfo file
+			$x = $this->toXML( 'f', $new );
+			
+			// finally, write the file!
+			return $this->writePackageInfoFile( $this->category_name, &$x );
 		}
 
 		// CASE 2 (last chance!)
@@ -234,28 +234,6 @@ class JLD_PearTools_ChannelCategories extends JLD_PearObject
 		
 		// finally, write the file!
 		return $this->writePackageInfoFile( $this->category_name, &$x );
-	}
-	/**
-	 */
-	protected function handlePi( &$pi, &$target_name, &$r )
-	{
-		if ( !isset( $pi['p'] ))
-			return false;
-		if ( !isset( $pi['p']['n'] ))
-			return false;
-		$current_name = $pi['p']['n'];
-		if ($current_name !== $target_name)
-			return false;
-			
-		// at this point, we should have found the proper <pi> section
-		// to insert the release information into.
-		if ( !isset( $pi['a']['r']))
-			throw new Exception( 'malformed "packagesinfo.xml" file: missing <r> section' );
-
-		$pi['a']['r']['v'] = $r['v'];
-		$pi['a']['r']['s'] = $r['s'];
-
-		return true;
 	}
 	/**
 	 * Creates a new packageinfo.xml file from scratch.

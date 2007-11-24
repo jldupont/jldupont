@@ -180,10 +180,16 @@ class JLD_PearTools_ChannelReleases extends JLD_PearObject
 		foreach	( $all as &$e )
 			$sorted[ $e['v'] ] = $e;
 			
-		krsort( $sorted );
+		uksort( $sorted, array( __CLASS__, 'c_krsort' ));
 		
 		return $sorted;
 	}
-	
+	/**
+	 * Custom sorting function
+	 */
+	 protected static function c_krsort( $a, $b )
+	 {
+	 	return -version_compare( $a, $b );
+	 }
 }//end class
 //</source>
