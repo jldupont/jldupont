@@ -8,6 +8,8 @@
  *			<categories	channelroot="${channel.root}" 
  *						catname="${package.category}" 
  *						packagename="${package.name}"
+  *						packagesummary="${package.summary}"
+ *						packagedescription="${package.description}"  
  *						packagereleaseversion="${package.version}" 
  *						packagereleasestability="${package.stability}" />
  * 
@@ -35,8 +37,12 @@ class ChannelCategoriesTask extends JLD_PhingTools_Task
 	
 	public function setCategoryName( $val ) { $this->__set('category_name', $val ); }	
 	public function setPackageName( $val ) { $this->__set('package_name', $val ); }		
+	public function setPackageSummary( $val ) { $this->__set('package_summary', $val ); }	
+	public function setPackageDescription( $val ) { $this->__set('package_description', $val ); }		
 	public function setPackageReleaseVersion( $val ) { $this->__set('package_version', $val ); }			
-	public function setPackageReleaseStability( $val ) { $this->__set('package_stability', $val ); }				
+	public function setPackageReleaseStability( $val ) { $this->__set('package_stability', $val ); }
+
+					
 		
     /**
      * The init method: Do init steps.

@@ -13,6 +13,7 @@
 	*(T15) Copies archive in /tags/$package
 	*(T16) Copies package files in /tags/$package-$version
 	*(T17) Add TAGS directory to SVN
+	*(T18) Add archive file to SVN
 	PART II: (/c)
 	*(T21) Add category directory to /c
 	*(T22) Add category to categories.xml file in /c
@@ -32,7 +33,6 @@
 	PART V:
 	* creates docs
 -->
-
 <project name="PackageRelease" basedir="." default='all'>
 
 	<!--
@@ -177,8 +177,11 @@
 		<!-- T17 -->
 		<echo>Adding tagged package ${package.name}/${package.version} to SVN</echo>
 		<taskdef classname='JLD.PhingTools.SvnAddTask' name='svn_add' />
-		<svn_add path="${channel.root}/${channel.tags}/${package.name}/${package.version}" />
-		
+		<svn_add path='"${channel.root}/${channel.tags}/${package.name}/${package.version}"' />
+		<!-- T18 -->
+		<echo>Adding archive file to SVN</echo>		
+		<svn_add path='"${channel.root}/${channel.tags}/${package.name}/${package.name}-${package.version}.tgz"' />
+
 		<!-- T21 -->
 		<echo>Creating the package's category directory in the /c REST structure</echo>
 		<mkdir dir="${channel.root}/${channel.rest}/c/${package.category}"/>
