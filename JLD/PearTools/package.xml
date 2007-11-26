@@ -21,10 +21,10 @@
  </lead>
 
  <date>2007-11-26</date>
- <time>02:42:28</time>
+ <time>02:58:57</time>
 
  <version>
-  <release>1.1.0</release>
+  <release>1.1.1</release>
   <api>1.0.0</api>
  </version>
  
@@ -119,7 +119,7 @@
 	<release>
 		<license uri="http://www.php.net/license">PHP License</license>
 		<notes>
-		* Added 'getChangelog' method to 'package.php' and 'PackageReadTask.php'
+		* Corrected 'getChangelog' bug
 		</notes>
 	</release>
 </changelog>
