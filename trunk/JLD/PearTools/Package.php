@@ -94,6 +94,12 @@ class JLD_PearTools_Package extends JLD_Object
 	}
 	/**
 	 */
+	public function getChangelog()
+	{
+		return @$this->data['changelog']['notes'];	
+	}	 	
+	/**
+	 */
 	public function getRaw()	{ return $this->raw; }
 	/**	
 	 */

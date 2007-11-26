@@ -11,6 +11,7 @@
  *						propertyPackageSummary='package.summary' 
  *						propertyPackageDescription='package.description'
  *						propertyPackageDeps='package.dependencies'
+ *						propertyPackageChangelog='package.changelog'
  *		/>
  * @author Jean-Lou Dupont
  * @package PearTools
@@ -35,6 +36,7 @@ class PackageReadTask extends JLD_PhingTools_Task
 	public function setPropertyPackageDescription( $val ) { $this->__set('propertyPackageDescription', $val ); }			
 	public function setPropertyPackageFile( $val ) { $this->__set('propertyPackageFile', $val ); }	
 	public function setPropertyPackageDeps( $val ) { $this->__set('propertyPackageDeps', $val ); }	
+	public function setPropertyPackageChangelog( $val ) { $this->__set('propertyPackageChangelog', $val ); }	
 		
     /**
      * The init method: Do init steps.
@@ -60,5 +62,6 @@ class PackageReadTask extends JLD_PhingTools_Task
 		$this->project->setProperty($this->propertyPackageSummary, $p->getSummary() );						
 		$this->project->setProperty($this->propertyPackageDescription, $p->getDescription() );
 		$this->project->setProperty($this->propertyPackageDeps, $p->getSerializedDependencies() );		
+		$this->project->setProperty($this->propertyPackageChangelog, $p->getChangelog() );				
     }
 }
