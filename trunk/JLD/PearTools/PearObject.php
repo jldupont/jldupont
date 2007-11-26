@@ -25,9 +25,11 @@ abstract class JLD_PearObject extends JLD_Object
 		'$package_name$'	=> 'package_name',	 // for packagesinfo.xml
 		'$package_name_L$'	=> 'package_name',	 // for info.xml		
 		'$all_releases$'	=> 'all_releases',	 // for packagesinfo.xml	
+		'$summary$'			=> 'package_summary',// for packagesinfo.xml	
+		'$description$'		=> 'package_description',// for packagesinfo.xml					
 		
 		'$package_version$'   => 'package_version',// for $version.xml
-		'$package_stability$' => 'package_stability',// for $version.xml			
+		'$package_stability$' => 'package_stability',// for $version.xml		
 		'$channel_uri$'		=> 'channel_uri',	// for $version.xml
 		'$base_tags$'		=> 'base_tags',		// for $version.xml
 		
