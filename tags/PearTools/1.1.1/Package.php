@@ -2,7 +2,7 @@
 /**
  * @author Jean-Lou Dupont
  * @package PearTools
- * @version @@package-version@@
+ * @version 1.1.1
  * @id $Id$
  */
 //<source lang=php>
