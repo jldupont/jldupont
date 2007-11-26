@@ -20,11 +20,11 @@
   <active>yes</active>
  </lead>
 
- <date>2007-11-24</date>
- <time>00:44:43</time>
+ <date>2007-11-26</date>
+ <time>02:42:28</time>
 
  <version>
-  <release>1.0.11</release>
+  <release>1.1.0</release>
   <api>1.0.0</api>
  </version>
  
@@ -119,9 +119,7 @@
 	<release>
 		<license uri="http://www.php.net/license">PHP License</license>
 		<notes>
-		* Fixed release ordering for 'allreleases.xml' file
-		* Updated dependency for Directory package
-		* Fixed 'packagesinfo.xml' bug causing to replication of a PI section
+		* Added 'getChangelog' method to 'package.php' and 'PackageReadTask.php'
 		</notes>
 	</release>
 </changelog>

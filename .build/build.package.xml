@@ -81,6 +81,7 @@
 						propertyPackageSummary='package.summary' 
 						propertyPackageDescription='package.description'
 						propertyPackageDeps='package.dependencies'
+						propertyPackageChangelog='package.changelog'
 		/>
 		<echo>Package name:        ${package.name}</echo>
 		<echo>Package category:    ${package.category}</echo>
@@ -88,6 +89,7 @@
 		<echo>Package stability:   ${package.stability}</echo>
 		<echo>Package summary:     ${package.summary}</echo>
 		<echo>Package description: ${package.description}</echo>
+		<echo>Package changelog:   ${package.changelog}</echo>
 
 		<!-- verifies the existence of the requested package version in the REST structure -->
 	 	<taskdef classname='JLD.PearTools.phing.ReleaseExistsTask' name='release_exists' />
