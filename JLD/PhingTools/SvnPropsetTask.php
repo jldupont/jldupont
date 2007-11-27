@@ -40,7 +40,7 @@ class SvnPropsetTask extends JLD_PhingTools_Task
 		$propname = $this->propname;
 		$propval = $this->propval;
 		
-		echo exec("svn propset $propname $propval $path");
+		echo exec("svn propset $propname $propval $path")."\n";
     }
 }
 //</source>
