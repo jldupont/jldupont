@@ -94,6 +94,7 @@
 ${package.changelog}
 			</description>
 			<pubDate>${rss.date}</pubDate>
+			<guid>${package.name}-${package.version}</guid>
 		</item>
 	</channel>
 </rss>]]></echo>
