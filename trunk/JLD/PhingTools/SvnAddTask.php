@@ -33,7 +33,7 @@ class SvnAddTask extends JLD_PhingTools_Task
     public function main() 
 	{
 		$path = $this->path; // shortcut
-		echo exec("svn add $path");
+		echo exec("svn add $path")."\n";
     }
 }
 //</source>
