@@ -3,7 +3,8 @@
  * @author Jean-Lou Dupont
  * @package JLD
  * @sub-package PhingTools
- * @version $Id$
+ * @version @@package-version@@
+ * @Id $Id$
  */
 //<source lang=php> 
 require_once "phing/Task.php";

@@ -10,7 +10,7 @@
  * @author Jean-Lou Dupont
  * @package PhingTools
  * @version @@package-version@@
- * @id $Id$
+ * @Id $Id$
  */
 //<source lang=php> 
 
@@ -33,7 +33,7 @@ class TrimTask extends JLD_PhingTools_Task
      */
     public function main() 
 	{
-		$this->project->setProperty($this->$trim_output, trim( $this->trim_input ) );
+		$this->project->setProperty($this->trim_output, trim( $this->trim_input ) );
     }
 
 }
