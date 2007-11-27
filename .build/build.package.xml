@@ -222,6 +222,10 @@
 			<then>
 				<echo>Adding archive file to SVN</echo>		
 				<svn_add path='"${channel.root}/${channel.tags}/${package.name}/${package.name}-${package.version}.tgz"' />
+				<svn_propset path='"${channel.root}/${channel.tags}/${package.name}/${package.name}-${package.version}.tgz"' 
+				           	propname="svn:mime-type" 
+				           	propval="application/gzip" />
+
 			</then>
 			<else>
 				<echo>Archive already in SVN</echo>
@@ -270,6 +274,9 @@
 			<then>
 				<echo>Adding "/c/categories.xml" to SVN</echo>
 				<svn_add path='"${channel.root}/${channel.rest}/c/categories.xml"' />
+				<svn_propset path='"${channel.root}/${channel.rest}/c/categories.xml"' 
+				           	propname="svn:mime-type" 
+				           	propval="application/xml" />
 			</then>
 			<else>
 				<echo>'categories.xml' already in SVN</echo>
@@ -283,6 +290,9 @@
 			<then>
 				<echo>Adding "/c/${package.category}/info.xml" to SVN</echo>
 				<svn_add path='"${channel.root}/${channel.rest}/c/${package.category}/info.xml"' />
+				<svn_propset path='"${channel.root}/${channel.rest}/c/${package.category}/info.xml"' 
+				           	propname="svn:mime-type" 
+				           	propval="application/xml" />
 			</then>
 			<else>
 				<echo>'info.xml' already in SVN</echo>
@@ -296,6 +306,9 @@
 			<then>
 				<echo>Adding "/c/${package.category}/packagesinfo.xml" to SVN</echo>
 				<svn_add path='"${channel.root}/${channel.rest}/c/${package.category}/packagesinfo.xml"' />
+				<svn_propset path='"${channel.root}/${channel.rest}/c/${package.category}/packagesinfo.xml"' 
+				           	propname="svn:mime-type" 
+				           	propval="application/xml" />
 			</then>
 			<else>
 				<echo>'packagesinfo.xml' already in SVN</echo>
@@ -340,6 +353,9 @@
 			<then>
 				<echo>Adding "/p/packages.xml" to SVN</echo>
 				<svn_add path='"${channel.root}/${channel.rest}/p/packages.xml"' />
+				<svn_propset path='"${channel.root}/${channel.rest}/p/packages.xml"' 
+				           	propname="svn:mime-type" 
+				           	propval="application/xml" />
 			</then>
 			<else>
 				<echo>'packages.xml' already in SVN</echo>
@@ -353,6 +369,9 @@
 			<then>
 				<echo>Adding "/p/${package.name}/info.xml" to SVN</echo>
 				<svn_add path='"${channel.root}/${channel.rest}/p/${package.name}/info.xml"' />
+				<svn_propset path='"${channel.root}/${channel.rest}/p/${package.name}/info.xml"' 
+				           	propname="svn:mime-type" 
+				           	propval="application/xml" />
 			</then>
 			<else>
 				<echo>'info.xml' already in SVN</echo>
@@ -403,6 +422,9 @@
 			<then>
 				<echo>Adding "/r/${package.namel}/allreleases.xml" to SVN</echo>
 				<svn_add path='"${channel.root}/${channel.rest}/r/${package.namel}/allreleases.xml"' />
+				<svn_propset path='"${channel.root}/${channel.rest}/r/${package.namel}/allreleases.xml"' 
+				           	propname="svn:mime-type" 
+				           	propval="application/xml" />
 			</then>
 			<else>
 				<echo>'allreleases.xml' already in SVN</echo>
@@ -416,6 +438,9 @@
 			<then>
 				<echo>Adding "/r/${package.namel}/${package.version}.xml" to SVN</echo>
 				<svn_add path='"${channel.root}/${channel.rest}/r/${package.namel}/${package.version}.xml"' />
+				<svn_propset path='"${channel.root}/${channel.rest}/r/${package.namel}/${package.version}.xml"' 
+				           	propname="svn:mime-type" 
+				           	propval="application/xml" />
 			</then>
 			<else>
 				<echo>"${package.version}.xml" already in SVN</echo>
@@ -429,6 +454,9 @@
 			<then>
 				<echo>Adding "/r/${package.namel}/${package.namel}/package.${package.version}.xml" to SVN</echo>
 				<svn_add path='"${channel.root}/${channel.rest}/r/${package.namel}/package.${package.version}.xml"' />
+				<svn_propset path='"${channel.root}/${channel.rest}/r/${package.namel}/package.${package.version}.xml"' 
+				           	propname="svn:mime-type" 
+				           	propval="application/xml" />
 			</then>
 			<else>
 				<echo>"package.${package.version}.xml" already in SVN</echo>

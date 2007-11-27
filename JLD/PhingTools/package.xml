@@ -11,7 +11,7 @@
  <name>PhingTools</name>
  <channel>jldupont.googlecode.com/svn</channel>
  <summary>PHING tools</summary>
- <description>Description...</description>
+ <description>SvnAddTask, SvnPropsetTask, DateTask, TrimTask etc.</description>
 
  <lead>
   <name>Jean-Lou Dupont</name>
