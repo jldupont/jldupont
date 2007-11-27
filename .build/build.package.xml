@@ -198,6 +198,7 @@
 
 		<taskdef classname='JLD.PhingTools.SvnStatusTask' name='svn_status' />
 		<taskdef classname='JLD.PhingTools.SvnAddTask' name='svn_add' />
+		<taskdef classname='JLD.PhingTools.SvnPropsetTask' name='svn_propset' />
 
 		<!-- T17 -->
 		<svn_status path='"${channel.root}/${channel.tags}/${package.name}/${package.version}"' 
@@ -471,7 +472,6 @@
 				<echo>Adding "/r/${package.namel}/${package.namel}/deps.${package.version}.txt" to SVN</echo>
 				<svn_add path='"${channel.root}/${channel.rest}/r/${package.namel}/deps.${package.version}.txt"' />
 				<echo>Setting 'application/gzip' MIME-type to dependencies file</echo>
-				<taskdef classname='JLD.PhingTools.SvnPropsetTask' name='svn_propset' />
 				<svn_propset path='"${channel.root}/${channel.rest}/r/${package.namel}/deps.${package.version}.txt"' 
 				           	propname="svn:mime-type" 
 				           	propval="application/gzip" />

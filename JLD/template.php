@@ -1,8 +1,9 @@
 <?php
 /**
  * @author Jean-Lou Dupont
- * @package JLD
- * @version $Id$
+ * @package XYZ
+ * @version @@package-version@@
+ * @Id $Id$
  */
 //<source lang=php> 
 
