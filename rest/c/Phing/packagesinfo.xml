@@ -7,8 +7,8 @@
 				<c>jldupont.googlecode.com/svn</c>
 				<ca xlink:href="/rest/c/Phing">Phing</ca>
 				<l>$license$</l>
-				<s>$summary$</s>
-				<d>$description$</d>
+				<s>PHING tools</s>
+				<d>SvnAddTask, SvnPropsetTask, DateTask, TrimTask etc.</d>
 				<r xlink:href="/rest/r/PhingTools">
 				</r>
 			</p>

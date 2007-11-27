@@ -7,8 +7,8 @@
 				<c>jldupont.googlecode.com/svn</c>
 				<ca xlink:href="/rest/c/Pear">Pear</ca>
 				<l>$license$</l>
-				<s>$summary$</s>
-				<d>$description$</d>
+				<s>PEAR tools</s>
+				<d>PHING tasks, PEAR REST channel objects etc.</d>
 				<r xlink:href="/rest/r/PearTools">
 				</r>
 			</p>
