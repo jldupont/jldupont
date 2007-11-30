@@ -90,10 +90,19 @@ class JLD_Cache_Manager
 /**
  * Simple generic object store
  */
-class JLD_Cache
+abstract class JLD_Cache
 {
 	function __construct() 
 	{}
+
+	/**
+	 * Returns information relative to the current cache.
+	 */
+	public function getInfo()
+	{ 
+		/* stub */	
+		return null;
+	}
 
 	/**
 	 * This method must check the availability
@@ -249,6 +258,11 @@ class JLD_Cache
  */
 class JLD_Cache_APC extends JLD_Cache 
 {
+	public function getInfo()
+	{
+		return apc_cache_info();
+	}
+	
 	public static function checkPresence()
 	{
 		return function_exists( 'apc_fetch' );
@@ -287,6 +301,11 @@ class JLD_Cache_APC extends JLD_Cache
  */
 class JLD_Cache_eAccel extends JLD_Cache 
 {
+	public function getInfo()
+	{
+		return eaccelerator_info();
+	}
+
 	public static function checkPresence()
 	{
 		return function_exists( 'eaccelerator_get' );		
@@ -337,6 +356,7 @@ class JLD_Cache_eAccel extends JLD_Cache
 
 class JLD_Cache_Fake
 {
+	public function getInfo() { return array(); }
 	public static function checkPresence() { return true; }
 	public function clearCache() { return true; }
 
