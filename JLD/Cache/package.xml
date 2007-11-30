@@ -20,10 +20,10 @@
  </lead>
 
  <date>2007-11-30</date>
- <time>02:25:14</time>
+ <time>15:16:04</time>
 
  <version>
-  <release>1.0.0</release>
+  <release>1.0.1</release>
   <api>1.0.0</api>
  </version>
  
@@ -42,6 +42,7 @@
 	<!-- file list begin {{ -->
 	<!-- baseinstalldir: the target directory on the target machine -->
    <file baseinstalldir="JLD/Cache" name="Cache.php" role="php" />
+   <file baseinstalldir="JLD/Cache" name="tests/UnitTest.php" role="php" />
     <!-- }} -->
 
   </dir>
@@ -74,7 +75,7 @@
 <release>
 <license uri="http://www.php.net/license">PHP License</license>
 <notes>
-First release.
+Added UnitTest directory to package.
 </notes>
 </release>
 </changelog>

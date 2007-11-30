@@ -23,12 +23,16 @@ class UnitTest extends PHPUnit_Framework_TestCase
 		$o = JLD_Cache_Manager::singleton();
 		$c = $o->getCache();
 		
+		echo 'cache class: '.get_class( $c )."\n";
+		
         $this->assertEquals(true, is_object( $c ) );
     }
     public function testAvailableCache()
     {
 		$o = JLD_Cache_Manager::singleton();
 		$c = $o->getAvailableCaches();
+		
+		var_dump( $c );
 		
         $this->assertEquals(true, is_array( $c ) );
     }
@@ -39,6 +43,17 @@ class UnitTest extends PHPUnit_Framework_TestCase
 		
         $this->assertEquals( false, $r );
     }
+    public function testGetCacheInfo()
+    {
+		$o = JLD_Cache_Manager::singleton();
+		$c = $o->getCache();
+		$i = $c->getInfo();
+		
+		var_dump( $i );
+		
+        $this->assertEquals( true, is_array( $i ) );
+    }
+	
     public function testGetInvalidKeyFromCache()
     {
 		$o = JLD_Cache_Manager::singleton();
@@ -56,6 +71,16 @@ class UnitTest extends PHPUnit_Framework_TestCase
 		$r = $c->set( 'key1', 'value1' );
 		
         $this->assertEquals( true, $r );
+    }
+    public function testWriteValidToCache2()
+    {
+		$o = JLD_Cache_Manager::singleton();
+		$c = $o->getCache();
+		
+		$c->set( 'key1', 'value1' );
+		$r = $c->get( 'key1' );	
+		
+        $this->assertEquals( 'value1', $r );
     }
     public function testReplace()
     {
