@@ -4,14 +4,13 @@
  
 //<source lang=php>
 
-require_once 'PHPUnit/Framework.php';
+require_once 'PHPUnit.php';
 
 error_reporting( E_ALL | E_STRICT );
 
 require 'JLD/GoogleDocs/RegistryRepository.php';
 
-
-class UnitTest extends PHPUnit_Framework_TestCase
+class JLD_GoogleDocs_RegistryRepositoryTest extends PHPUnit_TestCase
 {
 	static $gs_user;
 	static $gs_password;
@@ -19,6 +18,12 @@ class UnitTest extends PHPUnit_Framework_TestCase
 	static $gs_worksheet;
 	
 	var $r;
+	
+      function __construct($name) 
+	  {
+        $this->PHPUnit_TestCase($name);
+      }
+	
 	
 	public function testInit()
 	{
@@ -37,6 +42,7 @@ class UnitTest extends PHPUnit_Framework_TestCase
 			$this->r->init();
 		} catch( Exception $e )
 		{
+			echo 'there!';
 			$r= false;
 		}
 		$this->assertEquals( true, $r );
@@ -45,4 +51,10 @@ class UnitTest extends PHPUnit_Framework_TestCase
 }//end class
 
 require_once 'UnitTest.config.php';
+
+$suite = new PHPUnit_TestSuite();
+$suite->addTest(new JLD_GoogleDocs_RegistryRepositoryTest('testInit'));
+$result = PHPUnit::run($suite);
+print $result->toHTML();
+
 //</source>

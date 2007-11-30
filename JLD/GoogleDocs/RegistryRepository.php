@@ -30,6 +30,7 @@
 require_once 'JLD/Object/Object.php'; //includes also the 'JLD_System_Exception' class
 require_once 'JLD/Cache/Cache.php';
 require_once 'JLD/Registry/RegistryRepository.php';
+require_once 'JLD/System/Exception.php';
 
 require_once 'Zend/Gdata/Spreadsheets.php';
 require_once 'Zend/Gdata/ClientLogin.php';
