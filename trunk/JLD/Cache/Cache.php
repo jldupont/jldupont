@@ -1,14 +1,19 @@
 <?php
 /**
+ * Shared memory cache.
+ *
+ * Note that the method 'clearCache' does _not_
+ * perform unconditional clearing of the cache.
+ *
  * @author Jean-Lou Dupont
- * @package JLD
- * @subpackage Cache
- * @version $Id$
+ * @package Cache
+ * @version @@package-version@@
+ * @Id $Id$
  */
 //<source lang=php> 
 
 // create only one instance of the following class.
-new JLD_Cache_Manager;
+JLD_Cache_Manager::singleton();
 
 class JLD_Cache_Manager
 {
@@ -26,16 +31,23 @@ class JLD_Cache_Manager
 	static $instance = null;
 	static $cache = null;
 
-	public function __construct()
+	/**
+	 * Can't create an instance of this class directly;
+	 * need to go through the singleton interface.
+	 *
+	 */
+	protected function __construct(){}
+
+	public static function singleton()
 	{
 		// singleton pattern
-		if ( self::$instance !== null)
-			return self::$instance;
-		else
+		if ( self::$instance === null)
 		{
 			self::$instance = new JLD_Cache_Manager;
 			self::init();	
 		}
+		
+		return self::$instance;
 	}
 	public static function isFake()
 	{
@@ -45,7 +57,11 @@ class JLD_Cache_Manager
 	{
 		foreach ( self::$classes as $classe )
 			if (self::checkPresence( $classe ))
-				self::$cache = new $classe;				
+			{
+				// we just need one cache
+				self::$cache = new $classe;
+				break;
+			}
 	}
 	public static function getCache()
 	{
@@ -145,10 +161,12 @@ class JLD_Cache
 
 	function add($key, $value, $exptime=0) 
 	{
-		if( $this->get($key) == false ) {
+		if( $this->get($key) === false ) 
+		{
 			$this->set($key, $value, $exptime);
 			return true;
 		}
+		return false;
 	}
 
 	function add_multi($hash, $exptime=0) 
@@ -168,7 +186,10 @@ class JLD_Cache
 		if( $this->get($key) !== false )
 			$this->set($key, $value, $exptime);
 	}
-
+	/**
+	 * Atomic Increment.
+	 * @return false if lock can not be acquired.
+	 */
 	function incr($key, $value=1) 
 	{
 		if ( !$this->lock($key) )
@@ -243,22 +264,22 @@ class JLD_Cache_APC extends JLD_Cache
 		$val = apc_fetch($key);
 		if ( is_string( $val ) ) 
 			$val = unserialize( $val );
+		else
+			$val = false;
 
 		return $val;
 	}
 	
 	function set($key, $value, $exptime=0) 
 	{
-		apc_store($key, serialize($value), $exptime);
-		return true;
+		return apc_store($key, serialize($value), $exptime);
 	}
 	
 	function delete($key, $time=0) 
 	{
-		apc_delete($key);
-		return true;
+		return apc_delete($key);
 	}
-}
+}// END APC
 
 /**
  * This is a wrapper for eAccelerator's shared memory functions.
@@ -270,7 +291,11 @@ class JLD_Cache_eAccel extends JLD_Cache
 	{
 		return function_exists( 'eaccelerator_get' );		
 	}
-
+	/**
+	 * Only clears the elements marked for deletion
+	 * i.e. does not perform an unconditional 'clear' of
+	 * all entries.
+	 */
 	public function clearCache()
 	{
 		return eaccelerator_clear();
@@ -279,6 +304,10 @@ class JLD_Cache_eAccel extends JLD_Cache
 	function get($key) 
 	{
 		$val = eaccelerator_get( $key );
+
+		if ( $val === null )
+			return false;
+			
 		if ( is_string( $val ) ) 
 			$val = unserialize( $val );
 
@@ -287,26 +316,22 @@ class JLD_Cache_eAccel extends JLD_Cache
 
 	function set($key, $value, $exptime=0) 
 	{
-		eaccelerator_put( $key, serialize( $value ), $exptime );
-		return true;
+		return eaccelerator_put( $key, serialize( $value ), $exptime );
 	}
 
 	function delete($key, $time=0) 
 	{
-		eaccelerator_rm( $key );
-		return true;
+		return eaccelerator_rm( $key );
 	}
 
 	function lock($key, $waitTimeout = 0 ) 
 	{
-		eaccelerator_lock( $key );
-		return true;
+		return eaccelerator_lock( $key );
 	}
 
 	function unlock($key) 
 	{
-		eaccelerator_unlock( $key );
-		return true;
+		return eaccelerator_unlock( $key );
 	}
 }
 

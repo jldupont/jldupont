@@ -9,8 +9,6 @@
 
 <project name="jldupont" basedir="." default='all' >
 
-	<property file="./build.properties" />
-
 	<taskdef classname='JLD.PhingTools.SvnStatusTask' name='svn_status' />
 	<taskdef classname='JLD.PhingTools.SvnAddTask' name='svn_add' />
 	<taskdef classname='JLD.PhingTools.SvnPropsetTask' name='svn_propset' />
