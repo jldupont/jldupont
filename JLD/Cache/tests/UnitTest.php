@@ -8,6 +8,9 @@
  */
 require_once 'PHPUnit/Framework.php';
 
+ini_set("apc.enabled", "On");
+ini_set("apc.enable_cli", "On");
+
 require dirname( dirname(__FILE__) ).'/Cache.php';
 
 class UnitTest extends PHPUnit_Framework_TestCase
@@ -32,7 +35,7 @@ class UnitTest extends PHPUnit_Framework_TestCase
 		$o = JLD_Cache_Manager::singleton();
 		$c = $o->getAvailableCaches();
 		
-		var_dump( $c );
+		#var_dump( $c );
 		
         $this->assertEquals(true, is_array( $c ) );
     }
@@ -49,7 +52,7 @@ class UnitTest extends PHPUnit_Framework_TestCase
 		$c = $o->getCache();
 		$i = $c->getInfo();
 		
-		var_dump( $i );
+		#var_dump( $i );
 		
         $this->assertEquals( true, is_array( $i ) );
     }
