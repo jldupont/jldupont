@@ -12,15 +12,15 @@
  * expirty for key1: /persistency/$class1/$subkey1
  *
  * @author Jean-Lou Dupont
- * @package JLD
- * @subpackage Registry
- * @version $Id$
+ * @package Registry
+ * @version @@package-version@@
+ * @Id $Id$
  */
 //<source lang=php> 
 
-require 'JLD/Object/Object.php';
+require_once 'JLD/Object/Object.php';
 
-abstract class JLD_RegistryRepository extends JLD_Object implements Iterator
+class JLD_RegistryRepository extends JLD_Object implements Iterator
 {
 	/**
 	 * Default expiry timeout value in seconds.
@@ -136,14 +136,14 @@ abstract class JLD_RegistryRepository extends JLD_Object implements Iterator
 	/**
 	 * Fetches a fresh & complete copy of the registry.
 	 */
-	public function refresh();
+	public function refresh(){}
 	
 	/**
 	 * Initialization of the configuration parameters
 	 *
 	 * @param mixed $parameters Configuration Array
 	 */
-	public function init( $parameters );
+	public function init( $parameters ){}
 	
 }//end class
 //</source>

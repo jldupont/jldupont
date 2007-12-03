@@ -1,16 +1,21 @@
 <?php
 /**
+ * Unit Tests for GoogleDocs package
+ *
+ * @package GoogleDocs
+ * @author Jean-Lou Dupont
+ * @version $Id$
  */
  
 //<source lang=php>
 
-require_once 'PHPUnit.php';
+require_once 'PHPUnit/Framework.php';
 
 error_reporting( E_ALL | E_STRICT );
 
-require 'JLD/GoogleDocs/RegistryRepository.php';
+require dirname(dirname(__FILE__)).'/RegistryRepository.php';
 
-class JLD_GoogleDocs_RegistryRepositoryTest extends PHPUnit_TestCase
+class UnitTest extends PHPUnit_Framework_TestCase
 {
 	static $gs_user;
 	static $gs_password;
@@ -18,12 +23,6 @@ class JLD_GoogleDocs_RegistryRepositoryTest extends PHPUnit_TestCase
 	static $gs_worksheet;
 	
 	var $r;
-	
-      function __construct($name) 
-	  {
-        $this->PHPUnit_TestCase($name);
-      }
-	
 	
 	public function testInit()
 	{
@@ -38,11 +37,9 @@ class JLD_GoogleDocs_RegistryRepositoryTest extends PHPUnit_TestCase
 		$r = true;
 		try 
 		{
-			echo 'here !';
-			$this->r->init();
+			$this->r->init( $params );
 		} catch( Exception $e )
 		{
-			echo 'there!';
 			$r= false;
 		}
 		$this->assertEquals( true, $r );
@@ -51,10 +48,5 @@ class JLD_GoogleDocs_RegistryRepositoryTest extends PHPUnit_TestCase
 }//end class
 
 require_once 'UnitTest.config.php';
-
-$suite = new PHPUnit_TestSuite();
-$suite->addTest(new JLD_GoogleDocs_RegistryRepositoryTest('testInit'));
-$result = PHPUnit::run($suite);
-print $result->toHTML();
 
 //</source>
