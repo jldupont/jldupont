@@ -86,7 +86,7 @@ class JLD_GoogleDocs_RegistryRepository extends JLD_RegistryRepository
 		try 
 		{
 			$this->gs_service = Zend_Gdata_Spreadsheets::AUTH_SERVICE_NAME;
-			$this->gs_client = Zend_Gdata_ClientLogin::getHttpClient( $gs_user, $gs_password, $this->service);
+			$this->gs_client = Zend_Gdata_ClientLogin::getHttpClient( $this->gs_user, $this->gs_password, $this->gs_service);
 			$this->gs_spreadsheetService = new Zend_Gdata_Spreadsheets($this->gs_client);
 		}
 		catch( Zend_Exception $e )
