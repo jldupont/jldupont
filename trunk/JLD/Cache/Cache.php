@@ -53,7 +53,7 @@ class JLD_Cache_Manager
 	{
 		return (self::$cache instanceof JLD_Cache_Fake);	
 	}
-	protected function init()
+	protected static function init()
 	{
 		foreach ( self::$classes as $classe )
 			if (self::checkPresence( $classe ))

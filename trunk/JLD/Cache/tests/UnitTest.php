@@ -8,8 +8,8 @@
  */
 require_once 'PHPUnit/Framework.php';
 
-ini_set("apc.enabled", "On");
-ini_set("apc.enable_cli", "On");
+#ini_set("apc.enabled", "On");
+#ini_set("apc.enable_cli", "1"); // this must be included in the command line php.ini file!
 
 require dirname( dirname(__FILE__) ).'/Cache.php';
 

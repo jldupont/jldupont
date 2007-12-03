@@ -14,6 +14,42 @@
 			</p>
 			<a>
 				<r>
+					<v>1.0.3</v>
+					<s>stable</s>
+				</r>
+			</a>
+		</pi>
+		<pi>
+			<p>
+				<n>Cache</n>
+				<c>jldupont.googlecode.com/svn</c>
+				<ca xlink:href="/rest/c/System">System</ca>
+				<l>$license$</l>
+				<s>Memory based cache using either APC or eAccelerator</s>
+				<d>This package offers a simple interface to a memory base cache</d>
+				<r xlink:href="/rest/r/Cache">
+				</r>
+			</p>
+			<a>
+				<r>
+					<v>1.0.2</v>
+					<s>stable</s>
+				</r>
+			</a>
+		</pi>
+		<pi>
+			<p>
+				<n>Cache</n>
+				<c>jldupont.googlecode.com/svn</c>
+				<ca xlink:href="/rest/c/System">System</ca>
+				<l>$license$</l>
+				<s>Memory based cache using either APC or eAccelerator</s>
+				<d>This package offers a simple interface to a memory base cache</d>
+				<r xlink:href="/rest/r/Cache">
+				</r>
+			</p>
+			<a>
+				<r>
 					<v>1.0.1</v>
 					<s>stable</s>
 				</r>

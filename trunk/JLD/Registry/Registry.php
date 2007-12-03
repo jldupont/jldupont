@@ -29,9 +29,9 @@
  * 4) DEFAULT: use class level definition
  *
  * @author Jean-Lou Dupont
- * @package JLD
- * @subpackage Registry
- * @version $Id$
+ * @package Registry
+ * @version @@package-version@@
+ * @Id $Id$
  */
 //<source lang=php> 
 
