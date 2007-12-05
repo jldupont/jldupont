@@ -150,16 +150,17 @@ abstract class JLD_Object
 	protected function digestConfiguration( &$refList, &$params )
 	{
 		// bail out if we can't pass the validation phase.
-		if ($this->validateConfiguration( $refList, $params ) === false)
-			return false;
+		if ( ($hint = $this->validateConfiguration( $refList, $params )) !== true)
+			return $hint;
 		
 		// now, go through all the configuration parameters
 		// and sets them locally in this object instance
-		foreach ( $this->params as $key => &$value )
+		foreach ( $params as $key => &$value )
 		{
 			// let the client layer handle this sort of error.
 			if ( $this->varExists( $key ) )
 				return false;
+				
 			$this->__set( $key, $value );
 		}
 		

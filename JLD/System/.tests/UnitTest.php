@@ -1,9 +1,16 @@
 <?php
 require_once 'PHPUnit/Framework.php';
 
-require 'JLD/System/Exception.php';
+require dirname(dirname( __FILE__ )).'/Exception.php';
 
-class UnitTest extends JLD_System_Exception
+class UnitTest extends PHPUnit_Framework_TestCase
 {
+
+	public function testExceptionCreation()
+	{
+		$e = new JLD_System_Exception( 'message',  LOG_EMERG );
+
+		$this->assertEquals( true, is_object( $e ) );
+	}
 	
 }
