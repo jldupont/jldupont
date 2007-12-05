@@ -71,8 +71,8 @@ class JLD_GoogleDocs_RegistryRepository extends JLD_RegistryRepository
 	 */
 	public function init( $parameters )
 	{
-		if ($this->digestConfiguration( self::$configParametersList, $parameters ) === false)
-			throw new JLD_System_Exception( );
+		if ( ($hint = $this->digestConfiguration( self::$configParametersList, $parameters )) !== true)
+			throw new JLD_System_Exception( 'Missing parameter: '.$hint );
 
 		// let the client deal with any potential error
 		$this->initGdoc( );
@@ -88,6 +88,7 @@ class JLD_GoogleDocs_RegistryRepository extends JLD_RegistryRepository
 			$this->gs_service = Zend_Gdata_Spreadsheets::AUTH_SERVICE_NAME;
 			$this->gs_client = Zend_Gdata_ClientLogin::getHttpClient( $this->gs_user, $this->gs_password, $this->gs_service);
 			$this->gs_spreadsheetService = new Zend_Gdata_Spreadsheets($this->gs_client);
+			var_dump( $this->gs_spreadsheetService );
 		}
 		catch( Zend_Exception $e )
 		{

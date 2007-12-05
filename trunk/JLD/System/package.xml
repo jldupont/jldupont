@@ -9,8 +9,8 @@
 
  <name>System</name>
  <channel>jldupont.googlecode.com/svn</channel>
- <summary>Exception base class for all JLD namespace</summary>
- <description>Exception base class for all JLD namespace</description>
+ <summary>System base class for all JLD namespace</summary>
+ <description>System base class for all JLD namespace</description>
 
  <lead>
   <name>Jean-Lou Dupont</name>
@@ -23,7 +23,7 @@
  <time>21:36:21</time>
 
  <version>
-  <release>1.0.1</release>
+  <release>1.1.0</release>
   <api>1.0.0</api>
  </version>
  
@@ -41,12 +41,8 @@
 
 	<!-- file list begin {{ -->
 	<!-- baseinstalldir: the target directory on the target machine -->
-	<file baseinstalldir="JLD/System" name="Exception.php" role="php">
-		<tasks:replace from="@@package-version@@" to="version" type="package-info"/>
-	</file>
-	<file baseinstalldir="JLD/System" name="ExceptionList.php" role="php">
-		<tasks:replace from="@@package-version@@" to="version" type="package-info"/>
-	</file>
+	<file baseinstalldir="JLD/System" name="Logger.php" role="php" />
+	<file baseinstalldir="JLD/System" name="Exception.php" role="php" />
     <!-- }} -->
 
   </dir>
@@ -76,12 +72,12 @@
  </phprelease>
 
 <changelog>
- <release>
-   <license uri="http://www.php.net/license">PHP License</license>
-	<notes>
-		* Corrected minor package.xml validation error
-	</notes>
-  </release>
+<release>
+<license uri="http://www.php.net/license">PHP License</license>
+<notes>
+* Re-factoring
+</notes>
+</release>
 </changelog>
 
 </package>
