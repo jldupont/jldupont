@@ -55,7 +55,18 @@ class JLD_System_Logger
 							LOG_INFO    => 'LOG_INFO',
 							LOG_DEBUG   => 'LOG_DEBUG',
 	);
-		
+	/**
+	 * Defaults
+	 */
+	static $defs = array(	LOG_EMERG   => 'LOG_EMERG',
+							LOG_ALERT   => 'LOG_ALERT',
+							LOG_CRIT    => 'LOG_CRIT',
+							LOG_ERR     => 'LOG_ERR',
+							LOG_WARNING => 'LOG_WARNING',
+							LOG_NOTICE  => 'LOG_NOTICE',
+							LOG_INFO    => 'LOG_INFO',
+							LOG_DEBUG   => 'LOG_DEBUG',
+	);	
 	/**
 	 * Logs a message to the system logger
 	 */
@@ -97,7 +108,7 @@ class JLD_System_Logger
 		return md5( $m.$p );	
 	}
 	/**
-	 *
+	 * Reads from the cache ...
 	 */
 	protected function getTimeout( $p )
 	{
