@@ -2,7 +2,7 @@
 /**
  * PHING task which returns the current date
  *
- * 	<taskdef classname='JLD.PearTools.phing.DateTask' name='date' />
+ * 	<taskdef classname='JLD.PhingTools.DateTask' name='date' />
  *	<date propertyname="property_name_for_output_result" />
  * 
  * @author Jean-Lou Dupont
