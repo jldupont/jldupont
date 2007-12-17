@@ -1,0 +1,27 @@
+<?php
+/**
+ * PHING task which sorts entries of the data-type 'FileSet'
+ *
+ * 	<taskdef classname='JLD.PhingTools.SortTask' name='sort' />
+ *	
+ *  <sort tid='reference-to-object' key='' dir ='' />
+ *
+ * FileSet => key = [ mtime, ctime ];
+ *
+ * @author Jean-Lou Dupont
+ * @package PhingTools
+ * @version @@package-version@@
+ * @Id $Id$
+ */
+//<source lang=php> 
+abstract class DataTypeSorter
+{
+	var $ref = null;
+	var $key = null;
+	var $dir = null;
+	
+	public function checkKey( String $key );
+	
+	public function sort( &$obj, $key, $dir );
+}
+//</source>
