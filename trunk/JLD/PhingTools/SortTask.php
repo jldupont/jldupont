@@ -6,7 +6,7 @@
  *	
  *  <sort sid='reference-to-source-object' key='' dir ='' tid='result-object-reference-id' />
  *
- * dir := [0 => up; 1 => down ]
+ * dir := ['u' => up; 'd' => down ]
  * FileSet := key = [ mtime, ctime ];
  *
  * @author Jean-Lou Dupont
@@ -26,7 +26,7 @@ class SortTask extends JLD_PhingTools_Task
 	
 	public function setSid( $val ) { $this->__set('sid', $val); }	
 	public function setKey( $val ) { $this->__set('key', $val); }
-	public function setDir( $val ) { $this->__set('dir', $val); }
+	public function setDir( $val ) { $this->__set('dir', strtolower( $val )); }
 	public function setTid( $val ) { $this->__set('tid', $val); }	
 	
     /**
@@ -67,7 +67,7 @@ class SortTask extends JLD_PhingTools_Task
 			throw new BuildException(self::thisName.': requires a valid "key" attribute.');
 
 		$dir = $this->dir;
-		if ( empty( $dir ) )
+		if ( ($dir != 'u') && ($dir !='d'))
 			throw new BuildException(self::thisName.': requires a valid "dir" attribute.');
 			
 		$this->sorter = $this->createSorter( $this->classe );
@@ -78,7 +78,7 @@ class SortTask extends JLD_PhingTools_Task
 			throw new BuildException(self::thisName.': unsupported sort key.');		
 	} 
 	/**
-	 * 
+	 * Verifies if the requested source object class is supported.
 	 */
 	protected function checkSorter( $classe )
 	{
@@ -86,7 +86,7 @@ class SortTask extends JLD_PhingTools_Task
 		return class_exists( $classe.'Sorter' );
 	}
 	/**
-	 * 
+	 * Creates a 'sorter' object instance.
 	 */
 	protected function & createSorter( $classe )
 	{
@@ -94,7 +94,7 @@ class SortTask extends JLD_PhingTools_Task
 		return new $name( $this->project, $this->sObj, $this->tid );
 	}	
 	/**
-	 * 
+	 * Calls the sorter to do the job.
 	 */
 	protected function sort( &$obj, $key, $dir )
 	{

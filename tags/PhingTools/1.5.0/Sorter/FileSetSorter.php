@@ -3,7 +3,7 @@
  * @author Jean-Lou Dupont
  * @package PhingTools
  * @subpackage SortTask
- * @version @@package-version@@
+ * @version 1.5.0
  * @Id $Id: FileSetSorter.php 304 2007-12-17 02:17:29Z JeanLou.Dupont $
  */
 //<source lang=php> 

@@ -24,7 +24,7 @@
 			<exclude name="rss.xml" />
 		</fileset>
 	
-		<sort sid='allfiles' key='mtime' dir='1' tid='sortedfiles' />
+		<sort sid='allfiles' key='ctime' dir='d' tid='sortedfiles' />
 
 		<!-- 
 			T1- Delete target file 'rss.xml'
@@ -41,8 +41,10 @@
 		<delete file="${rss.path}/rss.xml" />
 
 		<!-- T2 --><!-- T3 -->
+		<echo>Copying template</echo>
 		<copy file= 'rss.template.xml' tofile="${rss.path}/rss.xml" overwrite="true" />
-
+		
+		<echo>Appending entries</echo>
 		<append destFile="${rss.path}/rss.xml">
 <!--
 			<fileset dir="${rss.path}/" >
