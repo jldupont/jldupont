@@ -5,7 +5,9 @@
  * 	<taskdef classname='JLD.PhingTools.SortTask' name='sort' />
  *	
  *  <sort tid='reference-to-object' key='' dir ='' />
- * 
+ *
+ * FileSet => key = [ mtime, ctime ];
+ *
  * @author Jean-Lou Dupont
  * @package PhingTools
  * @version @@package-version@@
@@ -31,14 +33,14 @@ class SortTask extends JLD_PhingTools_Task
     public function main() 
 	{
 		$this->validateParameters();
-		$this->sort();
+		$this->sort( $this->tObj, $this->__get('key' ), $this->__get( 'dir' ) );
     }
 	/**
 	 *
 	 */
 	protected function validateParameters()
 	{
-		if ( $this->tsid === null )
+		if ( $this->tid === null )
 			throw new BuildException( self::thisName.': missing target object id.');
 
 		$refs = $this->project->getReferences();
@@ -52,86 +54,43 @@ class SortTask extends JLD_PhingTools_Task
 			throw new BuildException(self::thisName.': object id given does not point a supported object.');		
 
 		$this->classe = get_class( $this->tObj );
-		if ( !method_exists( $this, "sort_$classe" ) )
+		if ( $this->checkSorter( $this->classe ) )
 			throw new BuildException(self::thisName.': unsupported object class.');		
-			
+
 		if ( empty( $this->__get( 'key' ) ) )
 			throw new BuildException(self::thisName.': requires a valid "key" attribute.');
 
 		if ( empty( $this->__get( 'dir' ) ) )
 			throw new BuildException(self::thisName.': requires a valid "dir" attribute.');
-	} 
-	
-	/**
-	 * 
-	 */
-	protected function sort()
-	{
-		$method = "sort_".$this->classe;
-		return $this->$method();
-	}	
-	/**
-	 * 
-	 */
-	protected function sort_fileset()
-	{
-		$project = $this->getProject();
-		$fs = $this->tObj;
-		
-        $ds = $fs->getDirectoryScanner($project);
-        $srcFiles = $ds->getIncludedFiles();
-        $srcDirs  = $ds->getIncludedDirectories();
-	
-		$this->sort_fileset_real( $srcFiles, $srcDirs );
-		
-		$ds = $this->createDirectoryScanner( $srcFiles, $srcDirs );
-		
-		$this->tObj->setRefid( $ds );
-	}
-	protected function sort_fileset_real( &$srcFiles, &$srcDirs )
-	{
-		$srcFiles = $this->sort_files( $srcFiles );
-		$srcDirs = $this->sort_files( $srcDirs );		
-	}	
-	protected function createDirectoryScanner( &$srcFiles, &$srcDirs )
-	{
-		return new DirectoryScanner_FS( $srcFiles, $srcDirs );
-	}
-	protected function sort_files( &$files, $key, $dir )
-	{
-		if (empty( $files ))
-			return array();
-		$result = array();
-		
-		// get timestamp for each file
-		foreach( $files as $file )
-		{
 			
-		}
-
-		$mtime = @filemtime( $dir.'/'.$file );		
+		$this->sorter = $this->createSorter( $this->classe );
+		if (!is_object( $this->sorter ))
+			throw new BuildException(self::thisName.': error creating sorter object.');		
+		if ( !$this->sorter->checkKey( $key ) )
+			throw new BuildException(self::thisName.': unsupported sort key.');		
+	} 
+	/**
+	 * 
+	 */
+	protected function checkSorter( $classe )
+	{
+		@require 'Sorter/'.$classe.'Sorter.php';
+		return class_exists( $classe.'Sorter' );
+	}
+	/**
+	 * 
+	 */
+	protected function createSorter( $classe )
+	{
+		return @new $classe.'Sorter';
+	}	
+	/**
+	 * 
+	 */
+	protected function sort( &$obj, $key, $dir )
+	{
+		return $this->sorter->sort( $obj, $key, $dir);
 	}	
 }// end class
-
-class DirectoryScanner_FS
-{
-	var $includedFiles = array();
-	var $includedDirs = array();
-		
-	public function __construct( &$srcFiles, &$srcDirs )
-	{
-		$this->includedFiles = $srcFiles;
-		$this->includedFirs = $srcDirs;
-	}
-	
-    function getIncludedDirectories() 
-	{
-		return $this->includedDirs;
-    }
-    function getIncludedFiles() 
-	{
-		return $this->includedFiles;		
-    }
-}
 
 //</source>
