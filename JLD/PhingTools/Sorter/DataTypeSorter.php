@@ -20,8 +20,8 @@ abstract class DataTypeSorter
 	var $key = null;
 	var $dir = null;
 	
-	public function checkKey( String $key );
+	abstract public function checkKey( $key );
 	
-	public function sort( &$obj, $key, $dir );
+	abstract public function sort( &$obj, $key, $dir );
 }
 //</source>
