@@ -16,6 +16,8 @@ class FileSetSorter extends DataTypeSorter
 	);
 	
 	var $ds;
+	var $srcFiles = array();
+	var $srcDirs = array();
 	
 	public function __construct(){}
 	
@@ -30,45 +32,53 @@ class FileSetSorter extends DataTypeSorter
 		
 		$this->init();
 		
-		$sort_method = 'sort_'.$key;
-		$this->$sort_method();
+		$this->doSort();
 		
 		$this->finalize();
 	}
 	/**
 	 * Sort by 'modification' time
 	 */
-	protected function sort_mtime()
+	protected function helper_mtime( &$file )
 	{
-		return $this->doList( 'helper_mtime' );
+		return @filemtime( $file );
 	}
 	/**
 	 * Sort by 'creation' time
 	 */
-	protected function sort_ctime()
+	protected function helper_ctime( &$file )
 	{
-		return $this->doList( 'helper_ctime' );		
+		return @filectime( $file );
 	}
 	/**
 	 * 
 	 */
-	protected function doList( $helper )
+	protected function doSort( )
 	{
+		$helper = 'helper_'.$this->key;
+		$fliste = array();
+		$dliste = array();
 		
-	}
-	/**
-	 * 
-	 */
-	protected function helper_mtime()
-	{
-		
-	}
-	/**
-	 * 
-	 */
-	protected function helper_ctime()
-	{
-		
+		// first, sort the files
+		if (!empty( $this->srcFiles ))		
+		{
+			foreach( $this->srcFiles as $file )
+			{
+				$tag = $this->$helper( $file );
+				$fliste[] = array( 'n' => $file, 't' => $tag );
+			}
+			$this->srcFiles = $this->doRealSort( $fliste);
+		}
+		// next, sort the directories
+		if (!empty( $this->srcDirs ))
+		{
+			foreach( $this->srcDirs as $dir )
+			{
+				$tag = $this->$helper( $file );
+				$dliste[] = array( 'n' => $file, 't' => $tag );
+			}
+			$this->srcDirs = $this->doRealSort( $dliste);			
+		}
 	}
 	/**
 	 * Verifies if the $key is supported
@@ -86,20 +96,13 @@ class FileSetSorter extends DataTypeSorter
 		$fs = $this->tObj;
 		
         $ds = $fs->getDirectoryScanner($project);
-        $srcFiles = $ds->getIncludedFiles();
-        $srcDirs  = $ds->getIncludedDirectories();
-	
-		$this->ds = $this->createDirectoryScanner( $srcFiles, $srcDirs );
+        $this->srcFiles = $ds->getIncludedFiles();
+        $this->srcDirs  = $ds->getIncludedDirectories();
 	}
 	protected function finalize()
 	{
+		$this->ds = $this->createDirectoryScanner( $srcFiles, $srcDirs );		
 		$this->tObj->setRefid( $this->ds );		
-	}	
-	
-	protected function sort_fileset_real( &$srcFiles, &$srcDirs )
-	{
-		$srcFiles = $this->sort_files( $srcFiles );
-		$srcDirs = $this->sort_files( $srcDirs );		
 	}	
 	protected function createDirectoryScanner( &$srcFiles, &$srcDirs )
 	{
@@ -109,44 +112,28 @@ class FileSetSorter extends DataTypeSorter
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-	protected function sort_files( &$files, $key, $dir )
-	{
-		if (empty( $files ))
-			return array();
-		$result = array();
-		
-		// get timestamp for each file
-		foreach( $files as $file )
-		{
-			
-		}
-
-		$mtime = @filemtime( $dir.'/'.$file );		
-	}	
 	/**
 	 * 
 	 * 
 	 */
-	protected function & doSort( &$all, $helper )
+	protected function & doRealSort( &$files )
 	{
-		$sorted = array();
-		
-		if (empty( $all ))
-			return false;
+		if (empty( $files ))
+			return array();
 			
-		// starts by re-tagging each entry
-		foreach	( $all as &$e )
-			$sorted[ $e['v'] ] = $e;
-			
-		uksort( $sorted, array( __CLASS__, $helper ));
+		uksort( $files, array( __CLASS__, 'SortHelper' ));
 		
-		return $sorted;
+		return $files;
 	}
 	/**
 	 * Custom sorting function
 	 */
-	 protected static function doSortHelper( $a, $b )
+	 protected static function SortHelper( $a, $b )
 	 {
+	 	switch( $this->dir )
+		{
+			
+		}
 	 	return -version_compare( $a, $b );
 	 }
 
