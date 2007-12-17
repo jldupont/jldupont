@@ -7,11 +7,11 @@
 		xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd 
 		http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
 
-  <!-- $Id -->
+  <!-- $Id$ -->
  <name>PhingTools</name>
  <channel>jldupont.googlecode.com/svn</channel>
  <summary>PHING tools</summary>
- <description>SvnAddTask, SvnPropsetTask, DateTask, TrimTask etc.</description>
+ <description>SvnAddTask, SvnPropsetTask, DateTask, TrimTask, SortTask etc.</description>
 
  <lead>
   <name>Jean-Lou Dupont</name>
@@ -20,11 +20,11 @@
   <active>yes</active>
  </lead>
 
- <date>2007-12-12</date>
- <time>17:47:30</time>
+ <date>2007-12-17</date>
+ <time>16:04:00</time>
 
  <version>
-  <release>1.4.0</release>
+  <release>1.5.0</release>
   <api>1.0.0</api>
  </version>
  
@@ -49,6 +49,9 @@
    <file baseinstalldir="JLD/PhingTools" name="TrimTask.php" role="php" />
    <file baseinstalldir="JLD/PhingTools" name="DateTask.php" role="php" />
    <file baseinstalldir="JLD/PhingTools" name="FileSet2PropertyTask.php" role="php" />
+   <file baseinstalldir="JLD/PhingTools" name="SortTask.php" role="php" />
+   <file baseinstalldir="JLD/PhingTools" name="/Sorter/DataTypeSorter.php" role="php" />
+   <file baseinstalldir="JLD/PhingTools" name="/Sorter/FileSetSorter.php" role="php" />
     <!-- }} -->
 
   </dir>
@@ -86,7 +89,7 @@
 <changelog>
 	<release>
 		<license uri="http://www.php.net/license">PHP License</license>
-		<notes>Added 'FileSet2PropertyTask'
+		<notes>Added 'SortTask'
 		</notes>
 	</release>
 </changelog>

@@ -4,7 +4,7 @@
  * @package PhingTools
  * @subpackage SortTask
  * @version @@package-version@@
- * @Id $Id$
+ * @Id $Id: FileSetSorter.php 304 2007-12-17 02:17:29Z JeanLou.Dupont $
  */
 //<source lang=php> 
 require 'DataTypeSorter.php';
@@ -18,7 +18,8 @@ class FileSetSorter extends DataTypeSorter
 	var $sObj = null;
 	var $tObj = null;
 	var $tId = null;
-	var $ds;
+	var $ds = null;
+	var $root = null;
 	var $srcFiles = array();
 	var $srcDirs = array();
 	var $project;
@@ -50,14 +51,16 @@ class FileSetSorter extends DataTypeSorter
 	 */
 	protected function helper_mtime( &$file )
 	{
-		return @filemtime( $file );
+		$abs_path = $this->root.'/'.$file;		
+		return @filemtime( $abs_path );
 	}
 	/**
 	 * Sort by 'creation' time
 	 */
 	protected function helper_ctime( &$file )
 	{
-		return @filectime( $file );
+		$abs_path = $this->root.'/'.$file;
+		return @filectime( $abs_path );
 	}
 	/**
 	 * 
@@ -83,20 +86,19 @@ class FileSetSorter extends DataTypeSorter
 		{
 			foreach( $this->srcDirs as $dir )
 			{
-				$tag = $this->$helper( $file );
-				$dliste[] = array( 'n' => $file, 't' => $tag );
+				$tag = $this->$helper( $dir );
+				$dliste[] = array( 'n' => $dir, 't' => $tag );
 			}
 			$this->doRealSort( $dliste);			
 		}
 		
 		$this->srcFiles = array();
-		foreach( $fliste as $key => &$na )
-			$this->srcFiles[] = $key;
+		foreach( $fliste as $index => &$fileElement )
+			$this->srcFiles[] = $fileElement['n'];
 
 		$this->srcDirs = array();
-		foreach( $dliste as $key => &$na )
-			$this->srcDirs[] = $key;
-
+		foreach( $dliste as $index => &$fileElement )
+			$this->srcDirs[] = $fileElement['n'];
 	}
 	/**
 	 * Verifies if the $key is supported
@@ -113,21 +115,20 @@ class FileSetSorter extends DataTypeSorter
 		$fs = $this->sObj;
 		
         $ds = $fs->getDirectoryScanner( $this->project );
+		$this->root = $fs->getDir( $this->project );
         $this->srcFiles = $ds->getIncludedFiles();
         $this->srcDirs  = $ds->getIncludedDirectories();
 	}
 	protected function finalize()
 	{
-		$this->ds = $this->createDirectoryScanner( $srcFiles, $srcDirs );		
+		$this->ds = $this->createDirectoryScanner( $this->srcFiles, $this->srcDirs );		
 		
-		$this->tObj = clone $this->sObj;
-		$this->tObj->setRefid( $this->ds );		
-		
-		$this->project->addReference( $this->tid, $this->tObj );
+		$this->tObj = new FileSetSorterShell( $this->root, $this->tId, $this->ds );
+		$this->project->addReference( $this->tId, $this->tObj );
 	}	
 	protected function createDirectoryScanner( &$srcFiles, &$srcDirs )
 	{
-		return new DirectoryScanner_FS( $srcFiles, $srcDirs );
+		return new DirectoryScanner_FS( $this->root, $srcFiles, $srcDirs );
 	}
 	
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -141,40 +142,69 @@ class FileSetSorter extends DataTypeSorter
 	{
 		if (empty( $files ))
 			return array();
-		
-		if ($this->dir)
-			uksort( $files, array( __CLASS__, 'sortHelperUp' ));
+		if ($this->dir == 'u')
+			usort( $files, array( __CLASS__, 'sortHelperUp' ));
 		else
-			uksort( $files, array( __CLASS__, 'sortHelperDown' ));		
+			usort( $files, array( __CLASS__, 'sortHelperDown' ));		
 	}
 	/**
 	 * Custom sorting function
 	 */
-	 protected static function sortHelperUp( $a, $b )
+	 protected static function sortHelperUp( &$a, &$b )
 	 {
-	 	return $a['t'] > $b['t'];
+	 	if ($a['t'] == $b['t'])
+			return 0;
+	 	return ($a['t'] > $b['t']) ? 1:-1;
 	 }
 	/**
 	 * Custom sorting function
 	 */
-	 protected static function sortHelperDown( $a, $b )
+	 protected static function sortHelperDown( &$a, &$b )
 	 {
-	 	return $a['t'] < $b['t'];
+	 	if ($a['t'] == $b['t'])
+			return 0;
+	 	return ($a['t'] < $b['t']) ? 1:-1;
 	 }
 
 } // end class
+
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+class FileSetSorterShell extends FileSet
+{
+	var $id = null;
+	var $ds = null;
+	var $root = null;
+	
+	public function __construct( &$root, &$id, &$ds )
+	{
+		$this->root = $root;
+		$this->ds = $ds;
+		$this->id = $id;
+	}
+    function getDir(Project $p)
+	{
+		return $this->root;
+	}	
+    function getDirectoryScanner(Project $p)
+	{
+		return $this->ds;
+	}	
+}
 
 class DirectoryScanner_FS
 {
 	var $includedFiles = array();
 	var $includedDirs = array();
-		
-	public function __construct( &$srcFiles, &$srcDirs )
-	{
-		$this->includedFiles = $srcFiles;
-		$this->includedFirs = $srcDirs;
-	}
+	var $root = null;
 	
+	public function __construct( &$root, &$srcFiles, &$srcDirs )
+	{
+		$this->root = $root;
+		$this->includedFiles = $srcFiles;
+		$this->includedDirs = $srcDirs;
+	}
     function getIncludedDirectories() 
 	{
 		return $this->includedDirs;
