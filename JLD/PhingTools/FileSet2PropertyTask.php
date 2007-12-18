@@ -107,6 +107,11 @@ class FileSet2PropertyTask extends JLD_PhingTools_Task
 	 */
 	protected function toProp()
 	{
+		// clear empty entries
+		foreach( $this->liste as $index =>&$e )
+			if (empty( $e ))
+				unset( $this->liste[ $index] );
+			
 		$this->processed_liste = implode( ',' , $this->liste );
 	}	 
 }// end class
