@@ -2,7 +2,7 @@
 /**
  * PHING task to 'trim' a string
  *
- * 	<taskdef classname='JLD.PearTools.phing.TrimTask' name='trim' />
+ * 	<taskdef classname='JLD.PhingTools.TrimTask' name='trim' />
  *	<trim	input="input_string"
  *			output="property_name_for_output_result" />
  * 
