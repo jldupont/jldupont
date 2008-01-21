@@ -43,13 +43,13 @@ class PathInfoTask extends JLD_PhingTools_Task
 		if (!is_array( $path_parts ))
 			throw new BuildException(self::thisTask.': pathinfo error.');		
 
-		if (!empty( $this->__get('prop_dirname') ))
+		if (!isset( $this->prop_dirname))
 			$this->project->setProperty($this->prop_dirname, $path_parts['dirname'] );									
-		if (!empty( $this->__get('prop_basename') ))
+		if (!isset( $this->prop_basename))
 			$this->project->setProperty($this->prop_basename, $path_parts['basename'] );									
-		if (!empty( $this->__get('prop_extension') ))
+		if (!isset( $this->prop_extension))
 			$this->project->setProperty($this->prop_extension, $path_parts['extension'] );									
-		if (!empty( $this->__get('prop_filename') ))
+		if (!isset( $this->prop_filename))
 			$this->project->setProperty($this->prop_filename, $path_parts['filename'] );									
     }
 }// end class
