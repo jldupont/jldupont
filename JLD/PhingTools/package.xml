@@ -11,7 +11,7 @@
  <name>PhingTools</name>
  <channel>jldupont.googlecode.com/svn</channel>
  <summary>PHING tools</summary>
- <description>SvnAddTask, SvnPropsetTask, DateTask, TrimTask, SortTask etc.</description>
+ <description>JsMinTask, SvnAddTask, SvnPropsetTask, DateTask, TrimTask, SortTask etc.</description>
 
  <lead>
   <name>Jean-Lou Dupont</name>
@@ -24,7 +24,7 @@
  <time>02:22:48</time>
 
  <version>
-  <release>1.6.0</release>
+  <release>1.7.0</release>
   <api>1.0.0</api>
  </version>
  
@@ -54,6 +54,8 @@
    <file baseinstalldir="JLD/PhingTools" name="/Sorter/FileSetSorter.php" role="php" />
    <file baseinstalldir="JLD/PhingTools" name="Text2PngTask.php" role="php" />
    <file baseinstalldir="JLD/PhingTools" name="ReadFileTask.php" role="php" />
+   <file baseinstalldir="JLD/PhingTools/jsmin" name="jsmin.php" role="php" />
+   <file baseinstalldir="JLD/PhingTools/jsmin" name="JsMinTask.php" role="php" />
     <!-- }} -->
 
   </dir>
@@ -91,7 +93,7 @@
 <changelog>
 	<release>
 		<license uri="http://www.php.net/license">PHP License</license>
-		<notes>Added 'ReadFileTask' and 'Text2PngTask'
+		<notes>Added ''JsMinTask''
 		</notes>
 	</release>
 </changelog>

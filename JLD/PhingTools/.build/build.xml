@@ -19,21 +19,18 @@
 				target="all" />
 	</target>
 
-
-	<property file="../../../.build/build.rss.properties" />
-
-	<target name='DoRss'>
+	<target name='DoRss' depends="DoPackage">
 		<phing phingfile="../../../.build/build.rss.xml" 
 				inheritRefs="true" 
 				inheritAll="true" />
 	</target>
-<!--
+
 	<target name='DoDocs' depends="DoPackage">
 		<phing phingfile="../../../.build/build.docs.xml" 
 				inheritRefs="true" 
 				inheritAll="true" />
 	</target>
--->
+
 	<target name='all' depends='DoPackage, DoRss' />
 
 </project>
