@@ -31,14 +31,14 @@ abstract class JLD_PhingTools_Task extends Task
 	 */
 	public function __isset( $nm )	 
 	{
-		return @isset( $this->vars[ $nm] );		
+		return @isset( $this->vars[ $nm ] );		
 	}
 	/**
 	 * Catch-all 'unset' interface
 	 */
 	public function __unset( $nm )	 
 	{
-		return @unset( $this->vars[ $nm] );		
+		unset( $this->vars[ $nm ] );		
 	}
 	/**
 	 *
