@@ -8,6 +8,17 @@
 
 	
 	<item>
+			<title>PhingTools - 1.7.0</title>
+			<link>http://jldupont.com/Extension:PhingTools</link>
+			<description>Changelog:
+Added ''JsMinTask''
+			</description>
+			<pubDate>Sun, 20 Jan 08 20:39:27 -0500</pubDate>
+		</item>
+
+
+	
+	<item>
 			<title>PhingTools - 1.6.0</title>
 			<link>http://jldupont.googlecode.com/svn</link>
 			<description>Changelog:
