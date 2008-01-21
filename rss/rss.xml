@@ -8,6 +8,17 @@
 
 	
 	<item>
+			<title>PhingTools - 1.9.0</title>
+			<link>http://jldupont.com/Extension:PhingTools</link>
+			<description>Changelog:
+Added ''PathInfoTask''
+			</description>
+			<pubDate>Sun, 20 Jan 08 22:22:35 -0500</pubDate>
+		</item>
+
+
+	
+	<item>
 			<title>PhingTools - 1.7.0</title>
 			<link>http://jldupont.com/Extension:PhingTools</link>
 			<description>Changelog:

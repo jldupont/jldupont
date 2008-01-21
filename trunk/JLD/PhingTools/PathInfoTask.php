@@ -26,10 +26,10 @@ class PathInfoTask extends JLD_PhingTools_Task
 	const thisTask = 'PathInfo';
 	
 	public function setFile( $val ) { $this->__set('file', $val); }	
-	public function setProp_dirname( $val ) { $this->__set('prop_dirname', $val); }	
-	public function setProp_basename( $val ) { $this->__set('prop_basename', $val); }	
-	public function setProp_extension( $val ) { $this->__set('prop_extension', $val); }	
-	public function setProp_filename( $val ) { $this->__set('prop_filename', $val); }			
+	public function setDirname( $val ) { $this->dirname = $val; }	
+	public function setBasename( $val ) { $this->basename = $val; }	
+	public function setExtension( $val ) { $this->extension = $val; }	
+	public function setFilename( $val ) { $this->filename = $val; }			
 	
     /**
      * The main entry point method.
@@ -43,14 +43,14 @@ class PathInfoTask extends JLD_PhingTools_Task
 		if (!is_array( $path_parts ))
 			throw new BuildException(self::thisTask.': pathinfo error.');		
 
-		if (!isset( $this->prop_dirname))
-			$this->project->setProperty($this->prop_dirname, $path_parts['dirname'] );									
-		if (!isset( $this->prop_basename))
-			$this->project->setProperty($this->prop_basename, $path_parts['basename'] );									
-		if (!isset( $this->prop_extension))
-			$this->project->setProperty($this->prop_extension, $path_parts['extension'] );									
-		if (!isset( $this->prop_filename))
-			$this->project->setProperty($this->prop_filename, $path_parts['filename'] );									
+		if (isset( $this->dirname ))
+			$this->project->setProperty($this->dirname, $path_parts['dirname'] );									
+		if (isset( $this->basename ))
+			$this->project->setProperty($this->basename, $path_parts['basename'] );									
+		if (isset( $this->extension ))
+			$this->project->setProperty($this->extension, $path_parts['extension'] );									
+		if (isset( $this->filename ))
+			$this->project->setProperty($this->filename, $path_parts['filename'] );
     }
 }// end class
 //</source>
