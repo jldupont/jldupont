@@ -27,6 +27,20 @@ abstract class JLD_PhingTools_Task extends Task
 		return @$this->vars[ $nm ];
 	}
 	/**
+	 * Catch-all 'isset' interface
+	 */
+	public function __isset( $nm )	 
+	{
+		return @isset( $this->vars[ $nm] );		
+	}
+	/**
+	 * Catch-all 'unset' interface
+	 */
+	public function __unset( $nm )	 
+	{
+		return @unset( $this->vars[ $nm] );		
+	}
+	/**
 	 *
 	 */
 	public function getVars() { return $this->vars; }
