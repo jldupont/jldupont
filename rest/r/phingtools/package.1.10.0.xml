@@ -21,7 +21,7 @@
  </lead>
 
  <date>2008-01-23</date>
- <time>01:41:16</time>
+ <time>01:44:38</time>
 
  <version>
   <release>1.10.0</release>
@@ -55,8 +55,8 @@
    <file baseinstalldir="JLD/PhingTools" name="/Sorter/FileSetSorter.php" role="php" />
    <file baseinstalldir="JLD/PhingTools" name="Text2PngTask.php" role="php" />
    <file baseinstalldir="JLD/PhingTools" name="ReadFileTask.php" role="php" />
-   <file baseinstalldir="JLD/PhingTools/jsmin" name="jsmin.php" role="php" />
-   <file baseinstalldir="JLD/PhingTools/jsmin" name="JsMinTask.php" role="php" />
+   <file baseinstalldir="JLD/PhingTools" name="/jsmin/jsmin.php" role="php" />
+   <file baseinstalldir="JLD/PhingTools" name="/jsmin/JsMinTask.php" role="php" />
    <file baseinstalldir="JLD/PhingTools" name="PathInfoTask.php" role="php" />
     <!-- }} -->
 
