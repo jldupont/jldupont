@@ -20,11 +20,11 @@
   <active>yes</active>
  </lead>
 
- <date>2008-01-21</date>
- <time>03:22:34</time>
+ <date>2008-01-23</date>
+ <time>01:41:16</time>
 
  <version>
-  <release>1.9.0</release>
+  <release>1.10.0</release>
   <api>1.0.0</api>
  </version>
  
@@ -44,6 +44,7 @@
 	<!-- baseinstalldir: the target directory on the target machine -->
    <file baseinstalldir="JLD/PhingTools" name="Task.php" role="php" />
    <file baseinstalldir="JLD/PhingTools" name="SvnAddTask.php" role="php" />
+   <file baseinstalldir="JLD/PhingTools" name="SvnAdd2Task.php" role="php" />
    <file baseinstalldir="JLD/PhingTools" name="SvnPropsetTask.php" role="php" />
    <file baseinstalldir="JLD/PhingTools" name="SvnStatusTask.php" role="php" />
    <file baseinstalldir="JLD/PhingTools" name="TrimTask.php" role="php" />
@@ -94,7 +95,7 @@
 <changelog>
 	<release>
 		<license uri="http://www.php.net/license">PHP License</license>
-		<notes>Added ''PathInfoTask''
+		<notes>Added ''SvnAdd2Task''
 		</notes>
 	</release>
 </changelog>
