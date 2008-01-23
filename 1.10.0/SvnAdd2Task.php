@@ -11,7 +11,7 @@
  * @author Jean-Lou Dupont
  * @package PhingTools
  * @version 1.10.0
- * @id $Id: SvnAddTask.php 289 2007-11-27 02:04:17Z JeanLou.Dupont $
+ * @id $Id: SvnAdd2Task.php 317 2008-01-23 01:42:30Z JeanLou.Dupont $
  */
 //<source lang=php> 
 
