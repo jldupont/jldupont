@@ -77,9 +77,9 @@ class SvnAddBatchTask extends Task
 			$path = $base.'/'.$name;
 			
 			// checks first if the $path is already in SVN
-			$result = exec("svn status $path");		
+			$result = exec("svn status \"$path\"");		
 			if (strpos( $result, '?' ) !== false)
-				echo exec("svn add $path")."\n";
+				echo exec("svn add \"$path\"")."\n";
         }
                                 
     }   
