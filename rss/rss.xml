@@ -8,12 +8,23 @@
 
 	
 	<item>
+			<title>PhingTools - 1.11.0</title>
+			<link>http://jldupont.com/Extension:PhingTools</link>
+			<description>Changelog:
+Added ''SvnAddBatchTask''
+			</description>
+			<pubDate>Tue, 22 Jan 08 21:10:41 -0500</pubDate>
+		</item>
+
+
+	
+	<item>
 			<title>PhingTools - 1.10.0</title>
 			<link>http://jldupont.com/Extension:PhingTools</link>
 			<description>Changelog:
 Added ''SvnAdd2Task''
 			</description>
-			<pubDate>Tue, 22 Jan 08 20:41:18 -0500</pubDate>
+			<pubDate>Tue, 22 Jan 08 20:44:39 -0500</pubDate>
 		</item>
 
 
