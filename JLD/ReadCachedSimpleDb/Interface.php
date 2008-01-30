@@ -60,7 +60,7 @@ interface ReadCachedSimpleDb_Interface
 	 *
 	 * @throws ReadCachedSimpleDb_Exception
 	 */
-	public function createFieldsCacheDbTable( &$tableSchema );	
+	public function createCacheDb( &$tableSchema );	
 		
 }
  
