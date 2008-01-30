@@ -48,7 +48,7 @@ interface ReadCachedSimpleDb_Interface
 	 *
 	 * @throws ReadCachedSimpleDb_Exception
 	 */
-	public function checkCacheDbTable();	
+	public function checkCacheDbTable( &$tableSchema );	
 
 	/**
 	 * Creates the required fields for the cache DB table.
@@ -60,7 +60,7 @@ interface ReadCachedSimpleDb_Interface
 	 *
 	 * @throws ReadCachedSimpleDb_Exception
 	 */
-	public function createFieldsCacheDbTable();	
+	public function createFieldsCacheDbTable( &$tableSchema );	
 		
 }
  
