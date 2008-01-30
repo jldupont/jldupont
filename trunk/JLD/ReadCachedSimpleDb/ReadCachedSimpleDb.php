@@ -93,15 +93,23 @@ class ReadCachedSimpleDb
 	 *
 	 * @param $tableSchema : must be in MBD2 format	 
 	 */
-	public function createFieldsCacheDbTable( &$tableSchema )
+	public function createCacheDb( &$tableSchema )
 	{
 		// verify we have a valid mdb2 object instance
+		if ( !$this->isValidMDB2() )
+		{
+			require_once 'JLD/ReadCachedSimpleDb/Exception.php';	
+			throw new ReadCachedSimpleDb_Exception; //##TODO
+		}
+		// we need the manager module to create table, fields etc.
+		$mdb2->loadModule('Manager');
+		
+		// does the required table already exist?
+		if (!$this->tableExists())
+			$this->createTable();
 		
 		// does the field already exist? skip if YES
 		// BUT make sure it is of the right type.
-		
-		// we need the manager module to create table, fields
-		$mdb2->loadModule('Manager');
 		
 	}
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -115,7 +123,7 @@ class ReadCachedSimpleDb
     public function createDomain($action)
 	{
 		require_once 'JLD/ReadCachedSimpleDb/Exception.php';	
-		throw new ReadCachedSimpleDb_Exception;
+		throw new ReadCachedSimpleDb_Exception; //##TODO
 	}
 	/**
 	 * @throws ReadCachedSimpleDb_Exception
@@ -123,7 +131,7 @@ class ReadCachedSimpleDb
     public function listDomains($action)
 	{
 		require_once 'JLD/ReadCachedSimpleDb/Exception.php';	
-		throw new ReadCachedSimpleDb_Exception;
+		throw new ReadCachedSimpleDb_Exception; //##TODO
 	}
 	/**
 	 *
@@ -132,7 +140,7 @@ class ReadCachedSimpleDb
     public function deleteDomain($action)
 	{
 		require_once 'JLD/ReadCachedSimpleDb/Exception.php';	
-		throw new ReadCachedSimpleDb_Exception;
+		throw new ReadCachedSimpleDb_Exception; //##TODO
 	}
 	/**
 	 * Puts the attributes associated with an 'item'.
@@ -177,9 +185,13 @@ class ReadCachedSimpleDb
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
+
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // Helper methods 
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	/**
+	 *
+	 */
 	private function checkLocalDatabase( &$tableSchema )
 	{
 		// verify if the table exist
@@ -192,7 +204,7 @@ class ReadCachedSimpleDb
 		
 	}
 	/**
-	 *
+	 * Performs some basic tests on the $mdb2 object instance
 	 */	
 	private function isValidMDB2( )	 
 	{
@@ -204,4 +216,41 @@ class ReadCachedSimpleDb
 			
 		return true;		
 	}
-}
+	/**
+	 * Verifies that the required database table exists
+	 *
+	 * @return
+	 */	
+	private function tableExists()
+	{
+		// we need a valid table name!
+		if ( empty( $this->tableName ) )
+		{
+			require_once 'JLD/ReadCachedSimpleDb/Exception.php';	
+			throw new ReadCachedSimpleDb_Exception; //##TODO
+		}
+		
+		// ##TODO check if this function fails if NO table exists
+		$tables = $this->mdb2->listTables();
+		// we can't run into an error here!
+        if (PEAR::isError($tables))
+		{
+			require_once 'JLD/ReadCachedSimpleDb/Exception.php';	
+			throw new ReadCachedSimpleDb_Exception; //##TODO
+		}
+
+		return in_array( $this->tableName, $tables );
+	}
+	/**
+	 * Creates the required table in the local database.
+	 */	
+	private function createTable()
+	{
+		
+	}	 
+
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+// Expiry related helper methods 
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+}//end class
