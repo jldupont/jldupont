@@ -73,7 +73,7 @@ interface ObjectCache_ManagementInterface
 	 * @param string $tableName the name of the table in the specified database
 	 * @throws ObjectCache_Exception
 	 */
-	public function setDatabaseParameters( $dsn, $databaseName, $tableName );
+	public function init( $dsn, $databaseName, $tableName );
 	
 	/**
 	 * Inits the required database structure.
