@@ -7,16 +7,21 @@
  * @version @@package-version@@
  * @package ObjectCache
  */
-
-require 'JLD/ObjectCache/Interface.php';
-require 'JLD/ObjectCache/Exception.php';
 require 'PEAR.php';
 require 'MDB2.php';
+require 'JLD/ObjectCache/Interface.php';
+require 'JLD/ObjectCache/Exception.php';
+require 'JLD/ObjectCache/Defines.php';
 
 class ObjectCache 
 	implements	ObjectCache_Interface,
 				ObjectCache_ManagementInterface
 {
+	/**
+	 * The messages of this class
+	 */
+	static $msg;
+	
 	/**
 	 * The 'expiry' timeout (in seconds)
 	 */
@@ -33,33 +38,130 @@ class ObjectCache
 	 * The table name in the database
 	 */	
 	var $table = null;	 
-
+	/**
+	 * The actual MDB2 object instance
+	 */
+	var $mdb2 = null;
+		 
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+// CONSTRUCTOR
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	public function __construct()
+	{}
 	
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // PRODUCTION INTERFACE	
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	public function setExpiry( $expiry );
+	/**
+	 * @see ObjectCache_Interface::setExpiry
+	 */
+	public function setExpiry( $expiry )
+	{
+		
+	}
 	
-	public function set( $key, $value );
+	/**
+	 * @see ObjectCache_Interface::set
+	 */
+	public function set( $key, $value )
+	{
+		
+	}
 
-	public function get( $key );	 
+	/**
+	 * @see ObjectCache_Interface::get
+	 */
+	public function get( $key )
+	{
+		
+	}
 	
-	public function delete( $key );	 
+	/**
+	 * @see ObjectCache_Interface::delete
+	 */
+	public function delete( $key )
+	{
+		
+	}
 
-	public function clear( );
-
+	/**
+	 * @see ObjectCache_Interface::clear
+	 */
+	public function clear( )
+	{
+		
+	}
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+// PRODUCTION INTERFACE	HELPERS
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	protected function init()
+	{
+	}
+	
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // MANAGEMENT INTERFACE	
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	public function setDatabaseParameters( $dsn, $databaseName, $tableName );
+	/**
+	 * 
+	 */
+	public function init( $dsn, $databaseName, $tableName )
+	{
+		$this->dsn 	= $dsn;
+		$this->db 	= $databaseName;
+		$this->table= $tableName;
+		
+		return $this->initReal();
+	}
+	/**
+	 * @see ObjectCache_ManagementInterface::initDatabaseStructure
+	 */
+	public function initDatabaseStructure( )
+	{
+		$this->initManagement();
+			
+	}
+	/**
+	 * @see ObjectCache_ManagementInterface::deleteDatabaseStructure
+	 */
+	public function deleteDatabaseStructure( )
+	{
+		$this->initManagement();		
+	}
+	/**
+	 * @see ObjectCache_ManagementInterface::checkDatabaseStructure
+	 */
+	public function checkDatabaseStructure( )
+	{
+		$this->initManagement();		
+	}
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+// MANAGEMENT INTERFACE	HELPERS
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	protected function initReal()
+	{
+		// already initialized?
+		if ( $this->mdb2 !== null )
+		{ 
+			$err = & ObjectCache::raiseError( MDB2_ERROR_NOT_FOUND,
+            			null, null, 'no RDBMS driver specified');
+			return $err;
+		}
+				
+		$this->mdb2 =& MDB2::factory( $this->dsn );			
+		if (PEAR::isError( $this->mdb2 )) 
+		{
+		    //die($mdb2->getMessage());
+		}					
+		// set the database to work on with
+		$this->mdb2->setDatabase( $this->db );
+		
+	}
+	protected function initManagement()
+	{
+		
+		$this->mdb2->loadModule( 'Manager' );
+	}
 	
-	public function initDatabaseStructure( );
-
-	public function deleteDatabaseStructure( );	 
-	
-	public function checkDatabaseStructure( );
-	
-
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // ERROR HANDLING
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -121,3 +223,5 @@ class ObjectCache
     }
 
 }//end class
+require 'JLD/ObjectCache/Messages.php';
+//end file
