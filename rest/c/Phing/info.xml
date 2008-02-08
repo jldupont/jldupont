@@ -7,5 +7,5 @@
  <n>Phing</n>
  <c>jldupont.googlecode.com/svn</c>
  <a>Phing</a> <!-- alias? -->
- <d>JsMinTask, SvnAddTask, SvnPropsetTask, DateTask, TrimTask, SortTask etc.</d>
+ <d>PearPathTask, JsMinTask, SvnAddTask, SvnPropsetTask, DateTask, TrimTask, SortTask etc.</d>
 </c>
