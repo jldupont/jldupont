@@ -10,7 +10,7 @@
  * @author Jean-Lou Dupont
  * @package PhingTools
  * @version 1.12.0
- * @Id $Id: ReadFileTask.php 307 2007-12-18 02:25:36Z JeanLou.Dupont $
+ * @Id $Id: PearPathTask.php 326 2008-02-08 22:56:09Z JeanLou.Dupont $
  */
 //<source lang=php> 
 
@@ -30,7 +30,7 @@ class PearPathTask
 			throw new BuildException( self::thisName.': target property name must be specified.');
 
 		$path = $this->findPearPath();
-					
+        $project = $this->getProject();					
 		$this->project->setProperty( $this->property, $path);
     }
 	/**

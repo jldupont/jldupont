@@ -30,7 +30,7 @@ class PearPathTask
 			throw new BuildException( self::thisName.': target property name must be specified.');
 
 		$path = $this->findPearPath();
-					
+        $project = $this->getProject();					
 		$this->project->setProperty( $this->property, $path);
     }
 	/**
