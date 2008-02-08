@@ -14,12 +14,14 @@
  */
 //<source lang=php> 
 
-class PearPathTask
+require_once "JLD/PhingTools/Task.php";
+
+class PearPathTask extends JLD_PhingTools_Task
 {
 	const thisName = 'PearPathTask';
-	var $property = null;
 	
-	public function setProperty( $val ) { $this->property = $val; }	
+	// Attributes interface
+	public function setProperty( $val ) { $this->__set('property', $val); }	
 	
     /**
      * The main entry point method.
