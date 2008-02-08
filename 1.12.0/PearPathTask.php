@@ -10,16 +10,19 @@
  * @author Jean-Lou Dupont
  * @package PhingTools
  * @version 1.12.0
- * @Id $Id: PearPathTask.php 326 2008-02-08 22:56:09Z JeanLou.Dupont $
+ * @Id $Id: PearPathTask.php 327 2008-02-08 23:06:18Z JeanLou.Dupont $
  */
 //<source lang=php> 
 
-class PearPathTask
+require_once "JLD/PhingTools/Task.php";
+
+class PearPathTask extends JLD_PhingTools_Task
 {
 	const thisName = 'PearPathTask';
 	var $property = null;
 	
-	public function setProperty( $val ) { $this->property = $val; }	
+	// Attributes interface
+	public function setProperty( $val ) { $this->__set('property', $val); }	
 	
     /**
      * The main entry point method.
