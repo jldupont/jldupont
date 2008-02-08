@@ -11,7 +11,7 @@
  <name>PhingTools</name>
  <channel>jldupont.googlecode.com/svn</channel>
  <summary>PHING tools</summary>
- <description>JsMinTask, SvnAddTask, SvnPropsetTask, DateTask, TrimTask, SortTask etc.</description>
+ <description>PearPathTask, JsMinTask, SvnAddTask, SvnPropsetTask, DateTask, TrimTask, SortTask etc.</description>
 
  <lead>
   <name>Jean-Lou Dupont</name>
@@ -20,11 +20,11 @@
   <active>yes</active>
  </lead>
 
- <date>2008-01-23</date>
- <time>03:03:42</time>
+ <date>2008-02-08</date>
+ <time>22:53:17</time>
 
  <version>
-  <release>1.11.0</release>
+  <release>1.12.0</release>
   <api>1.0.0</api>
  </version>
  
@@ -59,6 +59,7 @@
    <file baseinstalldir="JLD/PhingTools" name="/jsmin/jsmin.php" role="php" />
    <file baseinstalldir="JLD/PhingTools" name="/jsmin/JsMinTask.php" role="php" />
    <file baseinstalldir="JLD/PhingTools" name="PathInfoTask.php" role="php" />
+   <file baseinstalldir="JLD/PhingTools" name="PearPathTask.php" role="php" />
     <!-- }} -->
 
   </dir>
@@ -96,7 +97,7 @@
 <changelog>
 	<release>
 		<license uri="http://www.php.net/license">PHP License</license>
-		<notes>Added ''SvnAddBatchTask''
+		<notes>Added ''PearPathTask''
 		</notes>
 	</release>
 </changelog>
