@@ -7,12 +7,12 @@
  *	
  *  <findfiletask	dir="directory-where-to-start-the-search"
  *					source="filename-of-file-to-find" 
- * 					target="absolute-path-if-found" />
+ * 					result="absolute-path-if-found" />
  *
  * @author Jean-Lou Dupont
  * @package PhingTools
  * @version 1.13.0
- * @Id $Id: FindFileTask.php 330 2008-02-09 18:27:58Z JeanLou.Dupont $
+ * @Id $Id: FindFileTask.php 332 2008-02-09 18:56:55Z JeanLou.Dupont $
  */
 //<source lang=php> 
 
@@ -46,13 +46,13 @@ EXAMPLE of a reference list:
 	static $params = array(
 		'dir' 	 => array( 'm' => true, 'l' => true, 't' => 'dir' ),	
 		'source' => array( 'm' => true, 'l' => true, 't' => 'string' ),
-		'target' => array( 'm' => true, 'l' => true, 't' => 'string' ),		
+		'result' => array( 'm' => true, 'l' => true, 't' => 'string' ),		
 	);
 	
 	// Attributes interface
 	public function setDir( $val )		{ $this->__set('dir', $val); }		
 	public function setSource( $val )	{ $this->__set('source', $val); }	
-	public function setTarget( $val )	{ $this->__set('target', $val); }	
+	public function setResult( $val )	{ $this->__set('result', $val); }	
 		
     /**
      * The main entry point method.
@@ -74,7 +74,7 @@ EXAMPLE of a reference list:
 		$path = $this->findFile( $this->dir, $this->source );
 
         $project = $this->getProject();					
-		$this->project->setProperty( $this->target, $path);
+		$this->project->setProperty( $this->result, $path);
     }
 	/**
 	 *
@@ -93,7 +93,12 @@ EXAMPLE of a reference list:
 				break;
 			} 
 			// go 1 level up
-			$dir = realpath( $dir.'/../' );
+			$newdir = realpath( $dir.'/../' );
+			// did we reach the top?
+			if ( $newdir == $dir )
+				break;
+			$dir = $newdir;
+			
 		} while(true);
 		
 		return $result;
