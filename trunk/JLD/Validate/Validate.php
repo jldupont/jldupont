@@ -155,12 +155,15 @@ class JLD_Validate
 				if ( $ref_liste[ $key ]['s'] === true )
 					$value = htmlspecialchars( $value );
 		}
+		
+		return true;		
 	}
 	/**
 	 * Performs type checking
+	 * Types supported: [array, string, int, bool, float, dir, file]
 	 *
 	 * @param mixed $value to check
-	 * @param string $type expected type [array, string, int, bool, float]
+	 * @param string $type expected type 
 	 * @return bool
 	 * @throws Exception
 	 */	
@@ -186,6 +189,13 @@ class JLD_Validate
 			case 'array':
 				$result = is_array( $value );
 				break;
+			case 'dir':
+				$result = is_dir( $value );
+				break;
+			case 'file':
+				$result = is_file( $value );
+				break;
+	
 			default:
 				throw new Exception( __CLASS__.'::'.__METHOD__.': wrong type.' );
 		}

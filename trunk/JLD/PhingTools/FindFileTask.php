@@ -5,7 +5,8 @@
  *
  * 	<taskdef classname='JLD.PhingTools.FindFileTask' name='findfiletask' />
  *	
- *  <findfiletask	source="filename-of-file-to-find" 
+ *  <findfiletask	dir="directory-where-to-start-the-search"
+ *					source="filename-of-file-to-find" 
  * 					target="absolute-path-if-found" />
  *
  * @author Jean-Lou Dupont
@@ -43,23 +44,34 @@ EXAMPLE of a reference list:
 */
 	
 	static $params = array(
+		'dir' 	 => array( 'm' => true, 'l' => true, 't' => 'dir' ),	
 		'source' => array( 'm' => true, 'l' => true, 't' => 'string' ),
 		'target' => array( 'm' => true, 'l' => true, 't' => 'string' ),		
 	);
 	
 	// Attributes interface
-	public function setSource( $val ) { $this->__set('source', $val); }	
-	public function setTarget( $val ) { $this->__set('target', $val); }	
+	public function setDir( $val )		{ $this->__set('dir', $val); }		
+	public function setSource( $val )	{ $this->__set('source', $val); }	
+	public function setTarget( $val )	{ $this->__set('target', $val); }	
 		
     /**
      * The main entry point method.
      */
     public function main() 
 	{
-		if ( is_null( $this->source ))
-			throw new BuildException( self::thisName.': source filename name must be specified.');
+		$parameters = JLD_Validate::initFromObject( $this, self::$params );
+		$result = JLD_Validate::doListSanitization( $parameters, self::$params );
+		
+		if ( !is_array( $result ))
+			throw new BuildException( self::thisName.': missing parameter '.$result );
+			
+		$key = JLD_Validate::doSanitization( $parameters, self::$params );
 
-		$path = $this->findFile( $this->source );
+		if ( $key !== true)
+			throw new BuildException( 
+				self::thisName.': parameter '.$key.' of wrong type. Expecting "'.self::$params[$key]['t'].'"' );		
+
+		$path = $this->findFile( $this->dir, $this->source );
 
         $project = $this->getProject();					
 		$this->project->setProperty( $this->target, $path);
@@ -67,18 +79,24 @@ EXAMPLE of a reference list:
 	/**
 	 *
 	 */
-	protected function findPearPath()
+	protected function findFile( $dir, &$file )
 	{
-		$pathArray = explode( PATH_SEPARATOR, get_include_path() );
+		$result = null;
+		do {
+			if ( !is_dir( $dir ) )
+				break;
+				
+			$filepath = $dir.'/'.$file;
+			if ( is_file( $filepath ))
+			{
+				$result = $filepath;
+				break;
+			} 
+			// go 1 level up
+			$dir = realpath( $dir.'/../' );
+		} while(true);
 		
-		if ( empty( $pathArray ))
-			return null;
-			
-		foreach( $pathArray as &$e )
-			if ( preg_match( '/pear/si', $e ) === 1 )
-				return $e;
-									
-		return null;			
+		return $result;
 	} 
 
 }// end class
