@@ -28,6 +28,28 @@ EXAMPLE of a reference list:
 class JLD_Validate
 {
 	/**
+	 * Builds a parameter list (i.e. array) from an
+	 * object instance. Uses the 'reference list' passed
+	 * as input list.
+	 *
+	 * @param object $obj
+	 * @param array reference list
+	 * @return array output list
+	 */
+	public static function initFromObject( &$obj, &$ref_liste )
+	{
+		if (empty( $ref_liste ))
+			return null;
+			
+		$output = array();
+		
+		foreach( $ref_liste as $key => &$value )
+			if ( isset( $obj->$key ) )
+				$output[ $key ] = $obj->$key;
+				
+		return $output;
+	}	 
+	/**
 	 * Retrieves the specified list of parameters from the list.
 	 * Uses the ''l'' parameter from the reference list.
 	 *
