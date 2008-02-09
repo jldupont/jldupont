@@ -24,7 +24,7 @@
  <time>23:09:27</time>
 
  <version>
-  <release>1.12.0</release>
+  <release>1.13.0</release>
   <api>1.0.0</api>
  </version>
  
@@ -60,6 +60,7 @@
    <file baseinstalldir="JLD/PhingTools" name="/jsmin/JsMinTask.php" role="php" />
    <file baseinstalldir="JLD/PhingTools" name="PathInfoTask.php" role="php" />
    <file baseinstalldir="JLD/PhingTools" name="PearPathTask.php" role="php" />
+   <file baseinstalldir="JLD/PhingTools" name="FindFileTask.php" role="php" />
     <!-- }} -->
 
   </dir>
@@ -83,6 +84,13 @@
 		<min>2.3.0</min>
 	</package>
 
+	<!-- required for FindFileTask -->
+	<package>
+		<name>validate</name>
+		<channel>jldupont.googlecode.com/svn</channel>
+		<min>1.0.0</min>
+	</package>
+
   </required>
  </dependencies>
 
@@ -97,7 +105,7 @@
 <changelog>
 	<release>
 		<license uri="http://www.php.net/license">PHP License</license>
-		<notes>Added ''PearPathTask''
+		<notes>Added ''FindFileTask''
 		</notes>
 	</release>
 </changelog>

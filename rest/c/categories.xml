@@ -13,5 +13,6 @@
 	<c xlink:href="/rest/c/Pear/info.xml">Pear</c>
 	<c xlink:href="/rest/c/Phing/info.xml">Phing</c>
 	<c xlink:href="/rest/c/System/info.xml">System</c>
+	<c xlink:href="/rest/c/Validate/info.xml">Validate</c>
 
 </a>
