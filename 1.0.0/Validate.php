@@ -3,7 +3,7 @@
  * Parameter validation
  *
  * @author Jean-Lou Dupont
- * @version @@package-version@@
+ * @version 1.0.0
  */
 /**
   m: mandatory parameter
