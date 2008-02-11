@@ -20,11 +20,11 @@
   <active>yes</active>
  </lead>
 
- <date>2008-02-09</date>
- <time>19:27:18</time>
+ <date>2008-02-11</date>
+ <time>18:07:35</time>
 
  <version>
-  <release>1.13.0</release>
+  <release>1.14.0</release>
   <api>1.0.0</api>
  </version>
  
@@ -105,7 +105,7 @@
 <changelog>
 	<release>
 		<license uri="http://www.php.net/license">PHP License</license>
-		<notes>Added ''FindFileTask''
+		<notes>Added ''FindDirTask''
 		</notes>
 	</release>
 </changelog>
