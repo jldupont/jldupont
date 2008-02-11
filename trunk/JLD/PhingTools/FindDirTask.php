@@ -1,12 +1,18 @@
 <?php
 /**
  * PHING task 
- * Finds the specified file by 'going up' the directory hierarchy.
+ * Finds the specified directory by 'going up' the directory hierarchy.
+ * The 'source' directory to find is actually specified as a 'fragment' 
+ * i.e. not the full path (or else, what's the point?).
+ * E.g. to find the directory fragment 'trunk', use:
+ * <finddirtask dir="${project.basedir}"
+ *				source="trunk"
+ *				result="path.trunk" />
  *
- * 	<taskdef classname='JLD.PhingTools.FindFileTask' name='findfiletask' />
+ * 	<taskdef classname='JLD.PhingTools.FindDirTask' name='finddirtask' />
  *	
- *  <findfiletask	dir="directory-where-to-start-the-search"
- *					source="filename-of-file-to-find" 
+ *  <finddirtask	dir="directory-where-to-start-the-search"
+ *					source="directory-to-find" 
  * 					result="absolute-path-if-found" />
  *
  * @author Jean-Lou Dupont
@@ -19,28 +25,15 @@
 require_once "JLD/PhingTools/Task.php";
 require_once "JLD/Validate/Validate.php";
 
-class FindFileTask extends JLD_PhingTools_Task
+class FindDirTask extends JLD_PhingTools_Task
 {
-	const thisName = 'FindFileTask';
+	const thisName = 'FindDirTask';
 
 /**
  * m: mandatory parameter
  * s: sanitization required
  * l: which parameters to pick from list
  * d: default value
-
-EXAMPLE of a reference list:
-============================
-	static $parameters = array(
-		'email_p1'	=> array( 'm' => true,  's' => true, 'l' => false, 'd' => null,   'sq' => true, 'dq' => true  ),
-		'email_p2'	=> array( 'm' => true,  's' => true, 'l' => false, 'd' => null,   'sq' => true, 'dq' => true  ),
-		'size'		=> array( 'm' => false, 's' => true, 'l' => false, 'd' => '40',   'sq' => true, 'dq' => true  ),
-		'default'	=> array( 'm' => false, 's' => true, 'l' => false, 'd' => null,   'sq' => true, 'dq' => true  ),
-		'width'		=> array( 'm' => false, 's' => true, 'l' => true,  'd' => null,   'sq' => true, 'dq' => true  ),
-		'height'	=> array( 'm' => false, 's' => true, 'l' => true,  'd' => null,   'sq' => true, 'dq' => true  ),		
-		'alt'		=> array( 'm' => false, 's' => true, 'l' => true,  'd' => null,   'sq' => true, 'dq' => true  ),		
-		'title'		=> array( 'm' => false, 's' => true, 'l' => true,  'd' => null,   'sq' => true, 'dq' => true  ),		
-	);
 */
 	
 	static $params = array(
@@ -71,7 +64,7 @@ EXAMPLE of a reference list:
 			throw new BuildException( 
 				self::thisName.': parameter '.$key.' of wrong type. Expecting "'.self::$params[$key]['t'].'"' );		
 
-		$path = $this->findFile( $this->dir, $this->source );
+		$path = $this->findDir( $this->dir, $this->source );
 
         $project = $this->getProject();					
 		$this->project->setProperty( $this->result, $path);
@@ -79,19 +72,20 @@ EXAMPLE of a reference list:
 	/**
 	 *
 	 */
-	protected function findFile( $dir, &$file )
+	protected function findDir( $dir, &$dir_name )
 	{
 		$result = null;
 		do {
 			if ( !is_dir( $dir ) )
 				break;
 				
-			$filepath = $dir.'/'.$file;
-			if ( is_file( $filepath ))
+			$path = $dir.'/'.$dir_name;
+			if ( is_dir( $path ))
 			{
-				$result = $filepath;
+				$result = $path;
 				break;
 			} 
+			
 			// go 1 level up
 			$newdir = realpath( $dir.'/../' );
 			// did we reach the top?
