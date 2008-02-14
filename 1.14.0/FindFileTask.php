@@ -12,7 +12,7 @@
  * @author Jean-Lou Dupont
  * @package PhingTools
  * @version 1.14.0
- * @Id $Id: FindFileTask.php 333 2008-02-09 19:27:54Z JeanLou.Dupont $
+ * @Id $Id: FindFileTask.php 335 2008-02-11 18:09:08Z JeanLou.Dupont $
  */
 //<source lang=php> 
 
