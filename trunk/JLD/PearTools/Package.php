@@ -7,7 +7,6 @@
  */
 //<source lang=php>
 
-require_once "PEAR/XMLParser.php";
 require_once 'JLD/Object/Object.php';
 
 // use a class for namespace management.
