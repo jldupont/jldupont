@@ -13,7 +13,7 @@ require_once "DeliciousPost.php";
 require_once 'HTTP/Request.php';
 
 class JLD_DeliciousPosts 
-	implements ArrayAccess {
+	implements ArrayAccess, ArrayIterator {
 
 	static $service = "http://del.icio.us/rss/";
 
@@ -24,6 +24,10 @@ class JLD_DeliciousPosts
 	var $rep_body = null;
 	var $rep_code = null;
 
+	/**
+	 * Index for ArrayIterator Interface
+	 */
+	var $index = null;
 	/**
 	 * Serves as 'cache'
 	 */
@@ -53,9 +57,29 @@ class JLD_DeliciousPosts
 	
 		return $this->xml;
 	}
-
 	/*********************************************************
-	 * 						ArrayAccess Interface
+	 * 				ArrayIterator Interface
+	 ********************************************************/	
+	public function count() {
+	
+	}
+	public function current() {
+	
+	}
+	public function key() {
+	
+	}
+	public function next() {
+	
+	}
+	public function rewind() {
+	
+	}
+	public function valid() {
+	
+	}
+	/*********************************************************
+	 * 				ArrayAccess Interface
 	 ********************************************************/	
 	/**
 	 * 
@@ -66,11 +90,11 @@ class JLD_DeliciousPosts
 	
 		// first check the 'cache'
 		if ( isset( $this->posts[ $index ] ) )
-			return $this->posts[ $index ];
+			return true;
 				
 		// then the XML aggregate
 		if ( isset( $this->xml["item"][$index])) {
-			return ( $this->posts[ $index ] = $this->xml["item"][$index] );
+			return true;
 		}
 		
 		return false;
@@ -83,21 +107,32 @@ class JLD_DeliciousPosts
 
 		// first check the 'cache'
 		if ( isset( $this->posts[ $index ] ) )
-			return true;
+			return ( $this->posts[$index] );
 				
 		// then the XML aggregate
 		if ( isset( $this->xml["item"][$index])) {
 			// 'cache' it
-			$this->posts[ $index ] = $this->xml["item"][$index];
-			return true;
+			$post = new JLD_DeliciousPost( $this->xml["item"][$index] );
+			return ( $this->posts[ $index ] = $post );
 		}
-	
+		throw new Exception( __METHOD__.": unset offset" );
 	}
-	public function offsetSet( $index, $value ) {
+	public function offsetSet( $index, $post ) {
 	
+		if ( $post instanceof JLD_DeliciousPost ) {
+
+			$this->posts[$index] = $post;
+			return $this;
+		}
+
+		throw new Exception( __METHOD__.": invalid value" );
 	}
 	public function offsetUnset( $index ) {
 	
+		if ( isset( $this->posts[ $index ] ) )
+			unset( $this->posts[$index] );
+	
+		return $this;
 	}
 	/*********************************************************
 	 * 						PROTECTED
