@@ -12,7 +12,8 @@
 require_once "DeliciousPost.php";
 require_once 'HTTP/Request.php';
 
-class JLD_DeliciousPosts {
+class JLD_DeliciousPosts 
+	implements ArrayAccess {
 
 	static $service = "http://del.icio.us/rss/";
 
@@ -23,6 +24,15 @@ class JLD_DeliciousPosts {
 	var $rep_body = null;
 	var $rep_code = null;
 
+	/**
+	 * Serves as 'cache'
+	 */
+	var $post = array();
+
+	/*********************************************************
+	 * 						PUBLIC Interface
+	 ********************************************************/	
+	
 	public function __construct( $feed ) {
 	
 		$this->feed = $feed;
@@ -43,7 +53,52 @@ class JLD_DeliciousPosts {
 	
 		return $this->xml;
 	}
+
+	/*********************************************************
+	 * 						ArrayAccess Interface
+	 ********************************************************/	
+	/**
+	 * 
+	 * @param $index integer
+	 * @return boolean
+	 */
+	public function offsetExists( $index ) {
 	
+		// first check the 'cache'
+		if ( isset( $this->posts[ $index ] ) )
+			return $this->posts[ $index ];
+				
+		// then the XML aggregate
+		if ( isset( $this->xml["item"][$index])) {
+			return ( $this->posts[ $index ] = $this->xml["item"][$index] );
+		}
+		
+		return false;
+	}
+	/**
+	 * This method assumes 'offsetExists' has been called 
+	 * to ensure that the required $index exists
+	 */
+	public function offsetGet( $index ) {
+
+		// first check the 'cache'
+		if ( isset( $this->posts[ $index ] ) )
+			return true;
+				
+		// then the XML aggregate
+		if ( isset( $this->xml["item"][$index])) {
+			// 'cache' it
+			$this->posts[ $index ] = $this->xml["item"][$index];
+			return true;
+		}
+	
+	}
+	public function offsetSet( $index, $value ) {
+	
+	}
+	public function offsetUnset( $index ) {
+	
+	}
 	/*********************************************************
 	 * 						PROTECTED
 	 ********************************************************/	
