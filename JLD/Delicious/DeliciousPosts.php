@@ -7,19 +7,38 @@
  * @version @@package-version@@
  * @package Delicious
  * @dependencies PEAR::HTTP_Request
+ * @example
+ * 		$posts = new JLD_DeliciousPosts( 'jldupont/Mediawiki' );
+ * 		$posts->run();
+ * 		foreach( $o as $post )
+ *			$this->assertEquals( $post instanceof JLD_DeliciousPost, true );		
+ * 
  */
 
 require_once "DeliciousPost.php";
 require_once 'HTTP/Request.php';
 
 class JLD_DeliciousPosts 
-	implements ArrayAccess, ArrayIterator {
+	implements ArrayAccess, Iterator {
 
+	/**
+	 * API end-point
+	 */
 	static $service = "http://del.icio.us/rss/";
 
+	/**
+	 * Fragment of feed
+	 */
 	var $feed = null;
+	
+	/**
+	 * XML object
+	 */
 	var $xml  = null;
 	
+	/** 
+	 * API response objects
+	 */
 	var $rep_headers = null;
 	var $rep_body = null;
 	var $rep_code = null;
@@ -41,7 +60,10 @@ class JLD_DeliciousPosts
 	
 		$this->feed = $feed;
 	}
-	
+	/**
+	 * Should be called after having a newly constructed
+	 * instance of this class.
+	 */
 	public function run() {
 	
 		if ( !$this->fetch() )
@@ -52,7 +74,9 @@ class JLD_DeliciousPosts
 
 		return true;
 	}
-
+	/**
+	 * Mainly used for debug purposes
+	 */
 	public function getXml() {
 	
 		return $this->xml;
@@ -61,22 +85,36 @@ class JLD_DeliciousPosts
 	 * 				ArrayIterator Interface
 	 ********************************************************/	
 	public function count() {
-	
+
+		return count( $this->xml->item );
 	}
 	public function current() {
-	
+		
+		if ( isset( $this->posts[ $this->index ] ) )
+			return $this->posts[ $this->index ];
+		return $this->posts[ $this->index ] = 
+				new JLD_DeliciousPost( $this->xml->item[ $this->index ] );
 	}
+	/**
+	 * We know that the 'key' is really just an index
+	 */
 	public function key() {
-	
+
+		return $this->index;
 	}
 	public function next() {
-	
+
+		$this->index++;
+		return $this;	
 	}
 	public function rewind() {
-	
+
+		$this->index = 0;
+		return $this;	
 	}
 	public function valid() {
-	
+
+		return ( isset( $this->xml->item[$this->index] ) );
 	}
 	/*********************************************************
 	 * 				ArrayAccess Interface
@@ -93,7 +131,7 @@ class JLD_DeliciousPosts
 			return true;
 				
 		// then the XML aggregate
-		if ( isset( $this->xml["item"][$index])) {
+		if ( isset( $this->xml->item[$index])) {
 			return true;
 		}
 		
@@ -110,15 +148,15 @@ class JLD_DeliciousPosts
 			return ( $this->posts[$index] );
 				
 		// then the XML aggregate
-		if ( isset( $this->xml["item"][$index])) {
+		if ( isset( $this->xml->item[$index])) {
 			// 'cache' it
-			$post = new JLD_DeliciousPost( $this->xml["item"][$index] );
+			$post = new JLD_DeliciousPost( $this->xml->item[$index] );
 			return ( $this->posts[ $index ] = $post );
 		}
 		throw new Exception( __METHOD__.": unset offset" );
 	}
 	public function offsetSet( $index, $post ) {
-	
+
 		if ( $post instanceof JLD_DeliciousPost ) {
 
 			$this->posts[$index] = $post;
@@ -134,10 +172,16 @@ class JLD_DeliciousPosts
 	
 		return $this;
 	}
+	
 	/*********************************************************
 	 * 						PROTECTED
 	 ********************************************************/	
-	
+
+	/**
+	 * Parses the XML using SimpleXMLElement
+	 * 
+	 * @return boolean
+	 */
 	public function parse() {
 	
 		try {
@@ -148,17 +192,13 @@ class JLD_DeliciousPosts
 		}
 		return true;
 	}
-	
-	
 	/**
-	 * 
+	 * Builds the URL for the Delicious API
 	 */
 	protected function buildUrl() {
 	
 		return self::$service . $this->feed;
 	}
-
-	
 	/**
 	 * Fetches the feed
 	 * 
