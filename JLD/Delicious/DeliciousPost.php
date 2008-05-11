@@ -83,7 +83,7 @@ class JLD_DeliciousPost {
 	 *						PROTECTED INTERFACE 
 	 *======================================================================*/	
 	/** 
-	 * FACTORY from SimpleXMLElement 
+	 * FACTORY object from SimpleXMLElement 
 	 */
 	protected function & newFromXml( &$xmlObj ) {
 
@@ -94,7 +94,7 @@ class JLD_DeliciousPost {
 		return $this;	
 	}
 	/**
-	 * FACTORY from simple array
+	 * FACTORY object from simple array
 	 */
 	protected function & newFromArray( &$a ) {
 	
