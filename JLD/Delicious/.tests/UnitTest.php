@@ -1,6 +1,6 @@
 <?php
 /**
- *  WB_S3 package unit tests
+ *  JLD_Delicious package unit tests
  *
  *  @author Jean-Lou Dupont
  *  @version @@package-version@@
