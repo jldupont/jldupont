@@ -28,22 +28,9 @@ class UnitTest extends PHPUnit_Framework_TestCase
 		$o = new JLD_DeliciousPosts( self::$feed );
 		$r = $o->run();
 		
-		#$x = $o->getXml();
-		
-		#var_dump( $x );
-		
-		$this->assertEquals( $r , true );				
-	}
-
-	public function test2()
-	{
-		$o = new JLD_DeliciousPosts( self::$feed );
-		$r = $o->run();
-		
-		#var_dump( $o );
-		
 		foreach( $o as $post )
 			$this->assertEquals( $post instanceof JLD_DeliciousPost, true );		
+						
 	}
-	
+
 }// end UnitTest class
