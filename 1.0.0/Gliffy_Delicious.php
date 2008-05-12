@@ -57,5 +57,12 @@ class JLD_Gliffy_Delicious {
 		return $id;
 	}
 
+	public static function extractTitle( $obj ) {
+
+		if (!( $obj instanceof JLD_DeliciousPost ))
+			throw new Exception( __METHOD__.": requires JLD_DeliciousPost object instance" );
+	
+		return $obj->title;
+	}
 
 } // end class definition

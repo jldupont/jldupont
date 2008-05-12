@@ -50,11 +50,12 @@ class UnitTest extends PHPUnit_Framework_TestCase
 			$this->assertEquals( $g instanceof JLD_Gliffy, true );
 			
 			$i = $g->getPictureIterator();
+			$title = $g->title;
 			
 			foreach( $i as $index => $repr ) {
 
 				$this->assertEquals( is_string( $repr ) , true );
-				echo "\nrepresention $index: $repr";				
+				echo "\nRepresention for $title - $index: $repr";				
 			}
 			
 			
