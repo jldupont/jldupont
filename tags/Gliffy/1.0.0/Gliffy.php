@@ -77,9 +77,11 @@ class JLD_Gliffy {
 	 * 						PUBLIC Interface
 	 ********************************************************/	
 	
-	public function __construct( $id = null ) {
+	public function __construct( $id = null, $title = null ) {
 	
 		$this->id = $id;
+		$this->title = $title;
+		
 	}
 	/**
 	 * FACTORY instance from DeliciousPost instance
@@ -92,8 +94,16 @@ class JLD_Gliffy {
 			throw new Exception( "requires an instance of JLD_DeliciousPost class" );
 
 		$id = JLD_Gliffy_Delicious::extractId( $obj );
-
-		return new JLD_Gliffy( $id );
+		$title = JLD_Gliffy_Delicious::extractTitle( $obj );
+		
+		return new JLD_Gliffy( $id, $title );
+	}
+	/**
+	 * Returns the title of this diagram
+	 */
+	public function getTitle() {
+	
+		return $this->title;
 	}
 	/**
 	 * Returns an URL pointing to the requested
