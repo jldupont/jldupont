@@ -9,7 +9,9 @@
 <!-- DO NOT EDIT BELOW HERE -->
 <ch>jldupont.googlecode.com/svn</ch> <!-- not read by list-all command -->
 	<c xlink:href="/rest/c/Amazon/info.xml">Amazon</c>
+	<c xlink:href="/rest/c/Delicious/info.xml">Delicious</c>
 	<c xlink:href="/rest/c/Filesystem/info.xml">Filesystem</c>
+	<c xlink:href="/rest/c/OnlineTools/info.xml">OnlineTools</c>
 	<c xlink:href="/rest/c/Pear/info.xml">Pear</c>
 	<c xlink:href="/rest/c/Phing/info.xml">Phing</c>
 	<c xlink:href="/rest/c/System/info.xml">System</c>
