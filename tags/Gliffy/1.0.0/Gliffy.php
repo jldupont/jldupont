@@ -25,6 +25,7 @@
 
 require_once 'Gliffy_Delicious.php';
 require_once 'Gliffy_PictureIterator.php';
+require_once 'Gliffy_PictureRepresentation.php';
 
 class JLD_Gliffy { 
 

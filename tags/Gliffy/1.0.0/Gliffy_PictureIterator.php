@@ -37,9 +37,14 @@ class JLD_Gliffy_PictureIterator
 
 		return $this->src->getPictureRepresentationCount();
 	}
+	/**
+	 * Returns a JLD_Gliffy_PictureRepresentation object instance
+	 */
 	public function current() {
 
-		return ( $this->src->getUrl( $this->src->getPictureRepresentationByIndex( $this->index ) ) );
+		$url = $this->src->getUrl( $this->src->getPictureRepresentationByIndex( $this->index ) );
+		
+		return JLD_Gliffy_PictureRepresentation::newFromUrl( $this->title, $this->id, $url );
 	}
 	/**
 	 * We know that the 'key' is really just an index

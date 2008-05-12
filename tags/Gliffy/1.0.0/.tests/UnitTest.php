@@ -11,6 +11,7 @@ require_once dirname(__FILE__)."/../../Delicious/DeliciousPosts.php";
 require_once dirname(__FILE__)."/../../Delicious/DeliciousPost.php";
 require_once dirname(__FILE__)."/../Gliffy.php";
 require_once dirname(__FILE__)."/../Gliffy_Delicious.php";
+require_once dirname(__FILE__)."/../Gliffy_PictureRepresentation.php";
 
 class UnitTest extends PHPUnit_Framework_TestCase
 {
@@ -52,10 +53,15 @@ class UnitTest extends PHPUnit_Framework_TestCase
 			$i = $g->getPictureIterator();
 			$title = $g->title;
 			
-			foreach( $i as $index => $repr ) {
+			foreach( $i as $index => $picRepr ) {
 
-				$this->assertEquals( is_string( $repr ) , true );
-				echo "\nRepresention for $title - $index: $repr";				
+				$this->assertEquals( $picRepr instanceof JLD_Gliffy_PictureRepresentation, true );
+				$t  = $picRepr->title;
+				$id = $picRepr->id;
+				$ext= $picRepr->ext;
+				$size=$picRepr->size;
+				 
+				echo "\nRepresention for $title - $index - size $size - ext $ext";				
 			}
 			
 			
