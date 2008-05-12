@@ -28,8 +28,10 @@ foreach( $posts as $post ) {
 	
 	foreach( $i as $index => $repr ) {
 
-		assert( is_string( $repr ) );
-		echo "\n* Represention of $title: $index: $repr";	
+		$id   = $repr->id;
+		$ext  = $repr->ext;
+		$size = $repr->size;
+		echo "\n* Represention of $title: $index - size $size - ext $ext";	
 
 		$contents = file_get_contents( $repr );
 		if ( $contents === false )
