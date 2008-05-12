@@ -19,8 +19,8 @@
   <active>yes</active>
  </lead>
 
- <date>2008-02-14</date>
- <time>04:41:37</time>
+ <date>2008-05-12</date>
+ <time>01:33:40</time>
 
  <version>
   <release>1.0.0</release>
@@ -34,14 +34,16 @@
 
  <license uri="http://www.php.net/license">PHP License</license>
 
- <notes>$notes$</notes>
+ <notes>Gliffy package from jldupont</notes>
 
  <contents>
   <dir name="/">
 
 	<!-- file list begin {{ -->
 	<!-- baseinstalldir: the target directory on the target machine -->
-   <file baseinstalldir="JLD/Gliffy" name="Gliffy.php" role="php" />
+	<file baseinstalldir="JLD/Gliffy" name="Gliffy.php" role="php" />
+	<file baseinstalldir="JLD/Gliffy" name="Gliffy_Delicious.php" role="php" />
+	<file baseinstalldir="JLD/Gliffy" name="Gliffy_PictureIterator.php" role="php" />
     <!-- }} -->
 
   </dir>
