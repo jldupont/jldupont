@@ -1,36 +1,30 @@
 <?php
 /**
  * Gliffy
- * Handles 
+ *  
  *
  * @author Jean-Lou Dupont
  * @version @@package-version@@
  * @package Gliffy
  * @dependencies [optional] JLD/Delicious
  * @example
- * 		$posts = new JLD_DeliciousPosts( 'jldupont/Mediawiki' );
+ * 		$posts = new JLD_DeliciousPosts( 'jldupont/my-diagrams' );
  * 		$posts->run();
- * 		foreach( $o as $post )
- *			$this->assertEquals( $post instanceof JLD_DeliciousPost, true );		
+ * 		foreach( $o as $post ) {
  * 
- */
-/*******************************************************************
-	<item rdf:about="http://www.gliffy.com/publish/1422789/">
-	<title>TransportModel</title>
-	<link>http://www.gliffy.com/publish/1422789/</link>
-	<description></description>
-	<dc:creator>jldupont</dc:creator>
-	<dc:date>2008-05-12T00:15:15Z</dc:date>
-	<dc:subject>my-diagrams</dc:subject>
-	<taxo:topics>
-	  <rdf:Bag>
-	    <rdf:li resource="http://del.icio.us/tag/my-diagrams" />
-	  </rdf:Bag>
-	</taxo:topics>
-	</item>
+ *			$this->assertEquals( $post instanceof JLD_DeliciousPost, true );
+ * 			$g = JLD_Gliffy::newFromDeliciousPost( $post );
+ * 
+ *			$i = $g->getPictureIterator();
+ *			foreach( $i as $index => $repr ) {
+ * 				$this->assertEquals( is_string( $repr ) , true );
+ * 				echo "\nrepresention $index: $repr";
+ * 			}
+ * 		}
  */
 
 require_once 'Gliffy_Delicious.php';
+require_once 'Gliffy_PictureIterator.php';
 
 class JLD_Gliffy { 
 
@@ -45,18 +39,38 @@ class JLD_Gliffy {
 	static $defaultRepresentation = 'jpg_large';
 	
 	/**
+	 * CONSTANT that needs to be adjusted
+	 * if new representations are added to self::$repr
+	 */
+	const COUNT_PICTURE_REPRESENTATION = 4;
+	/**
 	 * Supported representations
 	 */
 	static $repr = array(
 
-		'jpg_large'	=> 'http://www.gliffy.com/pubdoc/%id%/L.jpg',
-		'jpg_medium'=> 'http://www.gliffy.com/pubdoc/%id%/M.jpg',
-		'jpg_small'	=> 'http://www.gliffy.com/pubdoc/%id%/S.jpg',
-		'jpg_thumb'	=> 'http://www.gliffy.com/pubdoc/%id%/T.jpg',
+		# PICTURE representations
+		'jpg_large'	=> array( 'type' => 'picture', 'url' => 'http://www.gliffy.com/pubdoc/%id%/L.jpg' ),
+		'jpg_medium'=> array( 'type' => 'picture', 'url' => 'http://www.gliffy.com/pubdoc/%id%/M.jpg' ),
+		'jpg_small'	=> array( 'type' => 'picture', 'url' => 'http://www.gliffy.com/pubdoc/%id%/S.jpg' ),
+		'jpg_thumb'	=> array( 'type' => 'picture', 'url' => 'http://www.gliffy.com/pubdoc/%id%/T.jpg' ),
 
-		'page'		=> 'http://www.gliffy.com/publish/%id%',
+		# PAGE representation
+		'page'		=> array( 'type' => 'page', 'url' => 'http://www.gliffy.com/publish/%id%' ),
 	);
 
+	/**
+	 * List of possible 'picture' representations
+	 * Must be correlated to self::$repr 
+	 */
+	static $pict_repr = array(
+	
+		'jpg_large',
+		'jpg_medium',
+		'jpg_small',
+		'jpg_thumb'
+		
+	);
+	
 	var $id = null;
 	
 	/*********************************************************
@@ -102,6 +116,31 @@ class JLD_Gliffy {
 		return $this->formatForRepresentationType( $repType );
 	}
 	/**
+	 * Returns an iterator object instance
+	 * which can iterate over all the picture
+	 * representation of this class
+	 */
+	public function getPictureIterator() {
+	
+		return new JLD_Gliffy_PictureIterator( $this );
+	}
+	/*********************************************************
+	 * 					PUBLIC/friend interface
+	 * NOTE: used by 'JLD_Gliffy_PictureIterator'
+	 ********************************************************/	
+	public function getPictureRepresentationCount() {
+
+		return self::COUNT_PICTURE_REPRESENTATION;
+	}
+	public function getPictureRepresentationByIndex( $index ) {
+		
+		return self::$pict_repr[ $index ];
+	}
+	/*********************************************************
+	 * 						PROTECTED Interface
+	 ********************************************************/	
+	
+	/**
 	 * Actually performs the formatting based on the required
 	 * representation type.
 	 * 
@@ -110,203 +149,9 @@ class JLD_Gliffy {
 	 */
 	protected function  formatForRepresentationType( $repType ) {
 	
-		$format = self::$repr[ $repType ];
+		$format = self::$repr[ $repType ]['url'];
 		
 		return str_replace( '%id%', $this->id, $format );
 	}
 	
 } // end class definition
-
-/*
-<?xml version="1.0" encoding="UTF-8"?>
-
-<rdf:RDF
- xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
- xmlns="http://purl.org/rss/1.0/"
- xmlns:cc="http://web.resource.org/cc/"
- xmlns:content="http://purl.org/rss/1.0/modules/content/"
- xmlns:taxo="http://purl.org/rss/1.0/modules/taxonomy/"
- xmlns:dc="http://purl.org/dc/elements/1.1/"
- xmlns:syn="http://purl.org/rss/1.0/modules/syndication/"
- xmlns:admin="http://webns.net/mvcb/"
->
-
-<channel rdf:about="http://del.icio.us/jldupont/my-diagrams">
-<title>del.icio.us/jldupont/my-diagrams</title>
-<link>http://del.icio.us/jldupont/my-diagrams</link>
-<description></description>
-<cc:license rdf:resource="http://creativecommons.org/licenses/publicdomain/" />
-<items>
- <rdf:Seq>
-  <rdf:li rdf:resource="http://www.gliffy.com/publish/1422789/" />
-  <rdf:li rdf:resource="http://www.gliffy.com/publish/1423462/" />
-  <rdf:li rdf:resource="http://www.gliffy.com/publish/1422012/" />
-  <rdf:li rdf:resource="http://www.gliffy.com/publish/1422053/" />
-  <rdf:li rdf:resource="http://www.gliffy.com/publish/1421994/" />
-  <rdf:li rdf:resource="http://www.gliffy.com/publish/1423596/" />
-  <rdf:li rdf:resource="http://www.gliffy.com/publish/1424697/" />
-  <rdf:li rdf:resource="http://www.gliffy.com/publish/1425215/" />
-  <rdf:li rdf:resource="http://www.gliffy.com/publish/1425219/" />
-  <rdf:li rdf:resource="http://www.gliffy.com/publish/1425286/" />
-  <rdf:li rdf:resource="http://www.gliffy.com/publish/1425400/" />
- </rdf:Seq>
-</items>
-</channel>
-
-<item rdf:about="http://www.gliffy.com/publish/1422789/">
-<title>TransportModel</title>
-<link>http://www.gliffy.com/publish/1422789/</link>
-<description></description>
-<dc:creator>jldupont</dc:creator>
-<dc:date>2008-05-12T00:15:15Z</dc:date>
-<dc:subject>my-diagrams</dc:subject>
-<taxo:topics>
-  <rdf:Bag>
-    <rdf:li resource="http://del.icio.us/tag/my-diagrams" />
-  </rdf:Bag>
-</taxo:topics>
-</item>
-
-<item rdf:about="http://www.gliffy.com/publish/1423462/">
-<title>ProtocolStackFlow</title>
-<link>http://www.gliffy.com/publish/1423462/</link>
-<description></description>
-<dc:creator>jldupont</dc:creator>
-<dc:date>2008-05-12T00:15:01Z</dc:date>
-<dc:subject>my-diagrams</dc:subject>
-<taxo:topics>
-  <rdf:Bag>
-    <rdf:li resource="http://del.icio.us/tag/my-diagrams" />
-  </rdf:Bag>
-</taxo:topics>
-</item>
-
-<item rdf:about="http://www.gliffy.com/publish/1422012/">
-<title>NetworkProtocolStack</title>
-<link>http://www.gliffy.com/publish/1422012/</link>
-<description></description>
-<dc:creator>jldupont</dc:creator>
-<dc:date>2008-05-12T00:14:50Z</dc:date>
-<dc:subject>my-diagrams</dc:subject>
-<taxo:topics>
-  <rdf:Bag>
-    <rdf:li resource="http://del.icio.us/tag/my-diagrams" />
-  </rdf:Bag>
-</taxo:topics>
-</item>
-
-<item rdf:about="http://www.gliffy.com/publish/1422053/">
-<title>MediaWiki_Extension</title>
-<link>http://www.gliffy.com/publish/1422053/</link>
-<description></description>
-<dc:creator>jldupont</dc:creator>
-<dc:date>2008-05-12T00:14:37Z</dc:date>
-<dc:subject>my-diagrams</dc:subject>
-<taxo:topics>
-  <rdf:Bag>
-    <rdf:li resource="http://del.icio.us/tag/my-diagrams" />
-  </rdf:Bag>
-</taxo:topics>
-</item>
-
-<item rdf:about="http://www.gliffy.com/publish/1421994/">
-<title>Client_Server</title>
-<link>http://www.gliffy.com/publish/1421994/</link>
-<description></description>
-<dc:creator>jldupont</dc:creator>
-<dc:date>2008-05-12T00:14:23Z</dc:date>
-<dc:subject>my-diagrams</dc:subject>
-<taxo:topics>
-  <rdf:Bag>
-    <rdf:li resource="http://del.icio.us/tag/my-diagrams" />
-  </rdf:Bag>
-</taxo:topics>
-</item>
-
-<item rdf:about="http://www.gliffy.com/publish/1423596/">
-<title>NetworkFunctionalPlanes</title>
-<link>http://www.gliffy.com/publish/1423596/</link>
-<description></description>
-<dc:creator>jldupont</dc:creator>
-<dc:date>2008-05-12T00:14:08Z</dc:date>
-<dc:subject>my-diagrams</dc:subject>
-<taxo:topics>
-  <rdf:Bag>
-    <rdf:li resource="http://del.icio.us/tag/my-diagrams" />
-  </rdf:Bag>
-</taxo:topics>
-</item>
-
-<item rdf:about="http://www.gliffy.com/publish/1424697/">
-<title>NetworkConnectivity</title>
-<link>http://www.gliffy.com/publish/1424697/</link>
-<description></description>
-<dc:creator>jldupont</dc:creator>
-<dc:date>2008-05-12T00:13:52Z</dc:date>
-<dc:subject>my-diagrams</dc:subject>
-<taxo:topics>
-  <rdf:Bag>
-    <rdf:li resource="http://del.icio.us/tag/my-diagrams" />
-  </rdf:Bag>
-</taxo:topics>
-</item>
-
-<item rdf:about="http://www.gliffy.com/publish/1425215/">
-<title>TransferModes</title>
-<link>http://www.gliffy.com/publish/1425215/</link>
-<description></description>
-<dc:creator>jldupont</dc:creator>
-<dc:date>2008-05-12T00:13:31Z</dc:date>
-<dc:subject>my-diagrams</dc:subject>
-<taxo:topics>
-  <rdf:Bag>
-    <rdf:li resource="http://del.icio.us/tag/my-diagrams" />
-  </rdf:Bag>
-</taxo:topics>
-</item>
-
-<item rdf:about="http://www.gliffy.com/publish/1425219/">
-<title>TypesCommunication</title>
-<link>http://www.gliffy.com/publish/1425219/</link>
-<description></description>
-<dc:creator>jldupont</dc:creator>
-<dc:date>2008-05-12T00:12:57Z</dc:date>
-<dc:subject>my-diagrams</dc:subject>
-<taxo:topics>
-  <rdf:Bag>
-    <rdf:li resource="http://del.icio.us/tag/my-diagrams" />
-  </rdf:Bag>
-</taxo:topics>
-</item>
-
-<item rdf:about="http://www.gliffy.com/publish/1425286/">
-<title>Connectivity</title>
-<link>http://www.gliffy.com/publish/1425286/</link>
-<description></description>
-<dc:creator>jldupont</dc:creator>
-<dc:date>2008-05-12T00:12:30Z</dc:date>
-<dc:subject>my-diagrams</dc:subject>
-<taxo:topics>
-  <rdf:Bag>
-    <rdf:li resource="http://del.icio.us/tag/my-diagrams" />
-  </rdf:Bag>
-</taxo:topics>
-</item>
-
-<item rdf:about="http://www.gliffy.com/publish/1425400/">
-<title>Connectivity2</title>
-<link>http://www.gliffy.com/publish/1425400/</link>
-<description></description>
-<dc:creator>jldupont</dc:creator>
-<dc:date>2008-05-12T00:12:05Z</dc:date>
-<dc:subject>my-diagrams</dc:subject>
-<taxo:topics>
-  <rdf:Bag>
-    <rdf:li resource="http://del.icio.us/tag/my-diagrams" />
-  </rdf:Bag>
-</taxo:topics>
-</item>
-
-</rdf:RDF>
-
- */
