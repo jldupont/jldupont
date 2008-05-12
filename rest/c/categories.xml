@@ -11,6 +11,7 @@
 	<c xlink:href="/rest/c/Amazon/info.xml">Amazon</c>
 	<c xlink:href="/rest/c/Delicious/info.xml">Delicious</c>
 	<c xlink:href="/rest/c/Filesystem/info.xml">Filesystem</c>
+	<c xlink:href="/rest/c/MyTools/info.xml">MyTools</c>
 	<c xlink:href="/rest/c/OnlineTools/info.xml">OnlineTools</c>
 	<c xlink:href="/rest/c/Pear/info.xml">Pear</c>
 	<c xlink:href="/rest/c/Phing/info.xml">Phing</c>
