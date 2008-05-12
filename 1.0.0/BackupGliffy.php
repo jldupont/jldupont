@@ -3,7 +3,7 @@
  *  JLD_BackupGliffy
  *
  *  @author Jean-Lou Dupont
- *  @version @@package-version@@
+ *  @version 1.0.0
  */
 
 require_once 'JLD/Delicious/DeliciousPosts.php';
