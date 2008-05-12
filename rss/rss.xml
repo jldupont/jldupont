@@ -8,6 +8,61 @@
 
 	
 	<item>
+			<title>Gliffy - 1.0.0</title>
+			<link>http://jldupont.com/Extension:Gliffy</link>
+			<description>Changelog:
+Initial Release
+			</description>
+			<pubDate>Sun, 11 May 08 21:35:59 -0400</pubDate>
+		</item>
+
+
+	
+	<item>
+			<title>Delicious - 1.0.0</title>
+			<link>http://jldupont.com/Extension:Delicious</link>
+			<description>Changelog:
+Initial Release
+			</description>
+			<pubDate>Sun, 11 May 08 21:33:34 -0400</pubDate>
+		</item>
+
+
+	
+	<item>
+			<title>PhingTools - 1.14.0</title>
+			<link>http://jldupont.com/Extension:PhingTools</link>
+			<description>Changelog:
+Added ''FindDirTask''
+			</description>
+			<pubDate>Thu, 14 Feb 08 05:41:42 +0100</pubDate>
+		</item>
+
+
+	
+	<item>
+			<title>PhingTools - 1.13.0</title>
+			<link>http://jldupont.com/Extension:PhingTools</link>
+			<description>Changelog:
+Added ''FindFileTask''
+			</description>
+			<pubDate>Sat, 09 Feb 08 14:27:21 -0500</pubDate>
+		</item>
+
+
+	
+	<item>
+			<title>Validate - 1.0.0</title>
+			<link>http://jldupont.com/Extension:Validate</link>
+			<description>Changelog:
+Initial Release
+			</description>
+			<pubDate>Sat, 09 Feb 08 13:46:42 -0500</pubDate>
+		</item>
+
+
+	
+	<item>
 			<title>PhingTools - 1.12.0</title>
 			<link>http://jldupont.com/Extension:PhingTools</link>
 			<description>Changelog:
