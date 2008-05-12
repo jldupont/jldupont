@@ -88,8 +88,8 @@ class JLD_DeliciousPost {
 	protected function & newFromXml( &$xmlObj ) {
 
 		foreach( self::$parameters as $key => &$value ) {
-			if ( isset( $xmlObj[$key] ) )
-				$this->params[$key] = $xmlObj[ $key ];
+			if ( isset( $xmlObj->$key ) )
+				$this->params[$key] = $xmlObj->$key;
 		}
 		return $this;	
 	}
