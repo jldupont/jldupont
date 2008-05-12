@@ -59,11 +59,11 @@
     <min>1.6.2</min>
    </pearinstaller>
  
-	<package>
+	<compatible>
 		<name>Delicious</name>
 		<channel>jldupont.googlecode.com/svn</channel>
 		<min>1.0.0</min>
-	</package>
+	</compatible>
 
   </required>
  </dependencies>
