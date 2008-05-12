@@ -20,9 +20,12 @@ class JLD_Gliffy_Delicious {
 	 */
 	static $formats = array(
 	
-		'/publish\/(.*)\//siU',
-		'/pubdoc\/(.*)\//siU',
-		
+		'/publish\/(\d+)\//siU',
+		'/pubdoc\/(\d+)\//siU',
+
+		'/publish\/(\d+)$/siU',
+		'/pubdoc\/(\d+)$/siU',
+	
 	);
 
 	/**
@@ -36,13 +39,13 @@ class JLD_Gliffy_Delicious {
 	 */
 	public static function extractId( $obj ) {
 	
-		if !( $obj instanceof JLD_DeliciousPost )
+		if (!( $obj instanceof JLD_DeliciousPost ))
 			throw new Exception( __METHOD__.": requires JLD_DeliciousPost object instance" );
 	
 		$id = null;
 			
 		$link = $obj->link;
-	
+		
 		foreach( self::$formats as $pattern ) {
 		
 			$result = preg_match( $pattern, $link, $match );

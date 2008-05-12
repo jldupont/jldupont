@@ -42,15 +42,19 @@ class JLD_Gliffy {
 	 */
 	static $service = "http://www.gliffy.com/";
 	
+	static $defaultRepresentation = 'jpg_large';
+	
 	/**
 	 * Supported representations
 	 */
 	static $repr = array(
-		'page'		=> self::$service.'publish/%id%',
-		'jpg_large'	=> self::$service.'publish/%id%/L.jpg',
-		'jpg_medium'=> self::$service.'publish/%id%/M.jpg',
-		'jpg_small'	=> self::$service.'publish/%id%/S.jpg',
-		'jpg_thumb'	=> self::$service.'publish/%id%/T.jpg',	
+
+		'jpg_large'	=> 'http://www.gliffy.com/pubdoc/%id%/L.jpg',
+		'jpg_medium'=> 'http://www.gliffy.com/pubdoc/%id%/M.jpg',
+		'jpg_small'	=> 'http://www.gliffy.com/pubdoc/%id%/S.jpg',
+		'jpg_thumb'	=> 'http://www.gliffy.com/pubdoc/%id%/T.jpg',
+
+		'page'		=> 'http://www.gliffy.com/publish/%id%',
 	);
 
 	var $id = null;
@@ -70,7 +74,7 @@ class JLD_Gliffy {
 	 */
 	public static function newFromDeliciousPost( $obj ) {
 	
-		if !( $obj instanceof JLD_DeliciousPost )
+		if (!( $obj instanceof JLD_DeliciousPost ))
 			throw new Exception( "requires an instance of JLD_DeliciousPost class" );
 
 		$id = JLD_Gliffy_Delicious::extractId( $obj );
@@ -89,7 +93,10 @@ class JLD_Gliffy {
 		if ( is_null( $this->id ) )
 			throw new Exception( "diagram id not initialized" );
 	
-		if !( array_key_exists( $repType, self::$repr ) )
+		if ( $repType === null )
+			$repType = self::$defaultRepresentation;
+			
+		if (!( array_key_exists( $repType, self::$repr ) ))
 			throw new Exception( "representation type not supported" );
 
 		return $this->formatForRepresentationType( $repType );
