@@ -20,7 +20,7 @@
  </lead>
 
  <date>2008-05-12</date>
- <time>01:33:40</time>
+ <time>01:35:58</time>
 
  <version>
   <release>1.0.0</release>
@@ -61,11 +61,11 @@
     <min>1.6.2</min>
    </pearinstaller>
  
-	<compatible>
+	<package>
 		<name>Delicious</name>
 		<channel>jldupont.googlecode.com/svn</channel>
 		<min>1.0.0</min>
-	</compatible>
+	</package>
 
   </required>
  </dependencies>
