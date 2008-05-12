@@ -44,6 +44,7 @@
 	<file baseinstalldir="JLD/Gliffy" name="Gliffy.php" role="php" />
 	<file baseinstalldir="JLD/Gliffy" name="Gliffy_Delicious.php" role="php" />
 	<file baseinstalldir="JLD/Gliffy" name="Gliffy_PictureIterator.php" role="php" />
+	<file baseinstalldir="JLD/Gliffy" name="Gliffy_PictureRepresentation.php" role="php" />	
     <!-- }} -->
 
   </dir>
