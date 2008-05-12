@@ -23,11 +23,16 @@ foreach( $this->o as $post ) {
 	assert( $g instanceof JLD_Gliffy, true );
 
 	$i = $g->getPictureIterator();
+	$title = $g->title;
 	
 	foreach( $i as $index => $repr ) {
 
 		$this->assertEquals( is_string( $repr ) , true );
-		echo "\n* Represention $index: $repr";				
+		echo "\n* Represention $index: $repr";	
+
+		$contents = file_get_contents( $repr );
+		if ( $contents === false )
+			echo ": error fetching";
 	}
 	
 	
