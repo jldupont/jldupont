@@ -15,24 +15,31 @@ require_once "JLD/BackupGliffy/config.php";
 
 // gets posts
 $posts = new JLD_DeliciousPosts( $feed );
+$posts->run();
 
 // main loop
-foreach( $this->o as $post ) {
+foreach( $posts as $post ) {
 
 	$g = JLD_Gliffy::newFromDeliciousPost( $post );
-	assert( $g instanceof JLD_Gliffy, true );
+	assert( $g instanceof JLD_Gliffy );
 
 	$i = $g->getPictureIterator();
 	$title = $g->title;
 	
 	foreach( $i as $index => $repr ) {
 
-		$this->assertEquals( is_string( $repr ) , true );
-		echo "\n* Represention $index: $repr";	
+		$id   = $repr->id;
+		$ext  = $repr->ext;
+		$size = $repr->size;
+		echo "\n* Represention of $title: $index - size $size - ext $ext";	
 
 		$contents = file_get_contents( $repr );
 		if ( $contents === false )
 			echo ": error fetching";
+		else {
+			echo ": fetching OK";
+			#file_put_contents( $dest . $title . );
+		}
 	}
 	
 	
