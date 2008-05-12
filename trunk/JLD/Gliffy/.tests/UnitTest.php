@@ -40,8 +40,27 @@ class UnitTest extends PHPUnit_Framework_TestCase
 			$url = $g->getUrl();
 			echo "url: ".$url."\n";
 		}
-		
-						
 	}
 
+	public function testIterator() {
+	
+		foreach( $this->o as $post ) {
+		
+			$g = JLD_Gliffy::newFromDeliciousPost( $post );
+			$this->assertEquals( $g instanceof JLD_Gliffy, true );
+			
+			$i = $g->getPictureIterator();
+			
+			foreach( $i as $index => $repr ) {
+
+				$this->assertEquals( is_string( $repr ) , true );
+				echo "\nrepresention $index: $repr";				
+			}
+			
+			
+		}
+	
+	
+	}
+	
 }// end UnitTest class
