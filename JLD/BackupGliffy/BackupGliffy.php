@@ -31,9 +31,10 @@ foreach( $posts as $post ) {
 		$id   = $repr->id;
 		$ext  = $repr->ext;
 		$size = $repr->size;
+		$url  = $repr->getUrl;
 		echo "\n* Represention of $title: $index - size $size - ext $ext";	
 
-		$contents = file_get_contents( $repr );
+		$contents = file_get_contents( $url );
 		if ( $contents === false )
 			echo ": error fetching";
 		else {
