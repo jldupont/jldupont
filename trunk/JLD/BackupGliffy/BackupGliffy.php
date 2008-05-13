@@ -31,7 +31,7 @@ foreach( $posts as $post ) {
 		$id   = $repr->id;
 		$ext  = $repr->ext;
 		$size = $repr->size;
-		$url  = $repr->getUrl;
+		$url  = $repr->url;
 		echo "\n* Represention of $title: $index - size $size - ext $ext";	
 
 		$contents = file_get_contents( $url );
