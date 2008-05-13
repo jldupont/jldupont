@@ -39,9 +39,9 @@ foreach( $posts as $post ) {
 			echo ": error fetching";
 		else {
 			echo ": fetching OK";
-			#file_put_contents( $dest . $title . );
+			$r = file_put_contents( $dest . $title . '/' . $size . '.' . $ext, $contents );
+			echo " - write " . ( ($r == strlen( $contents ) ) ? "success":"failed" );
 		}
 	}
 	
-	
-}
+}//foreach
