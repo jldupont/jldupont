@@ -2,4 +2,4 @@
 
 $feed = "jldupont/my-diagrams";
 
-$dest = "/media/usb1/backup/jld/__My Diagrams/";
+$dest = "/media/usb1/backup/jld/Gliffy_Diagrams/";
