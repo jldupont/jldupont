@@ -24,6 +24,14 @@ class JLD_Gliffy_PictureRepresentation {
 		'size'	=> true,
 	);
 	
+	static $repr = array(
+
+		'L'	=> 'http://www.gliffy.com/pubdoc/%id%/L.jpg',
+		'M' => 'http://www.gliffy.com/pubdoc/%id%/M.jpg',
+		'S'	=> 'http://www.gliffy.com/pubdoc/%id%/S.jpg',
+		'T'	=> 'http://www.gliffy.com/pubdoc/%id%/T.jpg',
+	);
+	
 	static $_extPatterns = array(
 	
 		'/L.jpg/siU'	=> array( 'ext'	=> 'jpg', 'size' => 'L' ),
@@ -40,6 +48,18 @@ class JLD_Gliffy_PictureRepresentation {
 		$this->size  = $size;
 		$this->ext   = $ext;
 		
+	}
+	public function getUrl() {
+	
+		if ( $this->id === null )
+			throw new Exception( __METHOD__.": id can not be null" );
+		if ( $this->size === null )
+			throw new Exception( __METHOD__.": size can not be null" );
+
+		$p = self::$repr[$this->size];
+		$url = str_replace( '%id%', $this->id, $p );
+		
+		return $url;
 	}
 	public static function newFromUrl( $title, $id, $url ) {
 
