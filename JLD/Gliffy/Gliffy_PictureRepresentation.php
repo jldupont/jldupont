@@ -75,7 +75,7 @@ class JLD_Gliffy_PictureRepresentation {
 	public function __get( $key ) {
 	
 		$key = strtolower( $key );
-		if ( $key === 'url' )
+		if ( $key == 'url' )
 			return $this->getUrl();
 	
 		if (!array_key_exists( $key, self::$_p ))
