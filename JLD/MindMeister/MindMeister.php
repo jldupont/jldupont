@@ -18,11 +18,6 @@ class JLD_MindMeister {
 	const CLASS_PATH = 'JLD_MindMeister_';
 
 	/**
-	 * REST API end-point
-	 */
-	static $REST = 'http://www.mindmeister.com/services/rest/';
-	
-	/**
 	 * No need to instantiate from this class
 	 */
 	protected function __construct() {
@@ -50,20 +45,22 @@ class JLD_MindMeister {
 	 */
 	public static function callMethod( $method, $args ) {
 
+		$method = strtolower( $method );
+	
 		$c = self::CLASS_PATH . 'Method_'. $method ;
+		$m = 'Methods/$method.php';
+		
 		if (class_exists( $c ))
 			return new $c;
 			
-		$r = @include 'Methods/$method.php';
+		$r = @include $m;
 		if ( !$r )
-			throw new Exception( __METHOD__. ": can't load class $c" );
+			throw new Exception( __METHOD__. ": can't load class $c associated with method $m" );
 			
 		if ( !class_exists( $c ))
-			throw new Exception( __METHOD__. ": can't find class $classe" );
+			throw new Exception( __METHOD__. ": can't find class $c associated with method $m" );
 		
 		return new $c;		
-	
-	
 	}
 	
 }//end-of-class
