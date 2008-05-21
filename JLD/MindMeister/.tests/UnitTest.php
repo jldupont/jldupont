@@ -8,6 +8,7 @@
 
 require_once 'PHPUnit/Framework.php';
 require_once dirname(__FILE__)."/../MindMeister.php";
+require_once dirname(__FILE__).'/config.php';
 
 class UnitTest extends PHPUnit_Framework_TestCase
 {
@@ -20,9 +21,13 @@ class UnitTest extends PHPUnit_Framework_TestCase
  	protected function tearDown()
 	{
 	}
-	public function test1()
+	public function testGetList()
 	{
-		$this->assertEquals( $g instanceof JLD_Gliffy, true );
+		$r = JLD_MindMeister::callMethod( 'getList', array() );
+		
+		var_dump( $r->body );
+		
+		$this->assertEquals( $r, true );
 	}
 
 	
