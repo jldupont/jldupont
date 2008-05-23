@@ -24,12 +24,10 @@ class JLD_MindMeister {
 	/**
 	 * No need to instantiate from this class
 	 */
-	protected function __construct() {
-	}
-	public static function setApiKey( $api_key, $secret_key ){
+	public function __construct( $api_key, $secret_key ) {
 	
-		self::$key  = $api_key;
-		self::$skey = $secret_key;
+		$this->api_key  = $api_key;
+		$this->secret_key = $secret_key;
 	}
 	
 	/**
@@ -53,10 +51,10 @@ class JLD_MindMeister {
 	/**
 	 * 
 	 */
-	public static function callMethod( $method, $args ) {
+	public function __call( $method, $args = null ) {
 
-		if ( is_null( self::$key ) || is_null( self::$skey) )
-			throw new Exception( __METHOD__.": api_key not set");
+		if ( is_null( $this->api_key ) || is_null( $this->secret_key) )
+			throw new Exception( __METHOD__.": key(s) not set");
 	
 		$method = strtolower( $method );
 	
@@ -64,7 +62,7 @@ class JLD_MindMeister {
 		$m = "Methods/$method.php";
 		
 		if (class_exists( $c ))
-			return self::executeMethod ( $c , $args );
+			return $this->executeMethod ( $c , $args );
 			
 		$r = include dirname(__FILE__).'/'.$m;
 		if ( !$r )
@@ -73,15 +71,14 @@ class JLD_MindMeister {
 		if ( !class_exists( $c ))
 			throw new Exception( __METHOD__. ": can't find class $c associated with method $m" );
 
-		return self::executeMethod ( $c , $args );		
+		return $this->executeMethod ( $c , $args );		
 	}
 	/**
 	 * 
 	 */
-	protected static function executeMethod( &$classe, &$args ) {
+	protected function executeMethod( &$classe, &$args ) {
 
-
-		$o = new $classe( self::$key, self::$skey, $args );
+		$o = new $classe( $this->api_key, $this->secret_key, $args );
 
 		return $o->execute();
 	}

@@ -12,18 +12,22 @@ require_once dirname(__FILE__).'/config.php';
 
 class UnitTest extends PHPUnit_Framework_TestCase
 {
+	var $mm;
+	
 	/*
 	 * GENERIC setup and teardown
 	 */		
     protected function setUp()
     {
+    	global $api_key, $secret_key;
+    	$this->mm = new JLD_MindMeister( $api_key, $secret_key );
     }
  	protected function tearDown()
 	{
 	}
 	public function testGetList()
 	{
-		$r = JLD_MindMeister::callMethod( 'getList', array() );
+		$r = $this->mm->getList( );
 		
 		var_dump( $r->body );
 		

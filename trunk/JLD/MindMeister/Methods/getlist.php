@@ -15,12 +15,16 @@ class JLD_MindMeister_method_getlist
 	
 	const METHOD = 'mm.maps.getList';
 	
+	static $refList = array();
+	
 	public function __construct( &$key, &$secret, &$args ) {
 
-		$this->method = self::METHOD;
+		$this->setParam( 'method' , self::METHOD );
 
 		parent::__construct( $key, $secret, $args );
 	}
 
-	
+	protected function getRefList() {
+		return self::$refList;
+	}
 }
