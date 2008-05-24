@@ -12,10 +12,14 @@
 
 class JLD_MindMeister_err {
 
+	var $code = null;
+	var $msg  = null;
+
 	public function __construct( $obj ) {
+
+		$this->code = (string) $obj->err['code'];
+		$this->msg  = (string) $obj->err['msg'];		
 	
-		echo __METHOD__."\n";
-		var_dump( $obj );
 	}
 
 }//end definition

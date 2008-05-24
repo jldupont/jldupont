@@ -12,10 +12,11 @@
 
 class JLD_MindMeister_frob {
 
+	var $frob = null;
+
 	public function __construct( $obj ) {
 	
-		echo __METHOD__."\n";
-		var_dump( $obj );
+		$this->frob = (string) $obj->frob;
 	}
 
 }//end definition
