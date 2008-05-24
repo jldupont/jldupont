@@ -10,7 +10,7 @@
  * @example
  */
 
-class JLD_MindMeister_frob {
+class JLD_MindMeister_err {
 
 	public function __construct( $obj ) {
 	
