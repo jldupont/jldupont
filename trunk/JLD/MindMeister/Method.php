@@ -174,7 +174,15 @@ class JLD_MindMeister_Method {
 		if ( $this->rep_code != 200 )
 			return $this->rep_code;
 		
-		return simplexml_load_string( $this->rep_body );
+		$o = simplexml_load_string( $this->rep_body );
+			
+		if ( !is_object( $o ))
+			throw new Exception( "network error" );
+			
+		if ( isset( $o->err ) )
+			return JLD_MindMeister::factory( 'err', $o );
+			
+		return $o;
 	}
 	/**
 	 * Sign the request

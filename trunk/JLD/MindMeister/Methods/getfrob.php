@@ -51,12 +51,12 @@ class JLD_MindMeister_method_getfrob
 	
 	public function execute() {
 	
-		$r = parent::execute();
+		$obj = parent::execute();
 		
-		if ( !is_object( $r ))
-			throw new Exception( "network error" );
-			
-		return $r;
+		if ( isset( $obj->frob ))
+			return JLD_MindMeister::factory( 'frob', $obj );
+		
+		throw new Exception( "unknown return code" );
 	}
 	
 }

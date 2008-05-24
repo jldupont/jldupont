@@ -34,20 +34,20 @@ class JLD_MindMeister {
 	/**
 	 * 
 	 */
-	public static function factory( $classe ) {
+	public static function factory( $classe, $args = null ) {
 		
 		$c = self::CLASS_PATH . $classe ;
 		if (class_exists( $c ))
 			return new $c;
 			
-		$r = include dirname(__FILE__).'/Classes/$classe/$classe.php';
+		$r = include dirname(__FILE__)."/Classes/$classe/$classe.php";
 		if ( !$r )
 			throw new Exception( __METHOD__. ": can't load class $classe" );
 			
 		if ( !class_exists( $c ))
 			throw new Exception( __METHOD__. ": can't find class $classe" );
 		
-		return new $c;		
+		return new $c( $args );		
 	}
 	/**
 	 * 
