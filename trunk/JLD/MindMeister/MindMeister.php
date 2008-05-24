@@ -13,6 +13,7 @@
 require_once 'Method.php';
 require_once 'Liste.php';
 require_once 'HTTP/Request.php';
+require_once 'Exception.php';
 
 class JLD_MindMeister {
 
