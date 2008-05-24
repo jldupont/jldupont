@@ -82,7 +82,10 @@ class JLD_MindMeister_Method {
 	
 		foreach( $refListe as $key =>$entry ) {
 		
-			if ()
+			if ( !in_array( $key, $this->args ))
+				throw new JLD_MindMeister_Exception( "Missing mandatory parameter $key" );
+				
+			$pl[ $key ] = $args[ $key ];
 		}
 		
 		return $pl;

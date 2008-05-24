@@ -13,7 +13,4 @@
 class JLD_MindMeister_Exception 
 	extends Exception {
 	
-	
-	
-	
 }//end definition
