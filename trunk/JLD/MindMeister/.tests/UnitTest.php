@@ -27,7 +27,7 @@ class UnitTest extends PHPUnit_Framework_TestCase
 	}
 	public function testGetList()
 	{
-		$r = $this->mm->getList( );
+		$r = $this->mm->authen( array( 'perms' => 'delete' ) );
 		
 		var_dump( $r->body );
 		

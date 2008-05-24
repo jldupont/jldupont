@@ -70,15 +70,19 @@ class JLD_MindMeister_Method {
 	}
 	/**
 	 * Verify the parameter list given a reference list
+	 * 
+	 * 1) Verify that mandatory parameters are specified
+	 * 2) Verify allowable values
 	 */
 	protected function verifyParamsList( ) {
 	
-		$refList = $this->getRefList();
+		$refListe = $this->getRefList();
 		
 		$pl = array();
 	
 		foreach( $refListe as $key =>$entry ) {
 		
+			if ()
 		}
 		
 		return $pl;
@@ -99,6 +103,9 @@ class JLD_MindMeister_Method {
 		$this->setParam( 'api_sign', $api_sign );
 	
 		$url = $this->formatURL( );
+		
+		var_dump( $url );
+		die;
 		
 		return $this->doRequest( $url );
 	}
