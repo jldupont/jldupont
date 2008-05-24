@@ -44,15 +44,14 @@ class UnitTest extends PHPUnit_Framework_TestCase
 			  }
 			}
 	 */
-	public function disabled_testWrongKey() {
+	public function testWrongKey() {
 
 		global $api_key, $secret_key;
     	$mm = new JLD_MindMeister( $api_key, 'secret_key' );
 	
 		$r = $mm->getfrob( );
 		
-		var_dump( $r );
-    	
+		$this->assertEquals( $r instanceof JLD_MindMeister_err, true );
 	}
 	/*
 		 object(SimpleXMLElement)#111 (2) {
@@ -69,9 +68,7 @@ class UnitTest extends PHPUnit_Framework_TestCase
 	{
 		$r = $this->mm->getfrob( );
 		
-		var_dump( $r );
-		
-		#$this->assertEquals( $r, true );
+		$this->assertEquals( $r instanceof JLD_MindMeister_frob, true );
 	}
 
 	
