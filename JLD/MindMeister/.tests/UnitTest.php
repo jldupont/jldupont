@@ -25,11 +25,11 @@ class UnitTest extends PHPUnit_Framework_TestCase
  	protected function tearDown()
 	{
 	}
-	public function testGetList()
+	public function testAuth()
 	{
-		$r = $this->mm->authen( array( 'perms' => 'delete' ) );
+		$r = $this->mm->auth( array( 'perms' => 'delete' ) );
 		
-		var_dump( $r->body );
+		var_dump( $r->rep_body );
 		
 		$this->assertEquals( $r, true );
 	}
