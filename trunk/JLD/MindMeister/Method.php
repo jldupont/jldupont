@@ -45,7 +45,7 @@ class JLD_MindMeister_Method {
 		$this->setParam( 'secret_key' , $secret_key );		
 
 		// don't include in $params just yet...
-		$this->args = $args;
+		$this->args = $args[0];
 		
 		// sub-classes should update this info if required.
 		if ( is_null( $rest ) )
@@ -79,16 +79,34 @@ class JLD_MindMeister_Method {
 		$refListe = $this->getRefList();
 		
 		$pl = array();
+		
+		#var_dump( $this->args );
+		#var_dump( $refListe );
 	
 		foreach( $refListe as $key =>$entry ) {
 		
-			if ( !in_array( $key, $this->args ))
+			if ( !array_key_exists( $key, $this->args ))
 				throw new JLD_MindMeister_Exception( "Missing mandatory parameter $key" );
+			
+			$value = $this->args[ $key ];
 				
-			$pl[ $key ] = $args[ $key ];
+			$allowedValues = isset( $entry[ 'a' ] ) ? $entry['a']:null;
+			
+			if ( is_null( $allowedValues ) ) {
+				$pl[ $key ] = $value;
+				continue;
+			}
+			if ( !in_array( $value, $allowedValues ) )
+				throw new JLD_MindMeister_Exception( "Parameter $key can not hold value $value" );
+			
+			$pl[ $key ] = $value;
 		}
 		
 		return $pl;
+	}
+	protected function setParamsList( &$args ) {
+		foreach( $args as $key => &$value )
+			$this->setParam( $key, $value );
 	}
 	
 	/** 
@@ -101,14 +119,14 @@ class JLD_MindMeister_Method {
 	 */
 	public function execute() {
 		
+		$verifiedParams = $this->verifyParamsList();
+		$this->setParamsList( $verifiedParams );
+	
 		// get the signature
-		$api_sign = $this->sign();
-		$this->setParam( 'api_sign', $api_sign );
+		$api_sig = $this->sign();
+		$this->setParam( 'api_sig', $api_sig );
 	
 		$url = $this->formatURL( );
-		
-		var_dump( $url );
-		die;
 		
 		return $this->doRequest( $url );
 	}
@@ -129,9 +147,10 @@ class JLD_MindMeister_Method {
 	protected function doRequest( &$url ) {
 	
 		$request =& new HTTP_Request( $url );
-										
+		$request->_timeout = 2;
+			
 		// REDIRECTS are a requirement
-		$request->_allowRedirects = true;
+		$request->_allowRedirects = false;
 		
 		$request->setMethod( "GET" );
 

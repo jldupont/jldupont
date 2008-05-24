@@ -15,13 +15,13 @@
  3) http://www.mindmeister.com/services/auth/?api_key=abc123&perms=delete&api_sig=zxy987
  
  */
-class JLD_MindMeister_method_authen 
+class JLD_MindMeister_method_auth
 	extends JLD_MindMeister_Method {
 
 	/**
 	 * REST end-point for this method
 	 */
-	const REST = 'http://www.mindmeister.com/services/authen/?api_key=%api_key%&perms=%perms%&api_sig=%api_sig%';
+	const REST = 'http://www.mindmeister.com/services/auth/?api_key=%api_key%&perms=%perms%&api_sig=%api_sig%';
 	
 	/**
 	 * not really required
