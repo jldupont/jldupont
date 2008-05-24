@@ -55,7 +55,10 @@ class JLD_MindMeister_method_getfrob
 		
 		if ( isset( $obj->frob ))
 			return JLD_MindMeister::factory( 'frob', $obj );
-		
+
+		if ( $obj instanceof JLD_MindMeister_err )
+			return $obj;
+			
 		throw new Exception( "unknown return code" );
 	}
 	
