@@ -21,7 +21,7 @@ class JLD_MindMeister_Method {
 	 * calculating the signature
 	 */
 	static $excludeFromSignature = array(
-		'api_sign', 'api_key', 'secret_key'
+		'api_sign', 'secret_key', // 'api_key', 
 	);
 	
 	/**
@@ -30,8 +30,6 @@ class JLD_MindMeister_Method {
 	var $params = array();
 	
 	var $args = null;
-	
-	var $method = null;
 	
 	var $rep_headers = null;
 	var $rep_body    = null;
@@ -105,6 +103,7 @@ class JLD_MindMeister_Method {
 		return $pl;
 	}
 	protected function setParamsList( &$args ) {
+	
 		foreach( $args as $key => &$value )
 			$this->setParam( $key, $value );
 	}
@@ -127,6 +126,8 @@ class JLD_MindMeister_Method {
 		$this->setParam( 'api_sig', $api_sig );
 	
 		$url = $this->formatURL( );
+		
+		var_dump( $url );
 		
 		return $this->doRequest( $url );
 	}
@@ -178,10 +179,12 @@ class JLD_MindMeister_Method {
 	 */
 	protected function sign() {
 
-		$key = $this->secret_key;
-		$ol = $this->getOrderedParamsList();
+		$key = $this->params['secret_key'];
+		$ol = $this->orderParamsList();
 		$to = "$key".$this->getStringToSign( $ol );
  
+		var_dump( $to );
+		
 		$api_sig = md5( $to );
 	
 		return $api_sig;
@@ -189,7 +192,7 @@ class JLD_MindMeister_Method {
 	/**
 	 * Orders the parameters in alphabetical order
 	 */
-	protected function getOrderedParamsList() {
+	protected function orderParamsList() {
 	
 		if ( empty( $this->params ))
 			return array();
@@ -198,6 +201,8 @@ class JLD_MindMeister_Method {
 		
 		if ( !$r )
 			throw new Exception( __METHOD__.": can't sort parameters list" );
+			
+		return $this->params;
 	}
 	/**
 	 * Extracts the value of each parameter and
@@ -212,7 +217,7 @@ class JLD_MindMeister_Method {
 		
 		foreach( $orderedList as $key =>$value ) {
 			if ( !in_array( $key, self::$excludeFromSignature ) )
-				$str .= $value;			
+				$str .= $key.$value;			
 		}
 		
 		return $str;
