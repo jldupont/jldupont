@@ -15,31 +15,29 @@
  3) http://www.mindmeister.com/services/auth/?api_key=abc123&perms=delete&api_sig=zxy987
  
  */
-class JLD_MindMeister_method_auth
+class JLD_MindMeister_method_getfrob
 	extends JLD_MindMeister_Method {
 
 	/**
 	 * REST end-point for this method
 	 */
-	const REST = 'http://www.mindmeister.com/services/auth/?api_key=%api_key%&perms=%perms%&api_sig=%api_sig%';
+	const REST = 'http://www.mindmeister.com/services/rest/?api_key=%api_key%&method=%method%&api_sig=%api_sig%';
 	
 	/**
 	 * not really required
 	 */
-	const METHOD = 'mm.authen';
+	const METHOD = 'mm.auth.getFrob';
 	
 	/**
 	 * Reference list for parameters
 	 */
 	static $refParams = array(
-		'perms'		=> array( 'l' => true, 'a' => array( 'read', 'write', 'delete' ) )
 	);
 	
 	public function __construct( &$key, &$secret, &$args  ) {
 
-		// not really needed in this case
-		$this->method = self::METHOD;
-
+		$this->setParam( 'method', self::METHOD );
+	
 		parent::__construct( $key, $secret, $args, self::REST );
 	}
 	/**

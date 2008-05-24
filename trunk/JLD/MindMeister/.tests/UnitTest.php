@@ -25,9 +25,9 @@ class UnitTest extends PHPUnit_Framework_TestCase
  	protected function tearDown()
 	{
 	}
-	public function testAuth()
+	public function testGetFrob()
 	{
-		$r = $this->mm->auth( array( 'perms' => 'delete' ) );
+		$r = $this->mm->getfrob( );
 		
 		var_dump( $r->rep_body );
 		
