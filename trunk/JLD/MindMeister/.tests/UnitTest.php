@@ -44,7 +44,7 @@ class UnitTest extends PHPUnit_Framework_TestCase
 			  }
 			}
 	 */
-	public function disabled_testWrongKey() {
+	public function testWrongKey() {
 
 		global $api_key, $secret_key;
     	$mm = new JLD_MindMeister( $api_key, 'secret_key' );
@@ -65,7 +65,7 @@ class UnitTest extends PHPUnit_Framework_TestCase
 		  string(16) "c997510c7862e6d4"
 		}
 	 */
-	public function testGetFrob()
+	public function disabled_testGetFrob()
 	{
 		$r = $this->mm->getfrob( );
 		
