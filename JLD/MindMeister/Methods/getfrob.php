@@ -49,4 +49,14 @@ class JLD_MindMeister_method_getfrob
 		return self::$refParams;
 	}
 	
+	public function execute() {
+	
+		$r = parent::execute();
+		
+		if ( !is_object( $r ))
+			throw new Exception( "network error" );
+			
+		return $r;
+	}
+	
 }

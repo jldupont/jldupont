@@ -31,6 +31,7 @@ class JLD_MindMeister_Method {
 	
 	var $args = null;
 	
+	var $url = null;
 	var $rep_headers = null;
 	var $rep_body    = null;
 	var $rep_code    = null;
@@ -125,11 +126,9 @@ class JLD_MindMeister_Method {
 		$api_sig = $this->sign();
 		$this->setParam( 'api_sig', $api_sig );
 	
-		$url = $this->formatURL( );
+		$this->url = $this->formatURL( );
 		
-		var_dump( $url );
-		
-		return $this->doRequest( $url );
+		return $this->doRequest( $this->url );
 	}
 	/**
 	 * 
@@ -148,7 +147,7 @@ class JLD_MindMeister_Method {
 	protected function doRequest( &$url ) {
 	
 		$request =& new HTTP_Request( $url );
-		$request->_timeout = 2;
+		$request->_timeout = 5;
 			
 		// REDIRECTS are a requirement
 		$request->_allowRedirects = false;
@@ -172,7 +171,10 @@ class JLD_MindMeister_Method {
 		$this->rep_body    = $request->getResponseBody();
 		$this->rep_code    = $request->getResponseCode();
 
-		return ( $this->rep_code == 200 );
+		if ( $this->rep_code != 200 )
+			return $this->rep_code;
+		
+		return simplexml_load_string( $this->rep_body );
 	}
 	/**
 	 * Sign the request
@@ -183,8 +185,6 @@ class JLD_MindMeister_Method {
 		$ol = $this->orderParamsList();
 		$to = "$key".$this->getStringToSign( $ol );
  
-		var_dump( $to );
-		
 		$api_sig = md5( $to );
 	
 		return $api_sig;
