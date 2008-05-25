@@ -71,5 +71,15 @@ class UnitTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals( $r instanceof JLD_MindMeister_frob, true );
 	}
 
+	public function testGetAuth()
+	{
+		$r = $this->mm->getfrob( );
+		
+		$a = $this->mm->auth( array( 'frob' => $r )  );
+		
+		var_dump( $a );
+		#$this->assertEquals( $r instanceof JLD_MindMeister_frob, true );
+	}
+	
 	
 }// end UnitTest class

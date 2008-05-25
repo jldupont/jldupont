@@ -10,18 +10,18 @@
  * @example
  */
 
-class JLD_MindMeister_frob 
+class JLD_MindMeister_auth 
 	extends JLD_MindMeister_Object {
 
-	var $frob = null;
+	var $auth = null;
 
 	public function __construct( $obj ) {
 	
-		$this->frob = (string) $obj->frob;
+		$this->auth = (string) $obj->auth;
 	}
 
 	public function getValue() {
-		return $this->frob;
+		return $this->auth;
 	}
 	
 }//end definition

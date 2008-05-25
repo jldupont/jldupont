@@ -85,14 +85,18 @@ class JLD_MindMeister_Method {
 				throw new JLD_MindMeister_Exception( "Missing mandatory parameter $key" );
 			
 			$value = $this->args[ $key ];
-				
-			$allowedValues = isset( $entry[ 'a' ] ) ? $entry['a']:null;
 			
-			if ( is_null( $allowedValues ) ) {
-				$pl[ $key ] = $value;
-				continue;
-			}
-			if ( !in_array( $value, $allowedValues ) )
+			$checkMethod = $entry[ 'm' ];
+
+			if (!is_callable( $checkMethod ))
+				throw new Exception( "method is not callable" );
+			
+			if ( !isset( $entry['a'] ) )
+				throw new Exception( "allowed values not set in reference array" ); 
+				
+			$r = call_user_func( $checkMethod, $key, $value, $entry['a'] );
+							
+			if ( !$r )
 				throw new JLD_MindMeister_Exception( "Parameter $key can not hold value $value" );
 			
 			$pl[ $key ] = $value;
@@ -100,6 +104,19 @@ class JLD_MindMeister_Method {
 		
 		return $pl;
 	}
+	
+	public function checkClass( &$key, &$value, &$values ) {
+	
+		if ( !is_array( $values) )
+			return ( $value instanceof $values );
+	
+		foreach( $values as $possibleValue )
+			if ( $value instanceof $possibleValue )
+				return true;
+				
+		return false;
+	}
+	
 	protected function setParamsList( &$args ) {
 	
 		foreach( $args as $key => &$value )
@@ -135,7 +152,12 @@ class JLD_MindMeister_Method {
 		$url = $this->rest;
 		
 		foreach( $this->params as $key => $value ) {
-			$url = str_replace( '%' . $key . '%', $this->getParam( $key ), $url );	
+		
+			$value = $this->getParam( $key );
+			if ( is_object( $value ) )
+				$value = $value->getValue();
+				
+			$url = str_replace( '%' . $key . '%', $value , $url );	
 		}
 	
 		return $url;
@@ -220,10 +242,14 @@ class JLD_MindMeister_Method {
 
 		$str = '';
 		
-		foreach( $orderedList as $key =>$value ) {
-			if ( !in_array( $key, self::$excludeFromSignature ) )
-				$str .= $key.$value;			
-		}
+		foreach( $orderedList as $key => $value ) {
+			if ( !in_array( $key, self::$excludeFromSignature ) ) {
+				if ( is_object( $value ) ) 
+					$value = $value->getValue();
+				$str .= $key.$value;
+			}
+						
+		}//foreach
 		
 		return $str;
 	}

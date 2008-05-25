@@ -14,6 +14,7 @@ require_once 'Method.php';
 require_once 'Liste.php';
 require_once 'HTTP/Request.php';
 require_once 'Exceptions.php';
+require_once 'Object.php';
 
 class JLD_MindMeister {
 
@@ -38,7 +39,7 @@ class JLD_MindMeister {
 		
 		$c = self::CLASS_PATH . $classe ;
 		if (class_exists( $c ))
-			return new $c;
+			return new $c( $args );
 			
 		$r = include dirname(__FILE__)."/Classes/$classe/$classe.php";
 		if ( !$r )
