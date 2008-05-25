@@ -33,11 +33,13 @@ class JLD_MindMeister_method_auth
 	 * Reference list for parameters
 	 */
 	static $refParams = array(
-		'frob' => array( 'm' => array( __CLASS__, 'checkClass' ), 'a' => 'JLD_MindMeister_frob' )
+		'perms' => array( 'm' => array( __CLASS__, 'checkStringArray'), 'a' => array( 'read', 'delete', 'write' ) ),
+		'frob'  => array( 'm' => array( __CLASS__, 'checkClass' ),     'a' => 'JLD_MindMeister_frob' )
 	);
 	
 	public function __construct( &$key, &$secret, &$args  ) {
 
+		#$this->setParam( 'method', self::METHOD );
 		parent::__construct( $key, $secret, $args, self::REST );
 	}
 	/**

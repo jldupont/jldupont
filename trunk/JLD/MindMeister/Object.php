@@ -12,7 +12,16 @@
 
 abstract class JLD_MindMeister_Object {
 
-	abstract public function getValue();
+	var $name  = null;
+	var $value = null;
+	
+	public function getName() {
+		return $this->name;
+	}
+
+	public function getValue() {
+		return $this->value;
+	}
 	
 }//end-of-class
 
