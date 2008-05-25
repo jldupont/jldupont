@@ -44,7 +44,7 @@ class UnitTest extends PHPUnit_Framework_TestCase
 			  }
 			}
 	 */
-	public function testWrongKey() {
+	public function disabled_testWrongKey() {
 
 		global $api_key, $secret_key;
     	$mm = new JLD_MindMeister( $api_key, 'secret_key' );
@@ -64,7 +64,7 @@ class UnitTest extends PHPUnit_Framework_TestCase
 		  string(16) "c997510c7862e6d4"
 		}
 	 */
-	public function testGetFrob()
+	public function disabled_testGetFrob()
 	{
 		$r = $this->mm->getfrob( );
 		
@@ -75,7 +75,7 @@ class UnitTest extends PHPUnit_Framework_TestCase
 	{
 		$r = $this->mm->getfrob( );
 		
-		$a = $this->mm->auth( array( 'frob' => $r )  );
+		$a = $this->mm->auth( array( 'frob' => $r, 'perms' => 'delete' )  );
 		
 		var_dump( $a );
 		#$this->assertEquals( $r instanceof JLD_MindMeister_frob, true );

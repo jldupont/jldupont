@@ -13,15 +13,10 @@
 class JLD_MindMeister_auth 
 	extends JLD_MindMeister_Object {
 
-	var $auth = null;
-
 	public function __construct( $obj ) {
 	
-		$this->auth = (string) $obj->auth;
+		$this->name  = 'auth';	
+		$this->value = (string) $obj->auth;
 	}
 
-	public function getValue() {
-		return $this->auth;
-	}
-	
 }//end definition

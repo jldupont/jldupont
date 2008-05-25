@@ -13,15 +13,9 @@
 class JLD_MindMeister_frob 
 	extends JLD_MindMeister_Object {
 
-	var $frob = null;
-
 	public function __construct( $obj ) {
-	
-		$this->frob = (string) $obj->frob;
-	}
-
-	public function getValue() {
-		return $this->frob;
+		$this->name  = 'frob';	
+		$this->value = (string) $obj->frob;
 	}
 	
 }//end definition

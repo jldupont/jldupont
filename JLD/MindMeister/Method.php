@@ -104,6 +104,13 @@ class JLD_MindMeister_Method {
 		
 		return $pl;
 	}
+	public function checkStringArray( &$key, &$value, &$values ) {
+
+		if ( !is_array( $values) )
+			return ( $value == $values );
+			
+		return ( in_array( $value, $values ));
+	}
 	
 	public function checkClass( &$key, &$value, &$values ) {
 	
@@ -141,6 +148,8 @@ class JLD_MindMeister_Method {
 		$this->setParam( 'api_sig', $api_sig );
 	
 		$this->url = $this->formatURL( );
+		
+		echo $this->url . "\n";
 		
 		return $this->doRequest( $this->url );
 	}
