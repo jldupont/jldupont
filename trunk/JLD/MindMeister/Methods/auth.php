@@ -33,7 +33,7 @@ class JLD_MindMeister_method_auth
 	 * Reference list for parameters
 	 */
 	static $refParams = array(
-		'frob' => array( )
+		'frob' => array( 'm' => array( __CLASS__, 'checkClass' ), 'a' => 'JLD_MindMeister_frob' )
 	);
 	
 	public function __construct( &$key, &$secret, &$args  ) {
@@ -53,8 +53,10 @@ class JLD_MindMeister_method_auth
 	
 		$obj = parent::execute();
 		
-		if ( isset( $obj->frob ))
-			return JLD_MindMeister::factory( 'frob', $obj );
+		var_dump( $obj );
+		
+		if ( isset( $obj->auth ))
+			return JLD_MindMeister::factory( 'auth', $obj );
 
 		if ( $obj instanceof JLD_MindMeister_err )
 			return $obj;
