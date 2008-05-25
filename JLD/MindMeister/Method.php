@@ -79,9 +79,6 @@ class JLD_MindMeister_Method {
 		
 		$pl = array();
 		
-		#var_dump( $this->args );
-		#var_dump( $refListe );
-	
 		foreach( $refListe as $key =>$entry ) {
 		
 			if ( !array_key_exists( $key, $this->args ))
