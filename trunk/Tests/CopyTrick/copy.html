@@ -4,84 +4,10 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 	<title>Copy</title>
 	
-	<script>
-		/*
-		 * Finds the iframe that created this document
-		 */
-		function findMatchingIframe( doc, title ) {
-
-			// must normalize because of IE...
-			title = title.toLowerCase();
-			
-			var result = undefined;
-			var i,j,t,iframes,iframe, nodes;
-			
-			iframes = doc.getElementsByTagName("iframe");
-			for (i=0; i<iframes.length; i++ ) {
-				iframe = iframes[i];
-				
-				// Mozilla
-				if ( iframe.contentDocument != undefined ) 
-					t = iframe.contentDocument.title;
-				else
-					t = iframe.document.title;
-
-				// normalize because of IE...
-				// IE concatenates hierarchically the titles
-				t = t.toLowerCase();
-								
-				if ( t.indexOf( title ) != -1 ) {
-					result = iframe;
-					break;
-				}
-			}
-			return result;
-		}
-		/**
-		 * Creates a <div> element before the "element" in the "doc"
-		 * @return new-div-element
-		 */
-		function createDiv( doc, element ) {
-			var div,e;
-			
-			div = doc.createElement("div");
-			e = doc.body.insertBefore( div, element );
-			
-			return e;
-		}
-	
-		function copy() {
-			var title,pdoc, iframes, iframe, div, content;
-			
-			// title of this document
-			title = window.document.title;
-		
-			// locate parent document
-			pdoc = window.parent.document;
-			
-			// get all the iframes from the parent window
-			iframes = pdoc.getElementsByTagName("iframe");
-			
-			// find the matching iframe in the parent window
-			iframe = findMatchingIframe( pdoc, title );
-			if ( iframe == undefined)
-				return;
-
-			// create a <div> in the parent document
-			div = createDiv( pdoc, iframe );
-			
-			// content from this document to copy
-			content = document.getElementById( "content" );
-			
-			// copy!
-			div.innerHTML = content.innerHTML;
-		}
-		
-		
-	</script>
+	<script type="text/javascript" src="JLD_parentCopy.js" ></script>
 	
 </head>
-<body onload="copy()">
+<body onload="JLD_parentCopy.copy('content')">
 
 	<div id="content">
 		ZNYX Networks is a leading global provider of high availability embedded Ethernet solutions for CarrierClass™ systems. Equipment manufacturers and system integrators use ZNYX Networks technologies to create next-generation solutions with high availability, high performance, and strict compliance to telecommunications standards. The company's portfolio of products and services offer design engineers pre-built and pre-tested embedded network and switch solutions, enabling rapid development and significant “time to market” advantages. Privately held, ZNYX Networks is headquartered in Fremont, Calif., with advanced research centers in Santa Barbara, San Francisco and Ottawa, Canada. Sales and professional service offices are in North America, Europe and Asia.
