@@ -1,6 +1,13 @@
-/*
+/**
+ * expand.js
+ *
+ *  Copies the innerHTML of the document's element of id="content"
+ *  in the parent window's element identified through the parameter
+ *  passed through the iframe that loaded this document.
+ *
  * @author Jean-Lou Dupont
  */
+ 
 /**
  * Locates the iframe that loaded this document
  */
@@ -59,6 +66,3 @@ function getTargetElementId( src ) {
 					
 		target.innerHTML = container.innerHTML;
 })();
-
-
-		
