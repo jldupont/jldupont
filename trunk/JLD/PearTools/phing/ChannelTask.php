@@ -15,8 +15,8 @@
 require_once "JLD/PhingTools/Task.php";
 require_once "JLD/PearTools/Channel.php";
 
-class ChannelTask extends JLD_PhingTools_Task
-{
+class ChannelTask 
+	extends JLD_PhingTools_Task {
 	// Attributes interface
 	public function setPath( $val ) { $this->__set('path', $val ); }	
 		
