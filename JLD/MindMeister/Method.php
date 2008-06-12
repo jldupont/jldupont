@@ -138,7 +138,7 @@ class JLD_MindMeister_Method {
 	/**
 	 * 
 	 */
-	public function execute() {
+	public function execute( $doRequest = true ) {
 		
 		$verifiedParams = $this->verifyParamsList();
 		$this->setParamsList( $verifiedParams );
@@ -151,7 +151,8 @@ class JLD_MindMeister_Method {
 		
 		echo $this->url . "\n";
 		
-		return $this->doRequest( $this->url );
+		if ( $doRequest )
+			return $this->doRequest( $this->url );
 	}
 	/**
 	 * 
@@ -259,6 +260,8 @@ class JLD_MindMeister_Method {
 			}
 						
 		}//foreach
+		
+		echo __METHOD__."string to sign: $str \n";
 		
 		return $str;
 	}

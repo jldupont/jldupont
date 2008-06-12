@@ -22,7 +22,7 @@ class JLD_MindMeister_method_auth
 	/**
 	 * REST end-point for this method
 	 */
-	const REST = 'http://www.mindmeister.com/services/auth/?api_key=%api_key%&perms=%perms%&frob=%frob%&api_sig=%api_sig%';
+	const REST = 'http://www.mindmeister.com/services/rest/?api_key=%api_key%&method=%method%&frob=%frob%&api_sig=%api_sig%';
 	
 	/**
 	 * not really required
@@ -33,13 +33,12 @@ class JLD_MindMeister_method_auth
 	 * Reference list for parameters
 	 */
 	static $refParams = array(
-		'perms' => array( 'm' => array( __CLASS__, 'checkStringArray'), 'a' => array( 'read', 'delete', 'write' ) ),
-		'frob'  => array( 'm' => array( __CLASS__, 'checkClass' ),     'a' => 'JLD_MindMeister_frob' )
+		'frob'  => array( 'm' => array( __CLASS__, 'checkClass' ),      'a' => 'JLD_MindMeister_frob' )
 	);
 	
 	public function __construct( &$key, &$secret, &$args  ) {
 
-		#$this->setParam( 'method', self::METHOD );
+		$this->setParam( 'method', self::METHOD );
 		parent::__construct( $key, $secret, $args, self::REST );
 	}
 	/**
@@ -53,9 +52,7 @@ class JLD_MindMeister_method_auth
 	
 	public function execute() {
 	
-		$obj = parent::execute();
-		
-		var_dump( $obj );
+		$obj = parent::execute( );
 		
 		if ( isset( $obj->auth ))
 			return JLD_MindMeister::factory( 'auth', $obj );
