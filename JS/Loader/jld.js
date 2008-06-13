@@ -1,18 +1,34 @@
 /**
  * jld.js
- * This class assumes 'google loader' is loaded.
  * 
  * @author Jean-Lou Dupont
+ * @dependency jQuery
  */
  
-/**
- * jQuery is assumed to be available
- */
-
 if ( typeof JLD =="undefined" ) {
 
 	// object literal
+	//  Static class declaration
 	var JLD = {};
 	
-	$(".JLD_Fetch").
+	/**
+	 * DOM elements should be as follows:
+	 * <tag class="JLD_FETCH" src="whatever-url"></tag>
+	 */
+	JLD.doFetches = function() {
+	
+		$(".JLD_FETCH").each(
+			function() {
+				src = this.getAttribute("src");
+				$(this).load( src );
+			}
+		);
+	}
+
+	/**
+	 * Should be called once the DOM is ready
+	 */	
+	JLD.init = function() {
+		JLD.doFetches();
+	}
 }
