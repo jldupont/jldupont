@@ -16,6 +16,7 @@ if ( typeof JLD =="undefined" ) {
 	 */
 	JLD.copy = function( index ) {
 		
+		// TODO: replace with getElementById('FETCH'+index)
 		$('.JLD_FETCH_IFRAME').each(
 			function() {
 				// make sure we only do each iframe once
@@ -27,6 +28,10 @@ if ( typeof JLD =="undefined" ) {
 				if ( index != id )
 					return;
 				
+				/*
+				 * Blogger error:
+				 * Error: uncaught exception: [Exception... "Unexpected error arg 0 [nsIDOMHTMLIFrameElement.contentDocument]"  nsresult: "0x8000ffff (NS_ERROR_UNEXPECTED)"  location: "JS frame :: http://jeanlou.dupont.googlepages.com/jld2.js :: anonymous :: line 30"  data: no]
+				 */
 				content = this.contentDocument.body.textContent;
 				$(this).after( "<div>" + content + '</div>' );
 				this.setAttribute( 'status', '1');
@@ -44,7 +49,7 @@ if ( typeof JLD =="undefined" ) {
 			function() {
 				src = this.getAttribute('src');
 				$(this).append(
-					"<iframe src='"+src+"' style='display:none' onload='JLD.copy("+index+");' class='JLD_FETCH_IFRAME' id='"+index+"' />"
+					"<iframe src='"+src+"' style='display:none' onload='JLD.copy("+index+");' class='JLD_FETCH_IFRAME' id='FETCH"+index+"' />"
 				);
 				index++;				
 			}
