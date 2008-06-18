@@ -27,6 +27,10 @@ handlers:
   script: server/oldsite/wiki.py
 # [/old]
 
+- url: /favicon.ico
+  static_files: client/www/com.jldupont.project.main/favicon.ico
+  upload: client/www/com.jldupont.project.main/favicon.ico
+
 - url: /
   static_files: client/www/com.jldupont.project.main/main.html
   upload: client/www/com.jldupont.project.main/main.html

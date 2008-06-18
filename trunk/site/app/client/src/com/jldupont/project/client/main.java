@@ -91,6 +91,20 @@ public class main implements EntryPoint, WindowResizeListener {
 		TextTitle.setText("Jean-Lou Dupont's WEB site");
 		flexTable.getFlexCellFormatter().setColSpan(0, 0, 2);
 		TextTitle.setWidth("100%");
+
+		final FlexTable flexTableFooter = new FlexTable();
+		rootPanel.add(flexTableFooter, 384, 375);
+		flexTableFooter.setSize("107px", "40px");
+
+		final Image ImgGwt = new Image();
+		flexTableFooter.setWidget(0, 0, ImgGwt);
+		flexTableFooter.getCellFormatter().setWidth(0, 0, "43px");
+		ImgGwt.setUrl("gwt.png");
+
+		final Image ImgGae = new Image();
+		flexTableFooter.setWidget(0, 1, ImgGae);
+		flexTableFooter.getCellFormatter().setWidth(0, 1, "50px");
+		ImgGae.setUrl("gae.png");
 		
 	    DeferredCommand.addCommand(new Command() {
 	        public void execute() {
