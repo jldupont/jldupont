@@ -93,7 +93,7 @@ public class main implements EntryPoint, WindowResizeListener {
 		TextTitle.setWidth("100%");
 
 		final FlexTable flexTableFooter = new FlexTable();
-		rootPanel.add(flexTableFooter, 384, 375);
+		rootPanel.add(flexTableFooter, 330, 367);
 		flexTableFooter.setSize("107px", "40px");
 
 		final Image ImgGwt = new Image();
