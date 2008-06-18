@@ -9,12 +9,12 @@ handlers:
 #CLIENT
 #======
 - url: /
-  static_files: client/www/com.jldupont.project.Main/Main.html
-  upload: client/www/com.jldupont.project.Main/Main.html
+  static_files: client/www/com.jldupont.project.main/main.html
+  upload: client/www/com.jldupont.project.main/main.html
 
 - url: /(.*\.(js|html|css|gif|png|jpg))
-  static_files: client/www/com.jldupont.project.Main/\1
-  upload: client/www/com.jldupont.project.Main/(.*\.(js|html|css|gif|png|jpg))
+  static_files: client/www/com.jldupont.project.main/\1
+  upload: client/www/com.jldupont.project.main/(.*\.(js|html|css|gif|png|jpg))
 
 #SERVER
 #======
