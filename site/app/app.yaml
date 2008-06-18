@@ -1,0 +1,27 @@
+application: jldupont
+version: 1
+api_version: 1
+runtime: python
+
+
+handlers:
+
+#CLIENT
+#======
+- url: /
+  static_files: client/www/com.jldupont.project.Main/Main.html
+  upload: client/www/com.jldupont.project.Main/Main.html
+
+- url: /(.*\.(js|html|css|gif|png|jpg))
+  static_files: client/www/com.jldupont.project.Main/\1
+  upload: client/www/com.jldupont.project.Main/(.*\.(js|html|css|gif|png|jpg))
+
+#SERVER
+#======
+
+
+
+# CATCH-ALL
+- url: /.*
+  static_files: server/default/not_found.html
+  upload: server/default/not_found.html
