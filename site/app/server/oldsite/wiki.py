@@ -6,13 +6,7 @@ import sys
 import logging
 
 import wsgiref.handlers
-import xml.dom.minidom
-import time
-from time import strftime, strptime
-
 from google.appengine.ext           import webapp
-from google.appengine.ext.webapp    import template
-from google.appengine.api           import urlfetch
 
 import pprint
 
