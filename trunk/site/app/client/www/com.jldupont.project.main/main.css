@@ -16,6 +16,14 @@
 	overflow:hidden;	
 }
 
+img {
+	border: none;
+}
+
+.gwt-Image {
+	border: none;
+}
+
 body { 
 	background-color: white;
 	color: black;

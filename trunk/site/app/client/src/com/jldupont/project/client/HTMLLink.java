@@ -66,7 +66,9 @@ public class HTMLLink extends Widget
   public void setHTML(String html) {
     DOM.setInnerHTML(getElement(), html == null ? "" : html);
   }
-
+  public void setClass( String classe ) {
+	  DOM.setElementAttribute(getElement(), "class", classe == null ? "" : classe);
+  }
   public void setId(String id) {
     DOM.setElementAttribute(getElement(), "id", id == null ? "" : id);
   }
@@ -104,6 +106,14 @@ public class HTMLLink extends Widget
 	  DOM.setImgSrc(img, url);
   }
   
+  public void setImgClass( String classe ) {
+	  Element $this = getElement();
+	  Element img = DOM.getChild( $this, 0);
+	  
+	  if ( img != null ) {
+	  	  DOM.setElementAttribute( img, "class", classe == null ? "" : classe);
+	  }
+  }
   /* ===============================================================================
    *  PRIVATE
    ===============================================================================*/
