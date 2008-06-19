@@ -6,11 +6,16 @@ runtime: python
 
 handlers:
 
+#SERVER
+#======
+
+#-	url: /services/delicious/(.*)
+#	script: server/services/delicious/main.py
+
 #CLIENT
 #======
 
- #old site compatibility
- #[old]
+ #[old]  site compatibility
 - url: /Main_Page
   script: server/oldsite/wiki.py
   
@@ -38,10 +43,6 @@ handlers:
 - url: /(.*\.(js|html|css|gif|png|jpg))
   static_files: client/www/com.jldupont.project.main/\1
   upload: client/www/com.jldupont.project.main/(.*\.(js|html|css|gif|png|jpg))
-
-#SERVER
-#======
-
 
 
 # CATCH-ALL
