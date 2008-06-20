@@ -12,6 +12,9 @@ import java.util.HashMap;
 public class ObjectPool 
 	extends JLD_Object {
 
+	/**
+	 * Recycle bin
+	 */
 	static HashMap bin = null;
 	
 	/*===================================================================
@@ -20,7 +23,7 @@ public class ObjectPool
 	/**
 	 * Borg pattern
 	 */
-	ObjectPool() {
+	public ObjectPool() {
 		super( "ObjectPool" );
 		
 		if ( bin == null )

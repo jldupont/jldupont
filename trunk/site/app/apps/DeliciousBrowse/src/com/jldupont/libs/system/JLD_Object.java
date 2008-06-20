@@ -5,7 +5,7 @@
 package com.jldupont.libs.system;
 
 import java.lang.Object;
-import com.jldupont.*;
+import com.jldupont.libs.system.Factory;;
 
 abstract public class JLD_Object 
 	extends Object {
@@ -29,18 +29,18 @@ abstract public class JLD_Object
 	 * CONSTRUCTORS 
 	 ===================================================================*/
 	
-	JLD_Object() {
+	public JLD_Object() {
 		super();
 		this.classe = null;
 		this.id = null;
 	}
 	
-	JLD_Object( String classe ) {
+	public JLD_Object( String classe ) {
 		super();
 		this.classe = classe;
 	}
 	
-	JLD_Object( String classe, String id ) {
+	public JLD_Object( String classe, String id ) {
 		super();		
 		this.classe = classe;
 		this.id = id;
@@ -79,7 +79,7 @@ abstract public class JLD_Object
 	 */
 	public void recycle() {
 		
-		ObjectPool pool = (ObjectPool) Factory.create("ObjectPool");
+		ObjectPool pool = (ObjectPool) Factory.create("ObjectPool", "recycle" );
 		
 		pool.recycle( this );
 	}

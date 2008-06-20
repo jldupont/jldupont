@@ -9,7 +9,8 @@ package com.jldupont.project.client;
 import com.jldupont.project.client.Param;
 import com.jldupont.project.client.ParamsList;
 
-import com.jldupont.libs.system.Logger;
+import com.jldupont.libs.system.*;
+import com.jldupont.services.Delicious.Tags;
 
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.DOM;
@@ -139,6 +140,8 @@ public class main implements EntryPoint, WindowResizeListener {
 	      });
 
 	    onWindowResized(Window.getClientWidth(), Window.getClientHeight());
+	    
+	    doTest();
 
 	}
 	
@@ -156,6 +159,20 @@ public class main implements EntryPoint, WindowResizeListener {
 
 		DOM.setStyleAttribute(ft, "position", "absolute");
 		DOM.setStyleAttribute(ft, "left", l + "px");
+	}
+
+	private void doTest() {
+
+		String id;
+		
+		Tags t1 = (Tags) Factory.create( "Delicious.Tags", "id1" );
+		t1.recycle();
+		
+		Tags t2 = (Tags) Factory.create( "Delicious.Tags", "id2" );
+
+		id = t2.getId();
+		
+		Window.alert( "id: " + id );
 	}
 	
 }//end class
