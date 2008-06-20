@@ -9,8 +9,8 @@ package com.jldupont.project.client;
 import com.jldupont.project.client.Param;
 import com.jldupont.project.client.ParamsList;
 
-import com.jldupont.libs.system.*;
-import com.jldupont.services.Delicious.Tags;
+import org.jldupont.system.*;
+import org.jldupont.delicious.Tags;
 
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.DOM;
@@ -165,10 +165,10 @@ public class main implements EntryPoint, WindowResizeListener {
 
 		String id;
 		
-		Tags t1 = (Tags) Factory.create( "com.jldupont.services.Delicious.Tags", "id1" );
+		Tags t1 = (Tags) Factory.create( "org.jldupont.delicious.Tags", "id1" );
 		t1.recycle();
 		
-		Tags t2 = (Tags) Factory.create( "com.jldupont.services.Delicious.Tags", "id2" );
+		Tags t2 = (Tags) Factory.create( "org.jldupont.delicious.Tags", "id2" );
 		t2.recycle();
 	}
 	
