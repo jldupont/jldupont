@@ -9,6 +9,8 @@ package com.jldupont.project.client;
 import com.jldupont.project.client.Param;
 import com.jldupont.project.client.ParamsList;
 
+import com.jldupont.libs.system.Logger;
+
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.DOM;
 
@@ -17,9 +19,6 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.WindowResizeListener;
-import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ClickListener;
 
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Frame;
@@ -30,7 +29,7 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.TextBoxBase;
-import com.google.gwt.user.client.ui.Widget;
+
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -128,8 +127,10 @@ public class main implements EntryPoint, WindowResizeListener {
 			liste += "name: " + param.getName() + " value: " + param.getValue();
 		}
 		
-		if ( liste.length() != 0 )
-			Window.alert( "Parameters:: " + liste );
+		if ( liste.length() != 0 ) {
+			Logger.log( "Parameters:: " + liste );
+		}
+		//Window.alert( "Parameters:: " + liste );
 		
 	    DeferredCommand.addCommand(new Command() {
 	        public void execute() {

@@ -1,9 +1,6 @@
 package com.jldupont.project.client;
 
-import com.google.gwt.user.client.Window;
-
 import java.util.Iterator;
-import com.jldupont.project.client.Param;
 
 public class ParamsList 
 	implements Iterator {

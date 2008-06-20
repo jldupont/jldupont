@@ -1,8 +1,6 @@
 package com.jldupont.project.client;
 
-import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.HasHTML;
 import com.google.gwt.user.client.ui.HasName;
@@ -16,16 +14,12 @@ import com.google.gwt.user.client.ui.Widget;
  */
 
 public class HTMLLink extends Widget 
-	implements HasHTML, HasName, EntryPoint {
+	implements HasHTML, HasName {
 
   /* ===============================================================================
    *  PROPERTIES
    ===============================================================================*/
 	
-	
-	public void onModuleLoad() {
-		
-	}
 	
   public HTMLLink() {
     setElement(DOM.createAnchor());
