@@ -1,6 +1,8 @@
 <module>
 	<inherits name="com.google.gwt.user.User"/>
-	<inherits name="com.jldupont.libs.system"/>
+	
+	<inherits name="org.jldupont.system"/>
+	<inherits name="org.jldupont.delicious"/>
 	
 	<entry-point class="com.jldupont.project.client.main"/>
 </module>
