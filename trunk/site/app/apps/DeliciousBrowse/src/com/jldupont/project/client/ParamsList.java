@@ -2,6 +2,7 @@ package com.jldupont.project.client;
 
 import java.util.Iterator;
 
+// no generics in GWT1.4
 public class ParamsList 
 	implements Iterator {
 	
