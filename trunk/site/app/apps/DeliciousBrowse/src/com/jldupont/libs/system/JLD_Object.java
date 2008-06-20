@@ -62,6 +62,14 @@ abstract public class JLD_Object
 	public String getId() {
 		return this.id;
 	}
+	
+	/*===================================================================
+	 * ObjectPool functionality 
+	 ===================================================================*/
+	
+	protected void setRecyclable() {
+		this.recyclable = true;
+	}
 	protected void setRecyclable( boolean state ) {
 		this.recyclable = state;
 	}
@@ -79,9 +87,12 @@ abstract public class JLD_Object
 	 */
 	public void recycle() {
 		
-		ObjectPool pool = (ObjectPool) Factory.create("ObjectPool", "recycle" );
-		
-		pool.recycle( this );
+		if ( getRecyclable() ) {
+			ObjectPool pool = (ObjectPool) Factory.create("ObjectPool", "recycle" );
+			pool.recycle( this );
+		} else {
+			Logger.log( "JLD_OBJECT: class (" + getClasse() +") is not recyclable" );
+		}
 	}
 	
 }//end class

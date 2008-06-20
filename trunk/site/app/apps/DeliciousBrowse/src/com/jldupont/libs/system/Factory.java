@@ -64,7 +64,7 @@ public class Factory
 		/**
 		 * @see com.jldupont.services.Delicious.Tags
 		 */
-		if ( className == "Delicious.Tags" ) {
+		if ( className == "com.jldupont.services.Delicious.Tags" ) {
 			return (JLD_Object) new Tags( id );
 		}
 		
