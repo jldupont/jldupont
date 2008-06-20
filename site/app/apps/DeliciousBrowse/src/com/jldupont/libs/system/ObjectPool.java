@@ -3,6 +3,7 @@
  */
 package com.jldupont.libs.system;
 
+import com.jldupont.libs.system.Logger;
 import java.util.HashMap;
 
 /**
@@ -42,6 +43,8 @@ public class ObjectPool
 		// do we already have an object of this class?
 		if ( bin.containsKey(classe) )
 			return;
+		
+		Logger.log("OBJECTPOOL: recycling an object of class("+ classe +") and id("+obj.getId()+")" );
 		
 		bin.put( classe, obj );
 	}

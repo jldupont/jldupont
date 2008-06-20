@@ -165,14 +165,11 @@ public class main implements EntryPoint, WindowResizeListener {
 
 		String id;
 		
-		Tags t1 = (Tags) Factory.create( "Delicious.Tags", "id1" );
+		Tags t1 = (Tags) Factory.create( "com.jldupont.services.Delicious.Tags", "id1" );
 		t1.recycle();
 		
-		Tags t2 = (Tags) Factory.create( "Delicious.Tags", "id2" );
-
-		id = t2.getId();
-		
-		Window.alert( "id: " + id );
+		Tags t2 = (Tags) Factory.create( "com.jldupont.services.Delicious.Tags", "id2" );
+		t2.recycle();
 	}
 	
 }//end class
