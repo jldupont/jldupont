@@ -4,6 +4,8 @@
 package org.jldupont.system;
 
 import org.jldupont.delicious.Tags;
+import org.jldupont.browser.URLParamsList;
+import org.jldupont.browser.CookieParamsList;
 
 import java.lang.Object;
 
@@ -62,10 +64,22 @@ public class Factory
 			return (JLD_Object) new ObjectPool();
 		}
 		/**
-		 * @see com.jldupont.services.Delicious.Tags
+		 * @see org.jldupont.delicious.Tags
 		 */
 		if ( className == "org.jldupont.delicious.Tags" ) {
 			return (JLD_Object) new Tags( id );
+		}
+		/**
+		 * @see org.jldupont.browser.URLParamsList
+		 */
+		if ( className == "org.jldupont.browser.URLParamsList" ) {
+			return (JLD_Object) new URLParamsList( );
+		}
+		/**
+		 * @see org.jldupont.browser.CookieParamsList
+		 */
+		if ( className == "org.jldupont.browser.CookieParamsList" ) {
+			return (JLD_Object) new CookieParamsList( );
 		}
 		
 		Logger.log( "FACTORY: ERROR CREATING INSTANCE OF CLASS: " + className );
