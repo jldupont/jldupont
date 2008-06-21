@@ -3,6 +3,7 @@
 	
 	<inherits name="org.jldupont.system"/>
 	<inherits name="org.jldupont.delicious"/>
+	<inherits name="org.jldupont.browser"/>
 	
 	<entry-point class="com.jldupont.project.client.main"/>
 </module>
