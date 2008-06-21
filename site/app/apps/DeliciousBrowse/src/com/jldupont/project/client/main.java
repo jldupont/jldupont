@@ -6,11 +6,10 @@
  */
 package com.jldupont.project.client;
 
-import com.jldupont.project.client.Param;
-import com.jldupont.project.client.ParamsList;
-
 import org.jldupont.system.*;
 import org.jldupont.delicious.Tags;
+import org.jldupont.browser.Param;
+import org.jldupont.browser.ParamsList;
 
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.DOM;
