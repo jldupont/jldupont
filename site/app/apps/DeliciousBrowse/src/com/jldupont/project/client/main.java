@@ -9,7 +9,7 @@ package com.jldupont.project.client;
 import org.jldupont.system.*;
 import org.jldupont.delicious.Tags;
 import org.jldupont.browser.Param;
-import org.jldupont.browser.ParamsList;
+import org.jldupont.browser.URLParamsList;
 
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.DOM;
@@ -60,7 +60,7 @@ public class main implements EntryPoint, WindowResizeListener {
 	/**
 	 * List of parameters
 	 */
-	ParamsList params;
+	URLParamsList params;
 	
 	/*
 	 * (non-Javadoc)
@@ -114,7 +114,7 @@ public class main implements EntryPoint, WindowResizeListener {
 		frPosts.setSize("12px", "6px");
 		frPosts.setVisible(false);
 		
-		this.params = new ParamsList();
+		this.params = new URLParamsList();
 		
 		String liste=new String("");
 		
