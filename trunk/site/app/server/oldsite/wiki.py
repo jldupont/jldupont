@@ -16,7 +16,7 @@ class WikiSite( webapp.RequestHandler ):
 
     def get( self, page ):
         user_agent = self.request.headers['User-Agent']
-        logging.info('Redir: req: ' + page + 'UA: '+user_agent )
+        logging.info('[Req: ' + page + '] [UA: '+user_agent +']')
         self.redirect("http://wiki.jldupont.com/" + page )
 
 #/**
