@@ -4,5 +4,4 @@
 	<inherits name="org.jldupont.browser"/>
 	<inherits name="org.jldupont.delicious"/>
 	
-	<source path="system"/>
 </module>
