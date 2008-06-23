@@ -6,6 +6,7 @@ package org.jldupont.system;
 import org.jldupont.delicious.Tags;
 import org.jldupont.browser.URLParamsList;
 import org.jldupont.browser.CookieParamsList;
+//import org.jldupont.web.HttpRequest;
 
 import java.lang.Object;
 
@@ -39,6 +40,10 @@ public class Factory
 		if ( obj != null ) {
 			rid = obj.getId();
 			Logger.log( "FACTORY: retrieved object of class: " + className + " id("+rid+")" +" asked id("+id+")" );
+			
+			// clean-up!
+			obj._clean();
+			
 			return obj;
 		}
 		
@@ -81,6 +86,13 @@ public class Factory
 		if ( className == "org.jldupont.browser.CookieParamsList" ) {
 			return (JLD_Object) new CookieParamsList( );
 		}
+
+		/**
+		 * @see org.jldupont.browser.CookieParamsList
+		 */
+//		if ( className == "org.jldupont.web.HttpRequest" ) {
+//			return (JLD_Object) new HttpRequest( id );
+//		}
 		
 		Logger.log( "FACTORY: ERROR CREATING INSTANCE OF CLASS: " + className );
 		
