@@ -11,7 +11,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 /**
  * Basic implementation of raw Anchor <a> widget
- * @see http://www.w3schools.com/tags/tag_a.asp
+ * @see http://www.w3schools.com/tagsFetcher/tag_a.asp
  * @author Peter Blazejewicz
  * @author Jean-Lou Dupont
  */

@@ -3,7 +3,7 @@
  */
 package org.jldupont.system;
 
-import org.jldupont.delicious.Tags;
+import org.jldupont.delicious.TagsFetcher;
 import org.jldupont.browser.URLParamsList;
 import org.jldupont.browser.CookieParamsList;
 //import org.jldupont.web.HttpRequest;
@@ -69,10 +69,10 @@ public class Factory
 			return (JLD_Object) new ObjectPool();
 		}
 		/**
-		 * @see org.jldupont.delicious.Tags
+		 * @see org.jldupont.delicious.TagsFetcher
 		 */
-		if ( className == "org.jldupont.delicious.Tags" ) {
-			return (JLD_Object) new Tags( id );
+		if ( className == "org.jldupont.delicious.TagsFetcher" ) {
+			return (JLD_Object) new TagsFetcher( id );
 		}
 		/**
 		 * @see org.jldupont.browser.URLParamsList
