@@ -94,4 +94,16 @@ abstract public class JLD_Object
 		}
 	}
 	
+	/*===================================================================
+	 * PROTECTED 
+	 ===================================================================*/
+	/**
+	 * Derived classes should handle this
+	 *  if special "cleaning" is required when the object is retrieved 
+	 *  from the ObjectPool before being handed-off to the requesting
+	 *  party.
+	 */
+	protected void _clean() {
+	}
+	
 }//end class
