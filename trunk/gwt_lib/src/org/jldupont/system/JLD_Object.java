@@ -13,7 +13,7 @@ abstract public class JLD_Object
 	/**
 	 * Class type
 	 */
-	String classe = null;
+	public String classe = null;
 	
 	/**
 	 * Identifier
@@ -24,6 +24,16 @@ abstract public class JLD_Object
 	 * Recyclable capability flag
 	 */
 	boolean recyclable = false;
+	
+	/**
+	 * Only initialized if used.
+	 */
+	org.jldupont.system.Timer timer = null;
+	
+	/**
+	 * Operation busy flag
+	 */
+	boolean isBusy = false;
 	
 	/*===================================================================
 	 * CONSTRUCTORS 
@@ -105,6 +115,35 @@ abstract public class JLD_Object
 			Logger.log( "JLD_OBJECT: class (" + getClasse() +") is not recyclable" );
 		}
 	}
+
+	/*===================================================================
+	 * OPERATION functionality 
+	 ===================================================================*/
+	protected void startOperation(int timeout) {
+		
+		if ( this.isBusy ) {
+			throw new RuntimeException(this.classe+".startOperation : already busy");
+		}
+		
+		this.isBusy = true;
+		
+		if ( this.timer == null ) {
+			this.timer = new org.jldupont.system.Timer();
+			this.timer.setTarget( this );
+		}
+		
+		this.timer.schedule( timeout );
+	}
+	public boolean getBusy() {
+		return this.isBusy;
+	}
+	/**
+	 * TODO override
+	 */
+	public void timerExpiredEvent() {
+		this.isBusy = false;
+		Logger.log(this.classe+".timerExpiredEvent: default method called");
+	}
 	
 	/*===================================================================
 	 * PROTECTED 
@@ -119,6 +158,7 @@ abstract public class JLD_Object
 	 *  should _clean also their composing objects.
 	 */
 	public void _clean() {
+		this.timer = null;
 	}
 	/**
 	 * Used by derived classes to provide

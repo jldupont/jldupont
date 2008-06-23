@@ -7,7 +7,7 @@ import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import org.jldupont.delicious.Tags;
+import org.jldupont.delicious.TagsFetcher;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -17,7 +17,7 @@ public class test
 	
 	private Button clickMeButton;
 	
-	public static Tags tags;
+	public static TagsFetcher tagsFetcher;
 	
 	public void onModuleLoad() {
 		
@@ -25,15 +25,15 @@ public class test
 
 		clickMeButton = new Button();
 		rootPanel.add(clickMeButton);
-		clickMeButton.setText("Fetch Tags");
+		clickMeButton.setText("Fetch TagsFetcher");
 		
-		tags = new Tags();
-		tags.setUser("jldupont");
+		tagsFetcher = new TagsFetcher();
+		tagsFetcher.setUser("jldupont");
 		
 		clickMeButton.addClickListener(new ClickListener() {
 			
 			public void onClick(Widget sender) {
-				test.tags.fetch();
+				test.tagsFetcher.fetch();
 			}
 		});
 		
@@ -41,7 +41,6 @@ public class test
 		//testObjectLiteral();
 		
 	}//[onModuleLoad]
-
 	private native void testObjectLiteral() /*-{
 	
 		var obj = {
