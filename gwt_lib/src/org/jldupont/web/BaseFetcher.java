@@ -3,27 +3,42 @@
  */
 package org.jldupont.web;
 
+import java.util.Vector;
+
 import org.jldupont.system.JLD_Object;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
-abstract public class BaseFetcher 
+abstract public class BaseFetcher implements Listener
 	extends JLD_Object {
 
 	/**
-	 * 
+	 * Call object
 	 */
 	JSONcall     jsonc;
 	/**
-	 * 
+	 * Callback object
 	 */
 	JSONcallback jsoncb;
 	
 	/**
-	 * Timeout
+	 * Timeout for HTTP call
 	 */
 	int timeout = 3000;
+	/**
+	 * Operation level timeout
+	 */
+	int operationTimeout = 5000;
 	
+	/**
+	 * Listeners
+	 */
+	Vector listeners = null;
+	
+	
+	/*===================================================================
+	 * CONSTRUCTORS 
+	 ===================================================================*/
 	public BaseFetcher(String classe, String id) {
 		super(classe,id);
 		setup();
@@ -35,8 +50,18 @@ abstract public class BaseFetcher
 	/*===================================================================
 	 * PUBLIC 
 	 ===================================================================*/
-	public void setTimeout() {
-		this.jsoncb.setTimeout();
+	/**
+	 * Operation level timeout
+	 */
+	public void setOperationTimeout( int timeout ) {
+		this.operationTimeout = timeout;
+	}
+	/**
+	 * Used in the HTTP call made
+	 *  from JSONcall
+	 */
+	public void setTimeout(int timeout) {
+		this.timeout = timeout;
 	}
 	/**
 	 * @see org.jldupont.web.BaseCall#setUrl(String)
@@ -53,12 +78,29 @@ abstract public class BaseFetcher
 	
 	public boolean fetch() {
 	
+		//prepare the call
+		this.jsonc.setTimeout(this.timeout);
+		
 		//set callback
+		this.jsoncb.create();
 		
 		//start operation
-		this.startOperation(timeout);
+		this.startOperation(this.operationTimeout);
+		
+		//do the call
+		this.jsonc.call();
 		
 		return true;
+	}
+	/*===================================================================
+	 * Operation related 
+	 ===================================================================*/
+	
+	/**
+	 * @see org.jldupont.system.JLD_Object
+	 */
+	public void timerExpiredEvent() {
+		super.timerExpiredEvent();
 	}
 	
 	/*===================================================================

@@ -12,14 +12,9 @@ public class BaseCallback
 	extends JLD_Object {
 
 	/**
-	 * 
+	 * Instance Counter
 	 */
 	static int instanceCounter = 0;
-	
-	/**
-	 * 
-	 */
-	int id = 0;
 	
 	/**
 	 * 
@@ -31,26 +26,61 @@ public class BaseCallback
 	 */
 	BaseCallbackEvent target=null;
 	
+	/**
+	 * 
+	 */
+	int currentCallback = -1;
+	
 	/*===================================================================
 	 * CONSTRUCTORS
 	 ===================================================================*/
 	public BaseCallback(String classe, String id) {
 		super(classe, id);
+		setup();
 	}
-	
+	private void setup() {
+		_clean();
+	}
 	/*===================================================================
 	 * PUBLIC
 	 ===================================================================*/
+	/**
+	 * create
+	 * @return void
+	 */
 	public void create() {
+
+		if ( this.target == null ) {
+			throw new RuntimeException( this.classe + ".create: target is null" );
+		}
 		
+		if (this.currentCallback > 0) {
+			deleteCallback( this.currentCallback );
+		}
+		
+		this.callbackFired = false;
+		this.currentCallback = instanceCounter++;
+		createCallback( this.currentCallback );
 	}
+	/**
+	 * 
+	 * @param target
+	 */
 	public void setTarget(BaseCallbackEvent target) {
 		this.target = target;
+	}
+	/**
+	 * 
+	 * @return String
+	 */
+	private String getCallbackName() {
+		return "BaseCallbackFnc"+String.valueOf(this.currentCallback)+".handler";
 	}
 	/*===================================================================
 	 * CALLBACK
 	 ===================================================================*/
 	public void callback(int id, JavaScriptObject obj) {
+		
 		this.callbackFired = true;
 		Logger.log(this.classe+": callback called! id["+id+"]");
 		
@@ -77,15 +107,19 @@ public class BaseCallback
 		eval( "$wnd."+fncName+" = null;" );
 	}-*/;
 	
-	private String getCallbackName() {
-		return "BaseCallbackFnc"+String.valueOf(this.id)+".handler";
-	}
-	
 	/*===================================================================
 	 * ObjectPool
 	 ===================================================================*/
 	public void _clean() {
 		
+		super._clean();
+		
+		if (this.currentCallback > 0) {
+			deleteCallback( this.currentCallback );
+		}
+		this.currentCallback = -1;
+		this.callbackFired = false;
+		this.target = null;
 	}
 	
 }//end class
