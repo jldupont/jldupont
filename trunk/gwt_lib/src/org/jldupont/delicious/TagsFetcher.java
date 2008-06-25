@@ -6,6 +6,7 @@ package org.jldupont.delicious;
 
 import org.jldupont.system.JLD_Object;
 import org.jldupont.system.Logger;
+import org.jldupont.system.Factory;
 import org.jldupont.web.BaseFetcher;
 import org.jldupont.web.CallListener;
 
@@ -58,7 +59,10 @@ public class TagsFetcher
 	/*===================================================================
 	 * PUBLIC interface
 	 ===================================================================*/
-	
+	/**
+	 * setUser
+	 *  Delicious Username
+	 */
 	public void setUser( String username ) {
 		this.username = new String( username );
 	}
@@ -78,7 +82,20 @@ public class TagsFetcher
 		//go fetch them
 		this.fetch();
 	}
-	
+	/**
+	 * getTags
+	 *  Returns a TagsList object containing all the current tags
+	 *   [string;int]
+	 *   e.g. [Companies;257]
+	 * @return
+	 */
+	public TagsList getTags() {
+		
+		TagsList list = (TagsList) Factory.create("org.jldupont.delicious.TagsList");
+		list.putAll( this.getJSONObject() );
+		
+		return list;
+	}
 	/*===================================================================
 	 * LISTENERS 
 	 ===================================================================*/

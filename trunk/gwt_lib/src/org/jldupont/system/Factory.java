@@ -8,6 +8,7 @@ import org.jldupont.browser.URLParamsList;
 import org.jldupont.browser.CookieParamsList;
 import org.jldupont.web.JSONcallback;
 import org.jldupont.web.JSONcall;
+import org.jldupont.delicious.TagsList;
 
 import java.lang.Object;
 
@@ -93,7 +94,10 @@ public class Factory
 		if ( className == "org.jldupont.web.JSONcallback") {
 			return (JLD_Object) new org.jldupont.web.JSONcallback(id);
 		}
-		
+		if ( className == "org.jldupont.delicious.TagsList" ) {
+			return (JLD_Object) new org.jldupont.delicious.TagsList(id);
+		}
+			
 		Logger.log( "FACTORY: ERROR CREATING INSTANCE OF CLASS: " + className );
 		
 		return null;
