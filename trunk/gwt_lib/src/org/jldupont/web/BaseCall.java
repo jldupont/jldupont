@@ -73,7 +73,6 @@ abstract public class BaseCall
 	 */
 	public void call( ) {
 		
-		boolean returnCode = true; // be optimistic
 		String cUrl = new String();
 		String p;
 		
