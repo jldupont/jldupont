@@ -7,12 +7,14 @@ import java.util.Vector;
 import java.util.Iterator;
 
 import org.jldupont.system.JLD_Object;
+import org.jldupont.system.Logger;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.user.client.Event;
 
 abstract public class BaseFetcher 
 	extends JLD_Object 
-	implements CallEventListener {
+	implements CallEventListener, BaseCallbackEvent {
 
 	/**
 	 * Call object
@@ -41,14 +43,16 @@ abstract public class BaseFetcher
 	/*===================================================================
 	 * CONSTRUCTORS 
 	 ===================================================================*/
-	public BaseFetcher(String classe, String id) {
-		super(classe,id);
+	public BaseFetcher(String classe, String id, boolean recyclable) {
+		super(classe,id, recyclable);
 		setup();
 	}
 	private void setup() {
 		this.jsonc = new JSONcall();
 		this.jsoncb= new JSONcallback();
 		this.listeners = new Vector();
+		
+		this.jsoncb.setTarget(this);
 	}
 	/*===================================================================
 	 * PUBLIC 
@@ -96,6 +100,17 @@ abstract public class BaseFetcher
 		return true;
 	}
 	/*===================================================================
+	 * BaseCallbackEvent 
+	 ===================================================================*/
+	/**
+	 * This handler is called when the callback is triggered
+	 * @see org.jldupont.web.JSONcallback
+	 */
+	public void handleCallbackEvent() {
+		Logger.log(this.classe+".handleCallbackEvent: called.");
+		this.notifyListeners();
+	}
+	/*===================================================================
 	 * CallListener 
 	 ===================================================================*/
 	
@@ -116,12 +131,19 @@ abstract public class BaseFetcher
 		}
 		
 	}
+	/**
+	 * Declare here so to help derived classes 
+	 */
+	public void onBrowserEvent(Event event) {
+		
+	}
 	
 	/*===================================================================
 	 * Operation related 
 	 ===================================================================*/
 	
 	/**
+	 * Resets 'busy' status.
 	 * @see org.jldupont.system.JLD_Object
 	 */
 	public void timerExpiredEvent() {
@@ -135,6 +157,7 @@ abstract public class BaseFetcher
 	 * @see org.jldupont.system.ObjectPool 
 	 */
 	public void _clean() {
+		super._clean();
 		this.jsonc._clean();
 		this.jsoncb._clean();
 		this.listeners.clear();

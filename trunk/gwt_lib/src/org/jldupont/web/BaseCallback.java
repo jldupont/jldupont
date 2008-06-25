@@ -85,7 +85,7 @@ public class BaseCallback
 		Logger.log(this.classe+": callback called! id["+id+"]");
 		
 		// fire-off the event
-		this.target.handleEvent();
+		this.target.handleCallbackEvent();
 	}
 	/**
 	 * BLACK MAGIC at work!!!
