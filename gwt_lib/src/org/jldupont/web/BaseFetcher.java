@@ -4,13 +4,15 @@
 package org.jldupont.web;
 
 import java.util.Vector;
+import java.util.Iterator;
 
 import org.jldupont.system.JLD_Object;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
-abstract public class BaseFetcher implements Listener
-	extends JLD_Object {
+abstract public class BaseFetcher 
+	extends JLD_Object 
+	implements CallEventListener {
 
 	/**
 	 * Call object
@@ -46,6 +48,7 @@ abstract public class BaseFetcher implements Listener
 	private void setup() {
 		this.jsonc = new JSONcall();
 		this.jsoncb= new JSONcallback();
+		this.listeners = new Vector();
 	}
 	/*===================================================================
 	 * PUBLIC 
@@ -93,6 +96,28 @@ abstract public class BaseFetcher implements Listener
 		return true;
 	}
 	/*===================================================================
+	 * CallListener 
+	 ===================================================================*/
+	
+	public void addCallListener(CallListener s) {
+		this.listeners.add( s );
+	}
+	
+	public void removeCallListener(CallListener s) {
+		this.listeners.remove( s );
+	}
+	
+	protected void notifyListeners() {
+		
+		Iterator it = this.listeners.iterator();
+		while (it.hasNext()) {
+			Object o = it.next ();
+		    ((CallListener) o).fireCallEvent( new CallEventObject(this));
+		}
+		
+	}
+	
+	/*===================================================================
 	 * Operation related 
 	 ===================================================================*/
 	
@@ -112,5 +137,6 @@ abstract public class BaseFetcher implements Listener
 	public void _clean() {
 		this.jsonc._clean();
 		this.jsoncb._clean();
+		this.listeners.clear();
 	}
 }//end class
