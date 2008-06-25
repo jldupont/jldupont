@@ -171,7 +171,20 @@ abstract public class JLD_Object
 		this.isBusy = false;
 		Logger.log(this.classe+".timerExpiredEvent: default method called");
 	}
-	
+	/**
+	 * Cancels the current operation
+	 */
+	public void timerCancel() {
+		
+		if ( this.timer != null ) {
+			this.timer.cancel();
+			this.isBusy = false;
+			Logger.log(this.classe+".timerCancel: method called");			
+		} else {
+			Logger.log(this.classe+".timerCancel: NO TIMER active!");	
+		}
+		
+	}
 	/*===================================================================
 	 * PROTECTED 
 	 ===================================================================*/

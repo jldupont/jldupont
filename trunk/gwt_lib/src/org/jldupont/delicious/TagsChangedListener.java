@@ -1,5 +1,11 @@
+/**
+ * @author Jean-Lou Dupont
+ */
 package org.jldupont.delicious;
 
-public interface TagsChangedListener {
+import org.jldupont.web.CallListener;
+
+public interface TagsChangedListener 
+	extends CallListener {
 
 }

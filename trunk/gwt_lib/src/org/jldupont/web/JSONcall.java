@@ -113,12 +113,12 @@ public class JSONcall
 		// get rid of any previous script tag.
 		//  This assumes that this object instance was recycled properly of course.
 		if ( this.scriptElementId != null ) {
-			Logger.log("JSONcall.setupScriptElement: script tag element exists with id[" + this.scriptElementId + "]" );
+			Logger.log(this.classe+".setupScriptElement: script tag element exists with id[" + this.scriptElementId + "]" );
 			deleteScriptElement();
 		}		
 		// create a new script tag element
 		this.scriptElementId = "JSONcall" + String.valueOf(this.scriptElementIdCounter++);
-		
+		Logger.log(this.classe+".setupScriptElement: creating script tag with id[" + this.scriptElementId + "]" );
 		Logger.log(thisClass + ".setupScriptElement: *before* injectScript");
 		injectScript( this.scriptElementId, cUrl );
 		Logger.log(thisClass + ".setupScriptElement: *after* injectScript");		

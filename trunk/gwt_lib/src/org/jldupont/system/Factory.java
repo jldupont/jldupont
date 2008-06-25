@@ -6,7 +6,8 @@ package org.jldupont.system;
 import org.jldupont.delicious.TagsFetcher;
 import org.jldupont.browser.URLParamsList;
 import org.jldupont.browser.CookieParamsList;
-//import org.jldupont.web.HttpRequest;
+import org.jldupont.web.JSONcallback;
+import org.jldupont.web.JSONcall;
 
 import java.lang.Object;
 
@@ -86,13 +87,12 @@ public class Factory
 		if ( className == "org.jldupont.browser.CookieParamsList" ) {
 			return (JLD_Object) new CookieParamsList( );
 		}
-
-		/**
-		 * @see org.jldupont.browser.CookieParamsList
-		 */
-//		if ( className == "org.jldupont.web.HttpRequest" ) {
-//			return (JLD_Object) new HttpRequest( id );
-//		}
+		if ( className == "org.jldupont.web.JSONcall") {
+			return (JLD_Object) new org.jldupont.web.JSONcall(id);
+		}
+		if ( className == "org.jldupont.web.JSONcallback") {
+			return (JLD_Object) new org.jldupont.web.JSONcallback(id);
+		}
 		
 		Logger.log( "FACTORY: ERROR CREATING INSTANCE OF CLASS: " + className );
 		

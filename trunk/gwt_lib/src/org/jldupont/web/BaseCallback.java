@@ -4,6 +4,7 @@
 package org.jldupont.web;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.user.client.Window;
 
 import org.jldupont.system.JLD_Object;
 import org.jldupont.system.Logger;
@@ -17,17 +18,17 @@ public class BaseCallback
 	static int instanceCounter = 0;
 	
 	/**
-	 * 
+	 * Callback fired status
 	 */
 	boolean callbackFired = false;
 
 	/**
-	 * 
+	 * Target for the callback
 	 */
 	BaseCallbackEvent target=null;
 	
 	/**
-	 * 
+	 * Current callback id
 	 */
 	int currentCallback = -1;
 	
@@ -60,7 +61,8 @@ public class BaseCallback
 		
 		this.callbackFired = false;
 		this.currentCallback = instanceCounter++;
-		createCallback( this.currentCallback );
+		Logger.log(this.classe+".create: creating callback name["+getCallbackName()+"]");
+		this.createCallback( this.currentCallback );
 	}
 	/**
 	 * 
@@ -73,7 +75,7 @@ public class BaseCallback
 	 * 
 	 * @return String
 	 */
-	private String getCallbackName() {
+	public String getCallbackName() {
 		return "BaseCallbackFnc"+String.valueOf(this.currentCallback)+".handler";
 	}
 	/*===================================================================
@@ -85,17 +87,21 @@ public class BaseCallback
 		Logger.log(this.classe+": callback called! id["+id+"]");
 		
 		// fire-off the event
-		this.target.handleCallbackEvent();
+		// @see 
+		this.target.handleCallbackEvent(id, obj);
 	}
 	/**
 	 * BLACK MAGIC at work!!!
+	 *  this$static is a parameter passed to this method as the "this" pointer
+	 *  of the current object. Hopefully, this won't change in future versions...
+	 *  I had to look at the generated "detailed" code to figure this one out.
 	 */
 	protected native void createCallback(int id) /*-{
 
 		var fncName = "BaseCallbackFnc"+id;
 		eval( "var obj = $wnd."+fncName+" = { id: '" + id + "' };"	);
-		obj.handler = function(jsonobj) {
-			this.@org.jldupont.web.BaseCallback::callback(ILcom/google/gwt/core/client/JavaScriptObject;)(this.id, jsonobj);
+		obj.handler = function(jsObj) {
+			this$static.@org.jldupont.web.BaseCallback::callback(ILcom/google/gwt/core/client/JavaScriptObject;)(this.id, jsObj);
 		};
 		
 	}-*/;

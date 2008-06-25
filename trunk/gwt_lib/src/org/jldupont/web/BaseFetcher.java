@@ -8,9 +8,12 @@ import java.util.Iterator;
 
 import org.jldupont.system.JLD_Object;
 import org.jldupont.system.Logger;
+import org.jldupont.system.Factory;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Window;
 
 abstract public class BaseFetcher 
 	extends JLD_Object 
@@ -42,6 +45,13 @@ abstract public class BaseFetcher
 	 */
 	Vector listeners = null;
 	
+	/**
+	 * Parameter name for the callback field.
+	 *  This is service-specific i.e. Delicious has one etc.
+	 */
+	String callbackParameterName = null;
+	
+	JSONObject currentJSONObj = null;
 	
 	/*===================================================================
 	 * CONSTRUCTORS 
@@ -51,11 +61,12 @@ abstract public class BaseFetcher
 		setup();
 	}
 	private void setup() {
-		this.jsonc = new JSONcall();
-		this.jsoncb= new JSONcallback();
+		this.jsonc = (JSONcall)org.jldupont.system.Factory.create("org.jldupont.web.JSONcall","attached_to_BaseFetcher");
+		this.jsoncb= (JSONcallback)org.jldupont.system.Factory.create("org.jldupont.web.JSONcallback","attached_to_BaseFetcher");
 		this.listeners = new Vector();
 		
 		this.jsoncb.setTarget(this);
+		this.currentJSONObj = null;
 	}
 	/*===================================================================
 	 * PUBLIC 
@@ -85,7 +96,11 @@ abstract public class BaseFetcher
 	public void addParam(String key, String value) {
 		this.jsonc.addParam(key, value);
 	}
-	
+	/**
+	 * fetch
+	 *  This is the main method.
+	 * @return
+	 */
 	public boolean fetch() {
 	
 		//prepare the call
@@ -93,6 +108,9 @@ abstract public class BaseFetcher
 		
 		//set callback
 		this.jsoncb.create();
+
+		//set callback parameter name
+		this.jsonc.addParam(this.callbackParameterName, this.getCallbackFunctionName());
 		
 		//start operation
 		this.startOperation(this.operationTimeout);
@@ -102,6 +120,19 @@ abstract public class BaseFetcher
 		
 		return true;
 	}
+	/**
+	 * @see org.jldupont.web.JSONcallback
+	 */
+	public String getCallbackFunctionName() {
+		return this.jsoncb.getCallbackName();
+	}
+	/**
+	 * 
+	 * @param cbName
+	 */
+	public void setCallbackParameterName(String cbName) {
+		this.callbackParameterName = cbName;
+	}
 	/*===================================================================
 	 * BaseCallbackEvent 
 	 ===================================================================*/
@@ -109,28 +140,46 @@ abstract public class BaseFetcher
 	 * This handler is called when the callback is triggered
 	 * @see org.jldupont.web.JSONcallback
 	 */
-	public void handleCallbackEvent() {
-		Logger.log(this.classe+".handleCallbackEvent: called.");
-		this.notifyListeners();
+	public void handleCallbackEvent(int id, JavaScriptObject obj) {
+		
+		CallEventObject ceo = new CallEventObject(this, obj);
+		this.currentJSONObj = ceo.getJSONObject();
+		
+		this.timerCancel();
+		Logger.log("BaseFetcher::"+this.classe+".handleCallbackEvent: called.");
+		this.notifyListeners(  ceo );
 	}
+	
+	public JSONObject getJSONObject() {
+		return this.currentJSONObj;
+	}
+	
 	/*===================================================================
 	 * CallListener 
 	 ===================================================================*/
-	
+	/**
+	 * addCallListener
+	 * @param CallListener
+	 */
 	public void addCallListener(CallListener s) {
+		Logger.log(this.classe+".addCallListener: called.");
 		this.listeners.add( s );
 	}
-	
+	/**
+	 * removeCallListener
+	 * @param CallListener
+	 */
 	public void removeCallListener(CallListener s) {
+		Logger.log(this.classe+".removeCallListener: called.");		
 		this.listeners.remove( s );
 	}
 	
-	protected void notifyListeners() {
+	protected void notifyListeners(CallEventObject obj) {
 		
 		Iterator it = this.listeners.iterator();
 		while (it.hasNext()) {
 			Object o = it.next ();
-		    ((CallListener) o).fireCallEvent( new CallEventObject(this));
+		    ((CallListener) o).fireCallEvent( obj );
 		}
 		
 	}
@@ -166,6 +215,6 @@ abstract public class BaseFetcher
 		this.listeners.clear();
 		this.timeout = _default_timeout;
 		this.operationTimeout = _default_operationTimeout;
-		
+		this.currentJSONObj = null;
 	}
 }//end class

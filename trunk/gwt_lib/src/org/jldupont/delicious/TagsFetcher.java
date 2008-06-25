@@ -20,7 +20,7 @@ public class TagsFetcher
 	/**
 	 * Delicious feed REST 
 	 */
-	final static String feedUrl = "http://del.icio.us/feeds/json/tagsFetcher/";
+	final static String feedUrl = "http://del.icio.us/feeds/json/tags/";
 	
 	/**
 	 * Username
@@ -71,22 +71,31 @@ public class TagsFetcher
 			throw new RuntimeException(this.classe+".get: username is empty");
 		
 		this.setUrl( feedUrl + this.username );
+		
+		// this is specific to Delicious
+		this.setCallbackParameterName("callback");
+		
+		//go fetch them
 		this.fetch();
 	}
 	
 	/*===================================================================
 	 * LISTENERS 
 	 ===================================================================*/
-	
+	// handled by BaseFetcher
 	
 	/*===================================================================
 	 * TIMED OPERATION
 	 ===================================================================*/
+	// handled by BaseFetcher
 	
 	/*===================================================================
 	 * CALLBACK
 	 ===================================================================*/
-	
+	public void handleCallbackEvent(int id, JavaScriptObject obj) {
+		Logger.log(this.classe+".handleCallbackEvent: called.");		
+		super.handleCallbackEvent(id, obj);
+	}
 	/*===================================================================
 	 * RECYCLING
 	 ===================================================================*/
@@ -94,6 +103,7 @@ public class TagsFetcher
 	 * Don't forget to clean the composing objects 
 	 */
 	public void _clean() {
+		super._clean();
 		this.username = null;
 	}
 }//end class
