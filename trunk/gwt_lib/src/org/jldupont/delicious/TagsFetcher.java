@@ -70,6 +70,7 @@ public class TagsFetcher
 		if (this.username.length() == 0)
 			throw new RuntimeException(this.classe+".get: username is empty");
 		
+		this.setUrl( feedUrl + this.username );
 		this.fetch();
 	}
 	

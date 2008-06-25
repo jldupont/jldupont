@@ -33,7 +33,7 @@ public class test
 		clickMeButton.addClickListener(new ClickListener() {
 			
 			public void onClick(Widget sender) {
-				test.tagsFetcher.fetch();
+				test.tagsFetcher.get();
 			}
 		});
 		

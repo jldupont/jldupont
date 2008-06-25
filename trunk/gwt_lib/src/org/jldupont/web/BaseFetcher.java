@@ -16,6 +16,9 @@ abstract public class BaseFetcher
 	extends JLD_Object 
 	implements CallEventListener, BaseCallbackEvent {
 
+	final static int _default_timeout = 3000;
+	final static int _default_operationTimeout = 5000;
+	
 	/**
 	 * Call object
 	 */
@@ -161,5 +164,8 @@ abstract public class BaseFetcher
 		this.jsonc._clean();
 		this.jsoncb._clean();
 		this.listeners.clear();
+		this.timeout = _default_timeout;
+		this.operationTimeout = _default_operationTimeout;
+		
 	}
 }//end class
