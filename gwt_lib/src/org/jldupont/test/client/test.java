@@ -1,3 +1,8 @@
+/**
+ * @author Jean-Lou Dupont
+ * 
+ *  Serves as test for the librairy
+ */
 package org.jldupont.test.client;
 
 import com.google.gwt.core.client.EntryPoint;
@@ -8,6 +13,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.jldupont.delicious.TagsFetcher;
+import org.jldupont.system.Factory;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -19,6 +25,8 @@ public class test
 	
 	public static TagsFetcher tagsFetcher;
 	
+	protected TagsChangedListenerTest tagsChangedListener = null;
+	
 	public void onModuleLoad() {
 		
 		RootPanel rootPanel = RootPanel.get();
@@ -27,8 +35,12 @@ public class test
 		rootPanel.add(clickMeButton);
 		clickMeButton.setText("Fetch TagsFetcher");
 		
-		tagsFetcher = new TagsFetcher();
+		tagsFetcher = (org.jldupont.delicious.TagsFetcher) Factory.create("org.jldupont.delicious.TagsFetcher");
 		tagsFetcher.setUser("jldupont");
+		
+		this.tagsChangedListener = new TagsChangedListenerTest();
+		
+		tagsFetcher.addCallListener(this.tagsChangedListener);
 		
 		clickMeButton.addClickListener(new ClickListener() {
 			
