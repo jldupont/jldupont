@@ -6,12 +6,14 @@ package org.jldupont.delicious;
 
 import org.jldupont.system.JLD_Object;
 import org.jldupont.system.Logger;
-import org.jldupont.web.JSONcall;
+import org.jldupont.web.BaseFetcher;
+import org.jldupont.web.CallListener;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
 public class TagsFetcher 
-	extends JLD_Object {
+	extends BaseFetcher 
+	implements TagsChangedEventListener {
 
 	final static String thisClass = "org.jldupont.delicious.TagsFetcher";
 	
@@ -25,50 +27,34 @@ public class TagsFetcher
 	 */
 	String username = null;
 	
-	/**
-	 * JSON callback object
-	 */
-	JSONcall jscb = null;
-	
-	/**
-	 * Instance counter
-	 */
-	static int instanceCounter = 0; 
-	
-	/**
-	 * Index id
-	 */
-	int id = 0;
-	
-	/**
-	 * To make sure we only create one
-	 *  javascript callback per instance
-	 */
-	boolean callbackExists = false;
-	
-	/**
-	 * 
-	 */
-	boolean callbackFired = false;
-	
 	/*===================================================================
 	 * CONSTRUCTORS 
 	 ===================================================================*/
+	
 	public TagsFetcher( String id ) {
-		super(thisClass, id );
+		super(thisClass, id, true );
 		setup();
 	}
 
 	public TagsFetcher() {
-		super(thisClass, "default_id" );
+		super(thisClass, "default_id", true );
 		setup();
 	}
 	private void setup() {
-		setRecyclable();
-		this.jscb = new JSONcall("attached_to_delicious_tags");
-		this.id = instanceCounter;
-		instanceCounter++;
+
 	}
+
+	/*===================================================================
+	 * TagsChangedListener
+	 ===================================================================*/
+	
+	public void addTagsChangedListener(TagsChangedListener s) {
+		this.addCallListener((CallListener)s);
+	}
+	public void removeTagsChangedListener(TagsChangedListener s) {
+		this.removeCallListener((CallListener)s);		
+	}
+
 	/*===================================================================
 	 * PUBLIC interface
 	 ===================================================================*/
@@ -76,34 +62,15 @@ public class TagsFetcher
 	public void setUser( String username ) {
 		this.username = new String( username );
 	}
-	
-	public void fetch() {
+	/**
+	 * Fetches a up-to-date copy of the tags for user
+	 */
+	public void get() {
 		
-		if ( this.getBusy() ) {
-			throw new IllegalStateException( thisClass+": busy with an operation" );
-		}
+		if (this.username.length() == 0)
+			throw new RuntimeException(this.classe+".get: username is empty");
 		
-		if ( this.username.length() == 0 ) {
-			throw new RuntimeException(thisClass + ": can not have empty username parameter");
-		}
-		
-		// start fresh
-		this.jscb._clean();
-		
-		// create callback
-		if ( !this.callbackExists ) {
-			createCallback( this.id );
-			this.callbackExists = true;
-		}
-		
-		// setup JSONcall 
-		this.jscb.setTimeout(3000);
-		this.jscb.setUrl( feedUrl + this.username );
-		this.jscb.addParam( "callback", getCallbackName() );
-		
-		// perform the fetch
-		this.startOperation(5000);
-		this.jscb.call();
+		this.fetch();
 	}
 	
 	/*===================================================================
@@ -115,41 +82,9 @@ public class TagsFetcher
 	 * TIMED OPERATION
 	 ===================================================================*/
 	
-	public void timerExpiredEvent() {
-		// this will take care of the busy flag
-		super.timerExpiredEvent();
-		
-	}
 	/*===================================================================
 	 * CALLBACK
 	 ===================================================================*/
-	public void callback(int id, JavaScriptObject obj) {
-		this.callbackFired = true;
-		Logger.log(thisClass+": callback called! id["+id+"]");
-	}
-	/**
-	 * BLACK MAGIC at work!!!
-	 */
-	protected native void createCallback(int id) /*-{
-
-		var fncName = "JSONCallbackFnc"+id;
-		eval( "var obj = $wnd."+fncName+" = { id: '" + id + "' };"	);
-		obj.handler = function(jsonobj) {
-			this.@org.jldupont.delicious.TagsFetcher::callback(ILcom/google/gwt/core/client/JavaScriptObject;)(this.id, jsonobj);
-		};
-		
-	}-*/;
-	/**
-	 * Deletes a callback
-	 */
-	protected native void deleteCallback(int id) /*-{
-		var fncName = "JSONCallbackFnc"+id;	
-		eval( "$wnd."+fncName+" = null;" );
-	}-*/;
-	
-	private String getCallbackName() {
-		return "JSONCallbackFnc"+String.valueOf(this.id)+".handler";
-	}
 	
 	/*===================================================================
 	 * RECYCLING
@@ -159,9 +94,6 @@ public class TagsFetcher
 	 */
 	public void _clean() {
 		this.username = null;
-		this.jscb._clean();
-		deleteCallback( this.id );
-		this.callbackFired = false;
 	}
 }//end class
 /*

@@ -11,6 +11,11 @@ abstract public class JLD_Object
 	extends Object {
 
 	/**
+	 * Instance counter
+	 */
+	public long instanceCounter = 0;
+	
+	/**
 	 * Class type
 	 */
 	public String classe = null;
@@ -19,6 +24,11 @@ abstract public class JLD_Object
 	 * Identifier
 	 */
 	String id = null;
+	
+	/**
+	 * UID
+	 */
+	long uid = 0;
 	
 	/**
 	 * Recyclable capability flag
@@ -41,22 +51,31 @@ abstract public class JLD_Object
 	
 	public JLD_Object() {
 		super();
-		Logger.log("JLD_Object: creating object class[null] id[null]");
-		this.classe = null;
-		this.id = null;
+		setup(null, null,false);
 	}
 	
 	public JLD_Object( String classe ) {
 		super();
-		Logger.log("JLD_Object: creating object class["+classe+"] id[null]");		
-		this.classe = classe;
+		setup(classe,null,false);
 	}
 	
 	public JLD_Object( String classe, String id ) {
 		super();		
-		Logger.log("JLD_Object: creating object class["+classe+"] id["+id+"]");		
+		setup(classe,id,false);
+	}
+	
+	public JLD_Object( String classe, String id, boolean recyclable ) {
+		super();		
+		setup(classe,id, recyclable);
+	}
+	
+	protected void setup(String classe, String id, boolean recyclable) {
+		instanceCounter++;
+		this.uid = instanceCounter;
 		this.classe = classe;
 		this.id = id;
+		this.recyclable = recyclable;
+		Logger.log("JLD_Object: creating object class["+classe+"] id["+id+"] uid["+this.uid+"]");		
 	}
 	/*===================================================================
 	 * PUBLIC 
@@ -119,21 +138,29 @@ abstract public class JLD_Object
 	/*===================================================================
 	 * OPERATION functionality 
 	 ===================================================================*/
+	/**
+	 * Used in derived classes.
+	 */
 	protected void startOperation(int timeout) {
 		
+		if ( this.timer == null ) {
+			this.timer = new org.jldupont.system.Timer();
+			this.timer.setTarget( this );
+			this.isBusy = false;
+		}
+
 		if ( this.isBusy ) {
 			throw new RuntimeException(this.classe+".startOperation : already busy");
 		}
 		
 		this.isBusy = true;
 		
-		if ( this.timer == null ) {
-			this.timer = new org.jldupont.system.Timer();
-			this.timer.setTarget( this );
-		}
-		
 		this.timer.schedule( timeout );
 	}
+	/**
+	 * Returns 'busy' status.
+	 * @return boolean
+	 */
 	public boolean getBusy() {
 		return this.isBusy;
 	}
