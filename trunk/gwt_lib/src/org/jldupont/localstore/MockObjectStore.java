@@ -9,13 +9,37 @@ package org.jldupont.localstore;
 import org.jldupont.system.JLD_Object;
 
 public class MockObjectStore 
-	extends JLD_Object 
+	extends BaseObjectStore 
 	implements ObjectStoreInterface {
 	
+	final static String thisClass = "org.jldupont.localstore.MockObjectStore";
 
+	/**==================================================================
+	 * CONSTRUCTORS 
+	 ===================================================================*/
+	
+	public MockObjectStore(String classe, String id) {
+		super(classe,id);
+	}
+	public MockObjectStore(String id) {
+		super(thisClass,id);
+	}
+	public MockObjectStore() {
+		super(thisClass,"default_id");
+	}
+	
 	/**==================================================================
 	 * @see org.jldupont.localstore.ObjectStoreInterface 
 	 ===================================================================*/
+	public boolean exists() {
+		return true;
+	}
+	/**
+	 * not much todo :-)
+	 */
+	public void initialize() {
+		
+	}
 	public void setStorageName(String name) {
 		
 	}
