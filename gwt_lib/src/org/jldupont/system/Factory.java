@@ -9,6 +9,7 @@ import org.jldupont.browser.CookieParamsList;
 import org.jldupont.web.JSONcallback;
 import org.jldupont.web.JSONcall;
 import org.jldupont.delicious.TagsList;
+import org.jldupont.localstore.LocalObjectStore;
 
 import java.lang.Object;
 
@@ -70,12 +71,8 @@ public class Factory
 		if ( className == "ObjectPool" ) {
 			return (JLD_Object) new ObjectPool();
 		}
-		/**
-		 * @see org.jldupont.delicious.TagsFetcher
-		 */
-		if ( className == "org.jldupont.delicious.TagsFetcher" ) {
-			return (JLD_Object) new TagsFetcher( id );
-		}
+		// org.jldupont.browser
+		// =======================
 		/**
 		 * @see org.jldupont.browser.URLParamsList
 		 */
@@ -88,15 +85,31 @@ public class Factory
 		if ( className == "org.jldupont.browser.CookieParamsList" ) {
 			return (JLD_Object) new CookieParamsList( );
 		}
+		// org.jldupont.web
+		// =======================
 		if ( className == "org.jldupont.web.JSONcall") {
 			return (JLD_Object) new org.jldupont.web.JSONcall(id);
 		}
 		if ( className == "org.jldupont.web.JSONcallback") {
 			return (JLD_Object) new org.jldupont.web.JSONcallback(id);
 		}
+		// org.jldupont.delicious
+		// =======================
+		/**
+		 * @see org.jldupont.delicious.TagsFetcher
+		 */
+		if ( className == "org.jldupont.delicious.TagsFetcher" ) {
+			return (JLD_Object) new TagsFetcher( id );
+		}
 		if ( className == "org.jldupont.delicious.TagsList" ) {
 			return (JLD_Object) new org.jldupont.delicious.TagsList(id);
 		}
+		// org.jldupont.localstore
+		// =======================
+		if ( className == "org.jldupont.delicious.LocalObjectStore" ) {
+			return (JLD_Object) new org.jldupont.localstore.LocalObjectStore(id);
+		}
+		
 			
 		Logger.log( "FACTORY: ERROR CREATING INSTANCE OF CLASS: " + className );
 		

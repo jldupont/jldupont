@@ -11,7 +11,7 @@ package org.jldupont.localstore;
 import org.jldupont.system.JLD_Object;
 
 public class GearsObjectStore 
-	extends JLD_Object 
+	extends BaseObjectStore 
 	implements ObjectStoreInterface {
 
 	final static String thisClass = "org.jldupont.localstore.GearsObjectStore";
@@ -25,6 +25,14 @@ public class GearsObjectStore
 		super(classe,id);
 		setup();
 	}
+	public GearsObjectStore(String id) {
+		super(thisClass,id);
+		setup();
+	}
+	public GearsObjectStore() {
+		super(thisClass,"default_id");
+		setup();
+	}
 	private void setup() {
 		
 	}
@@ -32,6 +40,14 @@ public class GearsObjectStore
 	/*===================================================================
 	 * ObjectStoreInterface 
 	 ===================================================================*/
+	public boolean exists() {
+		
+		return false;
+	}
+	
+	public void initialize() {
+		
+	}
 	public void setStorageName(String name) {
 		this.storageName = new String( name );
 	}
