@@ -53,9 +53,18 @@ public class MockObjectStore
 		return null;
 	}
 	
+	public int headKey(String key) {
+		
+		return 0;
+	}
+	
 	public boolean containsKey(String key) {
 	
 		return false;
+	}
+	
+	public void clear() {
+		
 	}
 	
 }//end 

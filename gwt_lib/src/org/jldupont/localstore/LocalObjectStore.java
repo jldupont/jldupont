@@ -8,7 +8,12 @@
  */
 /**
  * Schema:
- *  key TEXT , type TEXT, timestamp INTEGER, object BLOB
+ *  key TEXT , type TEXT, timestamp INTEGER, data BLOB
+ *  
+ *  key:       text string with / denoting hierarchy
+ *  type:      Java object type
+ *  timestamp: milliseconds since 1/1/1970
+ *  data:      object representation
  */
 package org.jldupont.localstore;
 
@@ -92,6 +97,15 @@ public class LocalObjectStore
 		this.init();
 		
 		return false;
+	}
+	
+	public int headKey(String key) {
+	
+		return 0;
+	}
+	
+	public void clear() {
+		
 	}
 	/*===================================================================
 	 * PROTECTED

@@ -1,4 +1,10 @@
 /**
+ * ObjectPool
+ *  Object Recycling facility
+ *  
+ * @author Jean-Lou Dupont
+ * 
+ * TODO implement limits e.g. limit the number of instance of class X
  * 
  */
 package org.jldupont.system;

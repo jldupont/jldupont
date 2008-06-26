@@ -33,13 +33,36 @@ public interface ObjectStoreInterface {
 	public void initialize();
 	
 	/**
-	 * Puts 
+	 * Puts an object in the store
 	 * @param obj
 	 */
 	public void put(LocalObjectStoreInterface obj);
 	
+	/**
+	 * Gets an object from the store
+	 * @param key
+	 * @return
+	 */
 	public LocalObjectStoreInterface get(String key);
 	
+	/**
+	 * Verifies if an object is in the store
+	 * @param key
+	 * @return boolean
+	 */
 	public boolean containsKey(String key);
 
+	/**
+	 * Returns the timestamp information
+	 * 
+	 * @param key
+	 * @return int Timestamp (ms since 1/1/1970)
+	 */
+	public int headKey(String key);
+	
+	/**
+	 * Erases all elements from the store
+	 */
+	public void clear();
+	
 }// end
