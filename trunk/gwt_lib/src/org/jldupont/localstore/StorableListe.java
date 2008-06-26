@@ -7,6 +7,7 @@
 package org.jldupont.localstore;
 
 import org.jldupont.system.Liste;
+import org.jldupont.system.Logger;
 
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
@@ -56,6 +57,7 @@ public class StorableListe
 	 *  The object's true representation is opaque to the LocalStore 
 	 */
 	public String getTextRepresentation() {
+		Logger.log(thisClass+".getTextRepresentation");
 		return this.liste.toString();		
 	}
 	
@@ -67,6 +69,7 @@ public class StorableListe
 	 *  TODO check if the 'null' values get discarded
 	 */
 	public void createFromTextRepresentation(String s) {
+		Logger.log(thisClass+".createFromTextRepresentation");		
 		this.liste = (JSONObject) JSONParser.parse( s );
 	}
 	
