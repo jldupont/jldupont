@@ -65,8 +65,11 @@ public class GearsObjectStore
 	 * @see org.jldupont.localstore.ObjectStoreInterface#exists()
 	 */
 	public boolean exists() {
+		boolean r = isGearsInstalled();
 		
-		return isGearsInstalled();
+		Logger.log(thisClass+".exists: result" + r );
+		
+		return r;
 	}
 	/**
 	 * @see org.jldupont.localstore.ObjectStoreInterface#isPersistent()
@@ -90,7 +93,7 @@ public class GearsObjectStore
 			throw new LocalStoreException("GearsObjectStore.initialize: database name cannot be null");
 		}
 		
-		createTable();
+		createDatabase();
 	}
 	
 	public void setStorageName(String name) {
@@ -121,6 +124,7 @@ public class GearsObjectStore
 			throw new LocalStoreException( e.getMessage() );
 		}
 		
+		Logger.log(thisClass+".put: stored key["+key+"] of type["+type+"]");
 	}
 	/**
 	 * @see org.jldupont.localstore.ObjectStoreInterface#get(String)
@@ -176,6 +180,7 @@ public class GearsObjectStore
 			throw new LocalStoreException( thisClass+".get: cannot createFromTextRepresentation, type["+type+"]" );
 		}
 		
+		Logger.log(thisClass+".get: got key["+key+"] of type["+type+"]");		
 		return obj;
 	}
 	/**
@@ -208,6 +213,8 @@ public class GearsObjectStore
 			throw new LocalStoreException( e.getMessage() );
 		}
 		
+		Logger.log(thisClass+".headKey: key["+key+"] with ts["+ts+"]");
+		
 		return ts;
 	}
 	/**
@@ -227,17 +234,19 @@ public class GearsObjectStore
 		} catch(DatabaseException e) {
 			throw new LocalStoreException( e.getMessage() );
 		}
+		Logger.log(thisClass+".clear");		
 	}
 	/*===================================================================
 	 * PROTECTED 
 	 ===================================================================*/
-	protected void createTable() throws LocalStoreException {
+	protected void createDatabase() throws LocalStoreException {
 		
 		try {
 			this.db.execute("create localstore if not exists "+this.storageName+" "+thisSchema);	
 		} catch(DatabaseException e) {
 			throw new LocalStoreException( e.getMessage() );
 		}
+		Logger.log(thisClass+".createDatabase, created database name["+this.storageName+"]");		
 	}
 	
 	/*===================================================================
