@@ -13,7 +13,7 @@ abstract public class JLD_Object
 	/**
 	 * Instance counter
 	 */
-	public long instanceCounter = 0;
+	public static long instanceCounter = 0;
 	
 	/**
 	 * Class type
@@ -49,7 +49,12 @@ abstract public class JLD_Object
 	 * Name
 	 *  useful for key in namespace
 	 */
-	String name = null;
+	protected String name = null;
+	
+	/**
+	 * Timestamp (ms since 1/1/1970)
+	 */
+	int timestamp = -1;
 	
 	/*===================================================================
 	 * CONSTRUCTORS 
@@ -86,6 +91,12 @@ abstract public class JLD_Object
 	/*===================================================================
 	 * PUBLIC 
 	 ===================================================================*/
+	public int getTimestamp() {
+		return this.timestamp;
+	}
+	public void setTimestamp(int timestamp) {
+		this.timestamp = timestamp;
+	}
 	/**
 	 * getClasse
 	 * @return classe
