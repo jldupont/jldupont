@@ -7,7 +7,7 @@
 package com.jldupont.project.client;
 
 import org.jldupont.system.*;
-import org.jldupont.delicious.Tags;
+import org.jldupont.delicious.TagsFetcher;
 import org.jldupont.browser.Param;
 import org.jldupont.browser.URLParamsList;
 
@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Frame;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -42,7 +43,7 @@ public class main implements EntryPoint, WindowResizeListener {
 	final FlexTable flexTable = new FlexTable();
 	final ListBox lbTags = new ListBox();	
 	final ListBox lbPosts = new ListBox();
-	final Frame frPost = new Frame("http://www.jldupont.com");
+	final Frame frPost = new Frame("");
 	final Frame frTags = new Frame("");
 	final Frame frPosts = new Frame("");
 	final TextBox ftTags = new TextBox();
@@ -73,41 +74,50 @@ public class main implements EntryPoint, WindowResizeListener {
 		rootPanel.add(flexTable, 0, 0);
 		flexTable.setSize("100%", "100%");
 
-		flexTable.setWidget(2, 0, lbTags);
-		flexTable.getCellFormatter().setWidth(2, 0, "10%");
-		flexTable.getCellFormatter().setVerticalAlignment(2, 0, HasVerticalAlignment.ALIGN_TOP);
+		flexTable.setWidget(3, 0, lbTags);
+		flexTable.getCellFormatter().setWidth(3, 0, "10%");
+		flexTable.getCellFormatter().setVerticalAlignment(3, 0, HasVerticalAlignment.ALIGN_TOP);
 		lbTags.setSize("100%", "100%");		
 		lbTags.setVisibleItemCount(100);
 		
-		flexTable.setWidget(2, 1, lbPosts);
-		flexTable.getCellFormatter().setWidth(2, 1, "10%");
-		flexTable.getCellFormatter().setVerticalAlignment(2, 1, HasVerticalAlignment.ALIGN_TOP);
+		flexTable.setWidget(3, 1, lbPosts);
+		flexTable.getCellFormatter().setWidth(3, 1, "10%");
+		flexTable.getCellFormatter().setVerticalAlignment(3, 1, HasVerticalAlignment.ALIGN_TOP);
 		lbPosts.setVisibleItemCount(100);
 		lbPosts.setSize("100%", "100%");
 
-		flexTable.setWidget(2, 2, frPost);
-		flexTable.getCellFormatter().setWidth(2, 2, "80%");
+		flexTable.setWidget(3, 2, frPost);
+		flexTable.getCellFormatter().setWidth(3, 2, "80%");
 		frPost.setSize("100%", "100%");
 
 
-		flexTable.setWidget(1, 0, ftTags);
+		flexTable.setWidget(2, 0, ftTags);
 		ftTags.setSize("100%", "100%");
-		flexTable.getCellFormatter().setHeight(1, 0, "34px");
+		flexTable.getCellFormatter().setHeight(2, 0, "34px");
 
 
-		flexTable.setWidget(1, 1, ftPosts);
+		flexTable.setWidget(2, 1, ftPosts);
 		ftPosts.setSize("100%", "100%");
 
-		flexTable.setWidget(0, 0, labelUser);
-		flexTable.getCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_RIGHT);
+		flexTable.setWidget(1, 0, labelUser);
+		flexTable.getCellFormatter().setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 		labelUser.setSize("100%", "100%");
-		flexTable.getCellFormatter().setHeight(0, 0, "27px");
+		flexTable.getCellFormatter().setHeight(1, 0, "27px");
 
 
-		flexTable.setWidget(0, 1, tbUser);
+		flexTable.setWidget(1, 1, tbUser);
 		tbUser.setSize("100%", "100%");
 		tbUser.setTitle("UserName");
 		tbUser.setTextAlignment(TextBoxBase.ALIGN_LEFT);
+
+		final FlexTable header = new FlexTable();
+		flexTable.setWidget(0, 0, header);
+		flexTable.getCellFormatter().setHeight(0, 0, "52px");
+		flexTable.getFlexCellFormatter().setColSpan(0, 0, 3);
+
+		final Image image = new Image();
+		flexTable.setWidget(0, 3, image);
+		image.setUrl("gears_logo_grey.gif");
 
 		
 		rootPanel.add(frPosts, 571, 577);
@@ -164,10 +174,10 @@ public class main implements EntryPoint, WindowResizeListener {
 
 		String id;
 		
-		Tags t1 = (Tags) Factory.create( "org.jldupont.delicious.Tags", "id1" );
+		TagsFetcher t1 = (TagsFetcher) Factory.create( "org.jldupont.delicious.TagsFetcher", "id1" );
 		t1.recycle();
 		
-		Tags t2 = (Tags) Factory.create( "org.jldupont.delicious.Tags", "id2" );
+		TagsFetcher t2 = (TagsFetcher) Factory.create( "org.jldupont.delicious.TagsFetcher", "id2" );
 		t2.recycle();
 	}
 	
