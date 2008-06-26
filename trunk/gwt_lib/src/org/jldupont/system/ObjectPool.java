@@ -38,7 +38,7 @@ public class ObjectPool
 	 */
 	public void recycle( JLD_Object obj ) {
 		
-		classe = obj.getClasse();
+		String classe = obj.getClasse();
 		
 		// do we already have an object of this class?
 		if ( bin.containsKey(classe) )
