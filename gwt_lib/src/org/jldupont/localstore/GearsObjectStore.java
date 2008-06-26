@@ -10,6 +10,7 @@ package org.jldupont.localstore;
 
 import org.jldupont.system.JLD_Object;
 import org.jldupont.system.Factory;
+import org.jldupont.system.Logger;
 
 //import com.google.gwt.gears.core.client.GearsException;
 import com.google.gwt.gears.database.client.Database;
@@ -66,6 +67,12 @@ public class GearsObjectStore
 	public boolean exists() {
 		
 		return isGearsInstalled();
+	}
+	/**
+	 * @see org.jldupont.localstore.ObjectStoreInterface#isPersistent()
+	 */
+	public boolean isPersistent() {
+		return true;
 	}
 	/**
 	 * Initialize the storage facility for a given
@@ -125,7 +132,7 @@ public class GearsObjectStore
 		}
 
 		ResultSet result = null;
-		Object obj  = null;
+		LocalObjectStoreInterface obj  = null;
 		String type = null;
 		int    ts   = -1;
 		String data = null;
@@ -158,15 +165,18 @@ public class GearsObjectStore
 		// an empty object of the required type
 		// The factory returns 'null' if it wasn't
 		// able to comply.
-		obj = Factory.create(type);
+		obj = (LocalObjectStoreInterface) Factory.create(type);
 		if (obj==null) {
 			throw new LocalStoreException( thisClass+".get: cannot create an object of type["+type+"]" );
 		}
 		
+		try {
+			obj.createFromTextRepresentation(data);
+		} catch(Exception e) {
+			throw new LocalStoreException( thisClass+".get: cannot createFromTextRepresentation, type["+type+"]" );
+		}
 		
-
-		
-		return (LocalObjectStoreInterface)obj;
+		return obj;
 	}
 	/**
 	 * @see org.jldupont.localstore.ObjectStoreInterface#headKey(String)
@@ -245,6 +255,11 @@ public class GearsObjectStore
 	 * ObjectPool 
 	 ===================================================================*/
 	public void _clean() {
+		try {
+			this.db.close();
+		} catch( Exception e ) {
+			Logger.log(thisClass+"._clean: error closing database");
+		}
 		this.db = null;
 		this.storageName = null;
 	}
