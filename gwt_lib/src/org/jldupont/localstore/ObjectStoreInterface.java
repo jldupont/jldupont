@@ -41,7 +41,8 @@ public interface ObjectStoreInterface {
 	/**
 	 * Gets an object from the store
 	 * @param key
-	 * @return
+	 * @return object
+	 * @return null if none
 	 */
 	public LocalObjectStoreInterface get(String key) throws LocalStoreException;
 	

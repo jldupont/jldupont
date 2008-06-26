@@ -9,6 +9,7 @@
 package org.jldupont.localstore;
 
 import org.jldupont.system.JLD_Object;
+import org.jldupont.system.Factory;
 
 //import com.google.gwt.gears.core.client.GearsException;
 import com.google.gwt.gears.database.client.Database;
@@ -107,7 +108,7 @@ public class GearsObjectStore
 		}
 		
 		try {
-			this.db.execute("UPDATE OR ON CONFLICT REPLACE localstore SET type=?,ts=?,data=? WHERE key=?;", 
+			this.db.execute("UPDATE OR ON CONFLICT REPLACE localstore SET type=?,ts=?,data=? WHERE key=?", 
 							new String[] {type,ts,data,key} );	
 		} catch(DatabaseException e) {
 			throw new LocalStoreException( e.getMessage() );
@@ -119,8 +120,53 @@ public class GearsObjectStore
 	 */
 	public LocalObjectStoreInterface get(String key) throws LocalStoreException {
 
+		if ( key.length() == 0 ) {
+			throw new LocalStoreException( thisClass+".get: key cannot be null" );
+		}
+
+		ResultSet result = null;
+		Object obj  = null;
+		String type = null;
+		int    ts   = -1;
+		String data = null;
 		
-		return null;
+		try {
+			result = this.db.execute(	"SELECT ts,type,data FROM localstore WHERE key=?", 
+										new String[] {key} );
+			
+			// we should only get one element (if any)
+			// and that's what we assume
+			if (result.isValidRow()) {
+				
+				ts   = result.getFieldAsInt(0);
+				type = result.getFieldAsString(1);
+				data = result.getFieldAsString(2);
+			}
+
+			result.close();
+			
+		} catch(DatabaseException e) {
+			throw new LocalStoreException( e.getMessage() );
+		}
+
+		// simple check on the 'type' field
+		if ( type.length() == 0 ) {
+			throw new LocalStoreException( thisClass+".get: type field cannot be null" );
+		}
+		
+		// use the system factory for creating
+		// an empty object of the required type
+		// The factory returns 'null' if it wasn't
+		// able to comply.
+		obj = Factory.create(type);
+		if (obj==null) {
+			throw new LocalStoreException( thisClass+".get: cannot create an object of type["+type+"]" );
+		}
+		
+		
+
+		
+		return (LocalObjectStoreInterface)obj;
 	}
 	/**
 	 * @see org.jldupont.localstore.ObjectStoreInterface#headKey(String)
@@ -128,7 +174,7 @@ public class GearsObjectStore
 	public int headKey(String key) throws LocalStoreException {
 
 		if ( key.length() == 0 ) {
-			throw new LocalStoreException( thisClass+".put: key cannot be null" );
+			throw new LocalStoreException( thisClass+".headKey: key cannot be null" );
 		}
 
 		ResultSet result = null;
