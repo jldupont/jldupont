@@ -13,23 +13,29 @@ import java.util.Set;
 import org.jldupont.system.Liste;
 import org.jldupont.system.Logger;
 
+import org.jldupont.localstore.StorableListe;
+
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONValue;
 
 public class TagsList 
-	extends org.jldupont.system.Liste {
+	extends org.jldupont.localstore.StorableListe {
 
 	final static String thisClass = "org.jldupont.delicious.TagsList";
 	
 	/*===================================================================
 	 * CONSTRUCTORS 
 	 ===================================================================*/
+	public TagsList() {
+		super(thisClass, "default_id",true);
+		setup();
+	}
 	public TagsList(String classe, String id) {
-		super(classe,id);
+		super(classe,id,true);
 		setup();
 	}
 	public TagsList(String id) {
-		super(thisClass, id);
+		super(thisClass, id,true);
 		setup();
 	}
 	private void setup() {
@@ -44,7 +50,7 @@ public class TagsList
 		
 		while( i.hasNext() ) {
 			String key = (String) i.next();
-			JSONValue value = (JSONValue) obj.get( key );
+			JSONValue value = obj.get( key );
 			this.put(key, value);
 		}
 

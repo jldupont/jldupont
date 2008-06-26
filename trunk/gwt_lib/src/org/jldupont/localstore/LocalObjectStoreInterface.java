@@ -36,6 +36,6 @@ public interface LocalObjectStoreInterface {
 	 *  this method can be used to initialize the object
 	 *  according to the representation. 
 	 */
-	public void   createFromTextRepresentation(String s);
+	public void createFromTextRepresentation(String s);
 
 }//end class
