@@ -6,7 +6,7 @@
  */
 package org.jldupont.localstore;
 
-import org.jldupont.system.JLD_Object;
+import org.jldupont.system.Logger;
 
 public class MockObjectStore 
 	extends BaseObjectStore 
@@ -35,36 +35,42 @@ public class MockObjectStore
 		return true;
 	}
 	/**
+	 * @see org.jldupont.localstore.ObjectStoreInterface#isPersistent()
+	 */
+	public boolean isPersistent() {
+		return false;
+	}
+	/**
 	 * not much todo :-)
 	 */
 	public void initialize() {
-		
+		Logger.log(thisClass+".initialize: called");
 	}
 	public void setStorageName(String name) {
-		
+		Logger.log(thisClass+".setStorageName: called");		
 	}
 	
 	public void put(LocalObjectStoreInterface obj) {
-		
+		Logger.log(thisClass+".put: called");		
 	}
 	
 	public LocalObjectStoreInterface get(String key) {
-		
+		Logger.log(thisClass+".get: called");		
 		return null;
 	}
 	
 	public int headKey(String key) {
-		
-		return 0;
+		Logger.log(thisClass+".headKey: called");		
+		return -1;
 	}
 	
 	public boolean containsKey(String key) {
-	
+		Logger.log(thisClass+".containsKey: called");	
 		return false;
 	}
 	
 	public void clear() {
-		
+		Logger.log(thisClass+".clear: called");		
 	}
 	
 }//end 

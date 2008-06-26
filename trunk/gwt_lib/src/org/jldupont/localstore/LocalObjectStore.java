@@ -73,6 +73,19 @@ public class LocalObjectStore
 	public boolean exists() {
 		return true;
 	}
+	/**
+	 * @throws LocalStoreException 
+	 * @see org.jldupont.localstore.ObjectStoreInterface#isPersistent()
+	 */
+	public boolean isPersistent() throws LocalStoreException {
+		if (this.store == null) {
+			throw new LocalStoreException(thisClass+".initialize: storage name cannot be null");
+		}
+		return this.store.isPersistent();
+	}
+	/**
+	 * @see org.jldupont.localstore.ObjectStoreInterface#setStorageName(String)
+	 */
 	public void setStorageName(String name) {
 		this.name = new String( name );
 	}
@@ -81,51 +94,66 @@ public class LocalObjectStore
 	 *  of this class.
 	 */
 	public void initialize() throws LocalStoreException {
+		
+		if (this.initialized)
+			return;
+		
 		if (this.name.length() == 0) {
 			throw new LocalStoreException(thisClass+".initialize: storage name cannot be null");
 		}
+		
+		this.store.setStorageName(this.name);
 		this.store.initialize();
-	}
-	public void put(LocalObjectStoreInterface obj) {
-		this.init();
-	}
-	
-	public LocalObjectStoreInterface get(String key) {
-		this.init();
 		
-		return null;
+		this.initialized = true;		
 	}
-	
-	public boolean containsKey(String key) {
-		this.init();
+	/**
+	 * @see org.jldupont.localstore.ObjectStoreInterface#put(LocalObjectStoreInterface)
+	 */
+	public void put(LocalObjectStoreInterface obj) throws LocalStoreException{
+		this.initialize();
+		this.store.put(obj);
+	}
+	/**
+	 * @see org.jldupont.localstore.ObjectStoreInterface#get(String)
+	 */
+	public LocalObjectStoreInterface get(String key) throws LocalStoreException{
+		this.initialize();
 		
-		return false;
+		return this.store.get(key);
 	}
-	
-	public int headKey(String key) {
-	
-		return 0;
-	}
-	
-	public void clear() {
+	/**
+	 * @see org.jldupont.localstore.ObjectStoreInterface#containsKey(String)
+	 */
+	public boolean containsKey(String key) throws LocalStoreException{
+		this.initialize();
 		
+		return this.store.containsKey(key);
+	}
+	/**
+	 * @see org.jldupont.localstore.ObjectStoreInterface#headKey(String)
+	 */
+	public int headKey(String key) throws LocalStoreException{
+	
+		return this.store.headKey(key);
+	}
+	/**
+	 * @see org.jldupont.localstore.ObjectStoreInterface#clear()
+	 */
+	public void clear() throws LocalStoreException {
+		this.store.clear();
 	}
 	/*===================================================================
 	 * PROTECTED
 	 ===================================================================*/
 	
-	protected void init() {
-		
-		if (this.initialized)
-			return;
-		
-	}
-	
+
 	/*===================================================================
 	 * ObjectPool
 	 ===================================================================*/
 	public void _clean() {
 		super._clean();
+		this.store._clean();
 		this.name = null;
 	}
 	

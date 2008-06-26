@@ -17,6 +17,10 @@ abstract public class BaseObjectStore
 	
 	abstract public boolean exists();
 	
+	abstract public boolean isPersistent() throws LocalStoreException;
+	
+	abstract public void initialize() throws LocalStoreException;
+	
 	abstract public void setStorageName(String name);
 	
 	abstract public void put(LocalObjectStoreInterface obj) throws LocalStoreException;

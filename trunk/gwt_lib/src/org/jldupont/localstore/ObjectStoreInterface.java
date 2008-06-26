@@ -19,6 +19,15 @@ public interface ObjectStoreInterface {
 	public boolean exists();
 	
 	/**
+	 * Indicates whether the storage is persistent across
+	 *  browser sessions.
+	 *  
+	 * @return boolean
+	 * @throws
+	 */
+	public boolean isPersistent() throws LocalStoreException;
+	
+	/**
 	 * Used to name the storage instance
 	 * 
 	 * @param name
@@ -30,7 +39,7 @@ public interface ObjectStoreInterface {
 	 *  storage instance. The "name" of the storage
 	 *  instance must have been set prior.
 	 */
-	public void initialize() throws LocalStoreException;
+	abstract void initialize() throws LocalStoreException;
 	
 	/**
 	 * Puts an object in the store
