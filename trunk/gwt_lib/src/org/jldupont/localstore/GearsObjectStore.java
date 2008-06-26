@@ -10,13 +10,32 @@ package org.jldupont.localstore;
 
 import org.jldupont.system.JLD_Object;
 
+//import com.google.gwt.gears.core.client.GearsException;
+import com.google.gwt.gears.database.client.Database;
+import com.google.gwt.gears.database.client.DatabaseException;
+import com.google.gwt.gears.database.client.ResultSet;
+
 public class GearsObjectStore 
 	extends BaseObjectStore 
 	implements ObjectStoreInterface {
 
 	final static String thisClass = "org.jldupont.localstore.GearsObjectStore";
 	
+	/**
+	 * Follows SQLite datatypes
+	 */
+	final static String thisSchema = "(key TEXT, type TEXT, ts INTEGER(8), data BLOB )";
+	
+	/**
+	 * Storage name
+	 *  i.e. database name
+	 */
 	String storageName = null;
+	
+	/**
+	 * Database instance
+	 */
+	Database db = null;
 	
 	/*===================================================================
 	 * CONSTRUCTORS 
@@ -40,39 +59,148 @@ public class GearsObjectStore
 	/*===================================================================
 	 * ObjectStoreInterface 
 	 ===================================================================*/
+	/**
+	 * @see org.jldupont.localstore.ObjectStoreInterface#exists()
+	 */
 	public boolean exists() {
 		
-		return false;
+		return isGearsInstalled();
+	}
+	/**
+	 * Initialize the storage facility for a given
+	 *  storage instance. The "name" of the storage
+	 *  instance must have been set prior.
+	 *  @see org.jldupont.localstore.ObjectStoreInterface#initialize()
+	 * @throws LocalStoreException 
+	 */
+	public void initialize() throws LocalStoreException {
+		
+		if (this.db != null)
+			return;
+		
+		if (this.storageName.length() == 0) {
+			throw new LocalStoreException("GearsObjectStore.initialize: database name cannot be null");
+		}
+		
+		createTable();
 	}
 	
-	public void initialize() {
-		
-	}
 	public void setStorageName(String name) {
 		this.storageName = new String( name );
 	}
-	
-	public void put(LocalObjectStoreInterface obj) {
+	/**
+	 * Puts/Replaces an object
+	 * 
+	 * @see org.jldupont.localstore.ObjectStoreInterface#put(LocalObjectStoreInterface)
+	 * @throws LocalStoreException 
+	 * TODO type check?
+	 */
+	public void put(LocalObjectStoreInterface obj) throws LocalStoreException {
+		
+		String key  = obj.getKey();
+		String type = obj.getType();
+		String ts   = String.valueOf( obj.getTimestamp() );
+		String data = obj.getTextRepresentation();
+		
+		if ( key.length() == 0 ) {
+			throw new LocalStoreException( thisClass+".put: key cannot be null" );
+		}
+		
+		try {
+			this.db.execute("UPDATE OR ON CONFLICT REPLACE localstore SET type=?,ts=?,data=? WHERE key=?;", 
+							new String[] {type,ts,data,key} );	
+		} catch(DatabaseException e) {
+			throw new LocalStoreException( e.getMessage() );
+		}
 		
 	}
-	
-	public LocalObjectStoreInterface get(String key) {
+	/**
+	 * @see org.jldupont.localstore.ObjectStoreInterface#get(String)
+	 */
+	public LocalObjectStoreInterface get(String key) throws LocalStoreException {
+
 		
 		return null;
 	}
-	
-	public int headKey(String key) {
+	/**
+	 * @see org.jldupont.localstore.ObjectStoreInterface#headKey(String)
+	 */
+	public int headKey(String key) throws LocalStoreException {
+
+		if ( key.length() == 0 ) {
+			throw new LocalStoreException( thisClass+".put: key cannot be null" );
+		}
+
+		ResultSet result = null;
+		int ts = -1; //pessimistic...
 		
-		return 0;
+		try {
+			result = this.db.execute("SELECT ts FROM localstore WHERE key=?", 
+							new String[] {key} );
+
+			// we should only have 1 result
+			// and that's what we are assuming
+			if (result.isValidRow()) {
+				
+				ts = result.getFieldAsInt(0);
+			}
+			
+			//clean-up			
+			result.close();
+			
+		} catch(DatabaseException e) {
+			throw new LocalStoreException( e.getMessage() );
+		}
+		
+		return ts;
+	}
+	/**
+	 * @see org.jldupont.localstore.ObjectStoreInterface#containsKey(String)
+	 */
+	public boolean containsKey(String key) throws LocalStoreException {
+		
+		return headKey( key ) == -1 ? false:true;
+		
+	}
+	/**
+	 * @see org.jldupont.localstore.ObjectStoreInterface#clear()
+	 */
+	public void clear() throws LocalStoreException {
+		try {
+			this.db.execute("DELETE FROM localstore" );
+		} catch(DatabaseException e) {
+			throw new LocalStoreException( e.getMessage() );
+		}
+	}
+	/*===================================================================
+	 * PROTECTED 
+	 ===================================================================*/
+	protected void createTable() throws LocalStoreException {
+		
+		try {
+			this.db.execute("create localstore if not exists "+this.storageName+" "+thisSchema);	
+		} catch(DatabaseException e) {
+			throw new LocalStoreException( e.getMessage() );
+		}
 	}
 	
-	public boolean containsKey(String key) {
-		
-		return false;
-	}
+	/*===================================================================
+	 * PRIVATE 
+	 ===================================================================*/
+	private static native boolean isGearsInstalled() /*-{
+		try {
+			return $wnd.google.gears.factory != null;
+		} catch (e) {
+			return false;
+		}
+	}-*/;
 	
-	public void clear() {
-		
+	/*===================================================================
+	 * ObjectPool 
+	 ===================================================================*/
+	public void _clean() {
+		this.db = null;
+		this.storageName = null;
 	}
 	
 }//end class

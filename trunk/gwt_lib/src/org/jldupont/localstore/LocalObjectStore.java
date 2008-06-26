@@ -76,10 +76,13 @@ public class LocalObjectStore
 	public void setStorageName(String name) {
 		this.name = new String( name );
 	}
-	
-	public void initialize() {
+	/**
+	 * This method shouldn't be called by client's
+	 *  of this class.
+	 */
+	public void initialize() throws LocalStoreException {
 		if (this.name.length() == 0) {
-			throw new RuntimeException(thisClass+".initialize: storage name cannot be null");
+			throw new LocalStoreException(thisClass+".initialize: storage name cannot be null");
 		}
 		this.store.initialize();
 	}
