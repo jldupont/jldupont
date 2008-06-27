@@ -48,9 +48,9 @@ public class main implements EntryPoint, WindowResizeListener {
 		flexTable.setCellPadding(5);
 
 		// LinkedIn
-		flexTable.setWidget(1, 0, ImgLinkedin);
+		flexTable.setWidget(2, 0, ImgLinkedin);
 		ImgLinkedin.setStylePrimaryName("gwt-Image");
-		flexTable.getCellFormatter().setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_CENTER);
+		flexTable.getCellFormatter().setHorizontalAlignment(2, 0, HasHorizontalAlignment.ALIGN_CENTER);
 		ImgLinkedin.setTarget("_blank");
 		ImgLinkedin.setHref("http://www.linkedin.com/in/JeanLouDupont");
 		ImgLinkedin.setId("link_linkedin");
@@ -59,10 +59,10 @@ public class main implements EntryPoint, WindowResizeListener {
 		ImgLinkedin.setTitle("my LinkedIn profile");
 
 		// Blog
-		flexTable.setWidget(1, 1, ImgBlog);
+		flexTable.setWidget(2, 1, ImgBlog);
 		ImgBlog.setStylePrimaryName("gwt-Image");
 		ImgBlog.setImgClass("gwt-Image");
-		flexTable.getCellFormatter().setHorizontalAlignment(1, 1, HasHorizontalAlignment.ALIGN_CENTER);
+		flexTable.getCellFormatter().setHorizontalAlignment(2, 1, HasHorizontalAlignment.ALIGN_CENTER);
 		ImgBlog.setTarget("_blank");
 		ImgBlog.setHref("http://jldupont.blogspot.com");
 		ImgBlog.setId("link_blog");
@@ -70,10 +70,10 @@ public class main implements EntryPoint, WindowResizeListener {
 		ImgBlog.setTitle("my WEBlog");		
 
 		// Mediawiki Wiki
-		flexTable.setWidget(2, 0, ImgWiki);
+		flexTable.setWidget(3, 0, ImgWiki);
 		ImgWiki.setStylePrimaryName("gwt-Image");
 		ImgWiki.setImgClass("gwt-Image");
-		flexTable.getCellFormatter().setHorizontalAlignment(2, 0, HasHorizontalAlignment.ALIGN_CENTER);
+		flexTable.getCellFormatter().setHorizontalAlignment(3, 0, HasHorizontalAlignment.ALIGN_CENTER);
 		ImgWiki.setTarget("_blank");
 		ImgWiki.setHref("http://wiki.jldupont.com");
 		ImgWiki.setId("link_wiki");
@@ -81,10 +81,10 @@ public class main implements EntryPoint, WindowResizeListener {
 		ImgWiki.setTitle("my Mediawiki site & extensions");
 
 		// Projects
-		flexTable.setWidget(2, 1, ImgProjects);
+		flexTable.setWidget(3, 1, ImgProjects);
 		ImgProjects.setStylePrimaryName("gwt-Image");
 		ImgProjects.setImgClass("gwt-Image");
-		flexTable.getCellFormatter().setHorizontalAlignment(2, 1, HasHorizontalAlignment.ALIGN_CENTER);
+		flexTable.getCellFormatter().setHorizontalAlignment(3, 1, HasHorizontalAlignment.ALIGN_CENTER);
 		ImgProjects.setTarget("_blank");
 		ImgProjects.setHref("http://code.google.com/u/JeanLou.Dupont/");
 		ImgProjects.setId("link_projects");
@@ -102,21 +102,30 @@ public class main implements EntryPoint, WindowResizeListener {
 		TextTitle.setWidth("100%");
 
 		final FlexTable flexTableFooter = new FlexTable();
-		flexTable.setWidget(3, 0, flexTableFooter);
-		flexTable.getCellFormatter().setHorizontalAlignment(3, 0, HasHorizontalAlignment.ALIGN_CENTER);
-		flexTable.getFlexCellFormatter().setColSpan(3, 0, 2);
+		flexTable.setWidget(4, 0, flexTableFooter);
+		flexTable.getCellFormatter().setHorizontalAlignment(4, 0, HasHorizontalAlignment.ALIGN_CENTER);
+		flexTable.getFlexCellFormatter().setColSpan(4, 0, 2);
 
 		final Image ImgGwt = new Image();
 		flexTableFooter.setWidget(0, 0, ImgGwt);
 		flexTableFooter.getCellFormatter().setWidth(0, 0, "43px");
 		ImgGwt.setUrl("gwt.png");
-		ImgGwt.setTitle("built using GoogleWebToolkit");
+		ImgGwt.setTitle("built using GoogleWebToolkit + GWT Designer");
 
 		final Image ImgGae = new Image();
 		flexTableFooter.setWidget(0, 1, ImgGae);
 		flexTableFooter.getCellFormatter().setWidth(0, 1, "50px");
 		ImgGae.setUrl("gae.png");
 		ImgGae.setTitle("built using GoogleAppEngine");
+
+		final ImgAnchorLink imgAnchorLink = new ImgAnchorLink();
+		flexTable.setWidget(1, 0, imgAnchorLink);
+		flexTable.getFlexCellFormatter().setColSpan(1, 0, 2);
+		flexTable.getCellFormatter().setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_CENTER);
+		imgAnchorLink.setHref("mailto:jld@jldupont.com");
+		imgAnchorLink.setImgUrl("mailto.png");
+		imgAnchorLink.setTitle("mailto:jld@jldupont.com");
+		imgAnchorLink.setStylePrimaryName("gwt-Image");
 		
 	    DeferredCommand.addCommand(new Command() {
 	        public void execute() {
