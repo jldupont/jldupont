@@ -1,4 +1,6 @@
 /**
+ * ImgAnchorLink
+ * 
  * @author Jean-Lou Dupont
  */
 package org.jldupont.widget;
@@ -89,7 +91,7 @@ public class ImgAnchorLink extends Widget
    *  IMG child node
    ===============================================================================*/
   
-  public void setImgUrl(String url ) {
+  public void setImgUrl(String url) {
 	  // if the img tag isn't created yet, go create it
 	  Element $this = getElement();
 	  Element img = DOM.getChild( $this, 0);
