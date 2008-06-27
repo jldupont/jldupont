@@ -74,6 +74,10 @@ public class ImgAnchorLink extends Widget
   public void setName(String name) {
     DOM.setElementAttribute(getElement(), "name", name == null ? "" :name);
   }
+  
+  public void setTitle(String name) {
+	    DOM.setElementAttribute(getElement(), "title", name == null ? "" :name);
+  }
 
   public void setTabIndex(int index) {
     $setTabIndex(getElement(), index);

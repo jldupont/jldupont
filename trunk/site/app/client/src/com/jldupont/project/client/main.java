@@ -7,7 +7,6 @@ package com.jldupont.project.client;
 
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.DOM;
-
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.WindowResizeListener;
@@ -20,16 +19,18 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.TextBoxBase;
 
+import org.jldupont.widget.ImgAnchorLink;
+
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class main implements EntryPoint, WindowResizeListener {
 	
 	private FlexTable flexTable = new FlexTable();
-	private HTMLLink ImgLinkedin = new HTMLLink();
-	private HTMLLink ImgBlog = new HTMLLink();
-	private HTMLLink ImgWiki = new HTMLLink();
-	private HTMLLink ImgProjects = new HTMLLink();
+	private ImgAnchorLink ImgLinkedin = new ImgAnchorLink();
+	private ImgAnchorLink ImgBlog = new ImgAnchorLink();
+	private ImgAnchorLink ImgWiki = new ImgAnchorLink();
+	private ImgAnchorLink ImgProjects = new ImgAnchorLink();
 	private TextBox TextTitle = new TextBox();
 	
 	public void onModuleLoad() {
@@ -54,7 +55,8 @@ public class main implements EntryPoint, WindowResizeListener {
 		ImgLinkedin.setHref("http://www.linkedin.com/in/JeanLouDupont");
 		ImgLinkedin.setId("link_linkedin");
 		ImgLinkedin.setImgUrl("linkedin.gif");
-		ImgLinkedin.setImgClass("gwt-Image");		
+		ImgLinkedin.setImgClass("gwt-Image");
+		ImgLinkedin.setTitle("my LinkedIn profile");
 
 		// Blog
 		flexTable.setWidget(1, 1, ImgBlog);
@@ -65,6 +67,7 @@ public class main implements EntryPoint, WindowResizeListener {
 		ImgBlog.setHref("http://jldupont.blogspot.com");
 		ImgBlog.setId("link_blog");
 		ImgBlog.setImgUrl("blog.jpg");
+		ImgBlog.setTitle("my WEBlog");		
 
 		// Mediawiki Wiki
 		flexTable.setWidget(2, 0, ImgWiki);
@@ -75,6 +78,7 @@ public class main implements EntryPoint, WindowResizeListener {
 		ImgWiki.setHref("http://wiki.jldupont.com");
 		ImgWiki.setId("link_wiki");
 		ImgWiki.setImgUrl("wiki.png");
+		ImgWiki.setTitle("my Mediawiki site & extensions");
 
 		// Projects
 		flexTable.setWidget(2, 1, ImgProjects);
@@ -85,6 +89,7 @@ public class main implements EntryPoint, WindowResizeListener {
 		ImgProjects.setHref("http://code.google.com/u/JeanLou.Dupont/");
 		ImgProjects.setId("link_projects");
 		ImgProjects.setImgUrl("projects.jpg");
+		ImgProjects.setTitle("my open projects");
 
 		// Title
 		flexTable.setWidget(0, 0, TextTitle);
@@ -105,11 +110,13 @@ public class main implements EntryPoint, WindowResizeListener {
 		flexTableFooter.setWidget(0, 0, ImgGwt);
 		flexTableFooter.getCellFormatter().setWidth(0, 0, "43px");
 		ImgGwt.setUrl("gwt.png");
+		ImgGwt.setTitle("built using GoogleWebToolkit");
 
 		final Image ImgGae = new Image();
 		flexTableFooter.setWidget(0, 1, ImgGae);
 		flexTableFooter.getCellFormatter().setWidth(0, 1, "50px");
 		ImgGae.setUrl("gae.png");
+		ImgGae.setTitle("built using GoogleAppEngine");
 		
 	    DeferredCommand.addCommand(new Command() {
 	        public void execute() {

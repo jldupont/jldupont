@@ -4,5 +4,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="var" path="GWT_HOME/gwt-user.jar"/>
 	<classpathentry kind="lib" path="C:/Program Files/Google/gwt-gears/gwt-google-apis.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/my_gwt_lib"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
