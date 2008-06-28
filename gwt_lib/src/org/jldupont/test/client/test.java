@@ -9,6 +9,7 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -48,6 +49,11 @@ public class test
 				test.tagsFetcher.get();
 			}
 		});
+
+		final ListBox listBox = new ListBox();
+		rootPanel.add(listBox, 5, 48);
+		listBox.setSize("87px", "228px");
+		listBox.setVisibleItemCount(5);
 		
 		//testToSource();
 		//testObjectLiteral();
