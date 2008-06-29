@@ -28,11 +28,17 @@ public class ImgAnchorLink extends Widget
   public ImgAnchorLink() {
     setElement(DOM.createAnchor());
   }
-
+  /**
+   * Get Href from anchor element
+   * @return DOM element 
+   */
   public String getHref() {
     return DOM.getElementAttribute(getElement(), "href");
   }
-
+  /**
+   * Get HTML from anchor element
+   * @return String
+   */
   public String getHTML() {
     return DOM.getInnerHTML(getElement());
   }
@@ -90,7 +96,13 @@ public class ImgAnchorLink extends Widget
   public void setText(String text) {
     DOM.setInnerText(getElement(), text == null ? "" : text);
   }
-
+  /* ===============================================================================
+   *  Listener interface
+   ===============================================================================*/
+  public void setListeners(String[] liste) {
+	  
+  }
+  
   /* ===============================================================================
    *  IMG child node
    ===============================================================================*/
