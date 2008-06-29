@@ -9,6 +9,9 @@ handlers:
 #SERVER
 #======
 
+- url: /services/echo/(.*)/
+  script: server/services/echo/echo.py
+
 #-	url: /services/delicious/(.*)
 #	script: server/services/delicious/main.py
 
