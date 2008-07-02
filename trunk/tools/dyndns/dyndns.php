@@ -30,6 +30,9 @@ $password = str_replace("\"", '', $password );
 $authorization = base64_encode( $username.":".$password );
 
 // FIRST, get the ip address from our "echo" service
+$request =& new HTTP_Request( "http://www.jldupont.com/services/echo/jldupont/" );
+
+$request->setMethod( 'GET' );
 
 
 
