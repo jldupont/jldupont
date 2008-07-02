@@ -13,12 +13,14 @@ import com.google.gwt.user.client.WindowResizeListener;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.TextBoxBase;
 
+import org.jldupont.widget.GoogleGears;
 import org.jldupont.widget.ImgAnchorLink;
 
 /**
@@ -26,7 +28,7 @@ import org.jldupont.widget.ImgAnchorLink;
  */
 public class main implements EntryPoint, WindowResizeListener {
 	
-	private FlexTable flexTable = new FlexTable();
+	private FlexTable flexTableMain = new FlexTable();
 	private ImgAnchorLink ImgLinkedin = new ImgAnchorLink();
 	private ImgAnchorLink ImgBlog = new ImgAnchorLink();
 	private ImgAnchorLink ImgWiki = new ImgAnchorLink();
@@ -40,17 +42,17 @@ public class main implements EntryPoint, WindowResizeListener {
 		rootPanel.setStylePrimaryName("rootPanel");
 		rootPanel.setStyleName("rootPanel");
 
-		rootPanel.add(flexTable, 60, 0);
-		flexTable.setStyleName("gwt-TabPanel");
-		flexTable.setBorderWidth(1);
-		flexTable.setSize("377px", "270px");
-		flexTable.setCellSpacing(5);
-		flexTable.setCellPadding(5);
+		rootPanel.add(flexTableMain, 60, 125);
+		flexTableMain.setBorderWidth(1);
+		flexTableMain.setStyleName("gwt-TabPanel");
+		flexTableMain.setSize("377px", "270px");
+		flexTableMain.setCellSpacing(5);
+		flexTableMain.setCellPadding(5);
 
 		// LinkedIn
-		flexTable.setWidget(2, 0, ImgLinkedin);
+		flexTableMain.setWidget(0, 0, ImgLinkedin);
 		ImgLinkedin.setStylePrimaryName("gwt-Image");
-		flexTable.getCellFormatter().setHorizontalAlignment(2, 0, HasHorizontalAlignment.ALIGN_CENTER);
+		flexTableMain.getCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
 		ImgLinkedin.setTarget("_blank");
 		ImgLinkedin.setHref("http://www.linkedin.com/in/JeanLouDupont");
 		ImgLinkedin.setId("link_linkedin");
@@ -59,10 +61,10 @@ public class main implements EntryPoint, WindowResizeListener {
 		ImgLinkedin.setTitle("my LinkedIn profile");
 
 		// Blog
-		flexTable.setWidget(2, 1, ImgBlog);
+		flexTableMain.setWidget(0, 1, ImgBlog);
+		flexTableMain.getCellFormatter().setHorizontalAlignment(0, 1, HasHorizontalAlignment.ALIGN_CENTER);
 		ImgBlog.setStylePrimaryName("gwt-Image");
 		ImgBlog.setImgClass("gwt-Image");
-		flexTable.getCellFormatter().setHorizontalAlignment(2, 1, HasHorizontalAlignment.ALIGN_CENTER);
 		ImgBlog.setTarget("_blank");
 		ImgBlog.setHref("http://jldupont.blogspot.com");
 		ImgBlog.setId("link_blog");
@@ -70,10 +72,10 @@ public class main implements EntryPoint, WindowResizeListener {
 		ImgBlog.setTitle("my WEBlog");		
 
 		// Mediawiki Wiki
-		flexTable.setWidget(3, 0, ImgWiki);
+		flexTableMain.setWidget(1, 0, ImgWiki);
 		ImgWiki.setStylePrimaryName("gwt-Image");
 		ImgWiki.setImgClass("gwt-Image");
-		flexTable.getCellFormatter().setHorizontalAlignment(3, 0, HasHorizontalAlignment.ALIGN_CENTER);
+		flexTableMain.getCellFormatter().setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_CENTER);
 		ImgWiki.setTarget("_blank");
 		ImgWiki.setHref("http://wiki.jldupont.com");
 		ImgWiki.setId("link_wiki");
@@ -81,47 +83,71 @@ public class main implements EntryPoint, WindowResizeListener {
 		ImgWiki.setTitle("my Mediawiki site & extensions");
 
 		// Projects
-		flexTable.setWidget(3, 1, ImgProjects);
+		flexTableMain.setWidget(1, 1, ImgProjects);
 		ImgProjects.setStylePrimaryName("gwt-Image");
 		ImgProjects.setImgClass("gwt-Image");
-		flexTable.getCellFormatter().setHorizontalAlignment(3, 1, HasHorizontalAlignment.ALIGN_CENTER);
+		flexTableMain.getCellFormatter().setHorizontalAlignment(1, 1, HasHorizontalAlignment.ALIGN_CENTER);
 		ImgProjects.setTarget("_blank");
 		ImgProjects.setHref("http://code.google.com/u/JeanLou.Dupont/");
 		ImgProjects.setId("link_projects");
 		ImgProjects.setImgUrl("projects.jpg");
 		ImgProjects.setTitle("my open projects");
+		flexTableMain.getCellFormatter().setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_CENTER);
 
-		// Title
-		flexTable.setWidget(0, 0, TextTitle);
+		final FlowPanel flowPanelHeader = new FlowPanel();
+		rootPanel.add(flowPanelHeader, 0, 0);
+		flowPanelHeader.setSize("100%", "5%");
+
+		// HEADER
+		final FlexTable flexTableHeader = new FlexTable();
+		flowPanelHeader.add(flexTableHeader);
+		flexTableHeader.setSize("100%", "100%");
+
+		final Image image = new Image();
+		flexTableHeader.setWidget(0, 0, image);
+		flexTableHeader.getCellFormatter().setWidth(0, 0, "116px");
+		image.setUrl("bluecortex2.gif");
+
+		// HEADER - Title
 		TextTitle.setStyleName("title");
-		TextTitle.setTextAlignment(TextBoxBase.ALIGN_CENTER);
+		flexTableHeader.setWidget(0, 1, TextTitle);
+		TextTitle.setTextAlignment(TextBoxBase.ALIGN_LEFT);
 		TextTitle.setTitle("title");
-		flexTable.getCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
 		TextTitle.setText("Jean-Lou Dupont's WEB site");
-		flexTable.getFlexCellFormatter().setColSpan(0, 0, 2);
 		TextTitle.setWidth("100%");
 
+		// FOOTER
+		// ===============================================
+		final FlowPanel flowPanelFooter = new FlowPanel();
+		rootPanel.add(flowPanelFooter, 0, 419);
+		flowPanelFooter.setSize("100%", "5%");
+
 		final FlexTable flexTableFooter = new FlexTable();
-		flexTable.setWidget(4, 0, flexTableFooter);
-		flexTable.getCellFormatter().setHorizontalAlignment(4, 0, HasHorizontalAlignment.ALIGN_CENTER);
-		flexTable.getFlexCellFormatter().setColSpan(4, 0, 2);
+		flowPanelFooter.add(flexTableFooter);
+		flexTableFooter.setSize("100%", "100%");
+		flexTableFooter.getCellFormatter().setHorizontalAlignment(0, 1, HasHorizontalAlignment.ALIGN_RIGHT);
+
+		final FlowPanel flowPanelContentFooter = new FlowPanel();
+		flexTableFooter.setWidget(0, 1, flowPanelContentFooter);
 
 		final Image ImgGwt = new Image();
-		flexTableFooter.setWidget(0, 0, ImgGwt);
-		flexTableFooter.getCellFormatter().setWidth(0, 0, "43px");
+		flowPanelContentFooter.add(ImgGwt);
 		ImgGwt.setUrl("gwt.png");
 		ImgGwt.setTitle("built using GoogleWebToolkit + GWT Designer");
 
 		final Image ImgGae = new Image();
-		flexTableFooter.setWidget(0, 1, ImgGae);
-		flexTableFooter.getCellFormatter().setWidth(0, 1, "50px");
+		flowPanelContentFooter.add(ImgGae);
 		ImgGae.setUrl("gae.png");
 		ImgGae.setTitle("built using GoogleAppEngine");
 
+		final GoogleGears googleGears = new GoogleGears();
+		flowPanelContentFooter.add(googleGears);
+		//flexTableFooter.getCellFormatter().setWidth(0, 1, "49px");
+
+		// EMAIL
 		final ImgAnchorLink imgAnchorLink = new ImgAnchorLink();
-		flexTable.setWidget(1, 0, imgAnchorLink);
-		flexTable.getFlexCellFormatter().setColSpan(1, 0, 2);
-		flexTable.getCellFormatter().setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_CENTER);
+		flexTableFooter.setWidget(0, 0, imgAnchorLink);
+		flexTableFooter.getCellFormatter().setWidth(0, 0, "152px");
 		imgAnchorLink.setHref("mailto:jld@jldupont.com");
 		imgAnchorLink.setImgUrl("mailto.png");
 		imgAnchorLink.setTitle("mailto:jld@jldupont.com");
@@ -144,9 +170,9 @@ public class main implements EntryPoint, WindowResizeListener {
 		 */
 	public void onWindowResized(int width, int height) {
 		
-		Element ft = flexTable.getElement();
+		Element ft = flexTableMain.getElement();
 		
-		int ww = this.flexTable.getOffsetWidth();
+		int ww = this.flexTableMain.getOffsetWidth();
 		
 		int l = (width - ww) / 2;
 
