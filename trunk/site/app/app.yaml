@@ -9,6 +9,10 @@ handlers:
 #SERVER
 #======
 
+# ACCESS service
+- url: /services/access/(.*)/
+  script: server/services/access/access.py
+
 # ECHO service 
 #  Used with EasyDns of dynamic IP updater
 # ----------------------------------------
