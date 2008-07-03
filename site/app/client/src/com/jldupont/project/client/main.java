@@ -20,8 +20,16 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.TextBoxBase;
 
+import com.google.gwt.http.client.Request;
+import com.google.gwt.http.client.RequestException;
+import com.google.gwt.http.client.Response;
+import com.google.gwt.http.client.RequestBuilder;
+import com.google.gwt.http.client.RequestCallback;
+
+import org.jldupont.system.Logger;
 import org.jldupont.widget.GoogleGears;
 import org.jldupont.widget.ImgAnchorLink;
+import org.jldupont.widget.LoginLogout;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -34,6 +42,9 @@ public class main implements EntryPoint, WindowResizeListener {
 	private ImgAnchorLink ImgWiki = new ImgAnchorLink();
 	private ImgAnchorLink ImgProjects = new ImgAnchorLink();
 	private TextBox TextTitle = new TextBox();
+	private LoginLogout loginLogout = new LoginLogout();
+	
+	public boolean isLogged = false;
 	
 	public void onModuleLoad() {
 		RootPanel.get();
@@ -103,6 +114,7 @@ public class main implements EntryPoint, WindowResizeListener {
 		flowPanelHeader.add(flexTableHeader);
 		flexTableHeader.setSize("100%", "100%");
 
+		// LOGO
 		final Image image = new Image();
 		flexTableHeader.setWidget(0, 0, image);
 		flexTableHeader.getCellFormatter().setWidth(0, 0, "116px");
@@ -115,6 +127,9 @@ public class main implements EntryPoint, WindowResizeListener {
 		TextTitle.setTitle("title");
 		TextTitle.setText("Jean-Lou Dupont's WEB site");
 		TextTitle.setWidth("100%");
+
+		// LOGIN LOGOUT
+		flexTableHeader.setWidget(0, 2, loginLogout);
 
 		// FOOTER
 		// ===============================================
@@ -130,19 +145,21 @@ public class main implements EntryPoint, WindowResizeListener {
 		final FlowPanel flowPanelContentFooter = new FlowPanel();
 		flexTableFooter.setWidget(0, 1, flowPanelContentFooter);
 
+		// GWT
 		final Image ImgGwt = new Image();
 		flowPanelContentFooter.add(ImgGwt);
 		ImgGwt.setUrl("gwt.png");
 		ImgGwt.setTitle("built using GoogleWebToolkit + GWT Designer");
 
+		// GAE
 		final Image ImgGae = new Image();
 		flowPanelContentFooter.add(ImgGae);
 		ImgGae.setUrl("gae.png");
 		ImgGae.setTitle("built using GoogleAppEngine");
 
+		// GEARS
 		final GoogleGears googleGears = new GoogleGears();
 		flowPanelContentFooter.add(googleGears);
-		//flexTableFooter.getCellFormatter().setWidth(0, 1, "49px");
 
 		// EMAIL
 		final ImgAnchorLink imgAnchorLink = new ImgAnchorLink();
@@ -163,6 +180,8 @@ public class main implements EntryPoint, WindowResizeListener {
 		
 	    Window.addWindowResizeListener(this);
 	    
+	    setupLoginLogout();
+	    
 	}
 		/*TODO
 		 * (non-Javadoc)
@@ -179,5 +198,44 @@ public class main implements EntryPoint, WindowResizeListener {
 		DOM.setStyleAttribute(ft, "position", "absolute");
 		DOM.setStyleAttribute(ft, "left", l + "px");	
 	}
+	/**
+	 * 
+	 */
+	private void setupLoginLogout() {
+		
+		String loginUrls = "/services/access/urls//";
+		
+		// assume not logged in
+		loginLogout.setState("login");
 
-}
+		RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, loginUrls);
+
+	    try {
+	      Request response = builder.sendRequest(null, new RequestCallback() {
+	        public void onError(Request request, Throwable exception) {
+		    	Logger.log("setupLoginLogout: error");
+	        }
+
+	        public void onResponseReceived(Request request, Response response) {
+	        	String text = response.getText();
+		    	Logger.log("setupLoginLogout: response received:" + text );	        	
+	        	
+	        	String url = text.substring( text.indexOf(":")+1 );
+	        	
+	        	if (text.startsWith("login")) {
+	        		loginLogout.setLoginHref( url );
+	        		loginLogout.setState("login");	        		
+	        	} else {
+	        		loginLogout.setLoginHref( url );
+	        		loginLogout.setState("logout");	        		
+	        	}
+	        }
+	      });
+	    } catch (RequestException e) {
+	    	Logger.log("setupLoginLogout: exception raised");
+	    }
+		
+	}
+	
+	
+}//end

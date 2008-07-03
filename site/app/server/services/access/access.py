@@ -19,16 +19,19 @@ class ServiceAccess( webapp.RequestHandler ):
         logging.info('[access][IP: '+remote_addr )
         
         user = users.get_current_user()
-        login = users.create_login_url( dest_url )
-        logout = users.create_logout_url( dest_url )
+        login_url = users.create_login_url( dest_url )
+        logout_url = users.create_logout_url( dest_url )
         
-        self.response.out.write( login + "\n" + logout );
+        if (user):        
+            self.response.out.write( "logout:"+ logout_url + "\nlogin:" + login_url );
+        else:
+            self.response.out.write( "login:"+ login_url + "\nlogout:" + logout_url );
 
 #/**
 # *  Initialize http handler
 # */
 def main():
-  application = webapp.WSGIApplication([('/services/access/urls/(.?*)/', ServiceAccess)], debug=True)
+  application = webapp.WSGIApplication([('/services/access/urls/(.*?)', ServiceAccess)], debug=True)
   wsgiref.handlers.CGIHandler().run(application)
 
 # Bootstrap
