@@ -10,7 +10,7 @@ handlers:
 #======
 
 # ACCESS service
-- url: /services/access/(.*)/
+- url: /services/access/urls/(.*)/
   script: server/services/access/access.py
 
 # ECHO service 
