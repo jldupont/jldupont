@@ -6,7 +6,7 @@
     http://pear.php.net/dtd/rest.release.xsd">
     
  <p xlink:href="/rest/p/system">System</p>
- <c>jldupont.googlecode.com/svn</c>
+ <c>pear.jldupont.com</c>
  
  <v>1.0.1</v>
  <st>stable</st>
@@ -19,6 +19,6 @@
  <n>Release Notes:</n>
  <f></f>
 
- <g>http://jldupont.googlecode.com/svn/tags/System/System-1.0.1</g>
+ <g>http://pear.jldupont.com/tags/System/System-1.0.1</g>
  <x xlink:href="package.1.0.1.xml"/>
 </r>

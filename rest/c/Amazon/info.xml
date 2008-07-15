@@ -5,7 +5,7 @@
     xsi:schemaLocation="http://pear.php.net/dtd/rest.category
     http://pear.php.net/dtd/rest.category.xsd">
  <n>Amazon</n>
- <c>jldupont.googlecode.com/svn</c>
+ <c>pear.jldupont.com</c>
  <a>Amazon</a>
  <d>Amazon WEB Services related classes</d>
 </c>

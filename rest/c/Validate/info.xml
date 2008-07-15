@@ -5,7 +5,7 @@
     xsi:schemaLocation="http://pear.php.net/dtd/rest.category
     http://pear.php.net/dtd/rest.category.xsd">
  <n>Validate</n>
- <c>jldupont.googlecode.com/svn</c>
+ <c>pear.jldupont.com</c>
  <a>Validate</a> <!-- alias? -->
  <d>Parameter validation</d>
 </c>

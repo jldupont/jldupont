@@ -5,7 +5,7 @@
     xsi:schemaLocation="http://pear.php.net/dtd/rest.category
     http://pear.php.net/dtd/rest.category.xsd">
  <n>MyTools</n>
- <c>jldupont.googlecode.com/svn</c>
+ <c>pear.jldupont.com</c>
  <a>MyTools</a> <!-- alias? -->
  <d>Gliffy backup tool</d>
 </c>

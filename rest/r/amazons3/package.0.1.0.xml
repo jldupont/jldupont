@@ -7,7 +7,7 @@
  <name>AmazonS3</name>
 
  <!-- customize here -->
- <channel>jldupont.googlecode.com/svn</channel>	
+ <channel>pear.jldupont.com</channel>	
  
  <summary>$summary</summary>
  <description>$description</description>

@@ -6,7 +6,7 @@
     http://pear.php.net/dtd/rest.release.xsd">
     
  <p xlink:href="/rest/p/peartools">PearTools</p>
- <c>jldupont.googlecode.com/svn</c>
+ <c>pear.jldupont.com</c>
  
  <v>1.2.0</v>
  <st>stable</st>
@@ -19,6 +19,6 @@
  <n>Release Notes:</n>
  <f></f>
 
- <g>http://jldupont.googlecode.com/svn/tags/PearTools/PearTools-1.2.0</g>
+ <g>http://pear.jldupont.com/tags/PearTools/PearTools-1.2.0</g>
  <x xlink:href="package.1.2.0.xml"/>
 </r>

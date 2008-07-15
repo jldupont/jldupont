@@ -8,7 +8,7 @@
 		http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
 
  <name>BackupGliffy</name>
- <channel>jldupont.googlecode.com/svn</channel>
+ <channel>pear.jldupont.com</channel>
  <summary>Gliffy backup tool</summary>
  <description>Gliffy backup tool</description>
 
@@ -62,13 +62,13 @@
  
 	<package>
 		<name>Delicious</name>
-		<channel>jldupont.googlecode.com/svn</channel>
+		<channel>pear.jldupont.com</channel>
 		<min>1.0.0</min>
 	</package>
 
 	<package>
 		<name>Gliffy</name>
-		<channel>jldupont.googlecode.com/svn</channel>
+		<channel>pear.jldupont.com</channel>
 		<min>1.0.0</min>
 	</package>
 

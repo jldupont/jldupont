@@ -4,7 +4,7 @@
     xmlns:xlink="http://www.w3.org/1999/xlink"    
 	xsi:schemaLocation="http://pear.php.net/dtd/rest.package    http://pear.php.net/dtd/rest.package.xsd">
  <n>Validate</n>
- <c>jldupont.googlecode.com/svn</c>
+ <c>pear.jldupont.com</c>
  <ca xlink:href="/rest/Validate">Validate</ca>
  <l>$license$</l>
  <s></s>

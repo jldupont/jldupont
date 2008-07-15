@@ -5,7 +5,7 @@
     xsi:schemaLocation="http://pear.php.net/dtd/rest.allpackages
     http://pear.php.net/dtd/rest.allpackages.xsd">
 
-	<c>jldupont.googlecode.com/svn</c>
+	<c>pear.jldupont.com</c>
 	
 	<p>amazons3</p>
 	<p>backupgliffy</p>

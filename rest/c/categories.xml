@@ -7,7 +7,7 @@
     http://pear.php.net/dtd/rest.allcategories.xsd">
 
 <!-- DO NOT EDIT BELOW HERE -->
-<ch>jldupont.googlecode.com/svn</ch> <!-- not read by list-all command -->
+<ch>pear.jldupont.com</ch> <!-- not read by list-all command -->
 	<c xlink:href="/rest/c/Amazon/info.xml">Amazon</c>
 	<c xlink:href="/rest/c/Delicious/info.xml">Delicious</c>
 	<c xlink:href="/rest/c/Filesystem/info.xml">Filesystem</c>

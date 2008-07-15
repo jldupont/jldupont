@@ -8,7 +8,7 @@
 		http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
 
  <name>Delicious</name>
- <channel>jldupont.googlecode.com/svn</channel>
+ <channel>pear.jldupont.com</channel>
  <summary>Del.icio.us tools</summary>
  <description>Del.icio.us tools</description>
 

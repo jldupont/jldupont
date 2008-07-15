@@ -4,7 +4,7 @@
 		<pi>
 			<p>
 				<n>Cache</n>
-				<c>jldupont.googlecode.com/svn</c>
+				<c>pear.jldupont.com</c>
 				<ca xlink:href="/rest/c/System">System</ca>
 				<l>$license$</l>
 				<s>Memory based cache using either APC or eAccelerator</s>
@@ -22,7 +22,7 @@
 		<pi>
 			<p>
 				<n>Cache</n>
-				<c>jldupont.googlecode.com/svn</c>
+				<c>pear.jldupont.com</c>
 				<ca xlink:href="/rest/c/System">System</ca>
 				<l>$license$</l>
 				<s>Memory based cache using either APC or eAccelerator</s>
@@ -40,7 +40,7 @@
 		<pi>
 			<p>
 				<n>Cache</n>
-				<c>jldupont.googlecode.com/svn</c>
+				<c>pear.jldupont.com</c>
 				<ca xlink:href="/rest/c/System">System</ca>
 				<l>$license$</l>
 				<s>Memory based cache using either APC or eAccelerator</s>
@@ -58,7 +58,7 @@
 		<pi>
 			<p>
 				<n>Cache</n>
-				<c>jldupont.googlecode.com/svn</c>
+				<c>pear.jldupont.com</c>
 				<ca xlink:href="/rest/c/System">System</ca>
 				<l>$license$</l>
 				<s></s>
@@ -76,7 +76,7 @@
 		<pi>
 			<p>
 				<n>Object</n>
-				<c>jldupont.googlecode.com/svn</c>
+				<c>pear.jldupont.com</c>
 				<ca xlink:href="/rest/c/System">System</ca>
 				<l>$license$</l>
 				<s>$summary$</s>
@@ -94,7 +94,7 @@
 		<pi>
 			<p>
 				<n>System</n>
-				<c>jldupont.googlecode.com/svn</c>
+				<c>pear.jldupont.com</c>
 				<ca xlink:href="/rest/c/System">System</ca>
 				<l>$license$</l>
 				<s>$summary$</s>
