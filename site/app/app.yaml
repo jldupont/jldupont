@@ -9,6 +9,16 @@ handlers:
 #SERVER
 #======
 
+# PEAR channel
+- url: /channel.xml
+  script: server/services/pear/channel.py
+  
+- url: /rest/(.*)
+  script: server/services/pear/rest.py
+  
+- url: /tags/(.*)
+  script: server/services/pear/tags.py
+
 # ACCESS service
 - url: /services/access/urls/(.*)/
   script: server/services/access/access.py
