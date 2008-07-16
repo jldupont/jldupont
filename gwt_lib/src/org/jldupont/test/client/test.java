@@ -59,6 +59,7 @@ public class test
 		//testObjectLiteral();
 		
 	}//[onModuleLoad]
+	
 	private native void testObjectLiteral() /*-{
 	
 		var obj = {

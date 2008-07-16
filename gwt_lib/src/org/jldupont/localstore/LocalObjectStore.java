@@ -98,9 +98,8 @@ public class LocalObjectStore
 		if (this.initialized)
 			return;
 		
-		if (this.name.length() == 0) {
+		if (this.name.length() == 0)
 			throw new LocalStoreException(thisClass+".initialize: storage name cannot be null");
-		}
 		
 		this.store.setStorageName(this.name);
 		this.store.initialize();
