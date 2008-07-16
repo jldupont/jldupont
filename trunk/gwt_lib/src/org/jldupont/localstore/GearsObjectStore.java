@@ -8,7 +8,6 @@
  */
 package org.jldupont.localstore;
 
-import org.jldupont.system.JLD_Object;
 import org.jldupont.system.Factory;
 import org.jldupont.system.Logger;
 

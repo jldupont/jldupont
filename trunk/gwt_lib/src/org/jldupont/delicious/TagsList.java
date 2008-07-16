@@ -27,7 +27,7 @@ public class TagsList
 	 * CONSTRUCTORS 
 	 ===================================================================*/
 	public TagsList() {
-		super(thisClass, "default_id",true);
+		super(thisClass, "default_id", true);
 		setup();
 	}
 	public TagsList(String classe, String id) {
