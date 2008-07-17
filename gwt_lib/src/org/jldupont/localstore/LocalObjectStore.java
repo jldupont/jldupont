@@ -109,14 +109,14 @@ public class LocalObjectStore
 	/**
 	 * @see org.jldupont.localstore.ObjectStoreInterface#put(LocalObjectStoreInterface)
 	 */
-	public void put(LocalObjectStoreInterface obj) throws LocalStoreException{
+	public void put(LocalObjectStoreInterface obj) throws LocalStoreException {
 		this.initialize();
 		this.store.put(obj);
 	}
 	/**
 	 * @see org.jldupont.localstore.ObjectStoreInterface#get(String)
 	 */
-	public LocalObjectStoreInterface get(String key) throws LocalStoreException{
+	public LocalObjectStoreInterface get(String key) throws LocalStoreException {
 		this.initialize();
 		
 		return this.store.get(key);
@@ -124,7 +124,7 @@ public class LocalObjectStore
 	/**
 	 * @see org.jldupont.localstore.ObjectStoreInterface#containsKey(String)
 	 */
-	public boolean containsKey(String key) throws LocalStoreException{
+	public boolean containsKey(String key) throws LocalStoreException {
 		this.initialize();
 		
 		return this.store.containsKey(key);
