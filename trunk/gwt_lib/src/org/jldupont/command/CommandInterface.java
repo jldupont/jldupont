@@ -7,12 +7,10 @@ package org.jldupont.command;
 
 public interface CommandInterface {
 
-	public void setParameter( CommandParameter p );
-	
 	/**
 	 * Execute the command chain
 	 */
-	public void run();
+	public CommandStatus run( CommandParameters p );
 	
 	/**
 	 * Verifies if the completion is pending
@@ -36,4 +34,9 @@ public interface CommandInterface {
 	 */
 	public void setNext( CommandInterface me, CommandInterface next );
 	
+	/**
+	 * Used by command class to propagate command chain status
+	 * @param s
+	 */
+	public void setStatus( CommandStatus s );
 }//end

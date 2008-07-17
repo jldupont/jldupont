@@ -12,19 +12,14 @@ abstract public class Command
 	implements CommandInterface {
 
 	/**
-	 * Pending status
+	 * CommandStatus
 	 */
-	boolean pending = false;
-	
-	/**
-	 * Exit code
-	 */
-	boolean code = false;
+	CommandStatus status = new CommandStatus();
 	
 	/**
 	 * CommandParameter
 	 */
-	CommandParameter param = null;
+	CommandParameters param = null;
 	
 	/**
 	 * Previous in command chain
@@ -40,20 +35,13 @@ abstract public class Command
 	 * CONSTRUCTORS 
 	 ===================================================================*/
 
-	public Command() {
-		super();
+	public Command( String classe, String id, boolean recyclable ) {
+		super( classe, id, recyclable );
 	}
 
 	/*===================================================================
 	 * CommandInterface 
 	 ===================================================================*/
-
-	/**
-	 * @see org.jldupont.command.CommandInterface#setParameter(CommandParameter)
-	 */
-	public void setParameter( CommandParameter p ) {
-		this.param = p;
-	}
 
 	/**
 	 * @see org.jldupont.command.CommandInterface#setNext(CommandInterface, CommandInterface)
@@ -67,18 +55,91 @@ abstract public class Command
 	 * @see org.jldupont.command.CommandInterface#isPending()
 	 */
 	public boolean isPending() {
-		return this.pending;
+		return this.status.isPending();
 	}
 	/**
 	 * @see org.jldupont.command.CommandInterface#getExitCode()
 	 */
 	public boolean getExitCode() {
-		return this.code;
+		return this.status.getExitCode();
 	}
 	
 	/**
 	 * @see org.jldupont.command.CommandInterface#run()
+	 * 
+	 * @pattern template_method
 	 */
-	abstract public void run();
+	public CommandStatus run( CommandParameters p ) {
+		
+		this.param = p;
+		
+		// run our command
+		this.status = this._run( p );
+
+		// if we failed, then don't bother with the rest of the chain
+		if ( !this.status.isPending() && !this.status.getExitCode() ) {
+			return this.status;
+		}
+		
+		// continue the chain
+		CommandStatus nextStatus = this.runNext( p );
+		
+		// if no next is present, then return our status
+		if ( nextStatus == null )
+			return this.status;
+		
+		// if next command in the chain is pending,
+		// then the whole chain is pending
+		if ( nextStatus.isPending() ) {
+			return nextStatus;
+		}
+		
+		// if the next command in the chain isn't successful,
+		// then the whole chain is declared unsuccessful too.
+		if ( status.getExitCode() == false ) {
+			return nextStatus;
+		}
+		
+		// the next command in the chain was successful,
+		// then the determining status is ours ... for now ;-)
+		return this.status;
+	}
+
+	/*===================================================================
+	 * ABSTRACT 
+	 ===================================================================*/
+	
+	abstract protected CommandStatus _run( CommandParameters p );
+
+	/*===================================================================
+	 * PROTECTED 
+	 ===================================================================*/
+	/**
+	 * Used by callbacks to propagate the command chain status
+	 * @param s
+	 */
+	protected void propagateCommandStatus( CommandStatus s ) {
+		
+		// first in the chain...
+		if ( this.prev == null ) {
+			this.status = s;
+			return;
+		}
+
+		// propagate upstream
+		this.prev.setStatus(s);
+	}
+	
+	
+	/**
+	 * Runs the next command in the chain
+	 */
+	protected CommandStatus runNext( CommandParameters p ) {
+		
+		if (this.next != null)
+			return this.next.run( p );
+		
+		return null;
+	}
 	
 }//end
