@@ -69,7 +69,7 @@ public class TagsFetcher
 	/**
 	 * Fetches a up-to-date copy of the tags for user
 	 */
-	public void get() {
+	public void get() throws RuntimeException {
 		
 		if (this.username.length() == 0)
 			throw new RuntimeException(this.classe+".get: username is empty");

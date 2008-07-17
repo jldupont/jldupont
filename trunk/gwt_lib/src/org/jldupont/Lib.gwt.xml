@@ -10,5 +10,6 @@
 	<inherits name="org.jldupont.delicious"/>
 	<inherits name="org.jldupont.localstore"/>
 	<inherits name="org.jldupont.widget"/>
-
+	<inherits name="org.jldupont.command"/>
+	
 </module>
