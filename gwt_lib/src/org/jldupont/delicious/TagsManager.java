@@ -24,7 +24,7 @@ public class TagsManager
 	/**
 	 * Storage name
 	 */
-	String name = null;
+	String nameStorage = null;
 	
 	final static String thisClass = "org.jldupont.delicious.TagsManager";
 	
@@ -57,7 +57,7 @@ public class TagsManager
 	 * @param name String
 	 */
 	public void setStorageName(String name) {
-		this.name = new String( name );
+		this.nameStorage = new String( name );
 	}
 	
 	/**
@@ -163,7 +163,7 @@ public class TagsManager
 	
 	protected String generateKey( String user ) {
 		
-		return new String( this.name + '/' + user );
+		return new String( this.nameStorage + '/' + user );
 	}
 	
 	/**
