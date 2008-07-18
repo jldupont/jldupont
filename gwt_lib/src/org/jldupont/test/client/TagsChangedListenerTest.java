@@ -3,7 +3,6 @@
  */
 package org.jldupont.test.client;
 
-import com.google.gwt.user.client.Window;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.Event;
