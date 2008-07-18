@@ -38,8 +38,13 @@ public class test
 		
 		tagsFetcher = (org.jldupont.delicious.TagsFetcher) Factory.create("org.jldupont.delicious.TagsFetcher");
 		tagsFetcher.setUser("jldupont");
+
+		final ListBox listBox = new ListBox();
+		rootPanel.add(listBox, 5, 48);
+		listBox.setSize("87px", "228px");
+		listBox.setVisibleItemCount(5);
 		
-		this.tagsChangedListener = new TagsChangedListenerTest();
+		this.tagsChangedListener = new TagsChangedListenerTest( listBox );
 		
 		tagsFetcher.addCallListener(this.tagsChangedListener);
 		
@@ -50,10 +55,6 @@ public class test
 			}
 		});
 
-		final ListBox listBox = new ListBox();
-		rootPanel.add(listBox, 5, 48);
-		listBox.setSize("87px", "228px");
-		listBox.setVisibleItemCount(5);
 		
 		//testToSource();
 		//testObjectLiteral();

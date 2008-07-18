@@ -84,19 +84,22 @@ abstract public class Command
 		// continue the chain
 		CommandStatus nextStatus = this.runNext( p );
 		
-		// if no next is present, then return our status
+		// End-of-Chain:
+		//  if no next is present, then return our status
 		if ( nextStatus == null )
 			return this.status;
 		
 		// if next command in the chain is pending,
 		// then the whole chain is pending
 		if ( nextStatus.isPending() ) {
+			this._onPending();
 			return nextStatus;
 		}
 		
 		// if the next command in the chain isn't successful,
 		// then the whole chain is declared unsuccessful too.
 		if ( status.getExitCode() == false ) {
+			this._onError();
 			return nextStatus;
 		}
 		
@@ -110,6 +113,10 @@ abstract public class Command
 	 ===================================================================*/
 	
 	abstract protected CommandStatus _run( CommandParameters p );
+	
+	abstract protected void _onPending( );
+	
+	abstract protected void _onError( );
 
 	/*===================================================================
 	 * PROTECTED 
