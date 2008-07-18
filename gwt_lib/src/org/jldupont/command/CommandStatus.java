@@ -23,6 +23,11 @@ public class CommandStatus {
 	public CommandStatus() {
 		
 	}
+	
+	public CommandStatus( boolean pending, boolean code ) {
+		this.pending = pending;
+		this.code = code;
+	}
 
 	public CommandStatus( boolean pending ) {
 		this.pending = pending;

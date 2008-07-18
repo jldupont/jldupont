@@ -81,7 +81,8 @@ abstract public class Command
 			return this.status;
 		}
 		
-		// continue the chain
+		// Continue the chain
+		// ##################
 		CommandStatus nextStatus = this.runNext( p );
 		
 		// End-of-Chain:
