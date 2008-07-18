@@ -19,7 +19,7 @@ abstract public class Command
 	/**
 	 * CommandParameter
 	 */
-	CommandParameters param = null;
+	protected CommandParameters param = null;
 	
 	/**
 	 * Previous in command chain
@@ -81,7 +81,7 @@ abstract public class Command
 		this.param = p;
 		
 		// run our command
-		this.status = this._run( p );
+		this.status = this._run( );
 
 		// if we failed, then don't bother with the rest of the chain
 		if ( !this.status.isPending() && !this.status.getStatusCode() ) {
@@ -90,7 +90,7 @@ abstract public class Command
 		
 		// Continue the chain
 		// ##################
-		CommandStatus nextStatus = this.runNext( p );
+		CommandStatus nextStatus = this.runNext( );
 		
 		// End-of-Chain:
 		//  if no next is present, then return our status
@@ -120,7 +120,7 @@ abstract public class Command
 	 * ABSTRACT 
 	 ===================================================================*/
 	
-	abstract protected CommandStatus _run( CommandParameters p );
+	abstract protected CommandStatus _run( );
 	
 	abstract protected void _onPending( );
 	
@@ -149,10 +149,10 @@ abstract public class Command
 	/**
 	 * Runs the next command in the chain
 	 */
-	protected CommandStatus runNext( CommandParameters p ) {
+	protected CommandStatus runNext( ) {
 		
 		if (this.next != null)
-			return this.next.run( p );
+			return this.next.run( this.param );
 		
 		return null;
 	}

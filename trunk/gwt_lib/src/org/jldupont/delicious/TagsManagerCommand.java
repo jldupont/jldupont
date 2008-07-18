@@ -6,7 +6,6 @@
 package org.jldupont.delicious;
 
 import org.jldupont.command.Command;
-import org.jldupont.command.CommandParameters;
 import org.jldupont.command.CommandStatus;
 
 import org.jldupont.system.Factory;
@@ -63,10 +62,10 @@ public class TagsManagerCommand
 	}
 
 	@Override
-	protected CommandStatus _run(CommandParameters p) throws RuntimeException {
+	protected CommandStatus _run( ) throws RuntimeException {
 		
 		// extract 'user' parameter
-		String user = (String) p.getParameter("user");
+		String user = (String) this.param.getParameter("user");
 		if ( user == null )
 			throw new LoggableRuntimeException( "TagsManager::_run: parameter 'user' not found" );
 		
@@ -85,7 +84,7 @@ public class TagsManagerCommand
 		// in the localstore then...
 		if ( tl != null ) {
 			// queue the result for the chain's benefit
-			p.setParameter("taglist", tl);
+			this.param.setParameter("taglist", tl);
 			return new CommandStatus( false, true );
 		}
 
@@ -108,13 +107,15 @@ public class TagsManagerCommand
 		
 		// timeout?  => error
 		if (c.isTimeout()) {
-			this.propagateCommandStatus( new CommandStatus( "TagsFetcher: timeout" ) );
+			this.propagateCommandStatus( new CommandStatus( CommandStatus.TIMEOUT, "TagsFetcher: timeout" ) );
 			return;
 		}
 	
+		//TODO what about empty list?
+		this.param.setParameter("taglist", c);
+			
 		// success? continue chain
-		
-		
+		this.runNext();
 	}//
 	
 	/**

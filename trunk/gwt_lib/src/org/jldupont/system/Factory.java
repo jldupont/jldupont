@@ -64,6 +64,12 @@ public class Factory
 	 * @return
 	 */
 	protected static JLD_Object createInstance( String className, String id ) {
+
+		// org.jldupont.system
+		// ===================
+		if ( className == "org.jldupont.system.StdListe" ) {
+			return (JLD_Object) new StdListe(id);
+		}
 	
 		/**
 		 * @see com.jldupont.system.ObjectPool
@@ -71,6 +77,11 @@ public class Factory
 		if ( className == "ObjectPool" ) {
 			return (JLD_Object) new ObjectPool();
 		}
+		
+		// org.jldupont.command
+		// ===================
+		
+		
 		// org.jldupont.browser
 		// =======================
 		/**

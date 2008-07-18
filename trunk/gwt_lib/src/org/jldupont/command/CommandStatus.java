@@ -11,7 +11,7 @@ public class CommandStatus {
 	/**
 	 * Exit codes
 	 */
-	final static int TIMEOUT = 1;
+	public final static int TIMEOUT = 1;
 	
 	/**
 	 * Pending status
@@ -40,20 +40,47 @@ public class CommandStatus {
 		
 	}
 	
-	public CommandStatus( boolean pending, boolean code ) {
+	public CommandStatus( int exitCode, String msg ) {
+		setup( exitCode, msg );
+	}
+	
+	/**
+	 * Constructor used in error state
+	 * @param exitCode
+	 */
+	public CommandStatus( int exitCode ) {
+		this.exitCode = exitCode;
+		this.statusCode = false;
+		this.pending = false;
+	}
+	
+	public CommandStatus( boolean pending, boolean statusCode ) {
 		this.pending = pending;
-		this.exitCode = 0;
+		this.statusCode = statusCode;
 	}
 
+	/**
+	 * Constructor for pending state
+	 * @param pending
+	 */
 	public CommandStatus( boolean pending ) {
 		this.pending = pending;
 	}
 	
+	/**
+	 * Constructor for error state
+	 * @param msg
+	 */
 	public CommandStatus( String msg ) {
 		this.pending = false;
 		this.exitCode = 0;
 		this.statusCode = false;
 		this.message = new String(msg);
+	}
+	
+	private void setup( int exitCode, String msg ) {
+		this.exitCode = exitCode;
+		this.message = msg;
 	}
 	
 	/*===================================================================
