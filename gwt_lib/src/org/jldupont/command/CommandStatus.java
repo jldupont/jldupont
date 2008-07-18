@@ -17,6 +17,11 @@ public class CommandStatus {
 	 */
 	boolean code = false;
 
+	/**
+	 * Message
+	 */
+	String message = null;
+	
 	/*===================================================================
 	 * Constructors 
 	 ===================================================================*/
@@ -31,6 +36,12 @@ public class CommandStatus {
 
 	public CommandStatus( boolean pending ) {
 		this.pending = pending;
+	}
+	
+	public CommandStatus( String msg ) {
+		this.pending = false;
+		this.code = false;
+		this.message = new String(msg);
 	}
 	
 	/*===================================================================
@@ -64,5 +75,16 @@ public class CommandStatus {
 	public void setExitCode( boolean code ) {
 		this.code = code;
 	}
+
+	/*===================================================================
+	 * Message 
+	 ===================================================================*/
 	
+	public void setMessage( String msg ) {
+		this.message = msg;
+	}
+	
+	public String getMessage() {
+		return this.message;
+	}
 }//end
