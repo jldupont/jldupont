@@ -19,12 +19,18 @@ public interface CommandInterface {
 	public boolean isPending();
 	
 	/**
+	 * Returns the status code
+	 * @return
+	 */
+	public boolean getStatusCode();
+	
+	/**
 	 * Returns the exit code
 	 * Only valid if the 'pending' status is false
 	 * 
 	 * @return boolean
 	 */
-	public boolean getExitCode();
+	public int getExitCode();
 	
 	/**
 	 * Sets the next command in the chain
