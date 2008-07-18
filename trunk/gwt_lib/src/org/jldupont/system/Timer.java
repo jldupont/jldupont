@@ -20,6 +20,9 @@ public class Timer
 		super();
 		this.id = id;
 	}
+	/**
+	 * When the timer expires, this method is called.
+	 */
 	public void run() {
 		
 		target.timerExpiredEvent();

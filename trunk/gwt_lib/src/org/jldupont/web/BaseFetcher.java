@@ -195,10 +195,17 @@ abstract public class BaseFetcher
 	 ===================================================================*/
 	
 	/**
+	 * This method is called when the operation times-out.
 	 * Resets 'busy' status.
 	 * @see org.jldupont.system.JLD_Object
 	 */
 	public void timerExpiredEvent() {
+		Logger.log("BaseFetcher::timerExpiredEvent: called.");
+		
+		// create a 'timeout' event object
+		CallEventObject ceo = new CallEventObject( this );
+		this.notifyListeners(ceo);
+		
 		super.timerExpiredEvent();
 	}
 	

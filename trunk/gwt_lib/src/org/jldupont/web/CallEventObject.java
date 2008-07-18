@@ -15,6 +15,21 @@ public class CallEventObject
 
 	JSONObject jsonObj;
 	
+	/**
+	 * Timeout indicator
+	 */
+	boolean timeout = false;
+	
+	/**
+	 * This constructor is used when a timeout event occured
+	 * @todo get rid of 'source' parameter!
+	 * @param source
+	 */
+	public CallEventObject( Object source ) {
+		super( source );
+		this.timeout = true;
+	}
+	
 	public CallEventObject(Object source, JavaScriptObject obj) {
 		super(source);
 		this.jsObj = obj;
@@ -33,5 +48,13 @@ public class CallEventObject
 	 */
 	public JavaScriptObject getJSObject() {
 		return this.jsObj;
+	}
+	
+	/**
+	 * If a timeout occured whilst performing the operation
+	 * @return boolean
+	 */
+	public boolean isTimeout() {
+		return this.timeout;
 	}
 }//end
