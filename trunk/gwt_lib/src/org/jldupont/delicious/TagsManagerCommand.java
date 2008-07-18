@@ -47,7 +47,7 @@ public class TagsManagerCommand
 	}
 	
 	/*===================================================================
-	 *  
+	 * Command interface
 	 ===================================================================*/
 	
 	@Override
@@ -106,15 +106,22 @@ public class TagsManagerCommand
 	
 	public void fireCallEvent(CallEventObject c) {
 		
+		// timeout?  => error
 		if (c.isTimeout()) {
-			
+			this.propagateCommandStatus( new CommandStatus( "TagsFetcher: timeout" ) );
+			return;
 		}
+	
+		// success? continue chain
 		
-	}
+		
+	}//
+	
 	/**
 	 * Declare here so to help derived classes 
 	 */
 	public void onBrowserEvent(Event event) {
+		// NOTHING todo... i think.
 	}
 	
 	/*===================================================================
