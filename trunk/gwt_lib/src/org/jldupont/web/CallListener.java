@@ -3,11 +3,17 @@
  */
 package org.jldupont.web;
 
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.EventListener;
 
 public interface CallListener 
 	extends EventListener {
 	
 	public void fireCallEvent(CallEventObject c);
+
+	/**
+	 * Declare here so to help derived classes 
+	 */
+	public void onBrowserEvent(Event event); 
 	
 }
