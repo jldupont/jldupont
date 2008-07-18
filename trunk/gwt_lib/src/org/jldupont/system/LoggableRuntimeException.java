@@ -1,0 +1,16 @@
+/**
+ * LoggableRuntimeException
+ * 
+ * @author Jean-Lou Dupont
+ */
+package org.jldupont.system;
+
+public class LoggableRuntimeException 
+	extends RuntimeException {
+
+	public LoggableRuntimeException(String msg) {
+		super(msg);
+		Logger.log(msg);
+	}
+	
+}//end

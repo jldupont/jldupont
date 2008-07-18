@@ -10,6 +10,7 @@ import org.jldupont.command.CommandParameters;
 import org.jldupont.command.CommandStatus;
 
 import org.jldupont.system.Factory;
+import org.jldupont.system.LoggableRuntimeException;
 import org.jldupont.web.CallEventObject;
 
 import com.google.gwt.user.client.Event;
@@ -52,33 +53,43 @@ public class TagsManagerCommand
 	@Override
 	protected void _onError() {
 		// TODO Auto-generated method stub
-
+		// not much todo...
 	}
 
 	@Override
 	protected void _onPending() {
 		// TODO Auto-generated method stub
-
+		// not much todo...
 	}
 
 	@Override
-	protected CommandStatus _run(CommandParameters p) {
+	protected CommandStatus _run(CommandParameters p) throws RuntimeException {
 		
 		// extract 'user' parameter
+		String user = (String) p.getParameter("user");
+		if ( user == null )
+			throw new LoggableRuntimeException( "TagsManager::_run: parameter 'user' not found" );
+		
+		TagsList tl = null;
 		
 		// place the request
 		try {
-			this.manager.generateKey(user);
+			tl = this.manager.get( user );
 		} catch(RuntimeException e) {
-			
+			throw new LoggableRuntimeException( "TagsManager::_run: " + e.getMessage() );			
 		} finally {
-			
+			this._onError();
 		}
 		
 		// completed right away?  the tags must have been available
 		// in the localstore then...
-		
-		return null;
+		if ( tl != null ) {
+			// queue the result for the chain's benefit
+			p.setParameter("taglist", tl);
+			return new CommandStatus( false, true );
+		}
+
+		return new CommandStatus( true /*pending*/ );
 	}
 
 	/**
