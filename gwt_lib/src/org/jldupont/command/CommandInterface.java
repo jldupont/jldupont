@@ -28,6 +28,7 @@ public interface CommandInterface {
 	
 	/**
 	 * Sets the next command in the chain
+	 *  Used for the 'normal' execution path.
 	 * 
 	 * @param me Command - used for callback path
 	 * @param next Command
@@ -39,4 +40,5 @@ public interface CommandInterface {
 	 * @param s
 	 */
 	public void setStatus( CommandStatus s );
+	
 }//end

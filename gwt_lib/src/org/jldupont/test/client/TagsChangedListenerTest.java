@@ -8,6 +8,8 @@ import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.Event;
 
+import com.google.gwt.user.client.ui.ListBox;
+
 import java.util.Set;
 import java.util.Iterator;
 
@@ -20,6 +22,12 @@ public class TagsChangedListenerTest
 
 	implements TagsChangedListener {
 
+	ListBox lb = null;
+	
+	public TagsChangedListenerTest( ListBox lb ) {
+		this.lb = lb;
+	}
+	
 	public void fireCallEvent(CallEventObject c) {
 		//Window.alert("TagsChangedListenerTest.fireCallEvent: called! " + c.getJSONObject().toString() );
 		JSONObject obj = c.getJSONObject();
@@ -31,6 +39,7 @@ public class TagsChangedListenerTest
 			String key = (String) i.next();
 			JSONValue value = (JSONValue) obj.get( key );
 			Logger.log("key: "+key+" value: "+value );
+			this.lb.insertItem(key, 0);
 		}
 	}
 	

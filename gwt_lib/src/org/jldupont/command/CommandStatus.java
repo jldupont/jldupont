@@ -16,6 +16,17 @@ public class CommandStatus {
 	 * Exit code
 	 */
 	boolean code = false;
+
+	/*===================================================================
+	 * Constructors 
+	 ===================================================================*/
+	public CommandStatus() {
+		
+	}
+
+	public CommandStatus( boolean pending ) {
+		this.pending = pending;
+	}
 	
 	/*===================================================================
 	 * Pending 

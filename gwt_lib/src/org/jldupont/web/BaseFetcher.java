@@ -147,7 +147,7 @@ abstract public class BaseFetcher
 		
 		this.timerCancel();
 		Logger.log("BaseFetcher::"+this.classe+".handleCallbackEvent: called.");
-		this.notifyListeners(  ceo );
+		this.notifyListeners( ceo );
 	}
 	
 	public JSONObject getJSONObject() {
