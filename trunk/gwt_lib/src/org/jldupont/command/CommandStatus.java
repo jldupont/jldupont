@@ -1,12 +1,18 @@
 /**
+ * CommandStatus
+ * 
  * @author Jean-Lou Dupont
  */
 package org.jldupont.command;
 
 
-
 public class CommandStatus {
 
+	/**
+	 * Exit codes
+	 */
+	final static int TIMEOUT = 1;
+	
 	/**
 	 * Pending status
 	 */
@@ -15,8 +21,13 @@ public class CommandStatus {
 	/**
 	 * Exit code
 	 */
-	boolean code = false;
+	int exitCode = 0;
 
+	/**
+	 * StatusCode
+	 */
+	boolean statusCode = false;
+	
 	/**
 	 * Message
 	 */
@@ -31,7 +42,7 @@ public class CommandStatus {
 	
 	public CommandStatus( boolean pending, boolean code ) {
 		this.pending = pending;
-		this.code = code;
+		this.exitCode = 0;
 	}
 
 	public CommandStatus( boolean pending ) {
@@ -40,7 +51,8 @@ public class CommandStatus {
 	
 	public CommandStatus( String msg ) {
 		this.pending = false;
-		this.code = false;
+		this.exitCode = 0;
+		this.statusCode = false;
 		this.message = new String(msg);
 	}
 	
@@ -64,18 +76,25 @@ public class CommandStatus {
 	 * ExitCode 
 	 ===================================================================*/
 	
-	public boolean getExitCode() {
-		return this.code;
+	public int getExitCode() {
+		return this.exitCode;
 	}
 	
-	public void setExitCode() {
-		this.code = true;
-	}
-	
-	public void setExitCode( boolean code ) {
-		this.code = code;
+	public void setExitCode( int code ) {
+		this.exitCode = code;
 	}
 
+	/*===================================================================
+	 * StatusCode 
+	 ===================================================================*/
+	
+	public boolean getStatusCode() {
+		return this.statusCode;
+	}
+	public void setStatusCode( boolean code ) {
+		this.statusCode = code;
+	}
+	
 	/*===================================================================
 	 * Message 
 	 ===================================================================*/

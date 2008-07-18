@@ -60,10 +60,17 @@ abstract public class Command
 	/**
 	 * @see org.jldupont.command.CommandInterface#getExitCode()
 	 */
-	public boolean getExitCode() {
+	public int getExitCode() {
 		return this.status.getExitCode();
 	}
-	
+
+	/**
+	 * @see org.jldupont.command.CommandInterface#getStatusCode()
+	 */
+	public boolean getStatusCode() {
+		return this.status.getStatusCode();
+	}
+
 	/**
 	 * @see org.jldupont.command.CommandInterface#run()
 	 * 
@@ -77,7 +84,7 @@ abstract public class Command
 		this.status = this._run( p );
 
 		// if we failed, then don't bother with the rest of the chain
-		if ( !this.status.isPending() && !this.status.getExitCode() ) {
+		if ( !this.status.isPending() && !this.status.getStatusCode() ) {
 			return this.status;
 		}
 		
@@ -99,7 +106,7 @@ abstract public class Command
 		
 		// if the next command in the chain isn't successful,
 		// then the whole chain is declared unsuccessful too.
-		if ( status.getExitCode() == false ) {
+		if ( status.getStatusCode() == false ) {
 			this._onError();
 			return nextStatus;
 		}
