@@ -47,4 +47,12 @@ public interface CommandInterface {
 	 */
 	public void setStatus( CommandStatus s );
 	
+	/**
+	 * The parameter name to look for when
+	 *  being called
+	 *  
+	 * @param paramName
+	 */
+	public void setParameterName( String paramName );
+	
 }//end

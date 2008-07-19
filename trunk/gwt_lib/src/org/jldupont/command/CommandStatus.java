@@ -36,8 +36,13 @@ public class CommandStatus {
 	/*===================================================================
 	 * Constructors 
 	 ===================================================================*/
+	/**
+	 * Constructor for OK state
+	 */
 	public CommandStatus() {
-		
+		this.exitCode = 0;
+		this.statusCode = true;
+		this.pending = false;
 	}
 	
 	public CommandStatus( int exitCode, String msg ) {
