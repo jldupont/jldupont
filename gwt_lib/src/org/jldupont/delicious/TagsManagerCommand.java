@@ -5,14 +5,15 @@
  */
 package org.jldupont.delicious;
 
+import com.google.gwt.user.client.Event;
+
 import org.jldupont.command.Command;
 import org.jldupont.command.CommandStatus;
 
 import org.jldupont.system.Factory;
 import org.jldupont.system.LoggableRuntimeException;
-import org.jldupont.web.CallEventObject;
 
-import com.google.gwt.user.client.Event;
+import org.jldupont.web.CallEventObject;
 
 public class TagsManagerCommand 
 	extends Command 
@@ -60,6 +61,10 @@ public class TagsManagerCommand
 		// TODO Auto-generated method stub
 		// not much todo...
 	}
+	
+	public void setParameterName( String paramName ) {
+		//nothing todo
+	}
 
 	@Override
 	protected CommandStatus _run( ) throws RuntimeException {
@@ -84,8 +89,8 @@ public class TagsManagerCommand
 		// in the localstore then...
 		if ( tl != null ) {
 			// queue the result for the chain's benefit
-			this.param.setParameter("taglist", tl);
-			return new CommandStatus( false, true );
+			this.param.setParameter( "taglist", tl );
+			return new CommandStatus( /*OK*/ );
 		}
 
 		return new CommandStatus( true /*pending*/ );

@@ -145,7 +145,6 @@ abstract public class Command
 		this.prev.setStatus(s);
 	}
 	
-	
 	/**
 	 * Runs the next command in the chain
 	 */

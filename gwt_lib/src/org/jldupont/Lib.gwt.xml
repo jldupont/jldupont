@@ -11,5 +11,6 @@
 	<inherits name="org.jldupont.localstore"/>
 	<inherits name="org.jldupont.widget"/>
 	<inherits name="org.jldupont.command"/>
+	<inherits name="org.jldupont.widget_commands"/>
 	
 </module>
