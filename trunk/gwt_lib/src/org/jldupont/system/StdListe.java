@@ -7,15 +7,25 @@
 package org.jldupont.system;
 
 import org.jldupont.system.JLD_Object;
+import org.jldupont.system.IteratorEx;
 
 import java.util.HashMap;
+import java.util.Set;
+import java.util.Iterator;
 
 public class StdListe 
-	extends JLD_Object {
+	extends JLD_Object 
+	implements IteratorEx {
 
 	final static String thisClass = "org.jldupont.command.StdListe";
 	
 	HashMap liste = null;
+	
+	Set keys = null;
+	
+	Iterator keysIterator = null;
+	
+	int index = -1;
 	
 	/*===================================================================
 	 * CONSTRUCTORS  
@@ -81,13 +91,46 @@ public class StdListe
 	public void remove(String key) {
 		this.liste.remove(key);
 	}
+	/*===================================================================
+	 * Iterator interface  
+	 ===================================================================*/
+	
+	public boolean hasNext() {
+		
+		return this.keysIterator.hasNext();
+	}
+	public Object next() {
+		
+		String key = (String) this.keysIterator.next();
+		Object value = this.liste.get(key);
+		
+		return value;
+	}
+	public void remove() {
+		//NOOP
+	}
+	/**
+	 * Reset the iterator interface
+	 *  Addition to the standard Iterator interface.
+	 *  This method shall be called *before* using the Iterator interface
+	 */
+	public void reset() {
+		this.keys = this.liste.keySet();
+		this.keysIterator = this.keys.iterator();
+		this.index = -1;
+	}
+	/*===================================================================
+	 * PROTECTED - helpers for Iterator interface  
+	 ===================================================================*/
+	
 	
 	/*===================================================================
 	 * RECYCLING  
 	 ===================================================================*/
 	public void _clean() {
 		super._clean();
-		
+		this.keys = null;
+		this.keysIterator = null;
 		this.liste.clear();
 		
 	}
