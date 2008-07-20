@@ -1,4 +1,6 @@
 /**
+ * ListeUpdaterCommand
+ * 
  * @author Jean-Lou Dupont
  */
 package widget_commands;
@@ -27,6 +29,7 @@ public class ListeUpdaterCommand
 	/*===================================================================
 	 * Constructors 
 	 ===================================================================*/
+	
 	public ListeUpdaterCommand( ) {
 		super( thisClass, "default_id", true );
 	}
@@ -34,6 +37,7 @@ public class ListeUpdaterCommand
 	public ListeUpdaterCommand( String id ) {
 		super( thisClass, id, true );
 	}
+	
 	/*===================================================================
 	 * WidgetCommandInterface
 	 ===================================================================*/
