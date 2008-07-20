@@ -4,9 +4,41 @@
  * 
  * @author Jean-Lou Dupont
  */
+/**
+ * TAGS
+ * =============
+ * + When USER changes => fetch tags
+ * - Store locally
+ * - Populate Tag_Tree
+ * 
+ * TAG selected
+ * ============
+ * + WHEN tag selection changes => filter posts
+ * - GET POSTS with TAG t
+ * -- Verify local store
+ * -- FETCH remote
+ * 
+ */
+/*
+		tagsFetcher = (org.jldupont.delicious.TagsFetcher) Factory.create("org.jldupont.delicious.TagsFetcher");
+		tagsFetcher.setUser("jldupont");
+		
+		this.tagsChangedListener = new TagsChangedListenerTest();
+		
+		tagsFetcher.addCallListener(this.tagsChangedListener);
+		
+		clickMeButton.addClickListener(new ClickListener() {
+			
+			public void onClick(Widget sender) {
+				test.tagsFetcher.get();
+			}
+		});
+ */
 package com.jldupont.project.client;
 
 import org.jldupont.system.*;
+import org.jldupont.widget.GoogleGears;
+import org.jldupont.widget.ImgAnchorLink;
 import org.jldupont.delicious.TagsFetcher;
 import org.jldupont.browser.Param;
 import org.jldupont.browser.URLParamsList;
@@ -20,16 +52,17 @@ import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.WindowResizeListener;
 
+import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Frame;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.TextBoxBase;
+import com.google.gwt.user.client.ui.Tree;
 
 
 /**
@@ -41,13 +74,10 @@ public class main implements EntryPoint, WindowResizeListener {
 	 * Controls
 	 */
 	final FlexTable flexTable = new FlexTable();
-	final ListBox lbTags = new ListBox();	
 	final ListBox lbPosts = new ListBox();
 	final Frame frPost = new Frame("");
 	final Frame frTags = new Frame("");
 	final Frame frPosts = new Frame("");
-	final TextBox ftTags = new TextBox();
-	final TextBox ftPosts = new TextBox();
 
 	final Label labelUser = new Label("User:");	
 	final TextBox tbUser = new TextBox();	
@@ -74,30 +104,20 @@ public class main implements EntryPoint, WindowResizeListener {
 		rootPanel.add(flexTable, 0, 0);
 		flexTable.setSize("100%", "100%");
 
-		flexTable.setWidget(3, 0, lbTags);
-		flexTable.getCellFormatter().setWidth(3, 0, "10%");
-		flexTable.getCellFormatter().setVerticalAlignment(3, 0, HasVerticalAlignment.ALIGN_TOP);
-		lbTags.setSize("100%", "100%");		
-		lbTags.setVisibleItemCount(100);
+		flexTable.getCellFormatter().setWidth(2, 0, "10%");
+		flexTable.getCellFormatter().setVerticalAlignment(2, 0, HasVerticalAlignment.ALIGN_TOP);
 		
-		flexTable.setWidget(3, 1, lbPosts);
-		flexTable.getCellFormatter().setWidth(3, 1, "10%");
-		flexTable.getCellFormatter().setVerticalAlignment(3, 1, HasVerticalAlignment.ALIGN_TOP);
+		flexTable.setWidget(2, 1, lbPosts);
+		flexTable.getCellFormatter().setWidth(2, 1, "10%");
+		flexTable.getCellFormatter().setVerticalAlignment(2, 1, HasVerticalAlignment.ALIGN_TOP);
 		lbPosts.setVisibleItemCount(100);
 		lbPosts.setSize("100%", "100%");
 
-		flexTable.setWidget(3, 2, frPost);
-		flexTable.getCellFormatter().setWidth(3, 2, "80%");
+		flexTable.setWidget(2, 2, frPost);
+		flexTable.getCellFormatter().setWidth(2, 2, "80%");
 		frPost.setSize("100%", "100%");
 
-
-		flexTable.setWidget(2, 0, ftTags);
-		ftTags.setSize("100%", "100%");
-		flexTable.getCellFormatter().setHeight(2, 0, "34px");
-
-
-		flexTable.setWidget(2, 1, ftPosts);
-		ftPosts.setSize("100%", "100%");
+		flexTable.getCellFormatter().setHeight(1, 0, "23px");
 
 		flexTable.setWidget(1, 0, labelUser);
 		flexTable.getCellFormatter().setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_RIGHT);
@@ -115,9 +135,16 @@ public class main implements EntryPoint, WindowResizeListener {
 		flexTable.getCellFormatter().setHeight(0, 0, "52px");
 		flexTable.getFlexCellFormatter().setColSpan(0, 0, 3);
 
-		final Image image = new Image();
-		flexTable.setWidget(0, 3, image);
-		image.setUrl("gears_logo_grey.gif");
+		final GoogleGears googleGears = new GoogleGears();
+		flexTable.setWidget(0, 3, googleGears);
+
+		final ImgAnchorLink imgAnchorLink = new ImgAnchorLink();
+		flexTable.setWidget(3, 0, imgAnchorLink);
+		imgAnchorLink.setListeners(new String[] {"allo", "bonjour"} );
+
+		// Tag Tree
+		final Tree tag_tree = new Tree();
+		flexTable.setWidget(2, 0, tag_tree);
 
 		
 		rootPanel.add(frPosts, 571, 577);
