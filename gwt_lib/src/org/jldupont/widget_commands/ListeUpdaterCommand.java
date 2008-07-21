@@ -3,7 +3,7 @@
  * 
  * @author Jean-Lou Dupont
  */
-package widget_commands;
+package org.jldupont.widget_commands;
 
 import com.google.gwt.user.client.ui.Widget;
 
