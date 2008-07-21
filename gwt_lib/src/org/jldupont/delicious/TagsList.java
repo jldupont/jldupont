@@ -1,8 +1,8 @@
 /**
- * @author Jean-Lou Dupont
- * 
+ * TagsList
  * Delicious Tags
  * 
+ * @author Jean-Lou Dupont
  */
 
 package org.jldupont.delicious;
@@ -36,6 +36,10 @@ public class TagsList
 		setup();
 	}
 	private void setup() {
+	}
+	public TagsList( JSONObject o ) {
+		super(thisClass, "default_id", true);
+		putAll( o );
 	}
 	/*===================================================================
 	 * PUBLIC 

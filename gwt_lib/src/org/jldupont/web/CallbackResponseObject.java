@@ -15,9 +15,9 @@ public class CallbackResponseObject
 	/**
 	 * Error codes
 	 */
-	final int NA      = 0;
-	final int OK      = 1;
-	final int TIMEOUT = 2;
+	public final static int NA      = 0;
+	public final static int OK      = 1;
+	public final static int TIMEOUT = 2;
 	
 	/**
 	 * Status Code
@@ -39,6 +39,21 @@ public class CallbackResponseObject
 	/*===================================================================
 	 * CONSTRUCTORS 
 	 ===================================================================*/
+	/**
+	 * Used to create a 'call complete' object with a response code
+	 */
+	public CallbackResponseObject(int code) {
+		super( thisClass, "default_id", true );
+		this.status    = true;
+		this.errorCode = code;	
+	}
+
+	
+	public CallbackResponseObject(Object o) {
+		super( thisClass, "default_id", true );
+		setup();
+		this.o = o;
+	}
 
 	public CallbackResponseObject() {
 		super( thisClass, "default_id", true );
@@ -50,6 +65,7 @@ public class CallbackResponseObject
 	}
 	
 	private void setup() {
+		this.o = null;
 		this.status    = false;
 		this.errorCode = NA;	
 	}

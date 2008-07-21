@@ -1,4 +1,7 @@
 /**
+ * BaseFetcher
+ * Performs JSON HTTP calls
+ * 
  * @author Jean-Lou Dupont
  */
 package org.jldupont.web;
@@ -13,7 +16,6 @@ import org.jldupont.system.Factory;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Window;
 
 abstract public class BaseFetcher 
 	extends JLD_Object 
@@ -61,8 +63,8 @@ abstract public class BaseFetcher
 		setup();
 	}
 	private void setup() {
-		this.jsonc = (JSONcall)org.jldupont.system.Factory.create("org.jldupont.web.JSONcall","attached_to_BaseFetcher");
-		this.jsoncb= (JSONcallback)org.jldupont.system.Factory.create("org.jldupont.web.JSONcallback","attached_to_BaseFetcher");
+		this.jsonc = (JSONcall) Factory.create("org.jldupont.web.JSONcall","attached_to_BaseFetcher");
+		this.jsoncb= (JSONcallback) Factory.create("org.jldupont.web.JSONcallback","attached_to_BaseFetcher");
 		this.listeners = new Vector();
 		
 		this.jsoncb.setTarget(this);
@@ -137,17 +139,27 @@ abstract public class BaseFetcher
 	 * BaseCallbackEvent 
 	 ===================================================================*/
 	/**
+	 * transformJSONObject
+	 * Must be defined in derived class
+	 * 
+	 * @pattern Template Method
+	 */
+	abstract protected Object transformJSONObject( JSONObject o );
+	
+	/**
 	 * This handler is called when the callback is triggered
 	 * @see org.jldupont.web.JSONcallback
 	 */
 	public void handleCallbackEvent(int id, JavaScriptObject obj) {
 		
-		CallEventObject ceo = new CallEventObject(this, obj);
-		this.currentJSONObj = ceo.getJSONObject();
+		this.currentJSONObj = new JSONObject( obj );
+		CallbackResponseObject cro = new CallbackResponseObject( this.transformJSONObject(this.currentJSONObj));
 		
 		this.timerCancel();
+		
 		Logger.log("BaseFetcher::"+this.classe+".handleCallbackEvent: called.");
-		this.notifyListeners( ceo );
+		
+		this.notifyListeners( cro );
 	}
 	
 	public JSONObject getJSONObject() {
@@ -174,7 +186,7 @@ abstract public class BaseFetcher
 		this.listeners.remove( s );
 	}
 	
-	protected void notifyListeners(CallEventObject obj) {
+	protected void notifyListeners(CallbackResponseObject obj) {
 		
 		Iterator it = this.listeners.iterator();
 		while (it.hasNext()) {
@@ -200,11 +212,12 @@ abstract public class BaseFetcher
 	 * @see org.jldupont.system.JLD_Object
 	 */
 	public void timerExpiredEvent() {
+		
 		Logger.log("BaseFetcher::timerExpiredEvent: called.");
 		
 		// create a 'timeout' event object
-		CallEventObject ceo = new CallEventObject( this );
-		this.notifyListeners(ceo);
+		CallbackResponseObject cro = new CallbackResponseObject( CallbackResponseObject.TIMEOUT );
+		this.notifyListeners( cro );
 		
 		super.timerExpiredEvent();
 	}

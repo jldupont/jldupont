@@ -11,6 +11,7 @@ import org.jldupont.web.BaseFetcher;
 import org.jldupont.web.CallListener;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.json.client.JSONObject;
 
 public class TagsFetcher 
 	extends BaseFetcher 
@@ -109,6 +110,13 @@ public class TagsFetcher
 	/*===================================================================
 	 * CALLBACK
 	 ===================================================================*/
+	/**
+	 * Transforms the JSON object to a 'TagsList' type object
+	 */
+	protected Object transformJSONObject( JSONObject o ) {
+		return new TagsList( o );
+	}
+	
 	public void handleCallbackEvent(int id, JavaScriptObject obj) {
 		Logger.log(this.classe+".handleCallbackEvent: called.");		
 		super.handleCallbackEvent(id, obj);

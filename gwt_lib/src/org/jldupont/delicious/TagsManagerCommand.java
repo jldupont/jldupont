@@ -13,7 +13,7 @@ import org.jldupont.command.CommandStatus;
 import org.jldupont.system.Factory;
 import org.jldupont.system.LoggableRuntimeException;
 
-import org.jldupont.web.CallEventObject;
+import org.jldupont.web.CallbackResponseObject;
 
 public class TagsManagerCommand 
 	extends Command 
@@ -108,10 +108,10 @@ public class TagsManagerCommand
 	 * TagsChangedListener interface 
 	 ===================================================================*/
 	
-	public void fireCallEvent(CallEventObject c) {
+	public void fireCallEvent(CallbackResponseObject c) {
 		
 		// timeout?  => error
-		if (c.isTimeout()) {
+		if (c.isError()) {
 			this.propagateCommandStatus( new CommandStatus( CommandStatus.TIMEOUT, "TagsFetcher: timeout" ) );
 			return;
 		}
