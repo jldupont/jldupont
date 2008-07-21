@@ -16,8 +16,12 @@ import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.json.client.JSONValue;
 
+import java.util.Iterator;
+import java.util.Set;
+
 public class Liste 
-	extends JLD_Object {
+	extends JLD_Object 
+	implements IteratorEx {
 
 	final static String thisClass = "org.jldupont.system.Liste";
 
@@ -25,6 +29,8 @@ public class Liste
 	 * Main object 
 	 */
 	protected JSONObject liste = null;
+	
+	Iterator iterator = null;
 	
 	/*===================================================================
 	 * CONSTRUCTORS 
@@ -45,9 +51,30 @@ public class Liste
 		this.liste = new JSONObject();
 	}
 	/*===================================================================
+	 * IteratorEx 
+	 ===================================================================*/
+	public boolean hasNext() {
+		return this.iterator.hasNext();
+	}
+
+	public Object next() {
+		return this.iterator.next();
+	}
+	
+	public void remove() {
+		this.iterator.remove();
+	}
+	
+	public void reset() {
+		Set keyset = this.liste.keySet();
+		this.iterator = keyset.iterator();
+	}
+	
+	/*===================================================================
 	 * PUBLIC 
 	 *  Modeled after the HashMap class
 	 ===================================================================*/
+	
 	public boolean isEmpty() {
 		return this.liste.size()!=0;
 	}
@@ -105,6 +132,7 @@ public class Liste
 		super._clean();
 		this.liste=null;
 		this.liste=new JSONObject();
+		this.iterator = null;
 	}
 	
 }//end class

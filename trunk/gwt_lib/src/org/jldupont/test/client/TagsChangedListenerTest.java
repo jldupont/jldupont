@@ -3,17 +3,14 @@
  */
 package org.jldupont.test.client;
 
-import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.Event;
 
 import com.google.gwt.user.client.ui.ListBox;
 
-import java.util.Set;
-import java.util.Iterator;
-
 import org.jldupont.delicious.TagsChangedListener;
-import org.jldupont.web.CallEventObject;
+import org.jldupont.delicious.TagsList;
+import org.jldupont.web.CallbackResponseObject;
 import org.jldupont.system.Logger;
 
 
@@ -27,16 +24,18 @@ public class TagsChangedListenerTest
 		this.lb = lb;
 	}
 	
-	public void fireCallEvent(CallEventObject c) {
+	public void fireCallEvent(CallbackResponseObject c) {
 		//Window.alert("TagsChangedListenerTest.fireCallEvent: called! " + c.getJSONObject().toString() );
-		JSONObject obj = c.getJSONObject();
+		TagsList o = (TagsList) c.getResponseObject();
+		if ( o == null ) {
+			Logger.log("TagsChangedListenerTest::fireCallEvent: TagsList == null");
+			return;
+		}
+		o.reset();
 		
-		Set set = obj.keySet();
-		Iterator i = set.iterator();
-		
-		while( i.hasNext() ) {
-			String key = (String) i.next();
-			JSONValue value = (JSONValue) obj.get( key );
+		while( o.hasNext() ) {
+			String key = (String) o.next();
+			JSONValue value = (JSONValue) o.get( key );
 			Logger.log("key: "+key+" value: "+value );
 			this.lb.insertItem(key, 0);
 		}

@@ -9,7 +9,7 @@ import com.google.gwt.user.client.EventListener;
 public interface CallListener 
 	extends EventListener {
 	
-	public void fireCallEvent(CallEventObject c);
+	public void fireCallEvent(CallbackResponseObject c);
 
 	/**
 	 * Declare here so to help derived classes 
