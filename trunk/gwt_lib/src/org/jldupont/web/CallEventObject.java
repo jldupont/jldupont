@@ -1,4 +1,7 @@
 /**
+ * CallEventObject
+ * 
+ * @deprecated
  * @author Jean-Lou Dupont
  */
 package org.jldupont.web;

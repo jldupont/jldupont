@@ -3,5 +3,6 @@
 	<inherits name="com.google.gwt.json.JSON"/>
 	<inherits name="org.jldupont.system"/>
 	<inherits name="org.jldupont.web"/>
+	<inherits name="org.jldupont.command"/>
 	<source path="delicious/"/>
 </module>

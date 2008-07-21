@@ -5,10 +5,10 @@
  */
 package widget_commands;
 
+import com.google.gwt.user.client.ui.Widget;
+
 import org.jldupont.command.Command;
 import org.jldupont.command.CommandStatus;
-
-import com.google.gwt.user.client.ui.Widget;
 
 public class ListeUpdaterCommand 
 	extends Command 
@@ -60,12 +60,16 @@ public class ListeUpdaterCommand
 	 * CommandInterface
 	 ===================================================================*/
 	
-	@Override
+	/**
+	 * Parameter to look for
+	 */
 	public void setParameterName( String paramName ) {
 		this.paramName = paramName;
 	}
 	
-	@Override
+	/**
+	 * @pattern Template Method
+	 */
 	protected CommandStatus _run() {
 		
 		// retrieve list
@@ -93,4 +97,11 @@ public class ListeUpdaterCommand
 
 	}
 
+	/*===================================================================
+	 * Recycling 
+	 ===================================================================*/
+	public void _clean() {
+		super._clean();
+	}
+	
 }//endclass
