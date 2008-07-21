@@ -50,13 +50,11 @@ public class TagsManagerCommand
 	 * Command interface
 	 ===================================================================*/
 	
-	@Override
 	protected void _onError() {
 		// TODO Auto-generated method stub
 		// not much todo...
 	}
 
-	@Override
 	protected void _onPending() {
 		// TODO Auto-generated method stub
 		// not much todo...
@@ -66,7 +64,6 @@ public class TagsManagerCommand
 		//nothing todo
 	}
 
-	@Override
 	protected CommandStatus _run( ) throws RuntimeException {
 		
 		// extract 'user' parameter
@@ -99,7 +96,6 @@ public class TagsManagerCommand
 	/**
 	 * @see org.jldupont.command.CommandInterface
 	 */
-	@Override
 	public void setStatus(CommandStatus s) {
 		this.propagateCommandStatus(s);
 

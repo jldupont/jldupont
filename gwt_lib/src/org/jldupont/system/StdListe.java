@@ -25,8 +25,6 @@ public class StdListe
 	
 	Iterator keysIterator = null;
 	
-	int index = -1;
-	
 	/*===================================================================
 	 * CONSTRUCTORS  
 	 ===================================================================*/
@@ -92,7 +90,7 @@ public class StdListe
 		this.liste.remove(key);
 	}
 	/*===================================================================
-	 * Iterator interface  
+	 * IteratorEx interface  
 	 ===================================================================*/
 	
 	public boolean hasNext() {
@@ -117,7 +115,6 @@ public class StdListe
 	public void reset() {
 		this.keys = this.liste.keySet();
 		this.keysIterator = this.keys.iterator();
-		this.index = -1;
 	}
 	/*===================================================================
 	 * PROTECTED - helpers for Iterator interface  
