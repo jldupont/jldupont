@@ -153,11 +153,11 @@ abstract public class BaseFetcher
 	public void handleCallbackEvent(int id, JavaScriptObject obj) {
 		
 		this.currentJSONObj = new JSONObject( obj );
-		CallbackResponseObject cro = new CallbackResponseObject( this.transformJSONObject(this.currentJSONObj));
+		CallbackResponseObject cro = new CallbackResponseObject( this.transformJSONObject(this.currentJSONObj) );
 		
 		this.timerCancel();
 		
-		Logger.log("BaseFetcher::"+this.classe+".handleCallbackEvent: called.");
+		Logger.logInfo(this.classe+"::BaseFetcher.handleCallbackEvent: called.");
 		
 		this.notifyListeners( cro );
 	}
@@ -174,7 +174,7 @@ abstract public class BaseFetcher
 	 * @param CallListener
 	 */
 	public void addCallListener(CallListener s) {
-		Logger.log(this.classe+".addCallListener: called.");
+		Logger.logInfo(this.classe+"::BaseFetcher.addCallListener: called.");
 		this.listeners.add( s );
 	}
 	/**
@@ -182,7 +182,7 @@ abstract public class BaseFetcher
 	 * @param CallListener
 	 */
 	public void removeCallListener(CallListener s) {
-		Logger.log(this.classe+".removeCallListener: called.");		
+		Logger.logInfo(this.classe+"::BaseFetcher.removeCallListener: called.");		
 		this.listeners.remove( s );
 	}
 	
@@ -213,7 +213,7 @@ abstract public class BaseFetcher
 	 */
 	public void timerExpiredEvent() {
 		
-		Logger.log("BaseFetcher::timerExpiredEvent: called.");
+		Logger.log(this.classe+"::BaseFetcher::timerExpiredEvent: called.");
 		
 		// create a 'timeout' event object
 		CallbackResponseObject cro = new CallbackResponseObject( CallbackResponseObject.TIMEOUT );

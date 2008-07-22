@@ -16,7 +16,9 @@ import com.google.gwt.user.client.ui.Widget;
 import org.jldupont.delicious.TagsFetcher;
 import org.jldupont.delicious.TagsList;
 import org.jldupont.delicious.TagsManager;
+
 import org.jldupont.system.Factory;
+import org.jldupont.system.Logger;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -63,11 +65,14 @@ public class test
 		rootPanel.add(testTagsmanagerButton, 167, 78);
 		testTagsmanagerButton.setText("Test TagsManager");
 
+		tagsManager = (org.jldupont.delicious.TagsManager) Factory.create("org.jldupont.delicious.TagsManager");		
+		tagsManager.addCallListener( this.tagsChangedListener );				
+		tagsManager.setStorageName( "test" );
+		
 		testTagsmanagerButton.addClickListener(new ClickListener() {
 			public void onClick( Widget sender ) {
-				tagsManager = (org.jldupont.delicious.TagsManager) Factory.create("org.jldupont.delicious.TagsManager");
-				tagsManager.setStorageName( "test" );
 				tagsList = tagsManager.get("jldupont");
+				Logger.logDir( tagsList );
 			}
 		});
 		//testToSource();

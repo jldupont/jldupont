@@ -36,7 +36,7 @@ public class TagsChangedListenerTest
 		while( o.hasNext() ) {
 			String key = (String) o.next();
 			JSONValue value = (JSONValue) o.get( key );
-			Logger.log("key: "+key+" value: "+value );
+			//Logger.log("key: "+key+" value: "+value );
 			this.lb.insertItem(key, 0);
 		}
 	}
