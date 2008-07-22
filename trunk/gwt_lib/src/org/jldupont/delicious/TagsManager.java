@@ -169,8 +169,10 @@ public class TagsManager
 			obj = store.get( key );
 		} catch (LocalStoreException e) {
 			Logger.logError("TagsManager::localFetch: LocalStoreException raised. Msg= " + e.getMessage());
+			obj = null;
 		} catch(Exception e) {
 			Logger.logError("TagsManager::localFetch: unknown exception raised. Msg=" + e.getMessage() );
+			obj = null;
 		} finally {
 			store.recycle();
 		}
@@ -183,6 +185,7 @@ public class TagsManager
 	 ===================================================================*/
 	public void fireCallEvent(CallbackResponseObject c) {
 		
+		// update our local store
 		try {
 			set( this.currentUser, (TagsList) c.getResponseObject(), Time.getTime() );
 		} catch( LocalStoreException e ) {

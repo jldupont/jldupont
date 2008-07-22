@@ -52,7 +52,7 @@ public class ObjectPool
 		
 		bin.put( classe, obj );
 		
-		Logger.log("OBJECTPOOL: recycling an object of class("+ classe +") and id("+obj.getId()+")" );		
+		Logger.logInfo("OBJECTPOOL: recycling an object of class("+ classe +") and id("+obj.getId()+")" );		
 	}
 	
 	public JLD_Object get( String classe ) {

@@ -27,6 +27,9 @@ public class LocalObjectStore
 	
 	final static String thisClass = "org.jldupont.localstore.LocalObjectStore";
 	
+	/**
+	 * Database name
+	 */
 	String storageName = null;
 	
 	/**
@@ -132,6 +135,23 @@ public class LocalObjectStore
 		this.initialize();
 		
 		return this.store.get(key);
+	}
+	/**
+	 * @see org.jldupont.localstore.ObjectStoreInterface#get(String)
+	 */
+	public LocalObjectStoreInterface get(String key, int ttl) throws LocalStoreException {
+		Logger.logInfo( "LocalObjectStore::get" );		
+		this.initialize();
+		
+		return this.store.get(key,ttl);
+	}
+	/**
+	 * @see org.jldupont.localstore.ObjectStoreInterface#delete
+	 */
+	public void delete(String key) throws LocalStoreException {
+		Logger.logInfo(thisClass+".delete: key["+key+"]");
+		this.initialize();
+		this.store.delete(key);
 	}
 	/**
 	 * @see org.jldupont.localstore.ObjectStoreInterface#containsKey(String)
