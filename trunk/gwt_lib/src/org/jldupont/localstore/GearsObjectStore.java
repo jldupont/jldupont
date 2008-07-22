@@ -26,7 +26,7 @@ public class GearsObjectStore
 	/**
 	 * Follows SQLite datatypes
 	 */
-	final static String thisSchema = "(key TEXT, type TEXT, ts INTEGER(8), data BLOB )";
+	final static String thisSchema = "(key TEXT, type TEXT, ts INTEGER(16), data BLOB )";
 	
 	/**
 	 * Storage name
@@ -115,10 +115,9 @@ public class GearsObjectStore
 		String ts   = String.valueOf( obj.getTimestamp() );
 		String data = obj.getTextRepresentation();
 		
-		if ( key.length() == 0 ) {
+		if ( key.length() == 0 )
 			throw new LocalStoreException( thisClass+".put: key cannot be null" );
-		}
-		
+	
 		try {
 			this.db.execute("INSERT OR REPLACE INTO localstore (key,type,ts,data) VALUES (?,?,?,?)", 
 							new String[] {key,type,ts,data} );	
@@ -126,7 +125,7 @@ public class GearsObjectStore
 			throw new LocalStoreException( e.getMessage() );
 		}
 		//Logger.logInfo(thisClass+".put: rowsAffected " + this.db.rowsAffected );
-		Logger.logInfo(thisClass+".put: stored key["+key+"] of type["+type+"]");
+		Logger.logInfo(thisClass+".put: stored key["+key+"] of type["+type+"] and timestamp["+ts+"]");
 	}
 	/**
 	 * @see org.jldupont.localstore.ObjectStoreInterface#get(String)
@@ -138,11 +137,10 @@ public class GearsObjectStore
 	 * @see org.jldupont.localstore.ObjectStoreInterface#get(String)
 	 */
 	public LocalObjectStoreInterface get(String key, int ttl) throws LocalStoreException {
-		Logger.logInfo(thisClass+".get: key["+key+"]");
+		Logger.logInfo(thisClass+".get: key["+key+"] and ttl["+ttl+"]");
 		
-		if ( key.length() == 0 ) {
+		if ( key.length() == 0 )
 			throw new LocalStoreException( thisClass+".get: key cannot be null" );
-		}
 
 		ResultSet result = null;
 		LocalObjectStoreInterface obj  = null;
@@ -167,10 +165,10 @@ public class GearsObjectStore
 				//Logger.logInfo(thisClass+".get: field name(0): " + result.getFieldName(0));
 				
 				ts   = result.getFieldAsInt(0);
-				//Logger.logInfo(thisClass+".get: ts: " + ts );
+				Logger.logInfo(thisClass+".get: ts: " + ts );
 				
 				type = result.getFieldAsString(1);
-				//Logger.logInfo(thisClass+".get: type: " + type );
+				Logger.logInfo(thisClass+".get: type: " + type );
 				
 				data = result.getFieldAsString(2);
 				//Logger.logInfo(thisClass+".get: data: " + data );
@@ -200,15 +198,25 @@ public class GearsObjectStore
 		}
 		
 		// check expiry
-		int currentTime = Time.getTime();
+		long currentTime = Time.getTime();
 		
 		if ( ttl == 0 )
 			ttl = DEFAULT_TTL;
 		
-			// can the object expire?
+		// correct some bad entries along the way...
+		if ( ts == -1 ) {
+			Logger.logWarn(thisClass+".get: object with timestamp (-1)" );
+			delete( key );
+			return null;
+		}
+		
+		// can the object expire?
 		if ( ts != 0 ) {
-			if ( (ts + ttl) < currentTime )
+			if ( (ts + ttl) < currentTime ) {
+				Logger.logWarn(thisClass+".get: object expired. TS["+ts+"] currentTime["+currentTime+"] and ttl["+ttl+"]" );
+				delete(key);
 				return null;
+			}	
 		}
 		
 		// use the system factory for creating

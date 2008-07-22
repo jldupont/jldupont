@@ -23,7 +23,7 @@ public interface LocalObjectStoreInterface {
 	/**
 	 * Timestamp (ms from 1/1/1970)
 	 */
-	public int getTimestamp();
+	public long getTimestamp();
 	
 	/**
 	 * Object representation in TEXT format

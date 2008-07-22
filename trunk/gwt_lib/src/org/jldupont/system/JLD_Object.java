@@ -54,7 +54,7 @@ abstract public class JLD_Object
 	/**
 	 * Timestamp (ms since 1/1/1970)
 	 */
-	int timestamp = -1;
+	long timestamp = -1;
 	
 	/*===================================================================
 	 * CONSTRUCTORS 
@@ -91,10 +91,12 @@ abstract public class JLD_Object
 	/*===================================================================
 	 * PUBLIC 
 	 ===================================================================*/
-	public int getTimestamp() {
+	public long getTimestamp() {
+		if ( this.timestamp == -1 )
+			this.timestamp = Time.getTime();
 		return this.timestamp;
 	}
-	public void setTimestamp(int timestamp) {
+	public void setTimestamp(long timestamp) {
 		this.timestamp = timestamp;
 	}
 	/**
@@ -168,6 +170,7 @@ abstract public class JLD_Object
 	 ===================================================================*/
 	/**
 	 * Used in derived classes.
+	 * @param Timeout int (in ms)
 	 */
 	protected void startOperation(int timeout) {
 		

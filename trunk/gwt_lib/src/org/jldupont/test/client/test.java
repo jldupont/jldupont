@@ -42,6 +42,10 @@ public class test
 		rootPanel.add(clickMeButton);
 		clickMeButton.setText("Fetch TagsFetcher");
 		
+		// TEST
+		//Factory.map("org.jldupont.delicious.TagsFetcher", "org.jldupont.delicious.mocks.TagsFetcher");
+		
+		
 		tagsFetcher = (org.jldupont.delicious.TagsFetcher) Factory.create("org.jldupont.delicious.TagsFetcher");
 		tagsFetcher.setUser("jldupont");
 

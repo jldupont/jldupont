@@ -4,9 +4,7 @@
  */
 package org.jldupont.delicious;
 
-import org.jldupont.system.JLD_Object;
 import org.jldupont.system.Logger;
-import org.jldupont.system.Factory;
 import org.jldupont.web.BaseFetcher;
 import org.jldupont.web.CallListener;
 
@@ -32,6 +30,10 @@ public class TagsFetcher
 	/*===================================================================
 	 * CONSTRUCTORS 
 	 ===================================================================*/
+	public TagsFetcher( String classe, String id ) {
+		super(classe, id, true );
+		setup();
+	}
 	
 	public TagsFetcher( String id ) {
 		super(thisClass, id, true );

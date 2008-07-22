@@ -13,8 +13,9 @@ abstract public class BaseObjectStore
 	
 	/**
 	 * Default TTL for all objects
+	 * 1 day (in ms)
 	 */
-	final static int DEFAULT_TTL = 86400;
+	final static int DEFAULT_TTL = 24*60*60*1000;
 	
 	public BaseObjectStore(String classe,String id) {
 		super(classe,id);
