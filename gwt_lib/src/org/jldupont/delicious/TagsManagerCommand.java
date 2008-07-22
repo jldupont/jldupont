@@ -19,23 +19,28 @@ public class TagsManagerCommand
 	extends Command 
 	implements TagsChangedListener {
 
-	final static String thisClass = "org.jldupont.delicious.TagsFetcherCommand";
+	final static String thisClass = "org.jldupont.delicious.TagsManagerCommand";
 	
 	TagsManager manager = null;
 	
 	/*===================================================================
 	 * Constructor 
 	 ===================================================================*/
+	public TagsManagerCommand(String id) {
+		super( thisClass, id, true );
+		setup();
+	}
 	public TagsManagerCommand() {
-		
 		super( thisClass, "default_id", true );
-		
+		setup();
+	}
+	
+	private void setup() {
 		this.manager = (TagsManager) Factory.create( "org.jldupont.delicious.TagsManager" );
 
 		// set listening interface
 		this.manager.addCallListener(this);
 	}
-	
 	/*===================================================================
 	 * CONFIGURATION - must be set prior to using an instance
 	 ===================================================================*/
