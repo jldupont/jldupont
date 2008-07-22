@@ -111,7 +111,7 @@ public class TagsManager
 	 * @param liste
 	 * @param timestamp
 	 */
-	public void set( String user, TagsList liste, int timestamp ) throws LocalStoreException {
+	public void set( String user, TagsList liste, long timestamp ) throws LocalStoreException {
 		
 		Logger.logInfo("TagsManager::set");
 		LocalObjectStore store = (LocalObjectStore) Factory.create("org.jldupont.delicious.LocalObjectStore");

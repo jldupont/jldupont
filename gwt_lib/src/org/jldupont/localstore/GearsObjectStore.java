@@ -26,7 +26,7 @@ public class GearsObjectStore
 	/**
 	 * Follows SQLite datatypes
 	 */
-	final static String thisSchema = "(key TEXT, type TEXT, ts INTEGER(16), data BLOB )";
+	final static String thisSchema = "(key TEXT, type TEXT, ts INTEGER(8), data BLOB )";
 	
 	/**
 	 * Storage name
@@ -145,7 +145,7 @@ public class GearsObjectStore
 		ResultSet result = null;
 		LocalObjectStoreInterface obj  = null;
 		String type = null;
-		int    ts   = -1;
+		long    ts   = -1;
 		String data = null;
 		boolean found = false;
 		
@@ -164,7 +164,7 @@ public class GearsObjectStore
 				//Logger.logInfo(thisClass+".get: field count: " + result.getFieldCount());
 				//Logger.logInfo(thisClass+".get: field name(0): " + result.getFieldName(0));
 				
-				ts   = result.getFieldAsInt(0);
+				ts   = result.getFieldAsLong(0);
 				Logger.logInfo(thisClass+".get: ts: " + ts );
 				
 				type = result.getFieldAsString(1);
