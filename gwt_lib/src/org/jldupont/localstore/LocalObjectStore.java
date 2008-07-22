@@ -18,6 +18,8 @@
 package org.jldupont.localstore;
 
 import org.jldupont.system.JLD_Object;
+import org.jldupont.system.Logger;
+import org.jldupont.system.Factory;
 
 public class LocalObjectStore 
 	extends JLD_Object 
@@ -25,7 +27,7 @@ public class LocalObjectStore
 	
 	final static String thisClass = "org.jldupont.localstore.LocalObjectStore";
 	
-	String name = null;
+	String storageName = null;
 	
 	/**
 	 * Initialization status
@@ -42,11 +44,11 @@ public class LocalObjectStore
 	 * CONSTRUCTORS 
 	 ===================================================================*/
 	public LocalObjectStore(String classe, String id) {
-		super(classe,id);
+		super(classe,id,true);
 		setup();
 	}
 	public LocalObjectStore(String id) {
-		super(thisClass,id);
+		super(thisClass,id,true);
 		setup();
 	}
 	/**
@@ -56,9 +58,12 @@ public class LocalObjectStore
 	private void setup() {
 		
 		// try GoogleGears...
-		this.store = new GearsObjectStore(getId());
+		//this.store = new GearsObjectStore(getId());
+		this.store = (BaseObjectStore) Factory.create("org.jldupont.localstore.GearsObjectStore", getId() );
 		if (this.store.exists())
 			return;
+		
+		Logger.log("LocalObjectStore::setup: fallback to mock");
 		
 		// fallback to Mock ...
 		this.store = new MockObjectStore(getId());
@@ -87,7 +92,8 @@ public class LocalObjectStore
 	 * @see org.jldupont.localstore.ObjectStoreInterface#setStorageName(String)
 	 */
 	public void setStorageName(String name) {
-		this.name = new String( name );
+		this.storageName = new String( name );
+		Logger.logInfo("LocalObjectStore::setStorageName: name=" + this.name );
 	}
 	/**
 	 * This method shouldn't be called by client's
@@ -98,10 +104,14 @@ public class LocalObjectStore
 		if (this.initialized)
 			return;
 		
-		if (this.name.length() == 0)
-			throw new LocalStoreException(thisClass+".initialize: storage name cannot be null");
+		Logger.logInfo( "LocalObjectStore::initialize" );
 		
-		this.store.setStorageName(this.name);
+		if ( this.storageName == null )
+			throw new LocalStoreException(thisClass+".initialize: storage name cannot be null");
+		if (this.storageName.length() == 0)
+			throw new LocalStoreException(thisClass+".initialize: storage name cannot be empty");
+		
+		this.store.setStorageName(this.storageName);
 		this.store.initialize();
 		
 		this.initialized = true;		
@@ -110,6 +120,7 @@ public class LocalObjectStore
 	 * @see org.jldupont.localstore.ObjectStoreInterface#put(LocalObjectStoreInterface)
 	 */
 	public void put(LocalObjectStoreInterface obj) throws LocalStoreException {
+		Logger.logInfo( "LocalObjectStore::put" );
 		this.initialize();
 		this.store.put(obj);
 	}
@@ -117,6 +128,7 @@ public class LocalObjectStore
 	 * @see org.jldupont.localstore.ObjectStoreInterface#get(String)
 	 */
 	public LocalObjectStoreInterface get(String key) throws LocalStoreException {
+		Logger.logInfo( "LocalObjectStore::get" );		
 		this.initialize();
 		
 		return this.store.get(key);
@@ -125,6 +137,7 @@ public class LocalObjectStore
 	 * @see org.jldupont.localstore.ObjectStoreInterface#containsKey(String)
 	 */
 	public boolean containsKey(String key) throws LocalStoreException {
+		Logger.logInfo( "LocalObjectStore::containsKey" );		
 		this.initialize();
 		
 		return this.store.containsKey(key);
@@ -133,7 +146,7 @@ public class LocalObjectStore
 	 * @see org.jldupont.localstore.ObjectStoreInterface#headKey(String)
 	 */
 	public int headKey(String key) throws LocalStoreException{
-	
+		Logger.logInfo( "LocalObjectStore::headKey" );
 		return this.store.headKey(key);
 	}
 	/**

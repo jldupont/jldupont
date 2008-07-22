@@ -11,6 +11,7 @@ import org.jldupont.command.Command;
 import org.jldupont.command.CommandStatus;
 
 import org.jldupont.system.Factory;
+import org.jldupont.system.Logger;
 import org.jldupont.system.LoggableRuntimeException;
 
 import org.jldupont.web.CallbackResponseObject;
