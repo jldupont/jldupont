@@ -10,17 +10,19 @@ package org.jldupont.delicious;
 import org.jldupont.system.JLD_Object;
 import org.jldupont.system.Factory;
 import org.jldupont.system.Logger;
+import org.jldupont.system.Time;
 import org.jldupont.localstore.LocalObjectStore;
 import org.jldupont.localstore.LocalStoreException;
 import org.jldupont.localstore.LocalObjectStoreInterface;
 import org.jldupont.web.CallEventListener;
 import org.jldupont.web.CallListener;
+import org.jldupont.web.CallbackResponseObject;
 
 import com.google.gwt.user.client.Event;
 
 public class TagsManager 
 	extends JLD_Object 
-	implements CallEventListener {
+	implements CallEventListener, TagsChangedListener {
 
 	/**
 	 * Storage name
@@ -30,6 +32,8 @@ public class TagsManager
 	final static String thisClass = "org.jldupont.delicious.TagsManager";
 	
 	TagsFetcher tf = null;
+	
+	String currentUser = null;
 	
 	/*===================================================================
 	 * CONSTRUCTORS 
@@ -51,7 +55,8 @@ public class TagsManager
 
 	protected void setup() {
 		
-		this.tf = (TagsFetcher) Factory.create("org.jldupont.delicious.TagsFetcher");		
+		this.tf = (TagsFetcher) Factory.create("org.jldupont.delicious.TagsFetcher");	
+		this.tf.addCallListener(this);
 	}
 	
 	/*===================================================================
@@ -75,14 +80,16 @@ public class TagsManager
 	 */
 	public TagsList get( String user ) throws RuntimeException {
 	
-		Logger.log("TagsManager::get: trying localFetch");
+		Logger.logInfo("TagsManager::get: trying localFetch");
+		
+		this.currentUser = new String( user );
 		
 		// try the local copy
 		TagsList tl = this.localFetch(user);
 		if ( tl != null )
 			return tl;
 		
-		Logger.log("TagsManager::get: trying remoteFetch");
+		Logger.logInfo("TagsManager::get: trying remoteFetch");
 		
 		// remoteFetch returns null to signal 'pending'
 		return this.remoteFetch(user);
@@ -96,6 +103,7 @@ public class TagsManager
 	 */
 	public void set( String user, TagsList liste, int timestamp ) throws LocalStoreException {
 		
+		Logger.logInfo("TagsManager::set");
 		LocalObjectStore store = (LocalObjectStore) Factory.create("org.jldupont.delicious.LocalObjectStore");
 		
 		store.setStorageName(this.nameStorage);
@@ -162,14 +170,25 @@ public class TagsManager
 		} catch (LocalStoreException e) {
 			Logger.logError("TagsManager::localFetch: LocalStoreException raised. Msg= " + e.getMessage());
 		} catch(Exception e) {
-			Logger.logError("TagsManager::localFetch: <b>unknown exception</b> raised. Msg=" + e.getMessage() );
+			Logger.logError("TagsManager::localFetch: unknown exception raised. Msg=" + e.getMessage() );
 		} finally {
 			store.recycle();
 		}
 		
 		return (TagsList) obj;
 	}
-
+	
+	/*===================================================================
+	 * TagsChangedListener 
+	 ===================================================================*/
+	public void fireCallEvent(CallbackResponseObject c) {
+		
+		try {
+			set( this.currentUser, (TagsList) c.getResponseObject(), Time.getTime() );
+		} catch( LocalStoreException e ) {
+			Logger.logError("TagsManager::fireCallEvent: LocalStoreException raised. Msg= " + e.getMessage());
+		}
+	}
 	/**
 	 * Declare here so to help derived classes 
 	 */
@@ -177,7 +196,6 @@ public class TagsManager
 	}
 	
 	protected String generateKey( String user ) {
-		Logger.logInfo("TagsManager::generateKey");
 		return new String( this.nameStorage + '/' + user );
 	}
 	
@@ -186,6 +204,8 @@ public class TagsManager
 	 */
 	public void _clean() {
 		super._clean();
+		this.nameStorage = null;
+		this.currentUser = null;
 	}
 	
 }//end class

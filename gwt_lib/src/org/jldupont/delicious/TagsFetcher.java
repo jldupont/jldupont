@@ -83,20 +83,6 @@ public class TagsFetcher
 		//go fetch them
 		this.fetch();
 	}
-	/**
-	 * getTags
-	 *  Returns a TagsList object containing all the current tags
-	 *   [string;int]
-	 *   e.g. [Companies;257]
-	 * @return
-	 */
-	public TagsList getTags() {
-		
-		TagsList list = (TagsList) Factory.create("org.jldupont.delicious.TagsList");
-		list.putAll( this.getJSONObject() );
-		
-		return list;
-	}
 	/*===================================================================
 	 * LISTENERS 
 	 ===================================================================*/
@@ -118,7 +104,7 @@ public class TagsFetcher
 	}
 	
 	public void handleCallbackEvent(int id, JavaScriptObject obj) {
-		Logger.log(this.classe+".handleCallbackEvent: called.");		
+		Logger.logInfo(this.classe+".handleCallbackEvent: called.");		
 		super.handleCallbackEvent(id, obj);
 	}
 	/*===================================================================

@@ -63,7 +63,7 @@ public class LocalObjectStore
 		if (this.store.exists())
 			return;
 		
-		Logger.log("LocalObjectStore::setup: fallback to mock");
+		Logger.logDebug("LocalObjectStore::setup: fallback to mock");
 		
 		// fallback to Mock ...
 		this.store = new MockObjectStore(getId());
@@ -93,7 +93,7 @@ public class LocalObjectStore
 	 */
 	public void setStorageName(String name) {
 		this.storageName = new String( name );
-		Logger.logInfo("LocalObjectStore::setStorageName: name=" + this.name );
+		Logger.logInfo("LocalObjectStore::setStorageName: name=" + this.storageName );
 	}
 	/**
 	 * This method shouldn't be called by client's

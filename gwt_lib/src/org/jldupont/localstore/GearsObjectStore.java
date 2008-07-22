@@ -119,12 +119,12 @@ public class GearsObjectStore
 		}
 		
 		try {
-			this.db.execute("UPDATE OR ON CONFLICT REPLACE localstore SET type=?,ts=?,data=? WHERE key=?", 
-							new String[] {type,ts,data,key} );	
+			this.db.execute("INSERT OR REPLACE INTO localstore (key,type,ts,data) VALUES (?,?,?,?)", 
+							new String[] {key,type,ts,data} );	
 		} catch(DatabaseException e) {
 			throw new LocalStoreException( e.getMessage() );
 		}
-		
+		//Logger.logInfo(thisClass+".put: rowsAffected " + this.db.rowsAffected );
 		Logger.logInfo(thisClass+".put: stored key["+key+"] of type["+type+"]");
 	}
 	/**

@@ -20,22 +20,27 @@ public class Logger {
 	}
 
 	public static void logError( String msg ) {
+		if ( isAvailable() == false ) return;
 		error(msg);
 	}
 
 	public static void logInfo( String msg ) {
+		if ( isAvailable() == false ) return;		
 		info(msg);
 	}
 
 	public static void logDebug( String msg ) {
+		if ( isAvailable() == false ) return;		
 		debug(msg);
 	}
 	
 	public static void logWarn( String msg ) {
+		if ( isAvailable() == false ) return;		
 		warn(msg);
 	}
 	
 	public static void logDir( Object obj ) {
+		if ( isAvailable() == false ) return;		
 		dir( obj );
 	}
 	
@@ -74,38 +79,32 @@ public class Logger {
 	}-*/;
 	
 	protected static native void logToFirebug( String msg ) /*-{
-	
 		console.log( msg );
 		
 	}-*/;
 
 	protected static native void info( String msg ) /*-{
-	
 		console.info( msg );
 	
 	}-*/;
 
 	protected static native void debug( String msg ) /*-{
-	
 		console.debug( msg );
 
 	}-*/;
 
 	protected static native void warn( String msg ) /*-{
-	
 		console.warn( msg );
 
 	}-*/;
 	
 	protected static native void error( String msg ) /*-{
-	
 		console.error( msg );
 
 	}-*/;
 
 	protected static native void dir( Object o ) /*-{
-	
-		console.dir( o );
+			console.dir( o );
 
 	}-*/;
 	
