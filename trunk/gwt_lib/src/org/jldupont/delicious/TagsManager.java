@@ -9,6 +9,7 @@ package org.jldupont.delicious;
 
 import org.jldupont.system.JLD_Object;
 import org.jldupont.system.Factory;
+import org.jldupont.system.Logger;
 import org.jldupont.localstore.LocalObjectStore;
 import org.jldupont.localstore.LocalStoreException;
 import org.jldupont.localstore.LocalObjectStoreInterface;
@@ -74,10 +75,14 @@ public class TagsManager
 	 */
 	public TagsList get( String user ) throws RuntimeException {
 	
+		Logger.log("TagsManager::get: trying localFetch");
+		
 		// try the local copy
 		TagsList tl = this.localFetch(user);
 		if ( tl != null )
 			return tl;
+		
+		Logger.log("TagsManager::get: trying remoteFetch");
 		
 		// remoteFetch returns null to signal 'pending'
 		return this.remoteFetch(user);
@@ -93,6 +98,7 @@ public class TagsManager
 		
 		LocalObjectStore store = (LocalObjectStore) Factory.create("org.jldupont.delicious.LocalObjectStore");
 		
+		store.setStorageName(this.nameStorage);
 		String key = this.generateKey(user);
 		
 		liste.setName(key);
@@ -130,7 +136,7 @@ public class TagsManager
 		try {
 			this.tf.get();
 		} catch(RuntimeException e) {
-			throw e;
+			throw new RuntimeException("TagsManager::remoteFetch");
 		} finally {
 			tf.recycle();
 		}
@@ -144,17 +150,21 @@ public class TagsManager
 	 */
 	private TagsList localFetch( String user ) {
 		
-		LocalObjectStore store = (LocalObjectStore) Factory.create("org.jldupont.delicious.LocalObjectStore");
+		LocalObjectStore store = (LocalObjectStore) Factory.create("org.jldupont.delicious.LocalObjectStore", "TagsManager::localFetch" );
 		LocalObjectStoreInterface obj = null;
 		
-		store.setStorageName(this.name);
+		store.setStorageName(this.nameStorage);
+		
+		String key = this.generateKey(user);
 		
 		try {
-			obj = store.get( this.generateKey(user) );
+			obj = store.get( key );
 		} catch (LocalStoreException e) {
-			return null;
+			Logger.logError("TagsManager::localFetch: LocalStoreException raised. Msg= " + e.getMessage());
+		} catch(Exception e) {
+			Logger.logError("TagsManager::localFetch: <b>unknown exception</b> raised. Msg=" + e.getMessage() );
 		} finally {
-			store.recycle();			
+			store.recycle();
 		}
 		
 		return (TagsList) obj;
@@ -167,7 +177,7 @@ public class TagsManager
 	}
 	
 	protected String generateKey( String user ) {
-		
+		Logger.logInfo("TagsManager::generateKey");
 		return new String( this.nameStorage + '/' + user );
 	}
 	

@@ -50,9 +50,9 @@ public class ObjectPool
 		if ( bin.containsKey(classe) )
 			return;
 		
-		Logger.log("OBJECTPOOL: recycling an object of class("+ classe +") and id("+obj.getId()+")" );
-		
 		bin.put( classe, obj );
+		
+		Logger.log("OBJECTPOOL: recycling an object of class("+ classe +") and id("+obj.getId()+")" );		
 	}
 	
 	public JLD_Object get( String classe ) {

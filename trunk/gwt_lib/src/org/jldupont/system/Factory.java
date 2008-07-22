@@ -17,6 +17,7 @@ import org.jldupont.web.JSONcall;
 import org.jldupont.command.CommandStatus;
 
 import org.jldupont.localstore.LocalObjectStore;
+import org.jldupont.localstore.GearsObjectStore;
 
 import java.lang.Object;
 import java.util.HashMap;
@@ -160,9 +161,11 @@ public class Factory
 		
 		// org.jldupont.localstore
 		// =======================
-		if ( className == "org.jldupont.delicious.LocalObjectStore" ) {
+		if ( className == "org.jldupont.delicious.LocalObjectStore" )
 			return (JLD_Object) new org.jldupont.localstore.LocalObjectStore(id);
-		}
+
+		if ( className == "org.jldupont.localstore.GearsObjectStore" )
+			return (JLD_Object) new org.jldupont.localstore.GearsObjectStore(id);
 		
 			
 		Logger.log( "FACTORY: <b>ERROR</b> CREATING INSTANCE OF CLASS: " + className );

@@ -14,6 +14,8 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.jldupont.delicious.TagsFetcher;
+import org.jldupont.delicious.TagsList;
+import org.jldupont.delicious.TagsManager;
 import org.jldupont.system.Factory;
 
 /**
@@ -25,6 +27,8 @@ public class test
 	private Button clickMeButton;
 	
 	public static TagsFetcher tagsFetcher;
+	public static TagsManager tagsManager;
+	public static TagsList tagsList;
 	
 	protected TagsChangedListenerTest tagsChangedListener = null;
 	
@@ -55,7 +59,17 @@ public class test
 			}
 		});
 
-		
+		final Button testTagsmanagerButton = new Button();
+		rootPanel.add(testTagsmanagerButton, 167, 78);
+		testTagsmanagerButton.setText("Test TagsManager");
+
+		testTagsmanagerButton.addClickListener(new ClickListener() {
+			public void onClick( Widget sender ) {
+				tagsManager = (org.jldupont.delicious.TagsManager) Factory.create("org.jldupont.delicious.TagsManager");
+				tagsManager.setStorageName( "test" );
+				tagsList = tagsManager.get("jldupont");
+			}
+		});
 		//testToSource();
 		//testObjectLiteral();
 		

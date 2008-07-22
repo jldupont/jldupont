@@ -11,7 +11,7 @@ package org.jldupont.localstore;
 import org.jldupont.system.Factory;
 import org.jldupont.system.Logger;
 
-//import com.google.gwt.gears.core.client.GearsException;
+import com.google.gwt.gears.core.client.GearsException;
 import com.google.gwt.gears.database.client.Database;
 import com.google.gwt.gears.database.client.DatabaseException;
 import com.google.gwt.gears.database.client.ResultSet;
@@ -66,7 +66,7 @@ public class GearsObjectStore
 	public boolean exists() {
 		boolean r = isGearsInstalled();
 		
-		Logger.log(thisClass+".exists: result" + r );
+		Logger.log(thisClass+".exists: result: " + r );
 		
 		return r;
 	}
@@ -84,6 +84,8 @@ public class GearsObjectStore
 	 * @throws LocalStoreException 
 	 */
 	public void initialize() throws LocalStoreException {
+		
+		Logger.logInfo("GearsObjectStore::initialize");
 		
 		if (this.db != null)
 			return;
@@ -123,13 +125,14 @@ public class GearsObjectStore
 			throw new LocalStoreException( e.getMessage() );
 		}
 		
-		Logger.log(thisClass+".put: stored key["+key+"] of type["+type+"]");
+		Logger.logInfo(thisClass+".put: stored key["+key+"] of type["+type+"]");
 	}
 	/**
 	 * @see org.jldupont.localstore.ObjectStoreInterface#get(String)
 	 */
 	public LocalObjectStoreInterface get(String key) throws LocalStoreException {
-
+		Logger.logInfo(thisClass+".get: key["+key+"]");
+		
 		if ( key.length() == 0 ) {
 			throw new LocalStoreException( thisClass+".get: key cannot be null" );
 		}
@@ -139,26 +142,51 @@ public class GearsObjectStore
 		String type = null;
 		int    ts   = -1;
 		String data = null;
+		boolean found = false;
 		
 		try {
 			result = this.db.execute(	"SELECT ts,type,data FROM localstore WHERE key=?", 
 										new String[] {key} );
 			
+			//Logger.logDir(result);
+			
 			// we should only get one element (if any)
 			// and that's what we assume
 			if (result.isValidRow()) {
 				
+				Logger.logInfo(thisClass+".get: row is valid");
+				//Logger.logDir(result);
+				//Logger.logInfo(thisClass+".get: field count: " + result.getFieldCount());
+				//Logger.logInfo(thisClass+".get: field name(0): " + result.getFieldName(0));
+				
 				ts   = result.getFieldAsInt(0);
+				//Logger.logInfo(thisClass+".get: ts: " + ts );
+				
 				type = result.getFieldAsString(1);
+				//Logger.logInfo(thisClass+".get: type: " + type );
+				
 				data = result.getFieldAsString(2);
+				//Logger.logInfo(thisClass+".get: data: " + data );
+				
+				found = true;
+				
+			} else {
+				Logger.logWarn(thisClass+".get: row is not valid");
 			}
 
 			result.close();
 			
 		} catch(DatabaseException e) {
+			Logger.logError(thisClass+".get: DatabaseException raised whilst SELECTing. Msg= " +e.getMessage());
+			throw new LocalStoreException( e.getMessage() );
+		} catch( Exception e ) {
+			Logger.logError(thisClass+".get: Exception raised whilst SELECTing. Msg= " +e.getMessage());
 			throw new LocalStoreException( e.getMessage() );
 		}
 
+		if (!found) 
+			return null;
+		
 		// simple check on the 'type' field
 		if ( type.length() == 0 ) {
 			throw new LocalStoreException( thisClass+".get: type field cannot be null" );
@@ -170,12 +198,14 @@ public class GearsObjectStore
 		// able to comply.
 		obj = (LocalObjectStoreInterface) Factory.create(type);
 		if (obj==null) {
+			Logger.logError(thisClass+".get: exception raised whilst using Factory." );
 			throw new LocalStoreException( thisClass+".get: cannot create an object of type["+type+"]" );
 		}
 		
 		try {
 			obj.createFromTextRepresentation(data);
 		} catch(Exception e) {
+			Logger.logError(thisClass+".get: exception raised whilst creating representation. Msg= " +e.getMessage());			
 			throw new LocalStoreException( thisClass+".get: cannot createFromTextRepresentation, type["+type+"]" );
 		}
 		
@@ -239,13 +269,24 @@ public class GearsObjectStore
 	 * PROTECTED 
 	 ===================================================================*/
 	protected void createDatabase() throws LocalStoreException {
+		Logger.logInfo("GearsObjectStore::createDatabase");
 		
 		try {
-			this.db.execute("create localstore if not exists "+this.storageName+" "+thisSchema);	
-		} catch(DatabaseException e) {
+			this.db = new Database( this.storageName );
+		} catch(GearsException e) {
+			Logger.logError(thisClass+"::createDatabase: exception raised whilst creating Database object instance. Msg= " + e.getMessage());
 			throw new LocalStoreException( e.getMessage() );
 		}
-		Logger.log(thisClass+".createDatabase, created database name["+this.storageName+"]");		
+		
+		try {
+			
+			this.db.execute("create table if not exists localstore "+thisSchema);
+			
+		} catch(DatabaseException e) {
+			Logger.logError(thisClass+"::createDatabase: exception raised whilst creating table. Msg= " + e.getMessage());
+			throw new LocalStoreException( e.getMessage() );
+		}
+		Logger.logInfo(thisClass+".createDatabase, created database name["+this.storageName+"]");		
 	}
 	
 	/*===================================================================
