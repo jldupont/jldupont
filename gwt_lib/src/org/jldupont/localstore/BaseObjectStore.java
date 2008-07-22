@@ -11,6 +11,11 @@ abstract public class BaseObjectStore
 	extends JLD_Object 
 	implements ObjectStoreInterface {
 	
+	/**
+	 * Default TTL for all objects
+	 */
+	final static int DEFAULT_TTL = 86400;
+	
 	public BaseObjectStore(String classe,String id) {
 		super(classe,id);
 	}
@@ -25,7 +30,22 @@ abstract public class BaseObjectStore
 	
 	abstract public void put(LocalObjectStoreInterface obj) throws LocalStoreException;
 	
+	abstract public void delete(String key) throws LocalStoreException;
+	
 	abstract public LocalObjectStoreInterface get(String key) throws LocalStoreException;
+	
+	/**
+	 * Gets an object from the localstore making sure
+	 *  that its timestamp is within the expiry timeframe i.e.
+	 *  timestamp + ttl < currentTime
+	 * If ttl=0, then DEFAULT_TTL is used.
+	 *  
+	 * @param key
+	 * @param ttl
+	 * @return LocalObjectStoreInterface
+	 * @throws LocalStoreException
+	 */
+	abstract public LocalObjectStoreInterface get(String key, int ttl) throws LocalStoreException;
 	
 	abstract public boolean containsKey(String key) throws LocalStoreException;
 	

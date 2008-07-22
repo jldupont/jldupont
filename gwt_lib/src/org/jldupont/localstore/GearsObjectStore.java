@@ -10,6 +10,7 @@ package org.jldupont.localstore;
 
 import org.jldupont.system.Factory;
 import org.jldupont.system.Logger;
+import org.jldupont.system.Time;
 
 import com.google.gwt.gears.core.client.GearsException;
 import com.google.gwt.gears.database.client.Database;
@@ -131,6 +132,12 @@ public class GearsObjectStore
 	 * @see org.jldupont.localstore.ObjectStoreInterface#get(String)
 	 */
 	public LocalObjectStoreInterface get(String key) throws LocalStoreException {
+		return get( key, 0 );
+	}
+	/**
+	 * @see org.jldupont.localstore.ObjectStoreInterface#get(String)
+	 */
+	public LocalObjectStoreInterface get(String key, int ttl) throws LocalStoreException {
 		Logger.logInfo(thisClass+".get: key["+key+"]");
 		
 		if ( key.length() == 0 ) {
@@ -192,6 +199,18 @@ public class GearsObjectStore
 			throw new LocalStoreException( thisClass+".get: type field cannot be null" );
 		}
 		
+		// check expiry
+		int currentTime = Time.getTime();
+		
+		if ( ttl == 0 )
+			ttl = DEFAULT_TTL;
+		
+			// can the object expire?
+		if ( ts != 0 ) {
+			if ( (ts + ttl) < currentTime )
+				return null;
+		}
+		
 		// use the system factory for creating
 		// an empty object of the required type
 		// The factory returns 'null' if it wasn't
@@ -211,6 +230,22 @@ public class GearsObjectStore
 		
 		Logger.log(thisClass+".get: got key["+key+"] of type["+type+"]");		
 		return obj;
+	}
+	/**
+	 * @see org.jldupont.localstore.ObjectStoreInterface#delete
+	 */
+	public void delete(String key) throws LocalStoreException {
+		Logger.logInfo(thisClass+".delete: key["+key+"]");
+		
+		if ( key.length() == 0 )
+			throw new LocalStoreException( thisClass+".delete: key cannot be null" );
+
+		try {
+			this.db.execute(	"DELETE FROM localstore WHERE key=?", new String[] {key} );
+		} catch(DatabaseException e) {
+			throw new LocalStoreException( e.getMessage() );
+		} finally {
+		}
 	}
 	/**
 	 * @see org.jldupont.localstore.ObjectStoreInterface#headKey(String)

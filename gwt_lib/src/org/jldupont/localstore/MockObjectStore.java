@@ -44,28 +44,39 @@ public class MockObjectStore
 	 * not much todo :-)
 	 */
 	public void initialize() {
-		Logger.log(thisClass+".initialize: called");
+		Logger.logInfo(thisClass+".initialize: called");
 	}
 	public void setStorageName(String name) {
-		Logger.log(thisClass+".setStorageName: called");		
+		Logger.logInfo(thisClass+".setStorageName: called");		
 	}
 	
 	public void put(LocalObjectStoreInterface obj) {
-		Logger.log(thisClass+".put: called");		
+		Logger.logInfo(thisClass+".put: called");		
 	}
 	
 	public LocalObjectStoreInterface get(String key) {
-		Logger.log(thisClass+".get: called");		
+		Logger.logInfo(thisClass+".get: called");		
+		return null;
+	}
+	public LocalObjectStoreInterface get(String key, int ttl) {
+		Logger.logInfo(thisClass+".get: called");		
 		return null;
 	}
 	
+	/**
+	 * @see org.jldupont.localstore.ObjectStoreInterface#delete
+	 */
+	public void delete(String key) throws LocalStoreException {
+		Logger.logInfo(thisClass+".delete: called");
+	}
+	
 	public int headKey(String key) {
-		Logger.log(thisClass+".headKey: called");		
+		Logger.logInfo(thisClass+".headKey: called");		
 		return -1;
 	}
 	
 	public boolean containsKey(String key) {
-		Logger.log(thisClass+".containsKey: called");	
+		Logger.logInfo(thisClass+".containsKey: called");	
 		return false;
 	}
 	
