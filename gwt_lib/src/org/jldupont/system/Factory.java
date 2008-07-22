@@ -34,14 +34,14 @@ public class Factory
 	 * @param src String
 	 * @param dest String
 	 */
-	public void map( String src, String dest ) {
+	public static void map( String src, String dest ) {
 		map.put( src, dest );
 	}
 	/**
 	 * Removes a mapping
 	 * @param src
 	 */
-	public void unmap( String src ) {
+	public static void unmap( String src ) {
 		map.remove(src);
 	}
 	/**
@@ -67,6 +67,7 @@ public class Factory
 		String rid = null;
 		
 		//check the remapping table
+		// ------------------------
 		String dest = (String) map.get(className);
 		if ( dest !=null )
 			className = dest;
@@ -149,6 +150,11 @@ public class Factory
 		if ( className == "org.jldupont.delicious.TagsFetcher" ) {
 			return (JLD_Object) new TagsFetcher( id );
 		}
+		
+		if ( className == "org.jldupont.delicious.mocks.TagsFetcher" ) {
+			return (JLD_Object) new org.jldupont.delicious.mocks.TagsFetcher( id );
+		}
+		
 		if ( className == "org.jldupont.delicious.TagsList" ) {
 			return (JLD_Object) new org.jldupont.delicious.TagsList(id);
 		}

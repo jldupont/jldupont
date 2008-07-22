@@ -70,6 +70,28 @@ public class TagsManager
 	public void setStorageName(String name) {
 		this.nameStorage = new String( name );
 	}
+	/**
+	 * Get with default ttl
+	 * @param user
+	 * @param ttl
+	 * @return TagsList
+	 * @throws RuntimeException
+	 */
+	public TagsList get( String user, int ttl ) throws RuntimeException {
+		Logger.logInfo("TagsManager::get: trying localFetch");
+		
+		this.currentUser = new String( user );
+		
+		// try the local copy
+		TagsList tl = this.localFetch(user, ttl);
+		if ( tl != null )
+			return tl;
+		
+		Logger.logInfo("TagsManager::get: trying remoteFetch");
+		
+		// remoteFetch returns null to signal 'pending'
+		return this.remoteFetch(user);
+	}
 	
 	/**
 	 * Returns the tag list for a specified user
@@ -79,20 +101,8 @@ public class TagsManager
 	 *  @return TagsList or NULL to signify 'pending'
 	 */
 	public TagsList get( String user ) throws RuntimeException {
-	
-		Logger.logInfo("TagsManager::get: trying localFetch");
-		
-		this.currentUser = new String( user );
-		
-		// try the local copy
-		TagsList tl = this.localFetch(user);
-		if ( tl != null )
-			return tl;
-		
-		Logger.logInfo("TagsManager::get: trying remoteFetch");
-		
-		// remoteFetch returns null to signal 'pending'
-		return this.remoteFetch(user);
+
+		return get( user, 0 );
 	}
 	/**
 	 * Sets a tag list
@@ -146,7 +156,7 @@ public class TagsManager
 		} catch(RuntimeException e) {
 			throw new RuntimeException("TagsManager::remoteFetch");
 		} finally {
-			tf.recycle();
+			//this.tf.recycle();
 		}
 		return null;
 	}
@@ -156,7 +166,7 @@ public class TagsManager
 	 * @param user
 	 * @return TagsList or NULL
 	 */
-	private TagsList localFetch( String user ) {
+	private TagsList localFetch( String user, int ttl ) {
 		
 		LocalObjectStore store = (LocalObjectStore) Factory.create("org.jldupont.delicious.LocalObjectStore", "TagsManager::localFetch" );
 		LocalObjectStoreInterface obj = null;
@@ -166,7 +176,7 @@ public class TagsManager
 		String key = this.generateKey(user);
 		
 		try {
-			obj = store.get( key );
+			obj = store.get( key, ttl );
 		} catch (LocalStoreException e) {
 			Logger.logError("TagsManager::localFetch: LocalStoreException raised. Msg= " + e.getMessage());
 			obj = null;
@@ -184,6 +194,10 @@ public class TagsManager
 	 * TagsChangedListener 
 	 ===================================================================*/
 	public void fireCallEvent(CallbackResponseObject c) {
+		
+		// don't try to update needlessly
+		if ( c.isError() )
+			return;
 		
 		// update our local store
 		try {

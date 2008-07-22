@@ -76,12 +76,19 @@ public class TagsManagerCommand
 		String user = (String) this.param.getParameter("user");
 		if ( user == null )
 			throw new LoggableRuntimeException( "TagsManager::_run: parameter 'user' not found" );
+
+		Object o = this.param.getParameter("ttl");
+		if ( o == null )
+			throw new LoggableRuntimeException( "TagsManager::_run: parameter 'ttl' not found" );
+		
+		// Integer are passed in string format...
+		int ttl = Integer.parseInt( (String) o);
 		
 		TagsList tl = null;
 		
 		// place the request
 		try {
-			tl = this.manager.get( user );
+			tl = this.manager.get( user, ttl );
 		} catch(RuntimeException e) {
 			throw new LoggableRuntimeException( "TagsManager::_run: " + e.getMessage() );			
 		} finally {

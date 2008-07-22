@@ -47,12 +47,6 @@ public class StorableListe
 	}
 	
 	/**
-	 * Timestamp (ms from 1/1/1970)
-	 * @see org.jldupont.system.JLD_Object
-	 */
-	//public int getTimestamp() {}
-	
-	/**
 	 * Object representation in TEXT format
 	 *  The object's true representation is opaque to the LocalStore 
 	 */

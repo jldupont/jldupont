@@ -2,6 +2,9 @@
  * CommandParameter interface
  * 
  * @author Jean-Lou Dupont
+ * 
+ * Integers must be passed in String format
+ * 
  */
 package org.jldupont.command;
 
