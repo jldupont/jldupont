@@ -3,19 +3,46 @@
  */
 package org.jldupont.system;
 
+import org.jldupont.delicious.TagsList;
 import org.jldupont.delicious.TagsFetcher;
+import org.jldupont.delicious.TagsManager;
+import org.jldupont.delicious.TagsManagerCommand;
+
 import org.jldupont.browser.URLParamsList;
 import org.jldupont.browser.CookieParamsList;
+
 import org.jldupont.web.JSONcallback;
 import org.jldupont.web.JSONcall;
-import org.jldupont.delicious.TagsList;
+
+import org.jldupont.command.CommandStatus;
+
 import org.jldupont.localstore.LocalObjectStore;
 
 import java.lang.Object;
+import java.util.HashMap;
 
 public class Factory 
 	extends Object {
 
+	static HashMap map = new HashMap();
+	
+	/**
+	 * Maps a source class to a destination class
+	 * Used to substitute a class for another.
+	 * Useful for testing with mock objects.
+	 * @param src String
+	 * @param dest String
+	 */
+	public void map( String src, String dest ) {
+		map.put( src, dest );
+	}
+	/**
+	 * Removes a mapping
+	 * @param src
+	 */
+	public void unmap( String src ) {
+		map.remove(src);
+	}
 	/**
 	 * create
 	 * 
@@ -37,6 +64,11 @@ public class Factory
 		ObjectPool pool = new ObjectPool();
 		JLD_Object obj;
 		String rid = null;
+		
+		//check the remapping table
+		String dest = (String) map.get(className);
+		if ( dest !=null )
+			className = dest;
 		
 		// check the ObjectPool first
 		obj = pool.get( className );
@@ -80,6 +112,8 @@ public class Factory
 		
 		// org.jldupont.command
 		// ===================
+//		if ( className == "org.jldupont.command.CommandStatus" )
+//			return (JLD_Object) new org.jldupont.command.CommandStatus( );
 		
 		
 		// org.jldupont.browser
@@ -96,14 +130,16 @@ public class Factory
 		if ( className == "org.jldupont.browser.CookieParamsList" ) {
 			return (JLD_Object) new CookieParamsList( );
 		}
+		
 		// org.jldupont.web
 		// =======================
-		if ( className == "org.jldupont.web.JSONcall") {
+		if ( className == "org.jldupont.web.JSONcall" ) {
 			return (JLD_Object) new org.jldupont.web.JSONcall(id);
 		}
-		if ( className == "org.jldupont.web.JSONcallback") {
+		if ( className == "org.jldupont.web.JSONcallback" ) {
 			return (JLD_Object) new org.jldupont.web.JSONcallback(id);
 		}
+		
 		// org.jldupont.delicious
 		// =======================
 		/**
@@ -115,6 +151,13 @@ public class Factory
 		if ( className == "org.jldupont.delicious.TagsList" ) {
 			return (JLD_Object) new org.jldupont.delicious.TagsList(id);
 		}
+		if ( className == "org.jldupont.delicious.TagsManager" ) {
+			return (JLD_Object) new org.jldupont.delicious.TagsManager(id);
+		}
+		if ( className == "org.jldupont.delicious.TagsManagerCommand" ) {
+			return (JLD_Object) new org.jldupont.delicious.TagsManagerCommand(id);
+		}
+		
 		// org.jldupont.localstore
 		// =======================
 		if ( className == "org.jldupont.delicious.LocalObjectStore" ) {
@@ -122,9 +165,9 @@ public class Factory
 		}
 		
 			
-		Logger.log( "FACTORY: ERROR CREATING INSTANCE OF CLASS: " + className );
+		Logger.log( "FACTORY: <b>ERROR</b> CREATING INSTANCE OF CLASS: " + className );
 		
 		return null;
 	}
 	
-}
+}//end

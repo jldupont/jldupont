@@ -5,6 +5,7 @@
  */
 package org.jldupont.command;
 
+//import org.jldupont.system.JLD_Object;
 
 public class CommandStatus {
 
@@ -36,6 +37,7 @@ public class CommandStatus {
 	/*===================================================================
 	 * Constructors 
 	 ===================================================================*/
+	
 	/**
 	 * Constructor for OK state
 	 */

@@ -38,6 +38,11 @@ public class TagsManager
 		setup();
 	}
 	
+	public TagsManager( String id ) {
+		super( thisClass, id, true );
+		setup();
+	}
+	
 	public TagsManager( String classe, String id, boolean recyclable ) {
 		super( classe, id, recyclable );
 		setup();		
