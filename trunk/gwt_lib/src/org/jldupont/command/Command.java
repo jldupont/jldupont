@@ -6,6 +6,7 @@
 package org.jldupont.command;
 
 import org.jldupont.system.JLD_Object;
+import org.jldupont.system.Logger;
 
 abstract public class Command 
 	extends JLD_Object 
@@ -13,8 +14,10 @@ abstract public class Command
 
 	/**
 	 * CommandStatus
+	 * pending: false
+	 * status: false
 	 */
-	CommandStatus status = new CommandStatus();
+	CommandStatus status = new CommandStatus( false, false );
 	
 	/**
 	 * CommandParameter
@@ -78,6 +81,12 @@ abstract public class Command
 	 */
 	public CommandStatus run( CommandParameters p ) {
 		
+		Logger.logInfo(this.classe+"::Command.run: start");
+		
+		// status
+		this.status.setState(false, false);
+		
+		// set parameters
 		this.param = p;
 		
 		// run our command
@@ -85,6 +94,7 @@ abstract public class Command
 
 		// if we failed, then don't bother with the rest of the chain
 		if ( !this.status.isPending() && !this.status.getStatusCode() ) {
+			Logger.logWarn(this.classe+"::Command.run: failed");
 			return this.status;
 		}
 		
@@ -94,20 +104,25 @@ abstract public class Command
 		
 		// End-of-Chain:
 		//  if no next is present, then return our status
-		if ( nextStatus == null )
+		if ( nextStatus == null ) {
+			Logger.logInfo(this.classe+"::Command.run: end-of-chain");
 			return this.status;
+		}
+			
 		
 		// if next command in the chain is pending,
 		// then the whole chain is pending
 		if ( nextStatus.isPending() ) {
 			this._onPending();
+			Logger.logInfo(this.classe+"::Command.run: next-in-chain: pending");
 			return nextStatus;
 		}
 		
 		// if the next command in the chain isn't successful,
 		// then the whole chain is declared unsuccessful too.
-		if ( status.getStatusCode() == false ) {
+		if ( nextStatus.getStatusCode() == false ) {
 			this._onError();
+			Logger.logWarn(this.classe+"::Command.run: next-in-chain: failed");			
 			return nextStatus;
 		}
 		

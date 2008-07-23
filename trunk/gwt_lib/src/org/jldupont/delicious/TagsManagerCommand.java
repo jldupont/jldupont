@@ -2,6 +2,19 @@
  * TagsManagerCommand
  * 
  * @author Jean-Lou Dupont
+ * 
+ * @example
+ * 	// need to set storagename used for localstore
+ *  obj.setStorageName("database-name");
+ *  
+ *  // set the 'next' pointer [optional]
+ *  obj.setNext( CommandInterface me, CommandInterface next );
+ *  
+ *  // call run() method with appropriate parameter
+ *  // which include:
+ *  //  user: username
+ *  //  ttl:  time-to-live for localstore
+ *  obj.run(CommandParameters p);
  */
 package org.jldupont.delicious;
 
@@ -75,11 +88,12 @@ public class TagsManagerCommand
 		// extract 'user' parameter
 		String user = (String) this.param.getParameter("user");
 		if ( user == null )
-			throw new LoggableRuntimeException( "TagsManager::_run: parameter 'user' not found" );
+			throw new LoggableRuntimeException( "TagsManagerCommand::_run: parameter 'user' not found" );
 
+		// extract the 'ttl' parameter
 		Object o = this.param.getParameter("ttl");
 		if ( o == null )
-			throw new LoggableRuntimeException( "TagsManager::_run: parameter 'ttl' not found" );
+			throw new LoggableRuntimeException( "TagsManagerCommand::_run: parameter 'ttl' not found" );
 		
 		// Integer are passed in string format...
 		int ttl = Integer.parseInt( (String) o);
@@ -90,7 +104,7 @@ public class TagsManagerCommand
 		try {
 			tl = this.manager.get( user, ttl );
 		} catch(RuntimeException e) {
-			throw new LoggableRuntimeException( "TagsManager::_run: " + e.getMessage() );			
+			throw new LoggableRuntimeException( "TagsManagerCommand::_run: " + e.getMessage() );			
 		} finally {
 			this._onError();
 		}
@@ -99,6 +113,7 @@ public class TagsManagerCommand
 		// in the localstore then...
 		if ( tl != null ) {
 			// queue the result for the chain's benefit
+			Logger.logInfo(this.classe+"._run: setting parameterList object with list of tags");
 			this.param.setParameter( "taglist", tl );
 			return new CommandStatus( /*OK*/ );
 		}
@@ -126,7 +141,8 @@ public class TagsManagerCommand
 		}
 	
 		//TODO what about empty list?
-		this.param.setParameter("taglist", c);
+		Logger.logInfo(this.classe+".fireCallEvent: setting parameterList object with 'tagslist' ");
+		this.param.setParameter("taglist", c.getResponseObject());
 			
 		// success? continue chain
 		this.runNext();

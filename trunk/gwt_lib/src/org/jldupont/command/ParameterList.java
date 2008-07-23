@@ -6,6 +6,7 @@
 package org.jldupont.command;
 
 import org.jldupont.system.StdListe;
+import org.jldupont.system.Logger;
 
 public class ParameterList 
 	extends StdListe 
@@ -29,12 +30,12 @@ public class ParameterList
 	 ===================================================================*/
 	
 	public Object getParameter( String key ) {
-		
+		Logger.logDebug(this.classe+".getParameter: getting key["+key+"]");		
 		return this.get(key);
 	}
 	
 	public void   setParameter( String key, Object o ) {
-		
+		Logger.logDebug(this.classe+".setParameter: setting key["+key+"]");
 		this.put(key, o);
 	}
 

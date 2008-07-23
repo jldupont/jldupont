@@ -84,6 +84,17 @@ public class CommandStatus {
 		this.statusCode = false;
 		this.message = new String(msg);
 	}
+
+	/**
+	 * Constructor for error state
+	 * @param msg
+	 */
+	public CommandStatus( String msg, boolean status, int code ) {
+		this.pending = false;
+		this.exitCode = code;
+		this.statusCode = status;
+		this.message = new String(msg);
+	}
 	
 	private void setup( int exitCode, String msg ) {
 		this.exitCode = exitCode;
@@ -139,5 +150,13 @@ public class CommandStatus {
 	
 	public String getMessage() {
 		return this.message;
+	}
+
+	/*===================================================================
+	 * State 
+	 ===================================================================*/
+	public void setState(boolean pending, boolean status) {
+		this.pending = pending;
+		this.statusCode = status;
 	}
 }//end
