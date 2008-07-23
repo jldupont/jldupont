@@ -20,7 +20,7 @@ public interface CommandInterface {
 	
 	/**
 	 * Returns the status code
-	 * @return
+	 * @return boolean
 	 */
 	public boolean getStatusCode();
 	

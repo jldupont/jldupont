@@ -75,9 +75,7 @@ abstract public class Command
 	}
 
 	/**
-	 * @see org.jldupont.command.CommandInterface#run()
-	 * 
-	 * @pattern template_method
+	 * @see org.jldupont.command.CommandInterface#run
 	 */
 	public CommandStatus run( CommandParameters p ) {
 		

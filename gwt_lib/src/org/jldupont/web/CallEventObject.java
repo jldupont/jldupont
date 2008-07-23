@@ -25,7 +25,7 @@ public class CallEventObject
 	
 	/**
 	 * This constructor is used when a timeout event occured
-	 * @todo get rid of 'source' parameter!
+	 * TODO get rid of 'source' parameter!
 	 * @param source
 	 */
 	public CallEventObject( Object source ) {
@@ -47,7 +47,7 @@ public class CallEventObject
 	}
 	/**
 	 * getJSObject
-	 * @return
+	 * @return JavaScript Object
 	 */
 	public JavaScriptObject getJSObject() {
 		return this.jsObj;

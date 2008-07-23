@@ -3,6 +3,8 @@
  */
 package org.jldupont.system;
 
+import com.google.gwt.core.client.GWT;
+
 import org.jldupont.delicious.TagsList;
 import org.jldupont.delicious.TagsFetcher;
 import org.jldupont.delicious.TagsManager;
@@ -50,7 +52,7 @@ public class Factory
 	 * create
 	 * 
 	 * @param className
-	 * @return
+	 * @return JLD_Object
 	 */
 	public static JLD_Object create( String className ) {
 		return create( className, null );
@@ -101,6 +103,8 @@ public class Factory
 	 */
 	protected static JLD_Object createInstance( String className, String id ) {
 
+		//return (JLD_Object) ( GWT.create( org.jldupont.system.JLD_Object.class ));
+		
 		// org.jldupont.system
 		// ===================
 		if ( className == "org.jldupont.system.StdListe" ) {

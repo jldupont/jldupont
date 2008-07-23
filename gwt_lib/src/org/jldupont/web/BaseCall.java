@@ -69,9 +69,9 @@ abstract public class BaseCall
 	 * Fetches the specified resource
 	 * 
 	 * @return boolean
-	 * @throws 
+	 * @throws RuntimeException
 	 */
-	public void call( ) {
+	public void call( ) throws RuntimeException {
 		
 		String cUrl = new String();
 		String p;

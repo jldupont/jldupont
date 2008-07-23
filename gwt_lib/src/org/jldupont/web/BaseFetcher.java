@@ -101,7 +101,7 @@ abstract public class BaseFetcher
 	/**
 	 * fetch
 	 *  This is the main method.
-	 * @return
+	 * @return boolean
 	 */
 	public boolean fetch() {
 	
@@ -171,7 +171,7 @@ abstract public class BaseFetcher
 	 ===================================================================*/
 	/**
 	 * addCallListener
-	 * @param CallListener
+	 * @param s CallListener source
 	 */
 	public void addCallListener(CallListener s) {
 		Logger.logInfo(this.classe+"::BaseFetcher.addCallListener: called.");
@@ -179,7 +179,7 @@ abstract public class BaseFetcher
 	}
 	/**
 	 * removeCallListener
-	 * @param CallListener
+	 * @param s CallListener source
 	 */
 	public void removeCallListener(CallListener s) {
 		Logger.logInfo(this.classe+"::BaseFetcher.removeCallListener: called.");		

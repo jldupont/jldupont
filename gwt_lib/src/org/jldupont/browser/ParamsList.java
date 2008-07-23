@@ -25,8 +25,6 @@ abstract public class ParamsList
 
 	/**
 	 * Constructor
-	 * 
-	 * @param liste String
 	 */
 	public ParamsList( ) {
 		

@@ -16,7 +16,7 @@ public class Factory
 	 * create
 	 * 
 	 * @param className
-	 * @return
+	 * @return JLD_Object
 	 */
 	public static JLD_Object create( String className ) {
 		return create( className, null );

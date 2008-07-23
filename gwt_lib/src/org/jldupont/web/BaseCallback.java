@@ -47,7 +47,6 @@ public class BaseCallback
 	 ===================================================================*/
 	/**
 	 * create
-	 * @return void
 	 */
 	public void create() {
 

@@ -10,8 +10,6 @@ public class URLParamsList
 	
 	/**
 	 * Constructor
-	 * 
-	 * @param liste String
 	 */
 	public URLParamsList( ) {
 		super();
