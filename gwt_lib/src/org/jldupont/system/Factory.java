@@ -25,6 +25,8 @@ import java.util.HashMap;
 public class Factory 
 	extends Object {
 
+	final static String thisClass = "org.jldupont.system.Factory";
+	
 	static HashMap map = new HashMap();
 	
 	/**
@@ -76,7 +78,7 @@ public class Factory
 		obj = pool.get( className );
 		if ( obj != null ) {
 			rid = obj.getId();
-			Logger.log( "FACTORY: retrieved object of class: " + className + " id("+rid+")" +" asked id("+id+")" );
+			Logger.logDebug( "FACTORY: retrieved object of class: " + className + " id("+rid+")" +" asked id("+id+")" );
 			
 			// clean-up!
 			obj._clean();
@@ -85,7 +87,7 @@ public class Factory
 		}
 		
 		// no luck, create one from scratch
-		Logger.log( "FACTORY: creating object of class: " + className );		
+		Logger.logDebug( "FACTORY: creating object of class: " + className );		
 		
 		return createInstance( className, id );
 	}
@@ -116,7 +118,11 @@ public class Factory
 		// ===================
 //		if ( className == "org.jldupont.command.CommandStatus" )
 //			return (JLD_Object) new org.jldupont.command.CommandStatus( );
-		
+
+		// org.jldupont.widget_commands
+		// ===================
+		if ( className == "org.jldupont.widget_commands.ListeUpdaterCommand" )
+			return (JLD_Object) new org.jldupont.widget_commands.ListeUpdaterCommand( );
 		
 		// org.jldupont.browser
 		// =======================
@@ -173,10 +179,7 @@ public class Factory
 		if ( className == "org.jldupont.localstore.GearsObjectStore" )
 			return (JLD_Object) new org.jldupont.localstore.GearsObjectStore(id);
 		
-			
-		Logger.log( "FACTORY: <b>ERROR</b> CREATING INSTANCE OF CLASS: " + className );
-		
-		return null;
+		throw new LoggableRuntimeException( thisClass+".createInstance: CREATING INSTANCE OF CLASS: " + className );
 	}
 	
 }//end

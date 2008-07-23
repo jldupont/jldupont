@@ -7,6 +7,7 @@
 package org.jldupont.system;
 
 import org.jldupont.system.JLD_Object;
+import org.jldupont.system.Logger;
 import org.jldupont.system.IteratorEx;
 
 import java.util.HashMap;
@@ -63,6 +64,8 @@ public class StdListe
 	 * @return
 	 */
 	public Object get(String key) {
+		assert( this.liste != null );
+		Logger.logDebug(this.classe+"::StdListe.get: key["+key+"]");
 		return this.liste.get(key);
 	}
 	/**
@@ -72,6 +75,8 @@ public class StdListe
 	 * @return void 
 	 */
 	public void put(String key, Object value) {
+		assert( this.liste != null );		
+		Logger.logDebug(this.classe+"::StdListe.set: key["+key+"]");		
 		this.liste.put(key, value);
 	}
 	/**
@@ -79,6 +84,7 @@ public class StdListe
 	 * @return void
 	 */
 	public void clear() {
+		Logger.logDebug(this.classe+"::StdListe.clear");
 		this.liste.clear();
 	}
 	/**
@@ -87,6 +93,7 @@ public class StdListe
 	 * @param key
 	 */
 	public void remove(String key) {
+		Logger.logDebug(this.classe+"::StdListe.remove: key["+key+"]");		
 		this.liste.remove(key);
 	}
 	/*===================================================================
@@ -94,18 +101,21 @@ public class StdListe
 	 ===================================================================*/
 	
 	public boolean hasNext() {
-		
+		Logger.logDebug(this.classe+"::StdListe.hasNext");		
 		return this.keysIterator.hasNext();
 	}
 	public Object next() {
 		
 		String key = (String) this.keysIterator.next();
+		Logger.logDebug(this.classe+"::StdListe.next: key["+key+"]");
+		
 		Object value = this.liste.get(key);
 		
+		Logger.logDebug(this.classe+"::StdListe.next: value["+value+"]");		
 		return value;
 	}
 	public void remove() {
-		//NOOP
+		//TODO
 	}
 	/**
 	 * Reset the iterator interface

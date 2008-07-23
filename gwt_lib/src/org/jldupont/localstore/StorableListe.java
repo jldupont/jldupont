@@ -51,7 +51,7 @@ public class StorableListe
 	 *  The object's true representation is opaque to the LocalStore 
 	 */
 	public String getTextRepresentation() {
-		Logger.log(thisClass+".getTextRepresentation");
+		Logger.logDebug(thisClass+".getTextRepresentation");
 		return this.liste.toString();		
 	}
 	
@@ -63,7 +63,7 @@ public class StorableListe
 	 *  TODO check if the 'null' values get discarded
 	 */
 	public void createFromTextRepresentation(String s) {
-		Logger.log(thisClass+".createFromTextRepresentation");		
+		Logger.logDebug(thisClass+".createFromTextRepresentation");		
 		this.liste = (JSONObject) JSONParser.parse( s );
 	}
 	

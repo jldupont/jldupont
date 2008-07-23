@@ -13,16 +13,9 @@ public interface UpdateListe {
 	public void clear();
 	
 	/**
-	 * Inserts key at tail
+	 * appends key at tail
 	 * @param key String
 	 */
-	public void insertItem(String key);
-	
-	/**
-	 * Inserts key at index
-	 * @param key
-	 * @param index
-	 */
-	public void insertItem(String key, int index);
+	public void addItem(String key);
 	
 }//end

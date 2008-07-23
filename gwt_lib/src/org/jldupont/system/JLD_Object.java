@@ -86,7 +86,7 @@ abstract public class JLD_Object
 		this.classe = classe;
 		this.id = id;
 		this.recyclable = recyclable;
-		Logger.log("JLD_Object: creating object class["+classe+"] id["+id+"] uid["+this.uid+"]");		
+		Logger.logDebug("JLD_Object: creating object class["+classe+"] id["+id+"] uid["+this.uid+"]");		
 	}
 	/*===================================================================
 	 * PUBLIC 
@@ -158,10 +158,10 @@ abstract public class JLD_Object
 		
 		if ( getRecyclable() ) {
 			ObjectPool pool = (ObjectPool) Factory.create("ObjectPool", "recycle" );
-			Logger.log( "JLD_OBJECT: sending object with id("+id+") to the recycle bin" );
+			Logger.logDebug( "JLD_OBJECT: sending object with id("+id+") to the recycle bin" );
 			pool.recycle( this );
 		} else {
-			Logger.log( "JLD_OBJECT: class (" + getClasse() +") is not recyclable" );
+			Logger.logWarn( "JLD_OBJECT: class (" + getClasse() +") is not recyclable" );
 		}
 	}
 
@@ -200,7 +200,7 @@ abstract public class JLD_Object
 	 */
 	public void timerExpiredEvent() {
 		this.isBusy = false;
-		Logger.log(this.classe+".timerExpiredEvent: default method called");
+		Logger.logWarn(this.classe+".timerExpiredEvent: default method called");
 	}
 	/**
 	 * Cancels the current operation
@@ -210,9 +210,9 @@ abstract public class JLD_Object
 		if ( this.timer != null ) {
 			this.timer.cancel();
 			this.isBusy = false;
-			Logger.log(this.classe+".timerCancel: method called");			
+			Logger.logWarn(this.classe+".timerCancel: method called");			
 		} else {
-			Logger.log(this.classe+".timerCancel: NO TIMER active!");	
+			Logger.logWarn(this.classe+".timerCancel: NO TIMER active!");	
 		}
 		
 	}

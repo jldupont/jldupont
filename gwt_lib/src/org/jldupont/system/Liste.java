@@ -30,6 +30,8 @@ public class Liste
 	 */
 	protected JSONObject liste = null;
 	
+	Set keys = null;
+	
 	Iterator iterator = null;
 	
 	/*===================================================================
@@ -54,11 +56,20 @@ public class Liste
 	 * IteratorEx 
 	 ===================================================================*/
 	public boolean hasNext() {
+		//Logger.logDebug(this.classe+"::Liste.hasNext");
 		return this.iterator.hasNext();
 	}
 
 	public Object next() {
-		return this.iterator.next();
+		
+		String key = (String) this.iterator.next();
+		//Logger.logDebug(this.classe+"::Liste.next, key["+key+"]");
+		
+		return key;
+		//Object value = this.liste.get(key);
+		
+		//Logger.logDebug(this.classe+"::Liste.next, value["+value+"]");		
+		//return value;
 	}
 	
 	public void remove() {
@@ -66,8 +77,9 @@ public class Liste
 	}
 	
 	public void reset() {
-		Set keyset = this.liste.keySet();
-		this.iterator = keyset.iterator();
+		//Logger.logDebug(this.classe+"::Liste.reset");		
+		this.keys = this.liste.keySet();
+		this.iterator = this.keys.iterator();
 	}
 	
 	/*===================================================================
@@ -133,6 +145,7 @@ public class Liste
 		this.liste=null;
 		this.liste=new JSONObject();
 		this.iterator = null;
+		this.keys = null;
 	}
 	
 }//end class
