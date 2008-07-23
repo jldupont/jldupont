@@ -61,7 +61,7 @@ public class StdListe
 	/**
 	 * Getter
 	 * @param key
-	 * @return
+	 * @return Object
 	 */
 	public Object get(String key) {
 		assert( this.liste != null );
@@ -72,7 +72,6 @@ public class StdListe
 	 * Setter
 	 * @param key
 	 * @param value
-	 * @return void 
 	 */
 	public void put(String key, Object value) {
 		assert( this.liste != null );		
@@ -81,7 +80,6 @@ public class StdListe
 	}
 	/**
 	 * Clear
-	 * @return void
 	 */
 	public void clear() {
 		Logger.logDebug(this.classe+"::StdListe.clear");

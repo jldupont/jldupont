@@ -23,7 +23,7 @@ public interface ObjectStoreInterface {
 	 *  browser sessions.
 	 *  
 	 * @return boolean
-	 * @throws
+	 * @throws LocalStoreException
 	 */
 	public boolean isPersistent() throws LocalStoreException;
 	
@@ -54,6 +54,17 @@ public interface ObjectStoreInterface {
 	 * @return null if none
 	 */
 	public LocalObjectStoreInterface get(String key) throws LocalStoreException;
+
+	/**
+	 * Gets an object from the store
+	 * - if TTL == 0  ==> use DEFAULT_TTL
+	 * 
+	 * @param key
+	 * @param ttl
+	 * @return object
+	 * @return null if none
+	 */
+	public LocalObjectStoreInterface get(String key, int ttl) throws LocalStoreException;
 	
 	/**
 	 * Verifies if an object is in the store
@@ -62,6 +73,14 @@ public interface ObjectStoreInterface {
 	 */
 	public boolean containsKey(String key) throws LocalStoreException;
 
+	/**
+	 * Deletes the specified key
+	 * 
+	 * @param key
+	 * @throws LocalStoreException
+	 */
+	public void delete(String key) throws LocalStoreException;
+	
 	/**
 	 * Returns the timestamp information
 	 * 

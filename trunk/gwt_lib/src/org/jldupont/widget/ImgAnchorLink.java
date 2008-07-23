@@ -12,13 +12,13 @@ import com.google.gwt.user.client.ui.HasName;
 import com.google.gwt.user.client.ui.Widget; 
 
 /**
- * Basic implementation of raw Anchor <a> widget
+ * Basic implementation of raw Anchor widget
  * @see http://www.w3schools.com/tagsFetcher/tag_a.asp
  * @author Peter Blazejewicz
  * @author Jean-Lou Dupont
  */
 
-public class ImgAnchorLink extends Widget 
+public class ImgAnchorLink extends Widget
 	implements HasHTML, HasName {
 
   /* ===============================================================================

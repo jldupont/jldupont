@@ -1,4 +1,10 @@
 /**
+ * Base Class for all objects
+ *  Provides:
+ *  - unique ids
+ *  - object pooling / recycling services
+ *  - ASYNC operation support (using timers)
+ * 
  * @author Jean-Lou Dupont
  *
  */
@@ -238,4 +244,5 @@ abstract public class JLD_Object
 	protected String _exId() {
 		return null;
 	}
+	
 }//end class

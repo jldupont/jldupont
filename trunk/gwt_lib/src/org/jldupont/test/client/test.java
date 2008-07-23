@@ -123,26 +123,4 @@ public class test
 		
 	}//[onModuleLoad]
 	
-	private native void testObjectLiteral() /*-{
-	
-		var obj = {
-			id: "666"
-		};
-		obj.id2 = function() {
-			alert("in obj.id2");
-		}
-		obj.id2();
-}-*/;
-	
-	
-	private native void testToSource() /*-{
-		alert( arguments.callee );
-		return;
-		this.@org.jldupont.test.client.test::test2();
-	}-*/;
-
-	private void test2() {
-		Window.alert("test2!!");
-	}
-	
 }//end class

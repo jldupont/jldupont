@@ -72,6 +72,8 @@ public class TagsManager
 	}
 	/**
 	 * Get with default ttl
+	 * If TTL == -1  ==> fetch remote copy
+	 * 
 	 * @param user
 	 * @param ttl
 	 * @return TagsList
@@ -82,10 +84,12 @@ public class TagsManager
 		
 		this.currentUser = new String( user );
 		
-		// try the local copy
-		TagsList tl = this.localFetch(user, ttl);
-		if ( tl != null )
-			return tl;
+		if ( ttl != -1 ) {
+			// try the local copy
+			TagsList tl = this.localFetch(user, ttl);
+			if ( tl != null )
+				return tl;
+		}
 		
 		Logger.logInfo("TagsManager::get: trying remoteFetch");
 		

@@ -102,7 +102,7 @@ public class Liste
 	/**
 	 * Puts a tag in the list
 	 * @param key
-	 * @param count
+	 * @param value
 	 */
 	public void put(String key, String value) {
 		this.liste.put(key, new JSONString(value));
@@ -121,7 +121,7 @@ public class Liste
 	 *  Actually puts a 'null' value instead
 	 *  
 	 * @param key
-	 * @return
+	 * @return JSONValue
 	 */
 	public JSONValue remove(String key) {
 		return this.liste.put(key, JSONNull.getInstance());

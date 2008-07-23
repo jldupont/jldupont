@@ -38,9 +38,8 @@ public class ObjectPool
 	}
 	
 	/**
-	 * 
+	 * recycle 
 	 * @param obj
-	 * @return void
 	 */
 	public void recycle( JLD_Object obj ) {
 		
