@@ -14,7 +14,8 @@ import java.lang.Object;
 import org.jldupont.system.Logger;
 
 abstract public class JLD_Object 
-	extends Object {
+	extends Object 
+	implements Recycle {
 
 	/**
 	 * Instance counter

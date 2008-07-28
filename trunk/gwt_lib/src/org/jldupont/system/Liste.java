@@ -21,7 +21,7 @@ import java.util.Set;
 
 public class Liste 
 	extends JLD_Object 
-	implements IteratorEx {
+	implements IteratorEx, Recycle {
 
 	final static String thisClass = "org.jldupont.system.Liste";
 
