@@ -10,6 +10,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import org.jldupont.command.CommandParameters;
@@ -50,7 +51,7 @@ public class test
 		RootPanel rootPanel = RootPanel.get();
 
 		clickMeButton = new Button();
-		rootPanel.add(clickMeButton, 100, 48);
+		rootPanel.add(clickMeButton, 18, 296);
 		clickMeButton.setText("Fetch TagsFetcher");
 		
 		// TEST
@@ -77,7 +78,7 @@ public class test
 		});
 
 		final Button testTagsmanagerButton = new Button();
-		rootPanel.add(testTagsmanagerButton, 100, 89);
+		rootPanel.add(testTagsmanagerButton, 18, 338);
 		testTagsmanagerButton.setText("Test TagsManager");
 
 		tagsManager = (org.jldupont.delicious.TagsManager) Factory.create("org.jldupont.delicious.TagsManager");		
@@ -94,7 +95,7 @@ public class test
 		// TagsManagerCommand
 		// ==================
 		final Button testTagsmanagercommandButton = new Button();
-		rootPanel.add(testTagsmanagercommandButton, 100, 147);
+		rootPanel.add(testTagsmanagercommandButton, 18, 390);
 		testTagsmanagercommandButton.setWidth("169px");
 		testTagsmanagercommandButton.setText("Test TagsManagerCommand");
 		
@@ -117,6 +118,11 @@ public class test
 				Logger.logDir( cs );
 			}
 		});
+
+		final TabPanel tabPanel = new TabPanel();
+		rootPanel.add(tabPanel, 116, 48);
+		tabPanel.setSize("447px", "237px");
+		tabPanel.selectTab(0);
 		
 		//testToSource();
 		//testObjectLiteral();

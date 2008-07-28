@@ -1,21 +1,9 @@
 """
- @author Jean-Lou Dupont
- 
-1) GET /https://api.del.icio.us/v1/tags/get
+Delicious/post
+@author: Jean-Lou Dupont
 
-<?xml version='1.0' standalone='yes'?>
-<tags>
-  <tag count="1" tag=".net" />
-  <tag count="23" tag="API" />
-  <tag count="1" tag="AmazonWebServices" />
-  <tag count="1" tag="BT" />
-  <tag count="1" tag="Brain" />
-  <tag count="1" tag="Bugzilla" />
-  <tag count="6" tag="CDN" />
-  <tag count="3" tag="DNS" />
-</tags>
+GET /https://api.del.icio.us/v1/posts/get
 
-2) GET /https://api.del.icio.us/v1/posts/get
 <?xml version='1.0' standalone='yes'?>
 <posts dt="2008-07-27" tag="" user="jldupont">
   <post href="http://code.google.com/appengine/docs/urlfetch/fetchfunction.html" 
@@ -35,12 +23,26 @@
         time="2008-07-27T01:52:47Z" />
 </posts>
 
-3) GET /https://api.del.icio.us/v1/tags/bundles/all
-<?xml version='1.0' standalone='yes'?>
-<bundles>
-  <bundle name="php" tags="PEAR-CHANNEL PHING PHPUnit pear php phpdoc" />
-  <bundle name="software" tags="ajax eclipse jquery programming subversion" />
-  <bundle name="my-stuff" tags="my-diagrams my-mindmaps" />
-  <bundle name="telecomm" tags="IP ITU ITU-T atca companies ethernet fcoe semiconductor utca" />
-</bundles>
 """
+
+from Delicious import Tag
+
+class Post(Object):
+    """
+    Delicious/Post
+    Represents a "post" object from Delicious API
+    """
+    def __init__(self):
+        Object.__init__(self)
+        self.href = ""
+        self.description = ""
+        self.extended = ""
+        self.hash = ""
+        self.others = ""
+        self.tag = Tag()
+        self.time = ""
+        
+        
+if (__name__ == "__main__" ):
+    p = Post()
+    
