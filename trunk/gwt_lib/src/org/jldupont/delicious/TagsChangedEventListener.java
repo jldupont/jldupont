@@ -3,8 +3,6 @@
  */
 package org.jldupont.delicious;
 
-import org.jldupont.web.CallListener;
-
 import com.google.gwt.user.client.EventListener;
 
 public interface TagsChangedEventListener 

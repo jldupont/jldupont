@@ -69,6 +69,15 @@ public class TagsFetcher
 	public void setUser( String username ) {
 		this.username = new String( username );
 	}
+	
+	/**
+	 * Sets an URL parameter
+	 * @param param
+	 */
+	public void setParam(String param) {
+		
+	}
+	
 	/**
 	 * Fetches a up-to-date copy of the tags for user
 	 */

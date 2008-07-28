@@ -118,10 +118,10 @@ public class JSONcall
 		}		
 		// create a new script tag element
 		this.scriptElementId = "JSONcall" + String.valueOf(this.scriptElementIdCounter++);
-		Logger.log(this.classe+".setupScriptElement: creating script tag with id[" + this.scriptElementId + "]" );
-		Logger.log(thisClass + ".setupScriptElement: *before* injectScript");
+		// Logger.log(this.classe+".setupScriptElement: creating script tag with id[" + this.scriptElementId + "]" );
+		// Logger.log(thisClass + ".setupScriptElement: *before* injectScript");
 		injectScript( this.scriptElementId, cUrl );
-		Logger.log(thisClass + ".setupScriptElement: *after* injectScript");		
+		// Logger.log(thisClass + ".setupScriptElement: *after* injectScript");		
 		
 		// hope everything went ok...
 		this.eScript = DOM.getElementById( this.scriptElementId );

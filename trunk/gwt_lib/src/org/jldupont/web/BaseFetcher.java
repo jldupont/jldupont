@@ -53,6 +53,9 @@ abstract public class BaseFetcher
 	 */
 	String callbackParameterName = null;
 	
+	/**
+	 * 
+	 */
 	JSONObject currentJSONObj = null;
 	
 	/*===================================================================

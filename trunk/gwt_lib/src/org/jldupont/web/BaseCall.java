@@ -95,7 +95,7 @@ abstract public class BaseCall
 	 * @param value
 	 */
 	public void addParam( String key, String value ) {
-		params.put(key, value);
+		this.params.put(key, value);
 	}
 	/*===================================================================
 	 * DERIVED interface 

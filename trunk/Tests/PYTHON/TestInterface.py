@@ -13,3 +13,9 @@ class X(A,B):
 
 if (__name__ == "__main__" ):
     x=X()
+    
+    
+"""
+A.__init__
+B.__init__
+"""
