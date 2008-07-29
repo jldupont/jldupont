@@ -21,7 +21,7 @@ import java.util.Set;
 
 public class Liste 
 	extends JLD_Object 
-	implements IteratorEx, Recycle {
+	implements IteratorEx {
 
 	final static String thisClass = "org.jldupont.system.Liste";
 
@@ -110,6 +110,9 @@ public class Liste
 	public void put(String key, int value) {
 		this.liste.put(key, new JSONNumber(value));
 	}
+	public void put(String key, long value) {
+		this.liste.put(key, new JSONNumber(value));
+	}
 	public void put(String key, boolean value) {
 		this.liste.put(key, JSONBoolean.getInstance(value));
 	}
@@ -128,7 +131,9 @@ public class Liste
 	}
 	/**
 	 * toString
-	 * @return String
+	 * Returns a JSON representation of the object.
+	 * 
+	 * @return String JSON representation
 	 */
 	public String toString() {
 		return this.liste.toString();
@@ -142,8 +147,8 @@ public class Liste
 	 */
 	public void _clean() {
 		super._clean();
-		this.liste=null;
-		this.liste=new JSONObject();
+		this.liste = null;
+		this.liste = new JSONObject();
 		this.iterator = null;
 		this.keys = null;
 	}

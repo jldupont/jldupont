@@ -1,9 +1,9 @@
 package org.jldupont.rest;
 
+import com.google.gwt.json.client.JSONValue;
+
 import org.jldupont.system.Liste;
-import org.jldupont.system.Recycle;
 import org.jldupont.system.Logger;
-import org.jldupont.system.IteratorEx;
 
 /**
  * JSONRequest
@@ -37,12 +37,36 @@ public class JSONRequest
 	 ===================================================================*/
 	
 	/**
-	 * 
+	 * setReqParam
 	 * @param key
 	 * @param value
 	 */
-	public void setReqParam(String key, Object value) {
-		
+	public void setReqParam(String key, boolean value) {
+		this.put( key, value );
+	}
+	/**
+	 * setReqParam
+	 * @param key
+	 * @param value
+	 */
+	public void setReqParam(String key, int value) {
+		this.put( key, value );
+	}
+	/**
+	 * setReqParam
+	 * @param key
+	 * @param value
+	 */
+	public void setReqParam(String key, long value) {
+		this.put( key, value );
+	}
+	/**
+	 * setReqParam
+	 * @param key
+	 * @param value
+	 */
+	public void setReqParam(String key, JSONValue value) {
+		this.put( key, value );
 	}
 	
 	/**
@@ -51,10 +75,16 @@ public class JSONRequest
 	 * @return Object
 	 */
 	public Object getReqParam(String key) {
-		
-		return null;
+		return this.get(key);
 	}
 	
+	/**
+	 * Returns a JSON representation of the object
+	 * @return JSONstring
+	 */
+	public String toJSON() {
+		return this.toString();
+	}
 
 	/*===================================================================
 	 * Recycle 
