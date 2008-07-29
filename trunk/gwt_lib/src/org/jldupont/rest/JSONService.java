@@ -7,8 +7,8 @@ import org.jldupont.system.Liste;
 
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.http.client.RequestCallback;
+import com.google.gwt.http.client.RequestException;
 import com.google.gwt.http.client.RequestBuilder;
-import com.google.gwt.http.client.RequestBuilder.Method;
 import com.google.gwt.http.client.Request;
 
 /**
@@ -27,6 +27,10 @@ public class JSONService
 	String entryPoint = null;
 	
 	Request        req = null;
+	
+	int				timeout = 0;
+	String			user = null;
+	String			password = null;
 	
 	/*===================================================================
 	 * CONSTRUCTORS 
@@ -51,11 +55,21 @@ public class JSONService
 	/*===================================================================
 	 * PUBLIC 
 	 ===================================================================*/
-	public boolean doGET( HashMap urlParams, Liste bodyParams, RequestCallback cb ) {
+	public void setUser(String user) {
+		this.user = new String(user);
+	}
+	public void setPassword(String password) {
+		this.password = new String(password);
+	}
+	public void setTimeout(int timeout) {
+		this.timeout = timeout;
+	}
+	
+	public boolean doGET( HashMap urlParams, Liste bodyParams, RequestCallback cb ) throws RequestException {
 		return this.doRequest( RequestBuilder.GET, urlParams, bodyParams, cb);
 	}
 
-	public boolean doPOST( HashMap urlParams, Liste bodyParams, RequestCallback cb ) {
+	public boolean doPOST( HashMap urlParams, Liste bodyParams, RequestCallback cb ) throws RequestException {
 		return this.doRequest( RequestBuilder.POST, urlParams, bodyParams, cb);
 	}
 	public void cancel() {
@@ -70,14 +84,26 @@ public class JSONService
 	/*===================================================================
 	 * PRIVATE 
 	 ===================================================================*/
-	private boolean doRequest(RequestBuilder.Method m, HashMap urlParams, Liste bodyParams, RequestCallback cb ) {
+	private boolean doRequest(RequestBuilder.Method m, HashMap urlParams, Liste bodyParams, RequestCallback cb ) 
+		throws RequestException {
 		
 		// build the URL params list e.g. ?x=y&x2=y2 ...
 		String url = URLParamsList.build( entryPoint, urlParams );
 		
 		RequestBuilder rb = new RequestBuilder( m, url );
 		
-		rb.sendRequest( bodyParams  , callback)
+		rb.setTimeoutMillis(timeout);
+		
+		if (user != null)
+			if ( user.length() != 0 )
+				rb.setUser(user);
+		
+		if (password != null)
+			if (password.length() != 0 )
+				rb.setPassword(password);
+		
+		// Put the 'body' parameters in the request
+		req = rb.sendRequest( bodyParams.toString()  , cb );
 		
 		return false;
 	}
@@ -96,7 +122,9 @@ public class JSONService
 	 ===================================================================*/
 	public void _clean() {
 		super._clean();
-		this.entryPoint = null;
-		this.req = null;
+		
+		entryPoint = null;
+		req = null;
+		timeout = 0;
 	}
 }//
