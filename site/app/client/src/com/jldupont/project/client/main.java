@@ -222,11 +222,12 @@ public class main implements EntryPoint, WindowResizeListener {
 	        	
 	        	String url = text.substring( text.indexOf(":")+1 );
 	        	
+	        	Logger.log("url: " + url );
 	        	if (text.startsWith("login")) {
 	        		loginLogout.setLoginHref( url );
 	        		loginLogout.setState("login");	        		
 	        	} else {
-	        		loginLogout.setLoginHref( url );
+	        		loginLogout.setLogoutHref( url );
 	        		loginLogout.setState("logout");	        		
 	        	}
 	        }

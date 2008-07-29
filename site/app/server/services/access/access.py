@@ -16,16 +16,16 @@ class ServiceAccess( webapp.RequestHandler ):
 
     def get( self, dest_url ):
         remote_addr = self.request.remote_addr
-        logging.info('[access][IP: '+remote_addr )
+        logging.info('[access][IP: '+remote_addr +']')
         
         user = users.get_current_user()
         login_url = users.create_login_url( dest_url )
         logout_url = users.create_logout_url( dest_url )
         
         if (user):        
-            self.response.out.write( "logout:"+ logout_url + "\nlogin:" + login_url );
+            self.response.out.write( "logout:"+ logout_url );
         else:
-            self.response.out.write( "login:"+ login_url + "\nlogout:" + logout_url );
+            self.response.out.write( "login:"+ login_url );
 
 #/**
 # *  Initialize http handler
