@@ -44,3 +44,64 @@
   <bundle name="telecomm" tags="IP ITU ITU-T atca companies ethernet fcoe semiconductor utca" />
 </bundles>
 """
+
+"""
+ @author Jean-Lou Dupont
+"""
+import os
+import sys
+import logging
+
+import wsgiref.handlers
+from google.appengine.ext import webapp
+from google.appengine.api import urlfetch
+
+class ServiceDelicious( webapp.RequestHandler ):
+    """
+        /services/delicious/(.*)/(.*)
+        
+        /services/delicious/update
+        
+        /services/delicious/tags/get
+        
+        /services/delicious/posts/all
+        /services/delicious/posts/dates
+        /services/delicious/posts/get
+        /services/delicious/posts/recent
+        
+        /services/delicious/bundles/all
+    """
+    
+    deliciousAPI = "https://api.del.icio.us/v1/"
+    
+    def __init__(self):
+        pass
+
+    methods = [ 'update', 'tags', 'posts', 'bundles' ]
+    
+    def get( self, method, action ):
+        if ( method not in self.methods ):
+            self.response.set_status( 400 );
+            return
+        logging.info( "GET method(%s), action(%s), query: (%s)" %  (method, action, self.request.query_string ) )
+        try:
+            logging.info( "HEADERS (%s)" %  (self.request.headers ) )
+            logging.info( "COOKIES (%s)" %  (self.request.cookies ) )
+            #logging.info( "BODY (%s)" %  (self.request.body ) )
+            self.response.headers['Authorization'] = self.request.headers['Authorization']
+            
+        except:
+            pass
+        
+        
+#/**
+# *  Initialize http handler
+# */
+def main():
+  application = webapp.WSGIApplication([('/services/delicious/(.*?)/(.*)', ServiceDelicious)], debug=True)
+  wsgiref.handlers.CGIHandler().run(application)
+
+# Bootstrap
+#  It all starts here
+if __name__ == "__main__":
+    main()
