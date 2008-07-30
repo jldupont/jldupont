@@ -69,7 +69,7 @@ class ServiceDelicious( webapp.RequestHandler ):
         /services/delicious/posts/get
         /services/delicious/posts/recent
         
-        /services/delicious/bundles/all
+        /services/delicious/tags/bundles/all
     """
     
     deliciousAPI = "https://api.del.icio.us/v1/"
@@ -83,22 +83,29 @@ class ServiceDelicious( webapp.RequestHandler ):
         if ( method not in self.methods ):
             self.response.set_status( 400 );
             return
-        logging.info( "GET method(%s), action(%s), query: (%s)" %  (method, action, self.request.query_string ) )
+        queryString = self.request.query_string
+        self.response.headers['WWW-Authenticate'] = 'Basic realm="jldupont/services/delicious"';
         try:
-            logging.info( "HEADERS (%s)" %  (self.request.headers ) )
-            logging.info( "COOKIES (%s)" %  (self.request.cookies ) )
-            #logging.info( "BODY (%s)" %  (self.request.body ) )
-            self.response.headers['Authorization'] = self.request.headers['Authorization']
-            
+            self.response.headers['Authorization'] = self.request.headers['Authorization'] 
         except:
-            pass
+            self.response.set_status( 401 );
+            return
         
+        url = self.deliciousAPI+method+"/"+action+"?"+queryString
+        response = urlfetch.fetch( url=url, method='GET', headers= { "Authorization":self.request.headers['Authorization']} );
+        self.response.headers['Content-Type'] = 'text/xml; charset=utf-8'     
+        self.response.headers = response.headers
+        self.response.out.write( response.content )
+        self.response.set_status( response.status_code )
+  
+        #Can't use this
+        #self.response.headers['Connection'] = 'close' 
         
 #/**
 # *  Initialize http handler
 # */
 def main():
-  application = webapp.WSGIApplication([('/services/delicious/(.*?)/(.*)', ServiceDelicious)], debug=True)
+  application = webapp.WSGIApplication([('/services/delicious/v1/(.*?)/(.*)', ServiceDelicious)], debug=True)
   wsgiref.handlers.CGIHandler().run(application)
 
 # Bootstrap
