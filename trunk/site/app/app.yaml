@@ -29,8 +29,8 @@ handlers:
 - url: /services/echo/(.*)/
   script: server/services/echo/echo.py
 
-- url: /services/delicious/(.*)
-  script: server/services/delicious/main.py
+- url: /services/delicious/v1/(.*)
+  script: server/services/delicious/v1.py
 
 #CLIENT
 #======
