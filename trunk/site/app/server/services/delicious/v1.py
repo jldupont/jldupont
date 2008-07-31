@@ -92,7 +92,7 @@ class ServiceDelicious( webapp.RequestHandler ):
             return
         
         url = self.deliciousAPI+method+"/"+action+"?"+queryString
-        response = urlfetch.fetch( url=url, method='GET', headers= { "Authorization":self.request.headers['Authorization']} );
+        response = urlfetch.fetch( url=url, method='GET', headers= { "Authorization":self.request.headers['Authorization'] } );
         self.response.headers['Content-Type'] = 'text/xml; charset=utf-8'     
         self.response.headers = response.headers
         self.response.out.write( response.content )
