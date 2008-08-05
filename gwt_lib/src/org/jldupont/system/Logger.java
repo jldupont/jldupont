@@ -4,6 +4,8 @@
  */
 package org.jldupont.system;
 
+import com.google.gwt.core.client.GWT;
+
 public class Logger {
 
 	public final static int INFO  = 0;
@@ -13,6 +15,8 @@ public class Logger {
 	
 	public static void log( String msg ) {
 		
+		GWT.log(msg, null);
+		
 		if ( isAvailable() == false )
 			return;
 		
@@ -20,31 +24,38 @@ public class Logger {
 	}
 
 	public static void logError( String msg ) {
+		GWT.log(msg, null);
 		if ( isAvailable() == false ) return;
 		error(msg);
 	}
 
 	public static void logInfo( String msg ) {
+		GWT.log(msg, null);
 		if ( isAvailable() == false ) return;		
 		info(msg);
 	}
 
 	public static void logDebug( String msg ) {
+		GWT.log(msg, null);
 		if ( isAvailable() == false ) return;		
 		debug(msg);
 	}
 	
 	public static void logWarn( String msg ) {
+		GWT.log(msg, null);
 		if ( isAvailable() == false ) return;		
 		warn(msg);
 	}
 	
 	public static void logDir( Object obj ) {
+		
 		if ( isAvailable() == false ) return;		
 		dir( obj );
 	}
 	
 	public static void log( String msg, int code ) {
+		
+		GWT.log(msg, null);
 		
 		if ( isAvailable() == false )
 			return;
