@@ -108,25 +108,28 @@ public class ImgAnchorLink extends Widget
    ===============================================================================*/
   
   public void setImgUrl(String url) {
-	  // if the img tag isn't created yet, go create it
+	  Element img = createImgElement();
+	  
+	  // set the img tag src attribute
+	  DOM.setImgSrc(img, url);
+  }
+  
+  public void setImgClass( String classe ) {
+	  Element img = createImgElement();
+	  
+	  DOM.setElementAttribute( img, "class", classe == null ? "" : classe);
+  }
+  
+  private Element createImgElement() {
 	  Element $this = getElement();
 	  Element img = DOM.getChild( $this, 0);
 	  
 	  if ( img == null ) {
 		  img = DOM.createImg();
 		  DOM.insertChild($this, img, 0);
-	  } 
-	  // set the img tag src attribute
-	  DOM.setImgSrc(img, url);
-  }
-  
-  public void setImgClass( String classe ) {
-	  Element $this = getElement();
-	  Element img = DOM.getChild( $this, 0);
-	  
-	  if ( img != null ) {
-	  	  DOM.setElementAttribute( img, "class", classe == null ? "" : classe);
 	  }
+	  
+	  return img;
   }
   /* ===============================================================================
    *  PRIVATE
