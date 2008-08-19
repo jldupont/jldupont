@@ -8,9 +8,12 @@ package org.jldupont.widget;
 public class LoginLogout 
 	extends ImgAnchorLink {
 
+	public final static int STATE_LOGIN 	= 0;
+	public final static int STATE_LOGOUT	= 1;
+	
 	// Image URLs
-	final static String img_login    = "login.gif";
-	final static String img_logout   = "logout.gif";
+	final static String img_login    = "login.png";
+	final static String img_logout   = "logout.png";
 	
 	// Tooltips
 	final static String title_login  = "Login"; 
@@ -21,6 +24,7 @@ public class LoginLogout
 	
 	public LoginLogout() {
 		super();
+		setState("login");
 	}
 
 	public void setLoginHref(String url) {
@@ -41,4 +45,17 @@ public class LoginLogout
 		}
 	}
 		
+	public void setState(int state, String url) {
+		
+		if (STATE_LOGIN == state) {
+			this.setImgUrl(img_login);
+			this.setTitle(title_login);
+			this.setHref(url);
+		} else {
+			this.setImgUrl(img_logout);
+			this.setTitle(title_logout);
+			this.setHref(url);
+		}
+	}
+	
 }//end

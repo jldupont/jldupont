@@ -335,7 +335,7 @@ public class GearsObjectStore
 	/*===================================================================
 	 * PRIVATE 
 	 ===================================================================*/
-	private static native boolean isGearsInstalled() /*-{
+	public static native boolean isGearsInstalled() /*-{
 		try {
 			return $wnd.google.gears.factory != null;
 		} catch (e) {
