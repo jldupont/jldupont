@@ -26,7 +26,8 @@ public class ImgAnchorLink extends Widget
    ===============================================================================*/
 	
   public ImgAnchorLink() {
-    setElement(DOM.createAnchor());
+	  super();
+	  setElement(DOM.createAnchor());
   }
   /**
    * Get Href from anchor element
