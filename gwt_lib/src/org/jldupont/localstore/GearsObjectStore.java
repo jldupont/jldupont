@@ -8,14 +8,12 @@
  */
 package org.jldupont.localstore;
 
-import org.jldupont.system.Factory;
 import org.jldupont.system.Logger;
 import org.jldupont.system.Time;
 
-import com.google.gwt.gears.core.client.GearsException;
-import com.google.gwt.gears.database.client.Database;
-import com.google.gwt.gears.database.client.DatabaseException;
-import com.google.gwt.gears.database.client.ResultSet;
+import com.google.gwt.gears.client.database.Database;
+import com.google.gwt.gears.client.database.DatabaseException;
+import com.google.gwt.gears.client.database.ResultSet;
 
 public class GearsObjectStore 
 	extends BaseObjectStore 
@@ -223,7 +221,7 @@ public class GearsObjectStore
 		// an empty object of the required type
 		// The factory returns 'null' if it wasn't
 		// able to comply.
-		obj = (LocalObjectStoreInterface) Factory.create(type);
+		obj = (LocalObjectStoreInterface) org.jldupont.system.Factory.create(type);
 		if (obj==null) {
 			Logger.logError(thisClass+".get: exception raised whilst using Factory." );
 			throw new LocalStoreException( thisClass+".get: cannot create an object of type["+type+"]" );
@@ -314,12 +312,10 @@ public class GearsObjectStore
 	protected void createDatabase() throws LocalStoreException {
 		Logger.logInfo("GearsObjectStore::createDatabase");
 		
-		try {
-			this.db = new Database( this.storageName );
-		} catch(GearsException e) {
-			Logger.logError(thisClass+"::createDatabase: exception raised whilst creating Database object instance. Msg= " + e.getMessage());
-			throw new LocalStoreException( e.getMessage() );
-		}
+		com.google.gwt.gears.client.Factory factory = com.google.gwt.gears.client.Factory.getInstance();
+		
+		this.db = factory.createDatabase();
+		this.db.open(this.storageName);
 		
 		try {
 			
