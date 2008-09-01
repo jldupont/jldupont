@@ -6,6 +6,12 @@ runtime: python
 
 handlers:
 
+#BLOGGER
+#=======
+
+- url: /scripts
+  static_dir: scripts
+
 #SERVER
 #======
 
