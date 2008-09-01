@@ -4,9 +4,14 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.user.client.ui.DeckPanel;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.HorizontalSplitPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.TabBar;
+import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -37,11 +42,27 @@ public class main implements EntryPoint {
 		textBox.setVisibleLength(80);
 		textBox.setWidth("100%");
 
-		final FlexTable flexTableBody = new FlexTable();
-		verticalPanel.add(flexTableBody);
-		flexTableBody.setWidth("100%");
-		verticalPanel.setCellHeight(flexTableBody, "100%");
-		verticalPanel.setCellWidth(flexTableBody, "100%");
+		final HorizontalSplitPanel horizontalSplitPanel = new HorizontalSplitPanel();
+		verticalPanel.add(horizontalSplitPanel);
+		horizontalSplitPanel.setSize("100%", "100%");
+		verticalPanel.setCellHeight(horizontalSplitPanel, "100%");
+		verticalPanel.setCellWidth(horizontalSplitPanel, "100%");
+		horizontalSplitPanel.setSplitPosition("50%");
+
+		final DeckPanel deckPanel = new DeckPanel();
+		horizontalSplitPanel.setLeftWidget(deckPanel);
+		deckPanel.setSize("100%", "100%");
+
+		final TabPanel tabPanel = new TabPanel();
+		horizontalSplitPanel.setRightWidget(tabPanel);
+		tabPanel.selectTab(0);
+		tabPanel.setSize("100%", "100%");
+
+		final TabBar tabBar = new TabBar();
+		tabPanel.add(tabBar, "Tab");
+
+		final TabBar tabBar_1 = new TabBar();
+		tabPanel.add(tabBar_1, "Tab");
 
 		final FlexTable flexTableFooter = new FlexTable();
 		verticalPanel.add(flexTableFooter);
