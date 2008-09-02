@@ -46,8 +46,8 @@ public class TagsList
 	 ===================================================================*/
 	public void putAll( JSONObject obj ) {
 
-		Set set = obj.keySet();
-		Iterator i = set.iterator();
+		Set<String> set = obj.keySet();
+		Iterator<String> i = set.iterator();
 		
 		while( i.hasNext() ) {
 			String key = (String) i.next();

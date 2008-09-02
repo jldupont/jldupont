@@ -30,9 +30,9 @@ public class Liste
 	 */
 	protected JSONObject liste = null;
 	
-	Set keys = null;
+	Set<String> keys = null;
 	
-	Iterator iterator = null;
+	Iterator<String> iterator = null;
 	
 	/*===================================================================
 	 * CONSTRUCTORS 

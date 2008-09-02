@@ -3,24 +3,20 @@
  */
 package org.jldupont.system;
 
-import com.google.gwt.core.client.GWT;
-
-import org.jldupont.delicious.TagsList;
-import org.jldupont.delicious.TagsFetcher;
-import org.jldupont.delicious.TagsManager;
-import org.jldupont.delicious.TagsManagerCommand;
-
 import org.jldupont.browser.URLParamsList;
 import org.jldupont.browser.CookieParamsList;
-
+import org.jldupont.delicious.TagsFetcher;
+/*
+import com.google.gwt.core.client.GWT;
+import org.jldupont.delicious.TagsList;
+import org.jldupont.delicious.TagsManager;
+import org.jldupont.delicious.TagsManagerCommand;
 import org.jldupont.web.JSONcallback;
 import org.jldupont.web.JSONcall;
-
 import org.jldupont.command.CommandStatus;
-
 import org.jldupont.localstore.LocalObjectStore;
 import org.jldupont.localstore.GearsObjectStore;
-
+*/
 import java.lang.Object;
 import java.util.HashMap;
 
@@ -29,7 +25,7 @@ public class Factory
 
 	final static String thisClass = "org.jldupont.system.Factory";
 	
-	static HashMap map = new HashMap();
+	static HashMap<String,String> map = new HashMap<String,String>();
 	
 	/**
 	 * Maps a source class to a destination class

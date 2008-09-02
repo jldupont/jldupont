@@ -14,6 +14,8 @@ import com.google.gwt.json.client.JSONObject;
 public class CallEventObject 
 	extends EventObject {
 
+	final static long serialVersionUID = 0l;
+	
 	JavaScriptObject jsObj = null;
 
 	JSONObject jsonObj;

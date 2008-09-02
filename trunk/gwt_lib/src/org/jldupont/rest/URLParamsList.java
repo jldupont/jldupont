@@ -4,8 +4,6 @@ import java.util.Iterator;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jldupont.system.Liste;
-
 import com.google.gwt.http.client.URL;
 
 /**
@@ -19,9 +17,9 @@ public class URLParamsList {
 		
 	}
 	
-	public static String build( String s, HashMap params ) {
+	public static String build( String s, HashMap<String,String> params ) {
 
-		Iterator iter = params.entrySet().iterator();
+		Iterator<Map.Entry<String,String>> iter = params.entrySet().iterator();
 		String liste = new String( s );
 		String key, value;
 		int j = 0;
@@ -32,7 +30,7 @@ public class URLParamsList {
 				liste += "&";
 			}
 				
-			Map.Entry entry = (Map.Entry)iter.next();
+			Map.Entry<String,String> entry = (Map.Entry<String,String>)iter.next();
 			key = (String)entry.getKey();
 			value = (String)entry.getValue();
 
@@ -50,7 +48,7 @@ public class URLParamsList {
 		
 	}
 	
-	public static String build( HashMap params ) {
+	public static String build( HashMap<String,String> params ) {
 		return build( "", params );
 	}
 	

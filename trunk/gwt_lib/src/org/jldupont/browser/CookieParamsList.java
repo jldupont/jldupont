@@ -12,7 +12,7 @@ import com.google.gwt.user.client.Cookies;
 public class CookieParamsList 
 	extends ParamsList {
 
-	Collection cookies = null;
+	Collection<String> cookies = null;
 	
 	public CookieParamsList() {
 		super();
@@ -21,7 +21,7 @@ public class CookieParamsList
 	protected void extractParams() {
 
 		int j = 0;
-		Iterator i = this.cookies.iterator();
+		Iterator<String> i = this.cookies.iterator();
 		String name = null;
 		
 		while( i.hasNext() && j<MAX_PARAMS ) {

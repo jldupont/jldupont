@@ -10,7 +10,7 @@ import java.util.Iterator;
 // no generics in GWT1.4
 abstract public class ParamsList 
 	extends JLD_Object
-	implements Iterator {
+	implements Iterator<Object> {
 	
 	/**
 	 * Constant 

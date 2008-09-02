@@ -3,7 +3,7 @@
  */
 package org.jldupont.test.client;
 
-import com.google.gwt.json.client.JSONValue;
+//import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.Event;
 
 import com.google.gwt.user.client.ui.ListBox;
@@ -35,7 +35,7 @@ public class TagsChangedListenerTest
 		
 		while( o.hasNext() ) {
 			String key = (String) o.next();
-			JSONValue value = (JSONValue) o.get( key );
+			//JSONValue value = (JSONValue) o.get( key );
 			//Logger.log("key: "+key+" value: "+value );
 			this.lb.addItem(key);
 		}

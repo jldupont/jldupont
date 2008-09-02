@@ -3,7 +3,6 @@ package org.jldupont.rest;
 import com.google.gwt.json.client.JSONValue;
 
 import org.jldupont.system.Liste;
-import org.jldupont.system.Logger;
 
 /**
  * JSONRequest

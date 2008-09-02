@@ -45,7 +45,7 @@ abstract public class BaseFetcher
 	/**
 	 * Listeners
 	 */
-	Vector listeners = null;
+	Vector<CallListener> listeners = null;
 	
 	/**
 	 * Parameter name for the callback field.
@@ -68,7 +68,7 @@ abstract public class BaseFetcher
 	private void setup() {
 		this.jsonc = (JSONcall) Factory.create("org.jldupont.web.JSONcall","attached_to_BaseFetcher");
 		this.jsoncb= (JSONcallback) Factory.create("org.jldupont.web.JSONcallback","attached_to_BaseFetcher");
-		this.listeners = new Vector();
+		this.listeners = new Vector<CallListener>();
 		
 		this.jsoncb.setTarget(this);
 		this.currentJSONObj = null;
@@ -191,7 +191,7 @@ abstract public class BaseFetcher
 	
 	protected void notifyListeners(CallbackResponseObject obj) {
 		
-		Iterator it = this.listeners.iterator();
+		Iterator<CallListener> it = this.listeners.iterator();
 		while (it.hasNext()) {
 			Object o = it.next ();
 		    ((CallListener) o).fireCallEvent( obj );

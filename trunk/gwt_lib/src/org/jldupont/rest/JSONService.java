@@ -65,11 +65,11 @@ public class JSONService
 		this.timeout = timeout;
 	}
 	
-	public boolean doGET( HashMap urlParams, Liste bodyParams, RequestCallback cb ) throws RequestException {
+	public boolean doGET( HashMap<String,String> urlParams, Liste bodyParams, RequestCallback cb ) throws RequestException {
 		return this.doRequest( RequestBuilder.GET, urlParams, bodyParams, cb);
 	}
 
-	public boolean doPOST( HashMap urlParams, Liste bodyParams, RequestCallback cb ) throws RequestException {
+	public boolean doPOST( HashMap<String,String> urlParams, Liste bodyParams, RequestCallback cb ) throws RequestException {
 		return this.doRequest( RequestBuilder.POST, urlParams, bodyParams, cb);
 	}
 	public void cancel() {
@@ -84,7 +84,7 @@ public class JSONService
 	/*===================================================================
 	 * PRIVATE 
 	 ===================================================================*/
-	private boolean doRequest(RequestBuilder.Method m, HashMap urlParams, Liste bodyParams, RequestCallback cb ) 
+	private boolean doRequest(RequestBuilder.Method m, HashMap<String,String> urlParams, Liste bodyParams, RequestCallback cb ) 
 		throws RequestException {
 		
 		// build the URL params list e.g. ?x=y&x2=y2 ...
