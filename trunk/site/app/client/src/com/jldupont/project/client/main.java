@@ -211,7 +211,9 @@ public class main implements EntryPoint, WindowResizeListener {
 		RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, loginUrls);
 
 	    try {
+	    	@SuppressWarnings("unused")
 	      Request response = builder.sendRequest(null, new RequestCallback() {
+	    	  
 	        public void onError(Request request, Throwable exception) {
 		    	Logger.log("setupLoginLogout: error");
 	        }
