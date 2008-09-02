@@ -4,8 +4,6 @@
 package org.jldupont.web;
 
 import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.user.client.Window;
-
 import org.jldupont.system.JLD_Object;
 import org.jldupont.system.Logger;
 

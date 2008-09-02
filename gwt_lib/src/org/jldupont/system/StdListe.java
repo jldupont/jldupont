@@ -20,11 +20,11 @@ public class StdListe
 
 	final static String thisClass = "org.jldupont.command.StdListe";
 	
-	HashMap liste = null;
+	HashMap<String,Object> liste = null;
 	
-	Set keys = null;
+	Set<String> keys = null;
 	
-	Iterator keysIterator = null;
+	Iterator<String> keysIterator = null;
 	
 	/*===================================================================
 	 * CONSTRUCTORS  
@@ -42,7 +42,7 @@ public class StdListe
 	
 	private void setup() {
 	
-		this.liste = new HashMap();
+		this.liste = new HashMap<String,Object>();
 	}
 	
 	/*===================================================================

@@ -22,7 +22,7 @@ public class Params
 	/**
 	 * Map of params
 	 */
-	HashMap liste = null;
+	HashMap<String,String> liste = null;
 	
 	public Params( ) {
 		super( "org.jldupont.browser.Params", "id_browser_params" );
@@ -58,7 +58,7 @@ public class Params
 		CookieParamsList	cListe = null;
 		Param p = null;
 		
-		this.liste = new HashMap();
+		this.liste = new HashMap<String,String>();
 		
 		uListe = (URLParamsList) Factory.create( "org.jldupont.browser.URLParamsList" );
 		cListe = (CookieParamsList) Factory.create( "org.jldupont.browser.CookieParamsList" );

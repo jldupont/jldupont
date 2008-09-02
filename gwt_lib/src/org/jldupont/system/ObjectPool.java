@@ -22,7 +22,7 @@ public class ObjectPool
 	/**
 	 * Recycle bin
 	 */
-	static HashMap bin = null;
+	static HashMap<String,Object> bin = null;
 	
 	/*===================================================================
 	 * CONSTRUCTORS 
@@ -34,7 +34,7 @@ public class ObjectPool
 		super( "ObjectPool" );
 		
 		if ( bin == null )
-			bin = new HashMap();
+			bin = new HashMap<String, Object>();
 	}
 	
 	/**

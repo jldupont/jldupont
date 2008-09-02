@@ -24,7 +24,7 @@ abstract public class BaseCall
 	/*....................................................................
 	 * PROPERTIES
 	 ...................................................................*/
-	HashMap params = null;
+	HashMap<String,String> params = null;
 	
 	/**
 	 * Default request timeout
@@ -47,7 +47,7 @@ abstract public class BaseCall
 	public BaseCall(String classe, String id) {
 		super(classe, id );
 		setRecyclable();
-		this.params = new HashMap();
+		this.params = new HashMap<String,String>();
 	}
 
 	/*===================================================================
@@ -113,7 +113,7 @@ abstract public class BaseCall
 	 */
 	protected String buildParamsList() {
 		
-		Iterator iter = this.params.entrySet().iterator();
+		Iterator<Map.Entry<String,String>> iter = this.params.entrySet().iterator();
 		String liste = new String();
 		String key, value;
 		int j = 0;
@@ -124,7 +124,7 @@ abstract public class BaseCall
 				liste += "&";
 			}
 				
-			Map.Entry entry = (Map.Entry)iter.next();
+			Map.Entry<String,String> entry = (Map.Entry<String,String>)iter.next();
 			key = (String)entry.getKey();
 			value = (String)entry.getValue();
 
