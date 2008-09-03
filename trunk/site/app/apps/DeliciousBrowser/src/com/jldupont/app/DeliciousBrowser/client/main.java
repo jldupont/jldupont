@@ -71,3 +71,31 @@ public class main implements EntryPoint {
 		verticalPanel.setCellHeight(flexTableFooter, "25");
 	}
 }
+/** Instapaper.com bookmarklet
+ * 
+	javascript:
+	var d=document,
+		w=window,
+		e=w.getSelection,
+		k=d.getSelection,
+		x=d.selection,
+		s=(e?e():(k)?k():(x?x.createRange().text:0)),
+		f=&#039;http://www.instapaper.com/b&#039;,
+		l=d.location,e=encodeURIComponent,
+		p=&#039;?v=4&amp;k=0ZNeebwuKOyY&amp;u=&#039;+e(l.href) +&#039;&amp;t=&#039;+e(d.title) +&#039;&amp;s=&#039;+e(s),
+		u=f+p;
+		try{
+			if(!/^(.*\.)?instapaper([^.]*)?$/.test(l.host))
+				throw(0);
+			iptstbt();
+		}catch(z){
+			a =function() {
+				if(!w.open(u,&#039;t&#039;,&#039;toolbar=0,resizable=0,status=1,width=250,height=150&#039;))
+				l.href=u;
+			};
+			if(/Firefox/.test(navigator.userAgent))
+				setTimeout(a,0);
+			else a();
+		}
+		void(0)
+*/
