@@ -13,6 +13,7 @@
  	
  		run: function() {
  			var links = document.getElementsByTagName("link");
+ 			var found = false;
  			
  			// nothing here
  			if ( null != links ) {
@@ -21,12 +22,16 @@
 	 				if (("application/rss+xml" == type) || ("application/atom+xml") == type) {
 	 					var href = links[i].getAttribute("href");
 	 					document.location = "http://www.google.com/ig/add?feedurl=" + href;
+	 					found = true;
 	 				}
 	 			}
+	 			
  			}
  			
  			// fall-through if no feed is found
- 			alert( 'No feed link found!' );
+ 			if (!found) {
+ 				alert( 'No feed link found!' );
+ 			}
  		}
  	
  	};
