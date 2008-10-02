@@ -68,9 +68,7 @@ class TextHandler(object):
                 u'Particle': True, u'Anagrams': True,
                 u'Declension': True, u'Interlingua': True,
                 u'Homophones': True, u'Compounds': True,
-                u'Etymology1': True, u'Etymology2': True,
-                
-                
+                u'Etymology1': True, u'Etymology2': True,  
                 }
     
     _lang = re.compile( "==(\w+)=="   )
