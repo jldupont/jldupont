@@ -2,6 +2,8 @@
  * addToGoogleReader
  * 
  * @author: Jean-Lou Dupont 
+ * 
+ * @version: $Id$
  */
 
  // find out if the script is already loaded on the current page
