@@ -21,6 +21,11 @@
 	 				var type = links[i].getAttribute("type");
 	 				if (("application/rss+xml" == type) || ("application/atom+xml") == type) {
 	 					var href = links[i].getAttribute("href");
+	 					
+	 					//is it a relative href or an "absolute" one?
+	 					if ( "http://" != href.substring(7).toLowerCase())
+	 						href = window.location + "/" + href;
+	 					
 	 					document.location = "http://www.google.com/ig/add?feedurl=" + href;
 	 					found = true;
 	 				}
