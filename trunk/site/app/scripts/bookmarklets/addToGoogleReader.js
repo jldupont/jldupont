@@ -25,7 +25,7 @@
 	 					var href = links[i].getAttribute("href");
 	 					
 	 					//is it a relative href or an "absolute" one?
-	 					if ( "http://" != href.substring(7).toLowerCase())
+	 					if ( "http://" != href.substr(0,7).toLowerCase())
 	 						href = window.location + "/" + href;
 	 					
 	 					document.location = "http://www.google.com/ig/add?feedurl=" + href;
