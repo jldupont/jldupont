@@ -6,6 +6,12 @@ runtime: python
 
 handlers:
 
+# iGoogle Gadgets
+# ---------------
+- url: /test_gwt_gadget/(.*)
+  static_files: apps/test_gwt_gadget/www/com.jldupont.project.main/\1
+  upload: apps/test_gwt_gadget/www/com.jldupont.project.main/(.*\.(js|html|css|gif|png|jpg|ico|xml))
+
 #BLOGGER
 #=======
 
