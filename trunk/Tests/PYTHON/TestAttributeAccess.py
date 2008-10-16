@@ -1,3 +1,4 @@
+import random
 
 class X(object):
     def __get__(self, object, var):
@@ -34,6 +35,22 @@ class Game(object):
     def __repr__(self):
         return "Game with var[%i]" % self.var
     
+class A(object):
+    
+    def __init__(self):
+        self.var = random.random()
+        
+    def __getattribute__(self, attr):
+        """Gets ALWAYS called, even for methods
+        """
+        print "class A.__getattribute__ attr[%s]" % attr
+        return object.__getattribute__(self, attr)
+    
+    def showVar(self):
+        """ Does this trigger __getattribute__ ? YES """
+        print "->var=" + str( self.var )
+        
+    
 if __name__ == "__main__":
     x = X()
     x.x
@@ -50,5 +67,13 @@ if __name__ == "__main__":
     
     print Game(777).z1
     print Game(888).z2
+    print "---------------"
+    a = A()
+    print "---------------"
+    a.showVar()
+    print "---------------"
+    print a.var
+    print "---------------"
+    a.some_nonexistent_method()
     
     
