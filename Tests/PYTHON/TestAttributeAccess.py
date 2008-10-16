@@ -22,12 +22,18 @@ class Z(object):
     
     def __get__(self, instance, owner):
         print "class [%s].__get__ instance[%s] owner[%s]" % (self.__class__, instance, owner)
-        return 'intercepted!'
+        return "Z with var[%i]" % self.var
     
 class Game(object):
     z1 = Z(1)
     z2 = Z(2)
-            
+    
+    def __init__(self, var):
+        self.var = var
+        
+    def __repr__(self):
+        return "Game with var[%i]" % self.var
+    
 if __name__ == "__main__":
     x = X()
     x.x
@@ -37,4 +43,12 @@ if __name__ == "__main__":
         
     print Game.z1
     print Game.z2
+    
+    g = Game(666)
+    print g.z1
+    print g.z2
+    
+    print Game(777).z1
+    print Game(888).z2
+    
     
