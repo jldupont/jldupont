@@ -6,10 +6,8 @@ def debug(target, *a, **k):
     print k
     
     def my_wrapper(target, *args, **kwargs):
-        print "args: "
-        print args
-        print "kwargs: " 
-        print kwargs
+        print "args: " + str( args )
+        print "kwargs: " + str( kwargs )
         return target( *args, **kwargs )
     
     return decorator(my_wrapper)(target)
@@ -29,3 +27,15 @@ class Test(object):
 if (__name__ == "__main__" ):
     t = Test()
     t.method1( 'just a string', param2 = 'second parameter' )
+    
+   
+result = """
+<type 'function'>
+()
+{}
+__init__
+args: (<__main__.Test object at 0x00B62550>, 'just a string', 'second parameter')
+kwargs: {}
+method1:
+param1[just a string] param2[second parameter] attribute1[init done]
+"""
