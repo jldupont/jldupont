@@ -10,6 +10,10 @@ class MM(object):
     """MindMeister WEB API
     """
     
+    _auth = "http://www.mindmeister.com/services/auth"
+    _api  = "http://www.mindmeister.com/services/"
+    
+    
     def __init__(self, secret):
         self.secret = secret
         
@@ -26,8 +30,10 @@ class MM(object):
 if __name__ == "__main__":
     """Examples as per MindMeister https://www.mindmeister.com/services/api/auth
     """
+    import binascii
+    
     params = [('yxz','foo'),('feg','bar'),('abc','baz')]
     
     mm = MM('DEADBEEF')
     
-    print str( mm.api_sign(params) )
+    print binascii.hexlify( mm.api_sign(params) )
