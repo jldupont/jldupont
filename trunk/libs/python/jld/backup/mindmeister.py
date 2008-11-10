@@ -4,9 +4,6 @@ import jld.api.mindmeister as mm
 
 from optparse import OptionParser
 
-class Registry(object):
-    
-
 
 def main():
     usage = "%prog [options] secret_key  api_key"
