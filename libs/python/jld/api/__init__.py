@@ -5,6 +5,7 @@
 __version__ = "$Id$"
 __author__ = "Jean-Lou Dupont"
 
+import urllib
 
 def tupleCompare( tuple1, tuple2 ):
     """Compares two tuples together
@@ -29,13 +30,24 @@ def concatenateParams(liste):
     
     return result
 
+
+def formatParams(liste):
+    """ Formats the parameters list for usage in an
+        HTTP method. Performs URI encoding.
+    """     
+    return urllib.urlencode( liste, True )
+
+
 # =========================================================================
 
 if __name__ == "__main__":
-    liste = [ ('k2', 'v2'), ('xyz','vxyz'), ('abc','vabc'), ('k1','v1') ]
+    liste = [ ('k2', 'v2'), ('xyz','v?xyz'), ('abc','vabc'), ('k1','v1') ]
     
     print 'alpha order:'
     print alphaOrderParams( liste )
     
     print 'concatenate params:'
     print concatenateParams( liste )
+    
+    print "============"
+    print formatParams( liste )
