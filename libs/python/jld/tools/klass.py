@@ -12,7 +12,8 @@ def searchForMethods(obj, prefix, stripPrefix = True):
     """
     methods = inspect.getmembers(obj, lambda X:type(X) is MethodType)
     
-    _liste = []
+    _liste = []  ;  _matches = []
+    
     for method in methods:
         _name = str( method[0] )
         _type = method[1]
@@ -21,8 +22,9 @@ def searchForMethods(obj, prefix, stripPrefix = True):
             if (stripPrefix):
                 _name = _name[len(prefix):]
             _liste.append( (_name, inspect.getdoc(method[1]) ) )
+            _matches.append( _name )
             
-    return _liste
+    return (_matches, _liste)
 
 # =========================================================
 

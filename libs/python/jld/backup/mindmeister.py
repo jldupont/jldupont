@@ -26,6 +26,8 @@ except Exception,e:
 
 from optparse import OptionParser
 
+# ========================================================================================
+
 class Backup(BaseCmd):
     """MindMeister Backup class
     """
@@ -34,14 +36,26 @@ class Backup(BaseCmd):
         self.secret = None
         self.api_key = None
     
-    def cmd_auth(self):
+    def cmd_auth(self, *args):
         """Generates an authentication URL and opens a browser instance for the user"""
-    
-    def cmd_export_all(self):
+        print "in auth command"
+        print args
+            
+    def cmd_export_all(self, *args):
         """Exports all the maps"""
-
+        print "in export_all command"
+        print args
 
 # ========================================================================================
+
+class MyTemplate(Template):
+    delimiter = '^^'
+    def __init__(self, init):
+        Template.__init__(self, init)
+
+# ========================================================================================
+
+
 def main():
 
     backup = Backup()
@@ -52,10 +66,6 @@ version $Id$ by Jean-Lou Dupont
 Commands:
 ^^commands
 """
-    class MyTemplate(Template):
-        delimiter = '^^'
-        def __init__(self, init):
-            Template.__init__(self, init)
         
     commands_help = backup.genCommandsHelp()
         
@@ -64,15 +74,13 @@ Commands:
     usage = tpl.substitute( tpl_values )
 
     parser = OptionParser( usage=usage )
-    parser.add_option( "-s", "--secret", dest="secret", action="store",
-                       help="configure secret" )
-    
-    parser.add_option( "-k", "--key", dest="api_key", action="store",
-                       help="configure api_key" )
+    parser.add_option( "-s", "--secret", dest="secret", action="store", help="configure secret" )
+    parser.add_option( "-k", "--key", dest="api_key", action="store",help="configure api_key" )
     
     (options,args) = parser.parse_args()
     
     # make sure we have SECRET and API_KEY configured in the registry
+    # Use conditional 'setKey' if we have valid overriding values i.e. not None
     r = reg.Registry()
     
     try:    r.setKey(r, 'mindmeister', 'secret', options.secret, cond=True)
@@ -81,25 +89,33 @@ Commands:
     except: pass    
         
     # == configuration ==
+    # ===================
     secret  = r.getKey('mindmeister', 'secret')
     api_key = r.getKey('mindmeister', 'api_key') 
     backup.secret = secret
     backup.api_key = api_key
 
-    # == command dispatch ==
-    try:
+    # == command validation ==
+    # ========================
+    try:    
         command = args[0]
+        if (command not in backup.cmds):
+            print "invalid command [%s]" % args[0]
+            sys.exit(0)
     except:
         print "use -h for help"
         sys.exit(0)
-        
-    if (command not in commands):
-        print "invalid command [%s]" % args[0]
-        sys.exit(0)
-        
+     
+    # get rid of command from the arg list
+    args.pop(0)
+     
+    # == DISPATCHER ==
+    # ================
+    getattr( backup, "cmd_%s" % command )(args)
+    
+    # === END ===
 
 # =======================================================================
 
-if __name__== "__main__":
-        
+if __name__== "__main__":   
     main()
