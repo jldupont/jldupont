@@ -13,7 +13,7 @@ class BaseCmd(object):
         """ Scans through all the methods of this instance
             and extracts all the ones prefixed with 'cmd_'
         """
-        self.commands = tclass.searchForMethods( self, 'cmd_' )
+        self.cmds, self.commands = tclass.searchForMethods( self, 'cmd_' )
         self.commands_help = None
         
     def genCommandsHelp(self):
