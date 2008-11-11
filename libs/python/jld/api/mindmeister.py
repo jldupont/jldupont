@@ -6,13 +6,14 @@ __version__= "$Id$"
 import binascii
 import md5
 import urllib2
+from xml.dom import minidom
 import jld.api as api
 
 class MM(object):
     """MindMeister WEB API
     """
     
-    _auth = "http://www.mindmeister.com/services/auth?api_key=%s&perms=%s&frob=%s&api_sign=%s"
+    _auth = "http://www.mindmeister.com/services/auth?api_key=%s&perms=%s&frob=%s&api_sig=%s"
     _api  = "http://www.mindmeister.com/services/rest?%s"
     
     _perms = ['read', 'write', 'delete']
@@ -44,7 +45,7 @@ class MM(object):
                     'frob':     frob,
                     'perms':    perm
                   }
-        sign = self.api_sign(params)
+        sign = self.api_sig(params)
         
         return self._auth % (self.api_key, perm, frob, sign) 
 
@@ -61,9 +62,23 @@ class MM(object):
         params = api.formatParams( args )
         url = self._api % params
         
-        return url
+        response = urllib2.urlopen(url)
+        return response.read()
+
+        
+
+class MM_Response_getFrob(object):
+    
+    def __init__(self, raw):
+        self.frob = None
+        try:
+            e = minidom.parseString(raw).documentElement
+            self.frob = e.getElementsByTagName('frob')[0].childNodes[0].nodeValue 
+        except:
+            pass
         
     
+
 # ===================================================================================
     
 if __name__ == "__main__":
