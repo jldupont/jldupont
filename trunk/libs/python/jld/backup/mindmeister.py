@@ -74,11 +74,10 @@ Commands:
     # make sure we have SECRET and API_KEY configured in the registry
     r = reg.Registry()
     
-    if (options is not None):
-        try:    r.setKey(r, 'mindmeister', 'secret', options.secret, cond=True)
-        except: pass
-        try:    r.setKey(r, 'mindmeister', 'api_key', options.api_key, cond=True)
-        except: pass    
+    try:    r.setKey(r, 'mindmeister', 'secret', options.secret, cond=True)
+    except: pass
+    try:    r.setKey(r, 'mindmeister', 'api_key', options.api_key, cond=True)
+    except: pass    
         
     # == configuration ==
     secret  = r.getKey('mindmeister', 'secret')
