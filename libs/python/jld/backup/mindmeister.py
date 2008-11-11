@@ -1,5 +1,7 @@
 """ Backup for MindMeister mindmaps
-""" 
+"""
+__author__  = "Jean-Lou Dupont"
+__version__ = "$Id$"
 import sys
 import os.path
 import logging
@@ -7,7 +9,8 @@ from string import Template
 try:
     import jld.registry as reg
     import jld.tools.klass as tclass
-    import jld.api.mindmeister as mm    
+    import jld.api.mindmeister as mm
+    from jld.cmd import BaseCmd
 except Exception,e:
     #directory levels to reach libs folder
     levelsUp = 3
@@ -18,17 +21,18 @@ except Exception,e:
     sys.path.append( path )
     import jld.registry as reg
     import jld.tools.klass as tclass
-    import jld.api.mindmeister as mm    
+    import jld.api.mindmeister as mm
+    from jld.cmd import BaseCmd    
 
 from optparse import OptionParser
 
-class Backup(object):
+class Backup(BaseCmd):
     """MindMeister Backup class
     """
-    
-    def __init__(self, secret, api_key):
-        self.secret = secret
-        self.api_key = api_key
+    def __init__(self):
+        BaseCmd.__init__(self)
+        self.secret = None
+        self.api_key = None
     
     def cmd_auth(self):
         """Generates an authentication URL and opens a browser instance for the user"""
@@ -40,10 +44,7 @@ class Backup(object):
 # ========================================================================================
 def main():
 
-    commands = tclass.searchForMethods( Backup, 'cmd_' )
-    commands_help = ''
-    for cmd in commands:
-        commands_help = commands_help + "\t" + cmd[0] + ' : ' + cmd[1] + "\n"
+    backup = Backup()
     
     usage_template = """%prog [options] command
 version $Id$ by Jean-Lou Dupont
@@ -55,6 +56,8 @@ Commands:
         delimiter = '^^'
         def __init__(self, init):
             Template.__init__(self, init)
+        
+    commands_help = backup.genCommandsHelp()
         
     tpl = MyTemplate( usage_template )
     tpl_values = {'commands':commands_help}
@@ -69,8 +72,6 @@ Commands:
     
     (options,args) = parser.parse_args()
     
-    print options, args
-    
     # make sure we have SECRET and API_KEY configured in the registry
     r = reg.Registry()
     
@@ -82,13 +83,19 @@ Commands:
     # == configuration ==
     secret  = r.getKey('mindmeister', 'secret')
     api_key = r.getKey('mindmeister', 'api_key') 
-    b = Backup( secret, api_key )
+    backup.secret = secret
+    backup.api_key = api_key
 
     # == command dispatch ==
-    print commands
-    if (args[0] not in commands):
+    try:
+        command = args[0]
+    except:
+        print "use -h for help"
+        sys.exit(0)
+        
+    if (command not in commands):
         print "invalid command [%s]" % args[0]
-        sys.exit()
+        sys.exit(0)
         
 
 # =======================================================================
