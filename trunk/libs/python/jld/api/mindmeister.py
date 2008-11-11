@@ -68,7 +68,6 @@ class MM(object):
         
 
 class MM_Response_getFrob(object):
-    
     def __init__(self, raw):
         self.frob = None
         try:
@@ -77,6 +76,14 @@ class MM_Response_getFrob(object):
         except:
             pass
         
+class MM_Response_getAuthToken(object):
+    def __init__(self, raw):
+        self.auth_token = None
+        try:
+            e = minidom.parseString(raw).documentElement
+            self.frob = e.getElementsByTagName('token')[0].childNodes[0].nodeValue 
+        except:
+            pass
     
 
 # ===================================================================================
