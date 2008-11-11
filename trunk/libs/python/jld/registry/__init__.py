@@ -27,7 +27,7 @@ class Registry(object):
     """
     def __init__(self):
         if sys.platform[:3] == 'win':
-            self.reg = WindowsRegistry
+            self.reg = WindowsRegistry()
         else:
             self.reg = LinuxRegistry()
     
@@ -37,11 +37,11 @@ class Registry(object):
         """
         return self.reg.getKey(file, key)
     
-    def setKey(self, file, key, value):
+    def setKey(self, file, key, value, cond = False):
         """SETS the specified key
             @throws RegistryException
         """      
-        return self.reg.setKey(file, key, value)
+        return self.reg.setKey(file, key, value, cond)
     
 
 class LinuxRegistry(object):
@@ -62,10 +62,14 @@ class LinuxRegistry(object):
         
         return self._extractKey(d, key)
 
-    def setKey(self, file, key, value):
+    def setKey(self, file, key, value, cond = False):
         """Sets the value for a key.
             Creates the registry file if it does not already exist.
         """
+        if (cond):
+            if (value is None):
+                return
+            
         d = self._load(file)
         
         if (d is not None):
@@ -164,6 +168,7 @@ class WindowsRegistry(object):
     _win = "Software\\Python\\Registry\\%s"
 
     def getKey(self, file, key):
+
         result = None
         subkey = self._win % file
         try:
@@ -172,12 +177,17 @@ class WindowsRegistry(object):
             result = value
         except:
             #the key does not exist yet, probably
-            logging.warn('Python Registry: key [%s] file[%s] does not exist' % (key, file))
+            #logging.warn('Python Registry: key [%s] file[%s] does not exist' % (key, file))
             return result
         
         return result
 
-    def setKey(self, file, key, value):
+    def setKey(self, file, key, value, cond=False):
+        #print "WindowsRegistry.setKey file[%s] key[%s] value[%s]" % (file, key, value)
+        if (cond):
+            if (value is None):
+                return
+     
         try:
             subkey = self._win % file
             ckey = _winreg.CreateKey( _winreg.HKEY_LOCAL_MACHINE, subkey)
