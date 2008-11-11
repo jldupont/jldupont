@@ -58,7 +58,30 @@ class Backup(BaseCmd):
         print "in export_all command"
         print args
 
+    def cmd_listmaps(self, *args):
+        """Lists all the maps"""
+        token = self._getAuthToken()
+        if (token is None):
+            print ""
+        
+    def _getAuthToken(self):
+        self._initMM()
+        r = reg.Registry()
+        r.getKey('mindmeister', 'frob')
+        raw = self.mm.do(method='mm.auth.getToken', frob=frob)
+        res = mm.MM_Response_getAuthToken(raw)
+        return res.auth_token
+        
 
     def _initMM(self):
         if (self.mm is None):
             self.mm = mm.MM(self.secret, self.api_key)
+
+
+class Messages(object):
+    """
+    """
+    def __init__(self):
+        pass
+    
+    

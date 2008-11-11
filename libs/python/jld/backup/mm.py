@@ -47,6 +47,7 @@ Commands:
     parser = OptionParser( usage=usage )
     parser.add_option( "-s", "--secret", dest="secret", action="store", help="configure secret" )
     parser.add_option( "-k", "--key", dest="api_key", action="store", help="configure api_key" )
+    parser.add_option( "-q", "--quiet", dest="quiet", action="store", help="quiet mode" )
     
     (options,args) = parser.parse_args()
     
@@ -65,6 +66,8 @@ Commands:
     api_key = r.getKey('mindmeister', 'api_key') 
     backup.secret = secret
     backup.api_key = api_key
+    try:    backup.quiet = options.quiet
+    except: pass
 
     # == simple check ==
     # ==================
