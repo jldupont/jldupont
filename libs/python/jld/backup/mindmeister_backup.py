@@ -25,6 +25,7 @@ class Backup(BaseCmd):
         self.auth_token = None
         self.mm = None
         self.msgs = msg.MM_Messages()
+        self.r = reg.Registry()
     
     def cmd_auth(self, *args):
         """Generates an authentication URL and opens a browser instance for the user"""
@@ -34,9 +35,8 @@ class Backup(BaseCmd):
         res = mmr.MM_Response_getFrob(raw)
         
         #keep this frob in order to retrieve an authentication token later on
-        r = reg.Registry()
         try:    
-            r.setKey('mindmeister', 'frob', res.frob, cond = True)
+            self.r.setKey('mindmeister', 'frob', res.frob, cond = True)
         except Exception,e: 
             logging.error( self.msgs.render('reg_update_error') )
             sys.exit(0)
@@ -51,16 +51,43 @@ class Backup(BaseCmd):
 
     def cmd_listmaps(self, *args):
         """Lists all the maps"""
-        token = self._getAuthToken()
-        if (token is None):
-            print self.msgs.render('do_auth')
-            sys.exit(0)
         
-        all = self._getAllMaps(token)
+        auth_token = self._prepareAuthorizedCommand()
+        all = self._getAllMaps(auth_token)
         print all
         
     # =========================================================
     # =========================================================
+    
+    def _prepareAuthorizedCommand(self):
+        """Prepares for an authorized command.
+            Existing auth_token in registry
+                a) valid?  then proceed
+                b) else: remove from registry
+                    inform user to auth
+        """
+        auth_token = self.r.getKey('mindmeister', 'auth_token')
+        
+        #If there is no auth_token,
+        # check for an existing frob and try to retrieve a token
+        if (auth_token is None):
+            frob = self.r.getKey('mindmeister', 'frob')
+            if (frob is None):
+                print self.msgs.render('do_auth')
+                sys.exit(0)
+            auth_token = self._getAuthToken(frob)
+        
+        if (not self._checkToken(auth_token)):
+            try:    
+                self.r.setKey('mindmeister', 'auth_token', None)
+                self.r.setKey('mindmeister', 'frob', None)
+            except: pass
+            print self.msgs.render('do_auth')
+            sys.exit(0)
+            
+        return auth_token
+        
+    
     def _getAllMaps(self, auth_token):
         """ Retrieves all maps
         """
@@ -87,17 +114,32 @@ class Backup(BaseCmd):
         res = mmr.MM_Response_getList(raw)
         return res
         
+    def _checkToken(self, auth_token):
+        """Verifies the validity of an authorization token
+        """
+        self._initMM()
+        raw = self.mm.do(method='mm.auth.checkToken', auth_token = auth_token)
+        res = mmr.MM_Response_getAuthToken(raw)
+        return res.auth_token==auth_token
         
-    def _getAuthToken(self):
+    def _getAuthToken(self, frob = None):
         """ Retrieves an authentication token.
             This method can only provide meaningful result
             when valid secret, api_key and frob are handy.
         """
         self._initMM()
-        r = reg.Registry()
-        frob = r.getKey('mindmeister', 'frob')
+
+        if (frob is None):
+            frob = self.r.getKey('mindmeister', 'frob')
         raw = self.mm.do(method='mm.auth.getToken', frob=frob)
         res = mmr.MM_Response_getAuthToken(raw)
+        
+        try:    
+            self.r.setKey('mindmeister', 'auth_token', res.auth_token)
+        except Exception,e: 
+            logging.error( self.msgs.render('reg_update_error') )
+            sys.exit(0)
+        
         return res.auth_token
         
 
