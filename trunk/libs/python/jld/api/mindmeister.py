@@ -62,6 +62,7 @@ class MM(object):
         params = api.formatParams( args )
         url = self._api % params
         
+        #print url
         response = urllib2.urlopen(url)
         return response.read()
 

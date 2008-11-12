@@ -23,7 +23,7 @@ class MM_Response_getAuthToken(object):
         self.auth_token = None
         try:
             e = minidom.parseString(raw).documentElement
-            self.frob = e.getElementsByTagName('token')[0].childNodes[0].nodeValue 
+            self.auth_token = e.getElementsByTagName('token')[0].childNodes[0].nodeValue
         except:
             pass
     
@@ -33,8 +33,10 @@ class MM_Response_getList(object):
     _attribs = ('id', 'title', 'created', 'modified', 'tags')
     
     def __init__(self, raw):
+        self.pages = 0
         self.total = None
         self.maps  = []
+        self.count = 0
         try:
             self.tree = minidom.parseString(raw).documentElement
             self._extractTotal()   
@@ -43,7 +45,9 @@ class MM_Response_getList(object):
             pass
         
     def _extractTotal(self):
-        try:    self.total = self.tree.getElementsByTagName('maps')[0].getAttribute('total') 
+        try:    
+            self.total = self.tree.getElementsByTagName('maps')[0].getAttribute('total')
+            self.pages = self.tree.getElementsByTagName('maps')[0].getAttribute('pages') 
         except: pass
 
     def _extractMaps(self):
@@ -57,6 +61,7 @@ class MM_Response_getList(object):
                     this[attr] = map.getAttribute(attr)
                 
                 self.maps.append( this )
+            self.count = len( self.maps )
         except: pass
 
 # ==========================================================
