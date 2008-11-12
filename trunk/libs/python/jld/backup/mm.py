@@ -8,7 +8,8 @@ from string import Template
 import logging
 try:
     import jld.registry as reg
-    from jld.backup.mindmeister import Backup
+    from jld.backup.mindmeister_backup import Backup
+    import jld.backup.mindmeister_messages as msg
     from jld.tools.template import ExTemplate
 except Exception,e:
     #directory levels to reach libs folder
@@ -19,7 +20,8 @@ except Exception,e:
         levelsUp = levelsUp - 1    
     sys.path.append( path )
     import jld.registry as reg
-    from jld.backup.mindmeister import Backup
+    from jld.backup.mindmeister_backup import Backup
+    import jld.backup.mindmeister_messages as msg
     from jld.tools.template import ExTemplate    
 
 from optparse import OptionParser
@@ -29,6 +31,7 @@ from optparse import OptionParser
 
 def main():
 
+    msgs   = msg.MM_Messages()
     backup = Backup()
     
     usage_template = """%prog [options] command
@@ -45,9 +48,9 @@ Commands:
     usage = tpl.substitute( tpl_values )
 
     parser = OptionParser( usage=usage )
-    parser.add_option( "-s", "--secret", dest="secret", action="store", help="configure secret" )
-    parser.add_option( "-k", "--key", dest="api_key", action="store", help="configure api_key" )
-    parser.add_option( "-q", "--quiet", dest="quiet", action="store", help="quiet mode" )
+    parser.add_option( "-s", "--secret",dest="secret",  action="store", help="configure secret" )
+    parser.add_option( "-k", "--key",   dest="api_key", action="store", help="configure api_key" )
+    parser.add_option( "-q", "--quiet", dest="quiet",   action="store", help="quiet mode" )
     
     (options,args) = parser.parse_args()
     
@@ -72,7 +75,7 @@ Commands:
     # == simple check ==
     # ==================
     if (secret is None) or (api_key is None):
-        print "please configure 'secret' and 'api_key'"
+        print msgs.render( 'configuration' )
         sys.exit(0)
 
     # == command validation ==
@@ -80,10 +83,10 @@ Commands:
     try:    
         command = args[0]
         if (command not in backup.cmds):
-            print "invalid command [%s]" % args[0]
+            print msgs.render( 'invalid_command', {'cmd':args[0] } )
             sys.exit(0)
     except:
-        print "use -h for help"
+        print msgs.render('use_help')
         sys.exit(0)
      
     # get rid of command from the arg list
