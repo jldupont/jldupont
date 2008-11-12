@@ -10,7 +10,8 @@ from types import *
 def searchForMethods(obj, prefix, stripPrefix = True):
     """Search for all methods with starting prefix. Returns a list of tuples (method_name, doc_string)
     """
-    methods = inspect.getmembers(obj, lambda X:type(X) is MethodType)
+    all_methods = inspect.getmembers(obj, lambda X:type(X) is MethodType)
+    methods = filter( lambda X: str(X[0]).startswith(prefix), all_methods )
     
     _liste = []  ;  _matches = []
     
@@ -18,11 +19,10 @@ def searchForMethods(obj, prefix, stripPrefix = True):
         _name = str( method[0] )
         _type = method[1]
         
-        if (_name.startswith(prefix)):
-            if (stripPrefix):
-                _name = _name[len(prefix):]
-            _liste.append( (_name, inspect.getdoc(method[1]) ) )
-            _matches.append( _name )
+        if (stripPrefix):
+            _name = _name[len(prefix):]
+        _liste.append( (_name, inspect.getdoc(method[1]) ) )
+        _matches.append( _name )
             
     return (_matches, _liste)
 

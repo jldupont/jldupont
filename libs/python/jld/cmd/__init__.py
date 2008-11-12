@@ -22,6 +22,6 @@ class BaseCmd(object):
         if (self.commands_help is None):
             self.commands_help = ''
             for name, doc in self.commands:
-                self.commands_help = self.commands_help + "\t" + name + ' : ' + doc + "\n"
+                self.commands_help = self.commands_help + "\t" + name + ' :  ' + doc + "\n"
 
         return self.commands_help

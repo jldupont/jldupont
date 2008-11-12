@@ -65,31 +65,6 @@ class MM(object):
         response = urllib2.urlopen(url)
         return response.read()
 
-        
-
-class MM_Response_getFrob(object):
-    """ In response to mm.auth.getFrob
-    """
-    def __init__(self, raw):
-        self.frob = None
-        try:
-            e = minidom.parseString(raw).documentElement
-            self.frob = e.getElementsByTagName('frob')[0].childNodes[0].nodeValue 
-        except:
-            pass
-        
-class MM_Response_getAuthToken(object):
-    """ In response to mm.auth.getToken
-    """
-    def __init__(self, raw):
-        self.auth_token = None
-        try:
-            e = minidom.parseString(raw).documentElement
-            self.frob = e.getElementsByTagName('token')[0].childNodes[0].nodeValue 
-        except:
-            pass
-    
-
 # ===================================================================================
     
 if __name__ == "__main__":

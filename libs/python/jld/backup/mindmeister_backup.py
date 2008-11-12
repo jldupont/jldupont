@@ -9,6 +9,7 @@ import webbrowser
 
 import jld.registry as reg
 import jld.api.mindmeister as mm
+import jld.api.mindmeister_response as mmr
 from jld.cmd import BaseCmd
 import jld.backup.mindmeister_messages as msg
 
@@ -30,7 +31,7 @@ class Backup(BaseCmd):
         #get a new 'frob'
         self._initMM()
         raw = self.mm.do(method='mm.auth.getFrob')
-        res = mm.MM_Response_getFrob(raw)
+        res = mmr.MM_Response_getFrob(raw)
         
         #keep this frob in order to retrieve an authentication token later on
         r = reg.Registry()
@@ -55,6 +56,9 @@ class Backup(BaseCmd):
             print self.msgs.render('do_auth')
             sys.exit(0)
         
+    # =========================================================
+    # =========================================================
+        
     def _getAuthToken(self):
         """ Retrieves an authentication token.
             This method can only provide meaningful result
@@ -64,7 +68,7 @@ class Backup(BaseCmd):
         r = reg.Registry()
         r.getKey('mindmeister', 'frob')
         raw = self.mm.do(method='mm.auth.getToken', frob=frob)
-        res = mm.MM_Response_getAuthToken(raw)
+        res = mmr.MM_Response_getAuthToken(raw)
         return res.auth_token
         
 
