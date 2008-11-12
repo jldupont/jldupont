@@ -29,9 +29,14 @@ class Messages(object):
         return self.msgs[key]
     
     def render(self, key, params = None):
+        """ Renders a message template with optional parameters
+        """
         msg = self[key]
         tpl = Template(msg)
         return tpl.substitute( params )
+    
+# =================================================================
+    
     
 if __name__ == "__main__":
 
