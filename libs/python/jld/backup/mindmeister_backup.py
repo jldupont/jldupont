@@ -62,8 +62,10 @@ class Backup(BaseCmd):
     def _prepareAuthorizedCommand(self):
         """Prepares for an authorized command.
             Existing auth_token in registry
-                a) valid?  then proceed
-                b) else: remove from registry
+                1a) valid?  then proceed
+                1b) else: remove frob & token from registry
+            Existing frob?
+                2b) try to get a token
                     inform user to auth
         """
         auth_token = self.r.getKey('mindmeister', 'auth_token')

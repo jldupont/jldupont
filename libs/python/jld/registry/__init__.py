@@ -4,33 +4,33 @@ __author__  = "Jean-Lou Dupont"
 __version__ = "$Id$"
 
 import sys
-import yaml
-import os.path
-import logging
-from types import *
-    
+
 class Registry(object):
     """Facade for the cross-platform Registry
     """
+    reg = None
+    
     def __init__(self):
+        if (Registry.reg is not None):
+            return
         if sys.platform[:3] == 'win':
             from jld.registry.windows import WindowsRegistry 
-            self.reg = WindowsRegistry()
+            Registry.reg = WindowsRegistry()
         else:
             from jld.registry.linux import LinuxRegistry
-            self.reg = LinuxRegistry()
+            Registry.reg = LinuxRegistry()
     
     def getKey(self, file, key):
         """GETS the specified key
             @throws RegistryException
         """
-        return self.reg.getKey(file, key)
+        return Registry.reg.getKey(file, key)
     
     def setKey(self, file, key, value, cond = False):
         """SETS the specified key
             @throws RegistryException
         """      
-        return self.reg.setKey(file, key, value, cond)
+        return Registry.reg.setKey(file, key, value, cond)
     
 # ================================================================================
 

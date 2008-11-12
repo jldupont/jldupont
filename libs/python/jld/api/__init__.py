@@ -1,4 +1,4 @@
-"""
+""" API tools
     @author Jean-Lou Dupont
 """
 
@@ -10,7 +10,7 @@ import urllib
 def alphaOrderParams(liste):
     """ Orders a dictionary based parameters list 
         (e.g. {key:value} ) by alphabetical key order.
-        Returns a list
+        Returns the resulting list
     """
     keys = liste.keys()
     keys.sort()

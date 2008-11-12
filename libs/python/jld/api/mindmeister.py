@@ -6,7 +6,6 @@ __version__= "$Id$"
 import binascii
 import md5
 import urllib2
-from xml.dom import minidom
 import jld.api as api
 
 class MM(object):
@@ -44,7 +43,7 @@ class MM(object):
         params = {  'api_key':  self.api_key,
                     'frob':     frob,
                     'perms':    perm
-                  }
+        }
         sign = self.api_sig(params)
         
         return self._auth % (self.api_key, perm, frob, sign) 
@@ -62,7 +61,6 @@ class MM(object):
         params = api.formatParams( args )
         url = self._api % params
         
-        #print url
         response = urllib2.urlopen(url)
         return response.read()
 

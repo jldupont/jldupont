@@ -1,5 +1,6 @@
 # YAML messages
 # for MindMeister backup utility
+# @author: Jean-Lou Dupont
 
 configuration: Please configure 'secret' and 'api_key'
 reg_update_error: Unable to update registry

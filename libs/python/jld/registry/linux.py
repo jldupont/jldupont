@@ -103,7 +103,7 @@ class LinuxRegistry(object):
             path = self._lind % file
         else:
             path = self._lin % file
-        #useful during debugging
+        #useful during debugging on Windows platform...
         if (trim):
             path.rstrip( os.sep )
         return path
