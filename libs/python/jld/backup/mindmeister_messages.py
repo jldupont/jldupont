@@ -12,7 +12,7 @@ class MM_Messages(object):
     filepath = "mindmeister_messages.yaml"
     
     def __init__(self):
-        self._load()
+        self.msgs = None
     
     def _load(self):
         """ Loads the messages from the filesystem
@@ -20,6 +20,9 @@ class MM_Messages(object):
         path = os.dirname( os.abspath(__file__) ).join(os.sep).self.filepath
         file = open(path,'r')
         self.msgs  = yaml.load(file)
+        file.close()
         
     def __getitem(self, key):
+        if (self.msgs is None):
+            self._load()
         return self.msgs[key] 
