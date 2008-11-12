@@ -23,6 +23,7 @@ class Backup(BaseCmd):
         self.api_key = None
         self.auth_token = None
         self.mm = None
+        self.msgs = msg.MM_Messages()
     
     def cmd_auth(self, *args):
         """Generates an authentication URL and opens a browser instance for the user"""
@@ -36,7 +37,7 @@ class Backup(BaseCmd):
         try:    
             r.setKey('mindmeister', 'frob', res.frob, cond = True)
         except Exception,e: 
-            logging.error("AUTH: unable to update registry")
+            logging.error( self.msgs.render('reg_update_error') )
             sys.exit(0)
         
         url = self.mm.gen_auth_url('read', res.frob)
@@ -51,9 +52,14 @@ class Backup(BaseCmd):
         """Lists all the maps"""
         token = self._getAuthToken()
         if (token is None):
-            print ""
+            print self.msgs.render('do_auth')
+            sys.exit(0)
         
     def _getAuthToken(self):
+        """ Retrieves an authentication token.
+            This method can only provide meaningful result
+            when valid secret, api_key and frob are handy.
+        """
         self._initMM()
         r = reg.Registry()
         r.getKey('mindmeister', 'frob')
@@ -65,12 +71,3 @@ class Backup(BaseCmd):
     def _initMM(self):
         if (self.mm is None):
             self.mm = mm.MM(self.secret, self.api_key)
-
-
-class Messages(object):
-    """
-    """
-    def __init__(self):
-        pass
-    
-    

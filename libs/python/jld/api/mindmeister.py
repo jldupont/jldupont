@@ -68,6 +68,8 @@ class MM(object):
         
 
 class MM_Response_getFrob(object):
+    """ In response to mm.auth.getFrob
+    """
     def __init__(self, raw):
         self.frob = None
         try:
@@ -77,6 +79,8 @@ class MM_Response_getFrob(object):
             pass
         
 class MM_Response_getAuthToken(object):
+    """ In response to mm.auth.getToken
+    """
     def __init__(self, raw):
         self.auth_token = None
         try:

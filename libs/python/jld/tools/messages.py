@@ -28,7 +28,7 @@ class Messages(object):
             self._load()
         return self.msgs[key]
     
-    def render(self, key, params):
+    def render(self, key, params = None):
         msg = self[key]
         tpl = Template(msg)
         return tpl.substitute( params )
