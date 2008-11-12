@@ -56,8 +56,37 @@ class Backup(BaseCmd):
             print self.msgs.render('do_auth')
             sys.exit(0)
         
+        all = self._getAllMaps(token)
+        print all
+        
     # =========================================================
     # =========================================================
+    def _getAllMaps(self, auth_token):
+        """ Retrieves all maps
+        """
+        run = True
+        per_page = 100;  pages = 0
+        total = 0;  count = 0;  page = 1;  maps = []
+        while run:
+            batch = self._getOnePage(auth_token, page, per_page)
+            maps.append( batch.maps )
+            pages = int( batch.pages )
+            count = count + int( batch.count )
+            total = int( batch.total )
+            page = page + 1
+            #print "total [%s]  count[%s] pages[%s]" % (total, count, pages)
+            if (count>=total):
+                run = False
+                
+        return maps
+        
+    def _getOnePage(self, auth_token, page, per_page):
+        """Retrieves one page of the map list"""
+        self._initMM()
+        raw = self.mm.do(method='mm.maps.getList', auth_token = auth_token, page = page, per_page = per_page)
+        res = mmr.MM_Response_getList(raw)
+        return res
+        
         
     def _getAuthToken(self):
         """ Retrieves an authentication token.
@@ -66,7 +95,7 @@ class Backup(BaseCmd):
         """
         self._initMM()
         r = reg.Registry()
-        r.getKey('mindmeister', 'frob')
+        frob = r.getKey('mindmeister', 'frob')
         raw = self.mm.do(method='mm.auth.getToken', frob=frob)
         res = mmr.MM_Response_getAuthToken(raw)
         return res.auth_token
