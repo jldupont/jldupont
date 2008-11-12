@@ -7,21 +7,10 @@ import os.path
 import logging
 import webbrowser
 
-try:
-    import jld.registry as reg
-    import jld.api.mindmeister as mm
-    from jld.cmd import BaseCmd
-except Exception,e:
-    #directory levels to reach libs folder
-    levelsUp = 3
-    path = os.path.abspath( __file__ )
-    while levelsUp>0:
-        path = os.path.dirname( path )
-        levelsUp = levelsUp - 1    
-    sys.path.append( path )
-    import jld.registry as reg
-    import jld.api.mindmeister as mm
-    from jld.cmd import BaseCmd    
+import jld.registry as reg
+import jld.api.mindmeister as mm
+from jld.cmd import BaseCmd
+import jld.backup.mindmeister_messages as msg
 
 # ========================================================================================
 
