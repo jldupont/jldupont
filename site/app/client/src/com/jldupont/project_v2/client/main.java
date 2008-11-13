@@ -9,6 +9,7 @@ import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.jldupont.pages.client.Base;
 
 import com.web_bloks.document.client.Namespace;
 import com.web_bloks.document.client.Title;

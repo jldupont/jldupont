@@ -1983,3 +1983,334 @@ Rebinding com.google.gwt.i18n.client.impl.LocaleInfoImpl
          [ERROR] Line 104: Title cannot be resolved to a type
       Removing invalidated units
    Removing units with errors
+Refreshing resources
+Refreshing resources
+Compiling Java source files in module 'com.jldupont.pages.Pages'
+   Removing units with errors
+      [ERROR] Errors in 'file:/C:/Documents%20and%20Settings/Jean-Lou%20Dupont/My%20Documents/workspace_gae/jldupont/trunk/site/app/client/src/com/jldupont/pages/client/Base.java'
+         [ERROR] Line 43: No source code is available for type com.web_bloks.content.client.BasePage; did you forget to inherit a required module?
+         [ERROR] Line 49: No source code is available for type com.web_bloks.content.client.ViewPage; did you forget to inherit a required module?
+         [ERROR] Line 62: No source code is available for type com.web_bloks.widget.client.LoginLogoutWidget; did you forget to inherit a required module?
+         [ERROR] Line 63: No source code is available for type com.web_bloks.widget.client.GearsStatus; did you forget to inherit a required module?
+         [ERROR] Line 64: No source code is available for type com.web_bloks.widget.client.ConfigWidget; did you forget to inherit a required module?
+         [ERROR] Line 71: No source code is available for type com.web_bloks.widget.client.UserMessageWidget; did you forget to inherit a required module?
+         [ERROR] Line 73: No source code is available for type com.web_bloks.widget.client.ImgAnchor; did you forget to inherit a required module?
+         [ERROR] Line 130: The method input_box_title() is undefined for the type BaseMessages
+         [ERROR] Line 196: IMG cannot be resolved
+         [ERROR] Line 202: The method crunchbase() is undefined for the type BaseMessages
+         [ERROR] Line 203: The method crunchbase_url() is undefined for the type BaseMessages
+         [ERROR] Line 242: No source code is available for type com.web_bloks.user.client.UserManager; did you forget to inherit a required module?
+         [ERROR] Line 245: No source code is available for type com.web_bloks.user.client.User; did you forget to inherit a required module?
+         [ERROR] Line 264: No source code is available for type com.web_bloks.widget.client.LoginLogoutWidget.State; did you forget to inherit a required module?
+         [ERROR] Line 290: No source code is available for type com.web_bloks.system.client.Logger; did you forget to inherit a required module?
+         [ERROR] Line 300: No source code is available for type com.web_bloks.user.client.StatusMessageServer; did you forget to inherit a required module?
+         [ERROR] Line 309: No source code is available for type com.web_bloks.user.client.UserMessageServer; did you forget to inherit a required module?
+      [ERROR] Errors in 'file:/C:/Documents%20and%20Settings/Jean-Lou%20Dupont/My%20Documents/workspace_gae/jldupont/trunk/site/app/client/src/com/jldupont/pages/client/MainPage.java'
+         [ERROR] Line 27: No source code is available for type com.web_bloks.content.client.ViewPage; did you forget to inherit a required module?
+         [ERROR] Line 36: No source code is available for type com.web_bloks.user.client.UserMessageServer; did you forget to inherit a required module?
+         [ERROR] Line 37: No source code is available for type com.web_bloks.user.client.StatusMessageServer; did you forget to inherit a required module?
+         [ERROR] Line 40: No source code is available for type com.web_bloks.widget.client.EditPageWidget; did you forget to inherit a required module?
+         [ERROR] Line 41: No source code is available for type com.web_bloks.widget.client.ViewSourceWidget; did you forget to inherit a required module?
+         [ERROR] Line 104: No source code is available for type com.web_bloks.document.client.Title; did you forget to inherit a required module?
+      Removing invalidated units
+   Removing units with errors
+Finding entry point classes
+Rebinding com.google.gwt.i18n.client.impl.LocaleInfoImpl
+   Removing units with errors
+      [ERROR] Errors in 'file:/C:/Documents%20and%20Settings/Jean-Lou%20Dupont/My%20Documents/workspace_gae/jldupont/trunk/site/app/client/src/com/jldupont/pages/client/Base.java'
+         [ERROR] Line 23: The import com.web_bloks cannot be resolved
+         [ERROR] Line 24: The import com.web_bloks cannot be resolved
+         [ERROR] Line 26: The import com.web_bloks cannot be resolved
+         [ERROR] Line 27: The import com.web_bloks cannot be resolved
+         [ERROR] Line 28: The import com.web_bloks cannot be resolved
+         [ERROR] Line 29: The import com.web_bloks cannot be resolved
+         [ERROR] Line 30: The import com.web_bloks cannot be resolved
+         [ERROR] Line 31: The import com.web_bloks cannot be resolved
+         [ERROR] Line 32: The import com.web_bloks cannot be resolved
+         [ERROR] Line 33: The import com.web_bloks cannot be resolved
+         [ERROR] Line 34: The import com.web_bloks cannot be resolved
+         [ERROR] Line 35: The import com.web_bloks cannot be resolved
+         [ERROR] Line 43: BasePage cannot be resolved to a type
+         [ERROR] Line 49: ViewPage cannot be resolved to a type
+         [ERROR] Line 62: LoginLogoutWidget cannot be resolved to a type
+         [ERROR] Line 63: GearsStatus cannot be resolved to a type
+         [ERROR] Line 64: ConfigWidget cannot be resolved to a type
+         [ERROR] Line 71: UserMessageWidget cannot be resolved to a type
+         [ERROR] Line 73: ImgAnchor cannot be resolved to a type
+         [ERROR] Line 92: ImgAnchor cannot be resolved to a type
+         [ERROR] Line 92: ImgAnchor cannot be resolved to a type
+         [ERROR] Line 105: ConfigWidget cannot be resolved to a type
+         [ERROR] Line 105: ConfigWidget cannot be resolved to a type
+         [ERROR] Line 106: ConfigWidget cannot be resolved to a type
+         [ERROR] Line 107: ConfigWidget cannot be resolved to a type
+         [ERROR] Line 111: ConfigWidget cannot be resolved to a type
+         [ERROR] Line 113: LoginLogoutWidget cannot be resolved to a type
+         [ERROR] Line 113: LoginLogoutWidget cannot be resolved to a type
+         [ERROR] Line 114: LoginLogoutWidget cannot be resolved to a type
+         [ERROR] Line 115: LoginLogoutWidget cannot be resolved to a type
+         [ERROR] Line 125: UserMessageWidget cannot be resolved to a type
+         [ERROR] Line 125: UserMessageWidget cannot be resolved to a type
+         [ERROR] Line 126: UserMessageWidget cannot be resolved to a type
+         [ERROR] Line 130: The method input_box_title() is undefined for the type BaseMessages
+         [ERROR] Line 184: GearsStatus cannot be resolved to a type
+         [ERROR] Line 184: GearsStatus cannot be resolved to a type
+         [ERROR] Line 195: ImgAnchor cannot be resolved to a type
+         [ERROR] Line 195: The method create(Class<?>) from the type GWT refers to the missing type ImgAnchor
+         [ERROR] Line 195: ImgAnchor cannot be resolved to a type
+         [ERROR] Line 196: IMG cannot be resolved
+         [ERROR] Line 202: The method crunchbase() is undefined for the type BaseMessages
+         [ERROR] Line 203: The method crunchbase_url() is undefined for the type BaseMessages
+         [ERROR] Line 242: UserManager cannot be resolved to a type
+         [ERROR] Line 242: The method create(Class<?>) from the type GWT refers to the missing type UserManager
+         [ERROR] Line 242: UserManager cannot be resolved to a type
+         [ERROR] Line 245: User cannot be resolved to a type
+         [ERROR] Line 255: LoginLogoutWidget cannot be resolved to a type
+         [ERROR] Line 256: LoginLogoutWidget cannot be resolved to a type
+         [ERROR] Line 262: ConfigWidget cannot be resolved to a type
+         [ERROR] Line 264: LoginLogoutWidget cannot be resolved to a type
+         [ERROR] Line 264: LoginLogoutWidget cannot be resolved
+         [ERROR] Line 266: ConfigWidget cannot be resolved to a type
+         [ERROR] Line 268: LoginLogoutWidget cannot be resolved to a type
+         [ERROR] Line 268: LoginLogoutWidget cannot be resolved
+         [ERROR] Line 276: ViewPage cannot be resolved to a type
+         [ERROR] Line 277: ViewPage cannot be resolved to a type
+         [ERROR] Line 289: ViewPage cannot be resolved to a type
+         [ERROR] Line 290: Logger cannot be resolved
+         [ERROR] Line 292: ViewPage cannot be resolved to a type
+         [ERROR] Line 300: StatusMessageServer cannot be resolved to a type
+         [ERROR] Line 304: UserMessageWidget cannot be resolved to a type
+         [ERROR] Line 305: UserMessageWidget cannot be resolved to a type
+         [ERROR] Line 309: UserMessageServer cannot be resolved to a type
+      [ERROR] Errors in 'file:/C:/Documents%20and%20Settings/Jean-Lou%20Dupont/My%20Documents/workspace_gae/jldupont/trunk/site/app/client/src/com/jldupont/pages/client/MainPage.java'
+         [ERROR] Line 8: The import com.web_bloks cannot be resolved
+         [ERROR] Line 9: The import com.web_bloks cannot be resolved
+         [ERROR] Line 11: The import com.web_bloks cannot be resolved
+         [ERROR] Line 14: The import com.web_bloks cannot be resolved
+         [ERROR] Line 15: The import com.web_bloks cannot be resolved
+         [ERROR] Line 16: The import com.web_bloks cannot be resolved
+         [ERROR] Line 27: ViewPage cannot be resolved to a type
+         [ERROR] Line 36: UserMessageServer cannot be resolved to a type
+         [ERROR] Line 37: StatusMessageServer cannot be resolved to a type
+         [ERROR] Line 40: EditPageWidget cannot be resolved to a type
+         [ERROR] Line 41: ViewSourceWidget cannot be resolved to a type
+         [ERROR] Line 94: UserMessageServer cannot be resolved to a type
+         [ERROR] Line 95: UserMessageServer cannot be resolved to a type
+         [ERROR] Line 97: StatusMessageServer cannot be resolved to a type
+         [ERROR] Line 98: StatusMessageServer cannot be resolved to a type
+         [ERROR] Line 104: Title cannot be resolved to a type
+      Removing invalidated units
+   Removing units with errors
+Refreshing resources
+Refreshing resources
+Compiling Java source files in module 'com.jldupont.pages.Pages'
+   Removing units with errors
+      [ERROR] Errors in 'file:/C:/Documents%20and%20Settings/Jean-Lou%20Dupont/My%20Documents/workspace_gae/jldupont/trunk/site/app/client/src/com/jldupont/pages/client/Base.java'
+         [ERROR] Line 43: No source code is available for type com.web_bloks.content.client.BasePage; did you forget to inherit a required module?
+         [ERROR] Line 49: No source code is available for type com.web_bloks.content.client.ViewPage; did you forget to inherit a required module?
+         [ERROR] Line 62: No source code is available for type com.web_bloks.widget.client.LoginLogoutWidget; did you forget to inherit a required module?
+         [ERROR] Line 63: No source code is available for type com.web_bloks.widget.client.GearsStatus; did you forget to inherit a required module?
+         [ERROR] Line 64: No source code is available for type com.web_bloks.widget.client.ConfigWidget; did you forget to inherit a required module?
+         [ERROR] Line 71: No source code is available for type com.web_bloks.widget.client.UserMessageWidget; did you forget to inherit a required module?
+         [ERROR] Line 73: No source code is available for type com.web_bloks.widget.client.ImgAnchor; did you forget to inherit a required module?
+         [ERROR] Line 130: The method input_box_title() is undefined for the type BaseMessages
+         [ERROR] Line 230: No source code is available for type com.web_bloks.user.client.UserManager; did you forget to inherit a required module?
+         [ERROR] Line 233: No source code is available for type com.web_bloks.user.client.User; did you forget to inherit a required module?
+         [ERROR] Line 252: No source code is available for type com.web_bloks.widget.client.LoginLogoutWidget.State; did you forget to inherit a required module?
+         [ERROR] Line 278: No source code is available for type com.web_bloks.system.client.Logger; did you forget to inherit a required module?
+         [ERROR] Line 288: No source code is available for type com.web_bloks.user.client.StatusMessageServer; did you forget to inherit a required module?
+         [ERROR] Line 297: No source code is available for type com.web_bloks.user.client.UserMessageServer; did you forget to inherit a required module?
+      [ERROR] Errors in 'file:/C:/Documents%20and%20Settings/Jean-Lou%20Dupont/My%20Documents/workspace_gae/jldupont/trunk/site/app/client/src/com/jldupont/pages/client/MainPage.java'
+         [ERROR] Line 27: No source code is available for type com.web_bloks.content.client.ViewPage; did you forget to inherit a required module?
+         [ERROR] Line 36: No source code is available for type com.web_bloks.user.client.UserMessageServer; did you forget to inherit a required module?
+         [ERROR] Line 37: No source code is available for type com.web_bloks.user.client.StatusMessageServer; did you forget to inherit a required module?
+         [ERROR] Line 40: No source code is available for type com.web_bloks.widget.client.EditPageWidget; did you forget to inherit a required module?
+         [ERROR] Line 41: No source code is available for type com.web_bloks.widget.client.ViewSourceWidget; did you forget to inherit a required module?
+         [ERROR] Line 104: No source code is available for type com.web_bloks.document.client.Title; did you forget to inherit a required module?
+      Removing invalidated units
+   Removing units with errors
+Finding entry point classes
+Rebinding com.google.gwt.i18n.client.impl.LocaleInfoImpl
+   Removing units with errors
+      [ERROR] Errors in 'file:/C:/Documents%20and%20Settings/Jean-Lou%20Dupont/My%20Documents/workspace_gae/jldupont/trunk/site/app/client/src/com/jldupont/pages/client/Base.java'
+         [ERROR] Line 23: The import com.web_bloks cannot be resolved
+         [ERROR] Line 24: The import com.web_bloks cannot be resolved
+         [ERROR] Line 26: The import com.web_bloks cannot be resolved
+         [ERROR] Line 27: The import com.web_bloks cannot be resolved
+         [ERROR] Line 28: The import com.web_bloks cannot be resolved
+         [ERROR] Line 29: The import com.web_bloks cannot be resolved
+         [ERROR] Line 30: The import com.web_bloks cannot be resolved
+         [ERROR] Line 31: The import com.web_bloks cannot be resolved
+         [ERROR] Line 32: The import com.web_bloks cannot be resolved
+         [ERROR] Line 33: The import com.web_bloks cannot be resolved
+         [ERROR] Line 34: The import com.web_bloks cannot be resolved
+         [ERROR] Line 35: The import com.web_bloks cannot be resolved
+         [ERROR] Line 43: BasePage cannot be resolved to a type
+         [ERROR] Line 49: ViewPage cannot be resolved to a type
+         [ERROR] Line 62: LoginLogoutWidget cannot be resolved to a type
+         [ERROR] Line 63: GearsStatus cannot be resolved to a type
+         [ERROR] Line 64: ConfigWidget cannot be resolved to a type
+         [ERROR] Line 71: UserMessageWidget cannot be resolved to a type
+         [ERROR] Line 73: ImgAnchor cannot be resolved to a type
+         [ERROR] Line 92: ImgAnchor cannot be resolved to a type
+         [ERROR] Line 92: ImgAnchor cannot be resolved to a type
+         [ERROR] Line 105: ConfigWidget cannot be resolved to a type
+         [ERROR] Line 105: ConfigWidget cannot be resolved to a type
+         [ERROR] Line 106: ConfigWidget cannot be resolved to a type
+         [ERROR] Line 107: ConfigWidget cannot be resolved to a type
+         [ERROR] Line 111: ConfigWidget cannot be resolved to a type
+         [ERROR] Line 113: LoginLogoutWidget cannot be resolved to a type
+         [ERROR] Line 113: LoginLogoutWidget cannot be resolved to a type
+         [ERROR] Line 114: LoginLogoutWidget cannot be resolved to a type
+         [ERROR] Line 115: LoginLogoutWidget cannot be resolved to a type
+         [ERROR] Line 125: UserMessageWidget cannot be resolved to a type
+         [ERROR] Line 125: UserMessageWidget cannot be resolved to a type
+         [ERROR] Line 126: UserMessageWidget cannot be resolved to a type
+         [ERROR] Line 130: The method input_box_title() is undefined for the type BaseMessages
+         [ERROR] Line 184: GearsStatus cannot be resolved to a type
+         [ERROR] Line 184: GearsStatus cannot be resolved to a type
+         [ERROR] Line 230: UserManager cannot be resolved to a type
+         [ERROR] Line 230: The method create(Class<?>) from the type GWT refers to the missing type UserManager
+         [ERROR] Line 230: UserManager cannot be resolved to a type
+         [ERROR] Line 233: User cannot be resolved to a type
+         [ERROR] Line 243: LoginLogoutWidget cannot be resolved to a type
+         [ERROR] Line 244: LoginLogoutWidget cannot be resolved to a type
+         [ERROR] Line 250: ConfigWidget cannot be resolved to a type
+         [ERROR] Line 252: LoginLogoutWidget cannot be resolved to a type
+         [ERROR] Line 252: LoginLogoutWidget cannot be resolved
+         [ERROR] Line 254: ConfigWidget cannot be resolved to a type
+         [ERROR] Line 256: LoginLogoutWidget cannot be resolved to a type
+         [ERROR] Line 256: LoginLogoutWidget cannot be resolved
+         [ERROR] Line 264: ViewPage cannot be resolved to a type
+         [ERROR] Line 265: ViewPage cannot be resolved to a type
+         [ERROR] Line 277: ViewPage cannot be resolved to a type
+         [ERROR] Line 278: Logger cannot be resolved
+         [ERROR] Line 280: ViewPage cannot be resolved to a type
+         [ERROR] Line 288: StatusMessageServer cannot be resolved to a type
+         [ERROR] Line 292: UserMessageWidget cannot be resolved to a type
+         [ERROR] Line 293: UserMessageWidget cannot be resolved to a type
+         [ERROR] Line 297: UserMessageServer cannot be resolved to a type
+      [ERROR] Errors in 'file:/C:/Documents%20and%20Settings/Jean-Lou%20Dupont/My%20Documents/workspace_gae/jldupont/trunk/site/app/client/src/com/jldupont/pages/client/MainPage.java'
+         [ERROR] Line 8: The import com.web_bloks cannot be resolved
+         [ERROR] Line 9: The import com.web_bloks cannot be resolved
+         [ERROR] Line 11: The import com.web_bloks cannot be resolved
+         [ERROR] Line 14: The import com.web_bloks cannot be resolved
+         [ERROR] Line 15: The import com.web_bloks cannot be resolved
+         [ERROR] Line 16: The import com.web_bloks cannot be resolved
+         [ERROR] Line 27: ViewPage cannot be resolved to a type
+         [ERROR] Line 36: UserMessageServer cannot be resolved to a type
+         [ERROR] Line 37: StatusMessageServer cannot be resolved to a type
+         [ERROR] Line 40: EditPageWidget cannot be resolved to a type
+         [ERROR] Line 41: ViewSourceWidget cannot be resolved to a type
+         [ERROR] Line 94: UserMessageServer cannot be resolved to a type
+         [ERROR] Line 95: UserMessageServer cannot be resolved to a type
+         [ERROR] Line 97: StatusMessageServer cannot be resolved to a type
+         [ERROR] Line 98: StatusMessageServer cannot be resolved to a type
+         [ERROR] Line 104: Title cannot be resolved to a type
+      Removing invalidated units
+   Removing units with errors
+Refreshing resources
+Refreshing resources
+Compiling Java source files in module 'com.jldupont.pages.Pages'
+   Removing units with errors
+      [ERROR] Errors in 'file:/C:/Documents%20and%20Settings/Jean-Lou%20Dupont/My%20Documents/workspace_gae/jldupont/trunk/site/app/client/src/com/jldupont/pages/client/Base.java'
+         [ERROR] Line 42: No source code is available for type com.web_bloks.content.client.BasePage; did you forget to inherit a required module?
+         [ERROR] Line 48: No source code is available for type com.web_bloks.content.client.ViewPage; did you forget to inherit a required module?
+         [ERROR] Line 61: No source code is available for type com.web_bloks.widget.client.LoginLogoutWidget; did you forget to inherit a required module?
+         [ERROR] Line 62: No source code is available for type com.web_bloks.widget.client.GearsStatus; did you forget to inherit a required module?
+         [ERROR] Line 63: No source code is available for type com.web_bloks.widget.client.ConfigWidget; did you forget to inherit a required module?
+         [ERROR] Line 70: No source code is available for type com.web_bloks.widget.client.UserMessageWidget; did you forget to inherit a required module?
+         [ERROR] Line 72: No source code is available for type com.web_bloks.widget.client.ImgAnchor; did you forget to inherit a required module?
+         [ERROR] Line 229: No source code is available for type com.web_bloks.user.client.UserManager; did you forget to inherit a required module?
+         [ERROR] Line 232: No source code is available for type com.web_bloks.user.client.User; did you forget to inherit a required module?
+         [ERROR] Line 251: No source code is available for type com.web_bloks.widget.client.LoginLogoutWidget.State; did you forget to inherit a required module?
+         [ERROR] Line 277: No source code is available for type com.web_bloks.system.client.Logger; did you forget to inherit a required module?
+         [ERROR] Line 287: No source code is available for type com.web_bloks.user.client.StatusMessageServer; did you forget to inherit a required module?
+         [ERROR] Line 296: No source code is available for type com.web_bloks.user.client.UserMessageServer; did you forget to inherit a required module?
+      [ERROR] Errors in 'file:/C:/Documents%20and%20Settings/Jean-Lou%20Dupont/My%20Documents/workspace_gae/jldupont/trunk/site/app/client/src/com/jldupont/pages/client/MainPage.java'
+         [ERROR] Line 27: No source code is available for type com.web_bloks.content.client.ViewPage; did you forget to inherit a required module?
+         [ERROR] Line 36: No source code is available for type com.web_bloks.user.client.UserMessageServer; did you forget to inherit a required module?
+         [ERROR] Line 37: No source code is available for type com.web_bloks.user.client.StatusMessageServer; did you forget to inherit a required module?
+         [ERROR] Line 40: No source code is available for type com.web_bloks.widget.client.EditPageWidget; did you forget to inherit a required module?
+         [ERROR] Line 41: No source code is available for type com.web_bloks.widget.client.ViewSourceWidget; did you forget to inherit a required module?
+         [ERROR] Line 104: No source code is available for type com.web_bloks.document.client.Title; did you forget to inherit a required module?
+      Removing invalidated units
+   Removing units with errors
+Finding entry point classes
+Rebinding com.google.gwt.i18n.client.impl.LocaleInfoImpl
+   Removing units with errors
+      [ERROR] Errors in 'file:/C:/Documents%20and%20Settings/Jean-Lou%20Dupont/My%20Documents/workspace_gae/jldupont/trunk/site/app/client/src/com/jldupont/pages/client/Base.java'
+         [ERROR] Line 22: The import com.web_bloks cannot be resolved
+         [ERROR] Line 23: The import com.web_bloks cannot be resolved
+         [ERROR] Line 25: The import com.web_bloks cannot be resolved
+         [ERROR] Line 26: The import com.web_bloks cannot be resolved
+         [ERROR] Line 27: The import com.web_bloks cannot be resolved
+         [ERROR] Line 28: The import com.web_bloks cannot be resolved
+         [ERROR] Line 29: The import com.web_bloks cannot be resolved
+         [ERROR] Line 30: The import com.web_bloks cannot be resolved
+         [ERROR] Line 31: The import com.web_bloks cannot be resolved
+         [ERROR] Line 32: The import com.web_bloks cannot be resolved
+         [ERROR] Line 33: The import com.web_bloks cannot be resolved
+         [ERROR] Line 34: The import com.web_bloks cannot be resolved
+         [ERROR] Line 42: BasePage cannot be resolved to a type
+         [ERROR] Line 48: ViewPage cannot be resolved to a type
+         [ERROR] Line 61: LoginLogoutWidget cannot be resolved to a type
+         [ERROR] Line 62: GearsStatus cannot be resolved to a type
+         [ERROR] Line 63: ConfigWidget cannot be resolved to a type
+         [ERROR] Line 70: UserMessageWidget cannot be resolved to a type
+         [ERROR] Line 72: ImgAnchor cannot be resolved to a type
+         [ERROR] Line 91: ImgAnchor cannot be resolved to a type
+         [ERROR] Line 91: ImgAnchor cannot be resolved to a type
+         [ERROR] Line 104: ConfigWidget cannot be resolved to a type
+         [ERROR] Line 104: ConfigWidget cannot be resolved to a type
+         [ERROR] Line 105: ConfigWidget cannot be resolved to a type
+         [ERROR] Line 106: ConfigWidget cannot be resolved to a type
+         [ERROR] Line 110: ConfigWidget cannot be resolved to a type
+         [ERROR] Line 112: LoginLogoutWidget cannot be resolved to a type
+         [ERROR] Line 112: LoginLogoutWidget cannot be resolved to a type
+         [ERROR] Line 113: LoginLogoutWidget cannot be resolved to a type
+         [ERROR] Line 114: LoginLogoutWidget cannot be resolved to a type
+         [ERROR] Line 124: UserMessageWidget cannot be resolved to a type
+         [ERROR] Line 124: UserMessageWidget cannot be resolved to a type
+         [ERROR] Line 125: UserMessageWidget cannot be resolved to a type
+         [ERROR] Line 183: GearsStatus cannot be resolved to a type
+         [ERROR] Line 183: GearsStatus cannot be resolved to a type
+         [ERROR] Line 229: UserManager cannot be resolved to a type
+         [ERROR] Line 229: The method create(Class<?>) from the type GWT refers to the missing type UserManager
+         [ERROR] Line 229: UserManager cannot be resolved to a type
+         [ERROR] Line 232: User cannot be resolved to a type
+         [ERROR] Line 242: LoginLogoutWidget cannot be resolved to a type
+         [ERROR] Line 243: LoginLogoutWidget cannot be resolved to a type
+         [ERROR] Line 249: ConfigWidget cannot be resolved to a type
+         [ERROR] Line 251: LoginLogoutWidget cannot be resolved to a type
+         [ERROR] Line 251: LoginLogoutWidget cannot be resolved
+         [ERROR] Line 253: ConfigWidget cannot be resolved to a type
+         [ERROR] Line 255: LoginLogoutWidget cannot be resolved to a type
+         [ERROR] Line 255: LoginLogoutWidget cannot be resolved
+         [ERROR] Line 263: ViewPage cannot be resolved to a type
+         [ERROR] Line 264: ViewPage cannot be resolved to a type
+         [ERROR] Line 276: ViewPage cannot be resolved to a type
+         [ERROR] Line 277: Logger cannot be resolved
+         [ERROR] Line 279: ViewPage cannot be resolved to a type
+         [ERROR] Line 287: StatusMessageServer cannot be resolved to a type
+         [ERROR] Line 291: UserMessageWidget cannot be resolved to a type
+         [ERROR] Line 292: UserMessageWidget cannot be resolved to a type
+         [ERROR] Line 296: UserMessageServer cannot be resolved to a type
+      [ERROR] Errors in 'file:/C:/Documents%20and%20Settings/Jean-Lou%20Dupont/My%20Documents/workspace_gae/jldupont/trunk/site/app/client/src/com/jldupont/pages/client/MainPage.java'
+         [ERROR] Line 8: The import com.web_bloks cannot be resolved
+         [ERROR] Line 9: The import com.web_bloks cannot be resolved
+         [ERROR] Line 11: The import com.web_bloks cannot be resolved
+         [ERROR] Line 14: The import com.web_bloks cannot be resolved
+         [ERROR] Line 15: The import com.web_bloks cannot be resolved
+         [ERROR] Line 16: The import com.web_bloks cannot be resolved
+         [ERROR] Line 27: ViewPage cannot be resolved to a type
+         [ERROR] Line 36: UserMessageServer cannot be resolved to a type
+         [ERROR] Line 37: StatusMessageServer cannot be resolved to a type
+         [ERROR] Line 40: EditPageWidget cannot be resolved to a type
+         [ERROR] Line 41: ViewSourceWidget cannot be resolved to a type
+         [ERROR] Line 94: UserMessageServer cannot be resolved to a type
+         [ERROR] Line 95: UserMessageServer cannot be resolved to a type
+         [ERROR] Line 97: StatusMessageServer cannot be resolved to a type
+         [ERROR] Line 98: StatusMessageServer cannot be resolved to a type
+         [ERROR] Line 104: Title cannot be resolved to a type
+      Removing invalidated units
+   Removing units with errors
