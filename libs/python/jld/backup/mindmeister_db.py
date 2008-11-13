@@ -6,6 +6,8 @@ __author__  = "Jean-Lou Dupont"
 __version__ = "$Id$"
 
 import sqlite3 as sql
+from string import Template
+from types import *
 
 class MM_db_Exception(Exception):
     """ MindMeister DB Exception class
@@ -36,16 +38,37 @@ class MM_db(object):
     _schema = """(mapid text, created text, modified text, title text, tags text, exported text)
     """
     
+    _fields = ['mapid', 'created', 'modified', 'title', 'tags', 'exported']
+    
+    _stm_upd = """INSERT OR REPLACE INTO %s (%s) VALUES(%s)
+    """
+    
+    _stm_select = """SELECT * FROM %s WHERE %s = %s
+    """
+    
     def __init__(self, filepath, tableName = 'maps'):
         self.filepath = filepath
         self.db = None
         self.table = tableName
+        self._fields = sorted( self._fields )
     
-    def update(self, list):
+    def update(self, entries):
         """ Performs requested updates
-            
+            entries: a list of dict entry 
         """
         self._prepare()
+        if (entries is None):
+            return
+        
+        for entry in entries:
+            assert( type(entry) is DictType )
+            s_entry = self._sortDict( entry )
+                        
+            try:
+                self.db.execute( self._stm_upd, s_entry )
+            except Exception,e:
+                raise MM_db_Exception( e )
+            
     
     def getOutOfDate(self):
         """ Returns a list of out-of-date mapId
@@ -60,6 +83,15 @@ class MM_db(object):
             Returns None OR entry (dict)
         """
         self._prepare()
+        if (mapId is None):
+            return None
+        
+        try:
+            self.db.execute()
+        except Exception,e:
+            raise MM_db_Exception( e )
+            
+        return
                 
     def deleteRow(self, mapId):
         """ Deletes a specific row by mapId
@@ -92,8 +124,29 @@ class MM_db(object):
         """ % (self.table, self.schema)
         
         try:
-            r = self.db.execute( stm )
+            self.db.execute( stm )
         except:
             raise MM_db_Exception( "exception whilst creating database table[%s]" % self.table)
         
     
+    def _prepareUpdateStatement(self):
+        """ Prepares the sqlite statement used
+            for the update process. 
+            The fields are sorted by alphabetical order.
+        """
+        fields = ''  ;  holders = ''
+        for field in self._fields:
+            fields  = fields + field + ','
+            holders = holders + '?,'
+        fields  = fields.rstrip(',')
+        holders = holders.rstrip(',') 
+            
+        stm = self._stm_upd % (self.table, fields, holders)
+        self.stm_upd = Template( stm )
+        
+    def _sortDict(self, adict):
+        """ Sorts a dictionary by key
+        """
+        keys = adict.keys()
+        keys.sort()
+        return map(adict.get, keys)
