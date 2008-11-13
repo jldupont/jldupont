@@ -12,7 +12,6 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Hyperlink;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.KeyboardListenerAdapter;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -127,7 +126,7 @@ public class Base extends Composite
 
 		textBoxInput = new TextBox();
 		verticalPanelHeader.add(textBoxInput);
-		textBoxInput.setTitle(MSG.input_box_title());
+		//textBoxInput.setTitle(MSG.input_box_title());
 		textBoxInput.setTabIndex(0);
 		textBoxInput.setCursorPos(0);
 		textBoxInput.setStylePrimaryName("rekrunch-Input");
@@ -189,19 +188,7 @@ public class Base extends Composite
 		flexTable.getCellFormatter().setHorizontalAlignment(0, 1, HasHorizontalAlignment.ALIGN_CENTER);
 		flexTable.getCellFormatter().setWidth(0, 1, "100%");
 		horizontalPanelFooterSources.setSpacing(1);
-		
-		Image image = null;				
-		// Sources
-		final ImgAnchor imgAnchorCrunchbase = GWT.create( ImgAnchor.class );
-		image = IMG.crunchbase().createImage();		
-		imgAnchorCrunchbase.setImg(image);
-		horizontalPanelFooterSources.add(imgAnchorCrunchbase);
-		horizontalPanelFooterSources.setCellVerticalAlignment(imgAnchorCrunchbase, HasVerticalAlignment.ALIGN_MIDDLE);
-		horizontalPanelFooterSources.setCellHorizontalAlignment(imgAnchorCrunchbase, HasHorizontalAlignment.ALIGN_CENTER);
-		imgAnchorCrunchbase.setImg( image );
-		imgAnchorCrunchbase.setTitle( MSG.crunchbase() );
-		imgAnchorCrunchbase.setHref( MSG.crunchbase_url() );
-		
+				
 		
 		DeferredCommand.addCommand(new Command(){
 			public void execute() {
