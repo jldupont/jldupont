@@ -10,7 +10,7 @@ from jld.tools.messages import Messages
 
 class MM_Messages(Messages):
     
-    filepath = "mindmeister_messages.yaml"
+    filepath = os.path.dirname( os.path.abspath( __file__ )) + os.sep + "mindmeister_messages.yaml"
     
     def __init__(self):
         Messages.__init__(self, self.filepath)

@@ -10,7 +10,7 @@ import webbrowser
 import jld.registry as reg
 import jld.api.mindmeister as mm
 import jld.api.mindmeister_response as mmr
-from jld.cmd import BaseCmd
+from   jld.cmd import BaseCmd
 import jld.backup.mindmeister_messages as msg
 
 # ========================================================================================
