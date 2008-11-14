@@ -94,6 +94,10 @@ class Backup(BaseCmd):
         total = 0;  count = 0;  page = 1;  maps = []
         while run:
             batch = self._getOnePage(auth_token, page, per_page)
+            if (batch.error):
+                print self.msgs.render('error_getmaps', {'msg':batch.error_msg})
+                #print batch.raw
+                sys.exit(0)
             maps.append( batch.maps )
             pages = int( batch.pages )
             count = count + int( batch.count )

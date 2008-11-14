@@ -33,10 +33,13 @@ class MM_Response_getList(object):
     _attribs = ('id', 'title', 'created', 'modified', 'tags')
     
     def __init__(self, raw):
+        self.raw = raw
         self.pages = 0
         self.total = None
         self.maps  = []
         self.count = 0
+        self.error = False
+        self.error_msg = None
         try:
             self.tree = minidom.parseString(raw).documentElement
             self._extractTotal()   
@@ -48,7 +51,9 @@ class MM_Response_getList(object):
         try:    
             self.total = self.tree.getElementsByTagName('maps')[0].getAttribute('total')
             self.pages = self.tree.getElementsByTagName('maps')[0].getAttribute('pages') 
-        except: pass
+        except Exception,e:
+            self.error = True
+            self.error_msg = e
 
     def _extractMaps(self):
         """ Returns a list of dict
@@ -62,7 +67,9 @@ class MM_Response_getList(object):
                 
                 self.maps.append( this )
             self.count = len( self.maps )
-        except: pass
+        except Exception,e:
+            self.error = True
+            self.error_msg = e
 
 # ==========================================================
 

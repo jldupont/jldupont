@@ -7,3 +7,4 @@ reg_update_error: Unable to update registry
 invalid_command: Invalid command [$cmd]
 use_help: Please use '-h' for help
 do_auth: Please authentication application (use 'auth' command)
+error_getmaps: Error fetching maps [$msg]
