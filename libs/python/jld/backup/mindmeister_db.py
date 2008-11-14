@@ -2,12 +2,13 @@
     @author: Jean-Lou Dupont
     
     Usage:
+    ======
     import jld.backup.mindmeister_db as dbase
     
     db = dbase.Db(filepath)
     maps = dbase.Maps  #shortcut
     
-    maps.select()
+    map = maps.select( ... )
     
 """
 
@@ -32,7 +33,15 @@ class Maps(SQLObject):
     modified = DateTimeCol()
     tags     = StringCol()
     exported = DateTimeCol()
-   
+    
+    @classmethod
+    def getToExportList(cls):
+        """ Selects the maps for which 
+            'exported' < 'modified' 
+            i.e. exported datime is older
+                OR exported == None
+        """
+        return cls.select(OR(cls.q.modified > cls.q.exported, cls.q.exported == None))
 
 class Db(object):
     """ Db class: used to bootstrap SQLObject 
@@ -53,8 +62,22 @@ if __name__ == "__main__":
     """ Tests
     """
     db = Db('/:memory:')
-    map = Maps.select(Maps.mapid=='1')
-    dir(map)
-    m1 = Maps(mapid='1', title='title', created=datetime.datetime.now(), modified=datetime.datetime.now(), tags='', exported=None)
-    print m1
+    Maps._connection.debug = True
+    
+    before = datetime.datetime(1971, 03, 31)
+    now = datetime.datetime.now()
+    
+    print 'before: %s' % before
+    print 'now: %s' % now
+    
+    m1 = Maps(mapid='1', modified=now, tags='', exported=before, title='title', created=datetime.datetime.now(), )
+    m1.set()
+    m2 = Maps(mapid='2', modified=now, tags='', exported=None, title='title', created=datetime.datetime.now(), )
+    m2.set()    
+    
+    list = Maps.getToExportList()
+    for item in list:
+        print item
+    
+    
     
