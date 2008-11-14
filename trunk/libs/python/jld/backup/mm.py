@@ -1,4 +1,9 @@
+#!/usr/bin/python
 """ Backup for MindMeister mindmaps
+
+    Dependencies:
+        module yaml
+
 """
 __author__  = "Jean-Lou Dupont"
 __version__ = "$Id$"
