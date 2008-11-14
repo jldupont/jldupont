@@ -8,7 +8,7 @@
     db = dbase.Db(filepath)
     maps = dbase.Maps  #shortcut
     
-    map = maps.select( ... )
+    liste = maps.getToExportList()
     
 """
 
@@ -21,7 +21,6 @@ import sqlite3 as sql
 
 # =============================================
 # =============================================
-
 
 class Maps(SQLObject):
     """ MindMeister Maps database
@@ -62,18 +61,18 @@ if __name__ == "__main__":
     """ Tests
     """
     db = Db('/:memory:')
-    Maps._connection.debug = True
+    #Maps._connection.debug = True
     
     before = datetime.datetime(1971, 03, 31)
     now = datetime.datetime.now()
+    after = datetime.datetime(2030, 03, 31)
     
-    print 'before: %s' % before
-    print 'now: %s' % now
+    #print 'before: %s' % before
+    #print 'now: %s' % now
     
     m1 = Maps(mapid='1', modified=now, tags='', exported=before, title='title', created=datetime.datetime.now(), )
-    m1.set()
     m2 = Maps(mapid='2', modified=now, tags='', exported=None, title='title', created=datetime.datetime.now(), )
-    m2.set()    
+    m3 = Maps(mapid='3', modified=now, tags='', exported=after, title='title', created=datetime.datetime.now(), )    
     
     list = Maps.getToExportList()
     for item in list:

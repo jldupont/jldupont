@@ -44,13 +44,9 @@ class Backup(BaseCmd):
         url = self.mm.gen_auth_url('read', res.frob)
         webbrowser.open_new(url)
             
-    def cmd_export_all(self, *args):
-        """Exports all the maps"""
-        print "in export_all command"
-        print args
-
-    def cmd_listmaps(self, *args):
-        """Lists all the maps"""
+    def cmd_umaps(self, *args):
+        """ Retrieves the latest list of maps
+        """
         
         auth_token = self._prepareAuthorizedCommand()
         all = self._getAllMaps(auth_token)
@@ -148,3 +144,35 @@ class Backup(BaseCmd):
     def _initMM(self):
         if (self.mm is None):
             self.mm = mm.MM(self.secret, self.api_key)
+
+
+# =================================================================================
+# =================================================================================
+
+class MM_Printer(object):
+    """ Pretty Printer
+    """
+    @classmethod
+    def header(cls):
+        """
+        """
+    
+    @classmethod
+    def footer(cls):
+        """
+        """
+    
+    @classmethod
+    def formatItem(cls, item):
+        """ Formats one item
+        """
+    
+    @classmethod
+    def maps(cls, list):
+        """ Default (basic) printer implementation
+        """
+        cls.header()
+        for item in list:
+            print cls.formatItem(item)
+        cls.footer()
+        
