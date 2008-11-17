@@ -63,7 +63,6 @@ Commands:
     
     (options,args) = parser.parse_args()
 
-        
     # make sure we have SECRET and API_KEY configured in the registry
     # Use conditional 'setKey' if we have valid overriding values i.e. not None
     r = reg.Registry()
@@ -75,15 +74,22 @@ Commands:
         except Exception,e: 
             logging.error("error setting registry: is the proper user access in place? [%s]" % e)
             sys.exit(0)
-        
+
     # == configuration ==
     # ===================
-    secret  = r.getKey('mindmeister', 'secret')
-    api_key = r.getKey('mindmeister', 'api_key') 
+    params = {}
+    
+    params['quiet'] = options.quiet
+    
+    secret  = params['secret']  = r.getKey('mindmeister', 'secret')
+    api_key = params['api_key'] = r.getKey('mindmeister', 'api_key')
+     
     backup.secret = secret
     backup.api_key = api_key
-    try:    backup.quiet = options.quiet
-    except: pass
+
+    # == Config UI ==
+    # ===============
+    ui.setParams( msgs, params )
 
     # == simple check ==
     # ==================
@@ -109,13 +115,9 @@ Commands:
     # ================
     try:
         getattr( backup, "cmd_%s" % command )(args)
-    except api.ErrorNetwork,e:
-        pass
-    except reg.RegistryException,e:
-        pass
     except Exception,e:
-        pass
-    
+        ui.handleError( e )
+        
     # === END ===
 
 # =======================================================================
