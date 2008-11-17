@@ -13,3 +13,15 @@ invalid_command: Invalid command [$cmd]
 use_help: Please use '-h' for help
 do_auth: Please authentication application (use 'auth' command)
 error_getmaps: Error fetching maps [$msg]
+error_network: Network error
+error_access: Access error
+error_object: Object access error
+error_method: API method access error
+error_validation: Parameter validation error
+error_property: Property error
+error_protocol: Protocol level error
+error_registry: Registry level error
+help_network: Maybe check the access to the Internet?
+help_registry: 
+help_protocol:
+help_validation: 

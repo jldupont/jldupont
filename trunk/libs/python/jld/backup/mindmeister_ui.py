@@ -9,41 +9,25 @@ import re
 import sys
 import jld.api as api
 import jld.registry as reg
+import jld.tools.cmd_ui as ui
 
-class MM_UI(object):
+class MM_UI(ui.UIBase):
     """ Handles user interface
     """
     _map = {
-        'ErrorNetwork':     (),
-        'ErrorAccess':      (),
-        'ErrorObject':      (),
-        'ErrorMethod':      (),
-        'ErrorValidation':  (),
-        'ErrorProperty':    (),
-        'ErrorProtocol':    (),
-        'RegistryException':(),
+        'ErrorNetwork':     { 'msg': 'error_network',   'help':'', },
+        'ErrorAccess':      { 'msg': 'error_access',    'help':'', },
+        'ErrorObject':      { 'msg': 'error_object',    'help':'', },
+        'ErrorMethod':      { 'msg': 'error_method',    'help':'', },
+        'ErrorValidation':  { 'msg': 'error_validation','help':'', },
+        'ErrorProperty':    { 'msg': 'error_property',  'help':'', },
+        'ErrorProtocol':    { 'msg': 'error_protocol',  'help':'', },
+        'RegistryException':{ 'msg': 'error_registry',  'help':'', },
     }
     
     def __init__(self):
-        self.msgs = None
-        self.params = {}
-    
-    def setParams(self, msgs, params):
-        """ Generic parameter setting interface
-        """
-        self.msgs = msgs
-        self.params = params
+        UIBase.__init__(self)
 
-    def handleError( self, exc ):
-        """ Displays, if required, an appropriate user message
-            corresponding to an error condition.
-            Also generates logging and/or email messages as appropriate.
-        """
-        classe = re.compile("\'(.*)\'").search( str( exc.__class__ ) ).group(1)
-        if (not self._map.has_key( classe )):
-            self.msgs.render( 'unhandled_exception', {'exc:': exc} )
-            sys.exit(0)
-        
 
 # ==============================================
 # ==============================================
