@@ -15,23 +15,26 @@ class MM_UI(ui.UIBase):
     """ Handles user interface
     """
     _map = {
-        'ErrorNetwork':     { 'msg': 'error_network',   'help':'', },
-        'ErrorAccess':      { 'msg': 'error_access',    'help':'', },
-        'ErrorObject':      { 'msg': 'error_object',    'help':'', },
-        'ErrorMethod':      { 'msg': 'error_method',    'help':'', },
-        'ErrorValidation':  { 'msg': 'error_validation','help':'', },
-        'ErrorProperty':    { 'msg': 'error_property',  'help':'', },
-        'ErrorProtocol':    { 'msg': 'error_protocol',  'help':'', },
-        'RegistryException':{ 'msg': 'error_registry',  'help':'', },
+        'jld.api.ErrorNetwork':     { 'msg': 'error_network',   'help': 'help_network', },
+        'jld.api.ErrorAccess':      { 'msg': 'error_access',    'help': 'help_access', },
+        'jld.api.ErrorMethod':      { 'msg': 'error_method',    'help': 'help_method', },
+        'jld.api.ErrorValidation':  { 'msg': 'error_validation','help': 'help_validation', },
+        'jld.api.ErrorProtocol':    { 'msg': 'error_protocol',  'help': 'help_protocol', },
+        'jld.registry.exception.RegistryException':{ 'msg': 'error_registry',  'help_win': 'help_registry_win', 'help_nix':'help_registry_nix' },
     }
     
-    def __init__(self):
-        UIBase.__init__(self)
-
-
 # ==============================================
 # ==============================================
 
 if __name__ == "__main__":
     """ Tests
     """
+    import jld.backup.mindmeister_messages as msg
+    
+    msgs = msg.MM_Messages()
+    ui = MM_UI( msgs )
+    
+    import jld.registry.exception as regExc
+    e = regExc.RegistryException('test')
+    
+    ui.handleError( e )

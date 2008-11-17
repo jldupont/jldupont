@@ -22,6 +22,10 @@ error_property: Property error
 error_protocol: Protocol level error
 error_registry: Registry level error
 help_network: Maybe check the access to the Internet?
-help_registry: 
-help_protocol:
-help_validation: 
+help_access: Is the proper access right in place?
+help_method: Has the MindMeister API changed?
+help_validation: Check documentation
+help_protocol: Has the MindMeister API changed?
+help_registry_win: The registry key HKEY_LOCAL_MACHINE/Software/Python/Registry can't be accessed 
+help_registry_nix: The filesystem path /etc/python/registry can't be accessed
+
