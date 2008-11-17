@@ -5,34 +5,64 @@ __version__= "$Id$"
 
 from xml.dom import minidom
 
-class MM_Response_getFrob(object):
+class MM_ResponseBase(object):
+    """ Base class response
+    """
+    def __init__(self):
+        self.code = None
+        self.error = None
+        
+class MM_ResponseBasic(MM_ResponseBase):
+    """ Basic response
+    """
+    def __init__(self, raw = None):
+        MM_ResponseBase.__init__(self)
+        
+        #test purpose
+        if (raw is not None):
+            self._extractErrorCode(raw)
+        
+    def _extractErrorCode(self, raw):
+        try:
+            e = minidom.parseString(raw).documentElement
+            self.code = e.getElementsByTagName('err')[0].getAttribute('code')
+        except:
+            pass
+
+
+class MM_Response_getFrob(MM_ResponseBase):
     """ In response to mm.auth.getFrob
     """
     def __init__(self, raw):
+        MM_ResponseBase.__init__(self)
         self.frob = None
+        self._extractErrorCode(raw)
         try:
             e = minidom.parseString(raw).documentElement
-            self.frob = e.getElementsByTagName('frob')[0].childNodes[0].nodeValue 
-        except:
-            pass
+            self.frob = e.getElementsByTagName('frob')[0].childNodes[0].nodeValue
+        except Exception,e:
+            self.error = e
         
-class MM_Response_getAuthToken(object):
+class MM_Response_getAuthToken(MM_ResponseBase):
     """ In response to mm.auth.getToken
     """
     def __init__(self, raw):
+        MM_ResponseBase.__init__(self)
         self.auth_token = None
+        self._extractErrorCode(raw)        
         try:
             e = minidom.parseString(raw).documentElement
             self.auth_token = e.getElementsByTagName('token')[0].childNodes[0].nodeValue
-        except:
-            pass
+        except Exception,e:
+            self.error = e
     
-class MM_Response_getList(object):
+class MM_Response_getList(MM_ResponseBase):
     """ In response to mm.maps.getList
     """
     _attribs = ('id', 'title', 'created', 'modified', 'tags')
     
     def __init__(self, raw):
+        MM_ResponseBase.__init__(self)
         self.raw = raw
         self.pages = 0
         self.total = None
@@ -40,6 +70,7 @@ class MM_Response_getList(object):
         self.count = 0
         self.error = False
         self.error_msg = None
+        self._extractErrorCode(raw)        
         try:
             self.tree = minidom.parseString(raw).documentElement
             self._extractTotal()   
@@ -52,8 +83,7 @@ class MM_Response_getList(object):
             self.total = self.tree.getElementsByTagName('maps')[0].getAttribute('total')
             self.pages = self.tree.getElementsByTagName('maps')[0].getAttribute('pages') 
         except Exception,e:
-            self.error = True
-            self.error_msg = e
+            self.error = e
 
     def _extractMaps(self):
         """ Returns a list of dict
@@ -68,8 +98,7 @@ class MM_Response_getList(object):
                 self.maps.append( this )
             self.count = len( self.maps )
         except Exception,e:
-            self.error = True
-            self.error_msg = e
+            self.error = e
 
 # ==========================================================
 

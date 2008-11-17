@@ -8,6 +8,9 @@ import md5
 import urllib2
 import jld.api as api
 
+class MM_Exception_HTTP(Exception):
+    pass
+
 class MM(object):
     """MindMeister WEB API
     """
@@ -61,7 +64,10 @@ class MM(object):
         params = api.formatParams( args )
         url = self._api % params
         
-        response = urllib2.urlopen(url)
+        try:
+            response = urllib2.urlopen(url)
+        except Exception,e:
+            raise MM_Exception_HTTP(e) 
         return response.read()
 
 # ===================================================================================
@@ -80,8 +86,14 @@ if __name__ == "__main__":
     # api_key=c4f64204ca7ee60dd11da6d568b2b199
     # &method=mm.test.echo
     # &api_sig=b46d4eabe4e18cd7fcab2de42d743f2d
-    #mm2 = MM('','')
-    #print mm2.do(method='mm.test.echo')
+    mm2 = MM('','')
+    ret = mm2.do(method='mm.test.echo')
+    
+    import mindmeister_response as rep
+    res = rep.MM_ResponseBasic(ret)
+    print res.code
+    print ret
+    print res.error
     
     #print mm2.do(method='mm.maps.getPublicList')
     
