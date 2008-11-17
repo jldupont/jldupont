@@ -3,58 +3,98 @@
 __author__ = "Jean-Lou Dupont"
 __version__= "$Id$"
 
+import jld.api as api
 from xml.dom import minidom
 
 class MM_ResponseBase(object):
     """ Base class response
     """
-    def __init__(self):
-        self.code = None
-        self.error = None
+
+    MM_ErrorCodes = { 
+                     '20':  ("Object not found",                                                  api.ErrorObject),
+                     '21':  ("Collaborators and Viewers empty",                                   api.ErrorValidation),
+                     '22':  ("Invalid email",                                                     api.ErrorValidation),   
+                     '24':  ("Parameter x_pos and/or y_pos",                                      api.ErrorValidation),
+                     '25':  ("Not privileged: the API key is not authorized for the action",      api.ErrorAccess),
+                     '26':  ("User login already taken",                                          api.ErrorValidation),
+                     '27':  ("Email already taken",                                               api.ErrorValidation),
+                     '28':  ("Password and confirmation do not match",                            api.ErrorValidation),
+                     '29':  ("Password or email too short",                                       api.ErrorValidation),
+                     '30':  ("Subsharing not activated for map",                                  api.ErrorProperty),
+                     '31':  ("No default map defined",                                            api.ErrorProperty),
+                     '32':  ("No write access on map",                                            api.ErrorAccess),
+                     '95':  ("Not premium: user must have a premium account",                     api.ErrorAccess),
+                     '96':  ("Invalid signature",                                                 api.ErrorAuth),
+                     '97':  ("Missing signature",                                                 api.ErrorAuth),
+                     '98':  ("Login failed",                                                      api.ErrorAuth),
+                     '100': ("Invalid API key",                                                   api.ErrorAuth),
+                     '112': ("Method not found",                                                  api.ErrorMethod),
+                     
+    } 
+
+    def __init__(self, raw):
+        self.code = None   #error code
+        self.error = None  #error message
+        self._extractErrorCode(raw)
+        
+    def _extractErrorCode(self, raw):
+        """ Extract the <err code="" ..> section
+            and raises and appropriate exception if need be
+        """
+        try:
+            e = minidom.parseString(raw).documentElement
+            err = e.getElementsByTagName('err')[0]
+            self.code = err.getAttribute('code')
+            msg = err.getAttribute('msg')
+
+        except Exception,e:
+            return #No error code found
+        
+        
+        self._codeToException(self.code, msg)
+            
+                    
+    def _codeToException(self, code, msg):
+        """ Raises a correlated exception
+        """
+        if (not self.MM_ErrorCodes.has_key( code )):
+            raise Exception('Found an undocumented Exception Code [%s]' % code)
+        
+        #raise appropriate exception
+        raise self.MM_ErrorCodes[code][1](msg)
+        
+            
         
 class MM_ResponseBasic(MM_ResponseBase):
     """ Basic response
     """
     def __init__(self, raw = None):
-        MM_ResponseBase.__init__(self)
+        MM_ResponseBase.__init__(self, raw)
         
-        #test purpose
-        if (raw is not None):
-            self._extractErrorCode(raw)
-        
-    def _extractErrorCode(self, raw):
-        try:
-            e = minidom.parseString(raw).documentElement
-            self.code = e.getElementsByTagName('err')[0].getAttribute('code')
-        except:
-            pass
-
 
 class MM_Response_getFrob(MM_ResponseBase):
     """ In response to mm.auth.getFrob
     """
     def __init__(self, raw):
-        MM_ResponseBase.__init__(self)
+        MM_ResponseBase.__init__(self, raw)
         self.frob = None
-        self._extractErrorCode(raw)
         try:
             e = minidom.parseString(raw).documentElement
             self.frob = e.getElementsByTagName('frob')[0].childNodes[0].nodeValue
         except Exception,e:
-            self.error = e
+            raise api.ErrorProtocol( 'expecting parameter "frob"' )
         
 class MM_Response_getAuthToken(MM_ResponseBase):
     """ In response to mm.auth.getToken
     """
     def __init__(self, raw):
-        MM_ResponseBase.__init__(self)
+        MM_ResponseBase.__init__(self, raw)
         self.auth_token = None
-        self._extractErrorCode(raw)        
         try:
             e = minidom.parseString(raw).documentElement
             self.auth_token = e.getElementsByTagName('token')[0].childNodes[0].nodeValue
         except Exception,e:
-            self.error = e
+            raise api.ErrorProtocol( 'expecting parameter "token"' )
     
 class MM_Response_getList(MM_ResponseBase):
     """ In response to mm.maps.getList
@@ -62,7 +102,7 @@ class MM_Response_getList(MM_ResponseBase):
     _attribs = ('id', 'title', 'created', 'modified', 'tags')
     
     def __init__(self, raw):
-        MM_ResponseBase.__init__(self)
+        MM_ResponseBase.__init__(self, raw)
         self.raw = raw
         self.pages = 0
         self.total = None
@@ -70,7 +110,6 @@ class MM_Response_getList(MM_ResponseBase):
         self.count = 0
         self.error = False
         self.error_msg = None
-        self._extractErrorCode(raw)        
         try:
             self.tree = minidom.parseString(raw).documentElement
             self._extractTotal()   
@@ -83,7 +122,7 @@ class MM_Response_getList(MM_ResponseBase):
             self.total = self.tree.getElementsByTagName('maps')[0].getAttribute('total')
             self.pages = self.tree.getElementsByTagName('maps')[0].getAttribute('pages') 
         except Exception,e:
-            self.error = e
+            raise api.ErrorProtocol( 'expecting parameter "maps"' )
 
     def _extractMaps(self):
         """ Returns a list of dict
@@ -98,7 +137,7 @@ class MM_Response_getList(MM_ResponseBase):
                 self.maps.append( this )
             self.count = len( self.maps )
         except Exception,e:
-            self.error = e
+            raise api.ErrorProtocol( 'expecting parameter "map"' )
 
 # ==========================================================
 
@@ -119,3 +158,11 @@ if __name__ == "__main__":
     r = MM_Response_getList(rGetList)
     print r.total
     print r.maps
+    
+    err = """
+<rsp stat="fail"> 
+<err code="97" msg="The call required signing but no signature was sent."/> 
+</rsp>    
+"""
+    r2 = MM_ResponseBasic( err )
+        

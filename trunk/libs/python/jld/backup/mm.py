@@ -99,7 +99,10 @@ Commands:
      
     # == DISPATCHER ==
     # ================
-    getattr( backup, "cmd_%s" % command )(args)
+    try:
+        getattr( backup, "cmd_%s" % command )(args)
+    except Exception,e:
+        pass
     
     # === END ===
 

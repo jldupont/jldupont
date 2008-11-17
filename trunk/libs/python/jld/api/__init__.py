@@ -39,6 +39,40 @@ def formatParams(liste):
 
 # =========================================================================
 
+class ErrorNetwork(Exception):
+    """ Error at the network layer e.g. DNS error, no connection etc. 
+    """
+
+class ErrorAuth(Exception):
+    """ Generic Authentication error
+    """
+
+class ErrorAccess(Exception):
+    """ Generic Access error e.g. restricted access
+    """
+
+class ErrorObject(Exception):
+    """ Generic object error e.g. object not found
+    """
+
+class ErrorMethod(Exception):
+    """ Generic method error e.g. unavailable method for API end-point etc.
+    """
+
+class ErrorValidation(Exception):
+    """ Generic validation error e.g. invalid parameter
+    """
+
+class ErrorProperty(Exception):
+    """ Generic property error e.g. feature X not available
+    """
+
+class ErrorProtocol(Exception):
+    """ Generic protocol error e.g. expecting parameter X but not found
+    """
+
+# =========================================================================
+
 if __name__ == "__main__":
     liste = { 'k2':'v2', 'xyz':'v?xyz', 'abc':'vabc', 'k1':'v1' }
     
