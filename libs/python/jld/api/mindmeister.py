@@ -70,6 +70,9 @@ class MM(object):
             raise api.ErrorNetwork(e) 
         return response.read()
 
+    def do_network_error(self):
+        raise api.ErrorNetwork('do_network_error')
+
 # ===================================================================================
     
 if __name__ == "__main__":

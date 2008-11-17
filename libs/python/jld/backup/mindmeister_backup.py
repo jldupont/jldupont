@@ -48,6 +48,12 @@ class Backup(BaseCmd):
         all = self._getAllMaps(auth_token)
         print all
         
+    def cmd_test(self, *args):
+        """ Test
+        """
+        self._initMM()
+        raw = self.mm.do_network_error()
+        
     # =========================================================
     # =========================================================
     
