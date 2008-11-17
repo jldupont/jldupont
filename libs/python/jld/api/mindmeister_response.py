@@ -100,7 +100,8 @@ class MM_Response_getAuthToken(MM_ResponseBase):
 class MM_Response_getList(MM_ResponseBase):
     """ In response to mm.maps.getList
     """
-    _attribs = ('id', 'title', 'created', 'modified', 'tags')
+    _attribs = ( 'id', 'title', 'created', 'modified', 'tags')
+    _remap   = { 'id': 'mapid' }
     
     def __init__(self, raw):
         MM_ResponseBase.__init__(self, raw)
@@ -136,7 +137,10 @@ class MM_Response_getList(MM_ResponseBase):
             for map in all_maps:
                 this = {}
                 for attr in self._attribs:
-                    this[attr] = map.getAttribute(attr)
+                    value = map.getAttribute(attr)
+                    if (attr in self._remap):
+                        attr = self._remap[attr]
+                    this[attr] = value
                 
                 self.maps.append( this )
             self.count = len( self.maps )

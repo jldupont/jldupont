@@ -15,6 +15,7 @@ class MM_UI(ui.UIBase):
     """ Handles user interface
     """
     _map = {
+        'jld.api.ErrorAuth':        { 'msg': 'error_auth',      'help': 'help_auth', },
         'jld.api.ErrorNetwork':     { 'msg': 'error_network',   'help': 'help_network', },
         'jld.api.ErrorAccess':      { 'msg': 'error_access',    'help': 'help_access', },
         'jld.api.ErrorMethod':      { 'msg': 'error_method',    'help': 'help_method', },
@@ -38,3 +39,13 @@ if __name__ == "__main__":
     e = regExc.RegistryException('test')
     
     ui.handleError( e )
+    
+    class NotDefined(Exception):
+        pass
+    
+    nd = NotDefined('not defined...')
+    ui.handleError( nd )
+    
+    ea = api.ErrorAuth()
+    ui.handleError( ea )
+    
