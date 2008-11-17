@@ -29,8 +29,12 @@ class Registry(object):
     def setKey(self, file, key, value, cond = False):
         """SETS the specified key
             @throws RegistryException
-        """      
-        return Registry.reg.setKey(file, key, value, cond)
+        """
+        if (cond):
+            if (value is None):
+                #print "skipping key[%s]" % key
+                return
+        return Registry.reg.setKey(file, key, value)
     
 # ================================================================================
 

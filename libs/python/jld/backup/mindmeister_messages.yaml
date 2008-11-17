@@ -2,6 +2,10 @@
 # for MindMeister backup utility
 # @author: Jean-Lou Dupont
 
+config_email: configure email address
+config_secret: configure secret
+config_key: configure api key
+quiet: quiet mode
 configuration: Please configure 'secret' and 'api_key'
 reg_update_error: Unable to update registry
 invalid_command: Invalid command [$cmd]
