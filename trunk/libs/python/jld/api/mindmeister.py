@@ -67,7 +67,7 @@ class MM(object):
         try:
             response = urllib2.urlopen(url)
         except Exception,e:
-            raise MM_Exception_HTTP(e) 
+            raise api.ErrorNetwork(e) 
         return response.read()
 
 # ===================================================================================

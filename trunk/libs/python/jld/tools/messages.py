@@ -33,7 +33,7 @@ class Messages(object):
         """
         msg = self[key]
         tpl = Template(msg)
-        return tpl.substitute( params )
+        return tpl.substitute( params ).lstrip()
     
 # =================================================================
     

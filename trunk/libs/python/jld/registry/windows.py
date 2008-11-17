@@ -25,11 +25,7 @@ class WindowsRegistry(object):
         
         return result
 
-    def setKey(self, file, key, value, cond=False):
-        if (cond):
-            if (value is None):
-                return
-     
+    def setKey(self, file, key, value):
         try:
             subkey = self._win % file
             ckey = _winreg.CreateKey( _winreg.HKEY_LOCAL_MACHINE, subkey)

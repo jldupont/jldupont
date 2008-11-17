@@ -35,11 +35,7 @@ class Backup(BaseCmd):
         res = mmr.MM_Response_getFrob(raw)
         
         #keep this frob in order to retrieve an authentication token later on
-        try:    
-            self.r.setKey('mindmeister', 'frob', res.frob, cond = True)
-        except Exception,e: 
-            logging.error( self.msgs.render('reg_update_error') )
-            sys.exit(0)
+        self.r.setKey('mindmeister', 'frob', res.frob, cond = True)
         
         url = self.mm.gen_auth_url('read', res.frob)
         webbrowser.open_new(url)
@@ -75,13 +71,9 @@ class Backup(BaseCmd):
                 sys.exit(0)
             auth_token = self._getAuthToken(frob)
         
-        if (not self._checkToken(auth_token)):
-            try:    
-                self.r.setKey('mindmeister', 'auth_token', None)
-                self.r.setKey('mindmeister', 'frob', None)
-            except: pass
-            print self.msgs.render('do_auth')
-            sys.exit(0)
+        if (not self._checkToken(auth_token)):   
+            self.r.setKey('mindmeister', 'auth_token', None)
+            self.r.setKey('mindmeister', 'frob', None)
             
         return auth_token
         
@@ -135,12 +127,8 @@ class Backup(BaseCmd):
             frob = self.r.getKey('mindmeister', 'frob')
         raw = self.mm.do(method='mm.auth.getToken', frob=frob)
         res = mmr.MM_Response_getAuthToken(raw)
-        
-        try:    
-            self.r.setKey('mindmeister', 'auth_token', res.auth_token)
-        except Exception,e: 
-            logging.error( self.msgs.render('reg_update_error') )
-            sys.exit(0)
+           
+        self.r.setKey('mindmeister', 'auth_token', res.auth_token)
         
         return res.auth_token
         

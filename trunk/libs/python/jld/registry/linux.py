@@ -28,14 +28,10 @@ class LinuxRegistry(object):
         
         return self._extractKey(d, key)
 
-    def setKey(self, file, key, value, cond = False):
+    def setKey(self, file, key, value):
         """Sets the value for a key.
             Creates the registry file if it does not already exist.
         """
-        if (cond):
-            if (value is None):
-                return
-            
         d = self._load(file)
         
         if (d is not None):

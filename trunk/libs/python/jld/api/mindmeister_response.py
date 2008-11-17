@@ -50,7 +50,7 @@ class MM_ResponseBase(object):
         except Exception,e:
             return #No error code found
         
-        
+        # generate appropriate exception
         self._codeToException(self.code, msg)
             
                     
@@ -60,13 +60,14 @@ class MM_ResponseBase(object):
         if (not self.MM_ErrorCodes.has_key( code )):
             raise Exception('Found an undocumented Exception Code [%s]' % code)
         
-        #raise appropriate exception
+        #RAISE!
         raise self.MM_ErrorCodes[code][1](msg)
         
             
         
 class MM_ResponseBasic(MM_ResponseBase):
     """ Basic response
+        Used for testing purpose only
     """
     def __init__(self, raw = None):
         MM_ResponseBase.__init__(self, raw)
@@ -110,12 +111,15 @@ class MM_Response_getList(MM_ResponseBase):
         self.count = 0
         self.error = False
         self.error_msg = None
+        
         try:
             self.tree = minidom.parseString(raw).documentElement
-            self._extractTotal()   
-            self._extractMaps()         
         except:
-            pass
+            raise api.ErrorProtocol('no XML response found')
+
+        self._extractTotal()   
+        self._extractMaps()         
+
         
     def _extractTotal(self):
         try:    
