@@ -38,9 +38,9 @@ class UIBase(object):
             Also generates logging and/or email messages as appropriate.
         """
         classe = re.compile("\'(.*)\'").search( str( exc.__class__ ) ).group(1)
-        if (not self._map.has_key( classe )):
+        if (classe not in self._map):
             print self.msgs.render( 'unhandled_exception', {'exc': str( exc ) } )
-            sys.exit(0)
+            return
 
         _entry = self._map[classe]
         
@@ -55,14 +55,14 @@ class UIBase(object):
         
     def _resolveHelp(self, entry):
         if (self._platform_win32):
-            if (entry.has_key('help_win')):
+            if ('help_win' in entry):
                 return entry['help_win']
 
         if (not self._platform_win32):
-            if (entry.has_key('help_nix')):
+            if ('help_nix' in entry):
                 return entry['help_nix']
             
-        if (entry.has_key('help')):
+        if ('help' in entry):
             return entry['help']
         
         return None

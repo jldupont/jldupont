@@ -12,6 +12,7 @@ import jld.api.mindmeister as mm
 import jld.api.mindmeister_response as mmr
 from   jld.cmd import BaseCmd
 import jld.backup.mindmeister_messages as msg
+import jld.backup.mindmeister_db as db
 
 # ========================================================================================
 
@@ -49,8 +50,7 @@ class Backup(BaseCmd):
         print all
         
     def cmd_test(self, *args):
-        """ Test
-        """
+        """Test: for development/debugging purpose only"""
         self._initMM()
         raw = self.mm.do_network_error()
         
@@ -73,10 +73,10 @@ class Backup(BaseCmd):
         if (auth_token is None):
             frob = self.r.getKey('mindmeister', 'frob')
             if (frob is None):
-                print self.msgs.render('do_auth')
-                sys.exit(0)
+                raise api.ErrorAuth()
             auth_token = self._getAuthToken(frob)
         
+        # token turns out to be invalid, help kickstart a re-authentication
         if (not self._checkToken(auth_token)):   
             self.r.setKey('mindmeister', 'auth_token', None)
             self.r.setKey('mindmeister', 'frob', None)
@@ -92,10 +92,6 @@ class Backup(BaseCmd):
         total = 0;  count = 0;  page = 1;  maps = []
         while run:
             batch = self._getOnePage(auth_token, page, per_page)
-            if (batch.error):
-                print self.msgs.render('error_getmaps', {'msg':batch.error_msg})
-                #print batch.raw
-                sys.exit(0)
             maps.append( batch.maps )
             pages = int( batch.pages )
             count = count + int( batch.count )

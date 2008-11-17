@@ -41,6 +41,37 @@ class Maps(SQLObject):
                 OR exported == None
         """
         return cls.select(OR(cls.q.modified > cls.q.exported, cls.q.exported == None))
+    
+    @classmethod
+    def updateFromList(cls, list):
+        """ Updates the database from the specified list
+        """
+        updated = 0;  created = 0;
+        for entry in list:
+            id = entry['mapid']
+            map = Maps.select( Maps.q.mapid == id )
+            mid = None
+            try:
+                mid = map[0].mapid
+            except:
+                pass
+            if (mid is None):
+                created = created + 1
+                Maps(mapid=entry['mapid'], 
+                     title=entry['title'],
+                     modified=entry['modified'], 
+                     exported=entry['exported'], 
+                     tags=entry['tags'],
+                     created=entry['created'])
+            else:
+                    map.set(mapid=entry['mapid'], 
+                     title=entry['title'],
+                     modified=entry['modified'], 
+                     exported=entry['exported'], 
+                     tags=entry['tags'],
+                     created=entry['created'])
+            
+        
 
 class Db(object):
     """ Db class: used to bootstrap SQLObject 
@@ -78,5 +109,21 @@ if __name__ == "__main__":
     for item in list:
         print item
     
+    print Maps.select(Maps.q.mapid=="4").count()
+
+    m4  = Maps(mapid='4', modified=now, tags='', exported=None, title='title4', created=datetime.datetime.now(), )
+    m4_ = Maps(mapid='4', modified=now, tags='', exported=None, title='title4_', created=datetime.datetime.now(), )
     
+    print Maps.select(Maps.q.mapid=="4")[0].title
     
+    print "####################"
+    m5  = Maps(mapid='5', modified=now, tags='', exported=None, title='title5', created=datetime.datetime.now(), )
+    m5.set(title='title5__')
+    print Maps.select(Maps.q.mapid=="5")[0].title
+    
+    print Maps.select(Maps.q.mapid=="6").count()
+    
+    print "####################"
+    d = { 'mapid': '6', 'modified':now, 'tags':'', 'exported':None, 'title':"map 6", 'created':now }
+    m6 = Maps(d)
+    print m6

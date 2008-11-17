@@ -7,6 +7,7 @@
 """
 __author__  = "Jean-Lou Dupont"
 __version__ = "$Id$"
+
 import sys
 import logging
 import os.path
@@ -31,10 +32,10 @@ from   jld.tools.template import ExTemplate
 
 # ========================================================================================
 _options =[
-          {'o1':'-e',    'o2':'--email',   'var':'email',  'action':'store',        'help':'config_email',  'reg': True, 'default': None},
-          {'o1':'-s',    'o2':'--secret',  'var':'secret', 'action':'store',        'help':'config_secret', 'reg': True, 'default': None},
-          {'o1':'-k',    'o2':'--key',     'var':'api_key','action':'store',        'help':'config_key',    'reg':True, 'default': None},
-          {'o1':'-q',    'o2':'--quiet',   'var':'quiet',  'action':'store_true',   'help':'quiet',         'reg':False, 'default': False },          
+  {'o1':'-e', 'o2':'--email',   'var':'email',  'action':'store',        'help':'config_email',  'reg': True, 'default': None},
+  {'o1':'-s', 'o2':'--secret',  'var':'secret', 'action':'store',        'help':'config_secret', 'reg': True, 'default': None},
+  {'o1':'-k', 'o2':'--key',     'var':'api_key','action':'store',        'help':'config_key',    'reg': True, 'default': None},
+  {'o1':'-q', 'o2':'--quiet',   'var':'quiet',  'action':'store_true',   'help':'quiet',         'reg': False, 'default': False },          
 ]
 
 def main():
@@ -72,7 +73,7 @@ Commands:
         try:    
             r.setKey('mindmeister', o['var'], getattr( options, o['var'] ), cond=True)
         except Exception,e: 
-            logging.error("error setting registry: is the proper user access in place? [%s]" % e)
+            ui.handleError(e)
             sys.exit(0)
 
     # == configuration ==
@@ -102,7 +103,7 @@ Commands:
     try:    
         command = args[0]
         if (command not in backup.cmds):
-            print msgs.render( 'invalid_command', {'cmd':args[0] } )
+            print msgs.render( 'invalid_command', { 'cmd':args[0] } )
             sys.exit(0)
     except:
         print msgs.render('use_help')

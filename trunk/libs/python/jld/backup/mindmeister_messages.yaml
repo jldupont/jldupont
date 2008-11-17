@@ -13,6 +13,7 @@ invalid_command: Invalid command [$cmd]
 use_help: Please use '-h' for help
 do_auth: Please authentication application (use 'auth' command)
 error_getmaps: Error fetching maps [$msg]
+error_auth: Authentication error
 error_network: Network error
 error_access: Access error
 error_object: Object access error
@@ -21,6 +22,7 @@ error_validation: Parameter validation error
 error_property: Property error
 error_protocol: Protocol level error
 error_registry: Registry level error
+help_auth: Please perform authentication using the 'auth' command and the -s , -k options
 help_network: Maybe check the access to the Internet?
 help_access: Is the proper access right in place?
 help_method: Has the MindMeister API changed?
@@ -28,4 +30,3 @@ help_validation: Check documentation
 help_protocol: Has the MindMeister API changed?
 help_registry_win: The registry key HKEY_LOCAL_MACHINE/Software/Python/Registry can't be accessed 
 help_registry_nix: The filesystem path /etc/python/registry can't be accessed
-
