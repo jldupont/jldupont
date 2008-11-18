@@ -50,7 +50,9 @@ class Backup(BaseCmd):
         """ Updates the local database with the latest list of maps """
         auth_token = self._prepareAuthorizedCommand()
         all = self._getAllMaps(auth_token)
-        print all
+        
+        self._initDb()
+        db.Maps.updateFromList( all )
         
     def cmd_listmaps(self, *args):
         """ List the latest maps """
@@ -59,6 +61,12 @@ class Backup(BaseCmd):
         pp = printer.MM_Printer( self.msgs )
         pp.run( all )
         
+    def cmd_listdb(self, *args):
+        """List the database content"""
+        self._initDb()
+        all = db.Maps.getAll()
+        pp = printer.MM_Printer( self.msgs )
+        pp.run( all )        
         
     def cmd_test(self, *args):
         """Test: for development/debugging purpose only"""
