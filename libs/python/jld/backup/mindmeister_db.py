@@ -8,6 +8,8 @@ import datetime
 from sqlobject import *
 import sqlite3 as sql
 
+import jld.api as api
+
 # =============================================
 
 class Maps(SQLObject):
@@ -67,9 +69,12 @@ class Db(object):
     """ Db class: used to bootstrap SQLObject 
     """
     def __init__(self, filepath):
-        connection_string = 'sqlite:' + filepath
-        connection = connectionForURI( connection_string )
-        sqlhub.processConnection = connection
+        try:
+            connection_string = 'sqlite:' + filepath
+            connection = connectionForURI( connection_string )
+            sqlhub.processConnection = connection
+        except Exception,e:
+            raise api.ErrorDb( e, {'file':filepath} )
 
         #table already exists ... no big deal
         Maps.createTable(ifNotExists=True)
@@ -82,6 +87,9 @@ class Db(object):
 if __name__ == "__main__":
     """ Tests
     """
+    db = Db('/.')
+    
+    
     db = Db('/:memory:')
     #Maps._connection.debug = True
     

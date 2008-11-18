@@ -31,8 +31,7 @@ class Messages(object):
     def render(self, key, params = None):
         """ Renders a message template with optional parameters
         """
-        msg = self[key]
-        tpl = Template(msg)
+        tpl = Template( self[key] )
         return tpl.substitute( params ).lstrip()
     
 # =================================================================
