@@ -7,6 +7,7 @@ __version__ = "$Id$"
 
 import re
 import sys
+from string import Template
 
 class UIBase(object):
     """ Base class for Command Line UI
@@ -35,8 +36,13 @@ class UIBase(object):
     def handleError( self, exc ):
         """ Displays, if required, an appropriate user message
             corresponding to an error condition.
-            Also generates logging and/or email messages as appropriate.
         """
+        try:
+            params = exc.params
+        except:
+            params = None
+            
+        #TODO: Also generates logging and/or email messages as appropriate.
         classe = re.compile("\'(.*)\'").search( str( exc.__class__ ) ).group(1)
         if (classe not in self._map):
             print self.msgs.render( 'unhandled_exception', {'exc': str( exc ) } )
@@ -47,9 +53,11 @@ class UIBase(object):
         msg_key  = _entry['msg']
         help_key = self._resolveHelp( _entry )
         
-        msg = self.msgs.render( msg_key )
+        msg = self.msgs.render( msg_key, params )
+        
         if (help_key is not None):
-            msg = msg + ': ' + self.msgs.render( help_key )
+            help = self.msgs.render( help_key, params )
+            msg = msg + ': ' + help
         
         print msg
         

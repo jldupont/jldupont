@@ -38,36 +38,46 @@ def formatParams(liste):
 
 
 # =========================================================================
+class ErrorGeneric(Exception):
+    """ Exception base class which accept parameters.
+    """
+    def __init__(self, msg, params = None):
+        Exception.__init__(self, msg)
+        self.params = params
+        
+class ErrorDb(ErrorGeneric):
+    """ Generic Db error e.g. can't open database file
+    """
 
-class ErrorNetwork(Exception):
+class ErrorNetwork(ErrorGeneric):
     """ Error at the network layer e.g. DNS error, no connection etc. 
     """
 
-class ErrorAuth(Exception):
+class ErrorAuth(ErrorGeneric):
     """ Generic Authentication error
     """
 
-class ErrorAccess(Exception):
+class ErrorAccess(ErrorGeneric):
     """ Generic Access error e.g. restricted access
     """
 
-class ErrorObject(Exception):
+class ErrorObject(ErrorGeneric):
     """ Generic object error e.g. object not found
     """
 
-class ErrorMethod(Exception):
+class ErrorMethod(ErrorGeneric):
     """ Generic method error e.g. unavailable method for API end-point etc.
     """
 
-class ErrorValidation(Exception):
+class ErrorValidation(ErrorGeneric):
     """ Generic validation error e.g. invalid parameter
     """
 
-class ErrorProperty(Exception):
+class ErrorProperty(ErrorGeneric):
     """ Generic property error e.g. feature X not available
     """
 
-class ErrorProtocol(Exception):
+class ErrorProtocol(ErrorGeneric):
     """ Generic protocol error e.g. expecting parameter X but not found
     """
 
