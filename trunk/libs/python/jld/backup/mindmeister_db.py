@@ -9,6 +9,7 @@ from sqlobject import *
 import sqlite3 as sql
 
 import jld.api as api
+import jld.tools.date as tdate
 
 # =============================================
 
@@ -33,6 +34,27 @@ class Maps(SQLObject):
         return cls.select(OR(cls.q.modified > cls.q.exported, cls.q.exported == None))
     
     @classmethod
+    def getAll(cls):
+        list = []
+        all = cls.select()
+        for one in all:
+            entry = cls.formatOne( one )
+            list.append( entry )
+            
+        return list
+    
+    @classmethod
+    def formatOne(cls, entry):
+        result = {}
+        result['mapid'] = entry.mapid
+        result['title'] = entry.title
+        result['created'] = entry.created
+        result['modified'] = entry.modified
+        result['tags'] = entry.tags
+        result['exported'] = entry.exported
+        return result
+    
+    @classmethod
     def updateFromList(cls, list):
         """ Updates the database from the specified list
         """
@@ -45,12 +67,13 @@ class Maps(SQLObject):
             except:
                 mid = None
                 
+            cls.formatEntry( entry )
             if (mid is None):
                 created = created + 1
                 Maps(   mapid=entry['mapid'], 
                          title=entry['title'],
                          modified=entry['modified'], 
-                         exported=entry['exported'], 
+                         exported=entry.get('exported'), 
                          tags=entry['tags'],
                          created=entry['created'])
             else:
@@ -61,6 +84,12 @@ class Maps(SQLObject):
                          tags=entry['tags'],
                          created=entry['created'])
             
+    @classmethod
+    def formatEntry(cls, entry):
+        """
+        """
+        entry['modified'] = tdate.convertDate( entry['modified'] )
+        entry['created'] = tdate.convertDate( entry['created'] )
             
 # ==============================================        
 
@@ -70,7 +99,7 @@ class Db(object):
     """
     def __init__(self, filepath):
         try:
-            connection_string = 'sqlite:' + filepath
+            connection_string = 'sqlite:/' + filepath
             connection = connectionForURI( connection_string )
             sqlhub.processConnection = connection
         except Exception,e:
@@ -87,10 +116,7 @@ class Db(object):
 if __name__ == "__main__":
     """ Tests
     """
-    db = Db('/.')
-    
-    
-    db = Db('/:memory:')
+    db = Db(':memory:')
     #Maps._connection.debug = True
     
     before = datetime.datetime(1971, 03, 31)
