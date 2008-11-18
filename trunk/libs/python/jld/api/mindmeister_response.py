@@ -105,13 +105,10 @@ class MM_Response_getList(MM_ResponseBase):
     
     def __init__(self, raw):
         MM_ResponseBase.__init__(self, raw)
+        
         self.raw = raw
-        self.pages = 0
-        self.total = None
-        self.maps  = []
-        self.count = 0
-        self.error = False
-        self.error_msg = None
+        self.pages = 0 ;  self.total = None  ; self.maps  = []
+        self.count = 0 ;  self.error = False ; self.error_msg = None
         
         try:
             self.tree = minidom.parseString(raw).documentElement

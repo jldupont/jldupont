@@ -35,6 +35,7 @@ _options =[
   {'o1':'-e', 'o2':'--email',   'var':'email',  'action':'store',        'help':'config_email',  'reg': True, 'default': None},
   {'o1':'-s', 'o2':'--secret',  'var':'secret', 'action':'store',        'help':'config_secret', 'reg': True, 'default': None},
   {'o1':'-k', 'o2':'--key',     'var':'api_key','action':'store',        'help':'config_key',    'reg': True, 'default': None},
+  {'o1':'-f', 'o2':'--file',    'var':'file',   'action':'store',        'help':'config_file',   'reg': True, 'default': None},
   {'o1':'-q', 'o2':'--quiet',   'var':'quiet',  'action':'store_true',   'help':'quiet',         'reg': False, 'default': False },          
 ]
 
@@ -82,10 +83,12 @@ Commands:
     
     params['quiet'] = options.quiet
     
+    file    = params['file']    = r.getKey('mindmeister', 'file')
     secret  = params['secret']  = r.getKey('mindmeister', 'secret')
     api_key = params['api_key'] = r.getKey('mindmeister', 'api_key')
      
-    backup.secret = secret
+    backup.file    = file
+    backup.secret  = secret
     backup.api_key = api_key
 
     # == Config UI ==

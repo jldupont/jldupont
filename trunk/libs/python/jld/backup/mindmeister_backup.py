@@ -7,10 +7,10 @@ import os.path
 import logging
 import webbrowser
 
+from   jld.cmd import BaseCmd
 import jld.registry as reg
 import jld.api.mindmeister as mm
 import jld.api.mindmeister_response as mmr
-from   jld.cmd import BaseCmd
 import jld.backup.mindmeister_messages as msg
 import jld.backup.mindmeister_db as db
 
@@ -21,12 +21,14 @@ class Backup(BaseCmd):
     """
     def __init__(self):
         BaseCmd.__init__(self)
+        self.file = None
         self.secret = None
         self.api_key = None
         self.auth_token = None
         self.mm = None
         self.msgs = msg.MM_Messages()
         self.r = reg.Registry()
+        self.db = None
     
     def cmd_auth(self, *args):
         """Generates an authentication URL and opens a browser instance for the user"""
@@ -56,6 +58,13 @@ class Backup(BaseCmd):
         
     # =========================================================
     # =========================================================
+    def _prepareDb(self):
+        """
+        """
+        if (self.db is None):
+            
+            
+            self.db = db.Db( path )
     
     def _prepareAuthorizedCommand(self):
         """Prepares for an authorized command.

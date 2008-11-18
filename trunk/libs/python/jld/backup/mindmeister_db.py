@@ -1,17 +1,6 @@
 """ MindMeister DB class
     @author: Jean-Lou Dupont
-    
-    Usage:
-    ======
-    import jld.backup.mindmeister_db as dbase
-    
-    db = dbase.Db(filepath)
-    maps = dbase.Maps  #shortcut
-    
-    liste = maps.getToExportList()
-    
 """
-
 __author__  = "Jean-Lou Dupont"
 __version__ = "$Id$"
 
@@ -19,7 +8,6 @@ import datetime
 from sqlobject import *
 import sqlite3 as sql
 
-# =============================================
 # =============================================
 
 class Maps(SQLObject):
@@ -50,28 +38,30 @@ class Maps(SQLObject):
         for entry in list:
             id = entry['mapid']
             map = Maps.select( Maps.q.mapid == id )
-            mid = None
             try:
                 mid = map[0].mapid
             except:
-                pass
+                mid = None
+                
             if (mid is None):
                 created = created + 1
-                Maps(mapid=entry['mapid'], 
-                     title=entry['title'],
-                     modified=entry['modified'], 
-                     exported=entry['exported'], 
-                     tags=entry['tags'],
-                     created=entry['created'])
+                Maps(   mapid=entry['mapid'], 
+                         title=entry['title'],
+                         modified=entry['modified'], 
+                         exported=entry['exported'], 
+                         tags=entry['tags'],
+                         created=entry['created'])
             else:
-                    map.set(mapid=entry['mapid'], 
-                     title=entry['title'],
-                     modified=entry['modified'], 
-                     exported=entry['exported'], 
-                     tags=entry['tags'],
-                     created=entry['created'])
+                updated = updated  + 1
+                map.set( title=entry['title'],
+                         modified=entry['modified'], 
+                         exported=entry['exported'], 
+                         tags=entry['tags'],
+                         created=entry['created'])
             
-        
+            
+# ==============================================        
+
 
 class Db(object):
     """ Db class: used to bootstrap SQLObject 
@@ -83,6 +73,7 @@ class Db(object):
 
         #table already exists ... no big deal
         Maps.createTable(ifNotExists=True)
+    
     
 # ==============================================
 # ==============================================

@@ -6,6 +6,7 @@ unhandled_exception: An unhandled exception occured [$exc]
 config_email: configure email address
 config_secret: configure secret
 config_key: configure api key
+config_file: configure database filesystem path
 quiet: quiet mode
 configuration: Please configure 'secret' and 'api_key'
 reg_update_error: Unable to update registry
