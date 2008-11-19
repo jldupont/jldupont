@@ -76,7 +76,7 @@ class Backup(BaseCmd):
     def cmd_getexport(self, *args):
         """List the export details of one mapid"""
         try:
-            mapid=args[0]
+            mapid=args[0][0]
         except:
             raise api.ErrorValidation( {'param':'mapid'} )
         self._prepareAuthorizedCommand()
