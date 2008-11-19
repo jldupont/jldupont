@@ -104,7 +104,8 @@ Commands:
     
         # == command validation ==
         # ========================
-        command = args[0] if (0 in args) else None
+        try: command = args[0]
+        except: command = None
         if (command not in backup.cmds):
             raise api.ErrorInvalidCommand( 'invalid command', {'cmd':command} )
          
