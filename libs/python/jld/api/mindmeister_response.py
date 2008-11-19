@@ -161,7 +161,7 @@ class MM_Response_getMapExport(MM_ResponseBase):
                 entry['mimetype'] = image.getAttribute('mimetype')
                 entry['url'] = image.childNodes[0].nodeValue
                 self.exports.append( entry )
-            return self.exports
+
         except Exception,e:
             raise api.ErrorProtocol( 'expecting parameter "image"' )
 
