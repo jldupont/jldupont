@@ -4,5 +4,6 @@ setup(
     name = "jld",
     version = "0.0.1",
     package_data = {'':['*.*']},
-    packages = find_packages(),
+    packages = ['jld',],
+    scripts=[ 'backup/scripts/mm','backup/scripts/mm.bat' ],
 )
