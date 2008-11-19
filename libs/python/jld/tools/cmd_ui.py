@@ -25,13 +25,11 @@ class UIBase(object):
     
     def __init__(self, msgs = None):
         self.msgs = msgs
-        self.params = {}
     
-    def setParams(self, msgs, params):
+    def setParams(self, msgs):
         """ Generic parameter setting interface
         """
         self.msgs = msgs
-        self.params = params
 
     def handleError( self, exc ):
         """ Displays, if required, an appropriate user message

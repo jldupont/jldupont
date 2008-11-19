@@ -15,7 +15,7 @@ from string import Template
 from optparse import OptionParser
 
 # ASSUME THAT THE REQUIRED LIBS are available
-# RELATIVE to this script
+# RELATIVE to this script => simplified install
 levelsUp = 3
 path = os.path.abspath( __file__ )
 while levelsUp>0:
@@ -32,7 +32,6 @@ from   jld.tools.template import ExTemplate
 
 # ========================================================================================
 _options =[
-  {'o1':'-e', 'o2':'--email',   'var':'email',  'action':'store',        'help':'config_email',  'reg': True, 'default': None},
   {'o1':'-s', 'o2':'--secret',  'var':'secret', 'action':'store',        'help':'config_secret', 'reg': True, 'default': None},
   {'o1':'-k', 'o2':'--key',     'var':'api_key','action':'store',        'help':'config_key',    'reg': True, 'default': None},
   {'o1':'-f', 'o2':'--file',    'var':'file',   'action':'store',        'help':'config_file',   'reg': True, 'default': None},
@@ -41,84 +40,87 @@ _options =[
 
 def main():
 
-    ui     = mui.MM_UI()
     msgs   = msg.MM_Messages()
-    backup = Backup()
+    ui     = mui.MM_UI()
     
-    usage_template = """%prog [options] command
+    # == Config UI ==
+    # ===============
+    ui.setParams( msgs )    
+    
+    # all the exceptions are handled by 'ui'
+    try:
+
+        backup = Backup()
+        
+        usage_template = """%prog [options] command
+    
 version $Id$ by Jean-Lou Dupont
+
+*** Interface to MindMeister (http://www.mindmeister.com/) ***
+This command-line utility requires valid 'API_KEY' and 'SECRET' parameters
+obtained from MindMeister. In order to use this tool, the 'auth' command
+must first be called with the said valid parameters.
+
+The '-f' option is required for running 'mmd' daemon. This option configures
+the local Sqlite database used for storing map related information. 
 
 Commands:
 ^^{commands}
 """
-        
-    commands_help = backup.genCommandsHelp()
-        
-    tpl = ExTemplate( usage_template )
-    tpl_values = {'commands' : commands_help}
-    usage = tpl.substitute( tpl_values )
-
-    parser = OptionParser( usage=usage )
-    for o in _options:
-        help_msg = msgs.render( o['help'] )
-        parser.add_option( o['o1'], o['o2'], dest=o['var'], action=o['action'], help=help_msg, default=o['default'])
+            
+        commands_help = backup.genCommandsHelp()
+            
+        tpl = ExTemplate( usage_template )
+        tpl_values = {'commands' : commands_help}
+        usage = tpl.substitute( tpl_values )
     
-    (options,args) = parser.parse_args()
-
-    # make sure we have SECRET and API_KEY configured in the registry
-    # Use conditional 'setKey' if we have valid overriding values i.e. not None
-    r = reg.Registry()
-    for o in _options:
-        if ( not o['reg'] ):
-            continue
-        try:    
+        parser = OptionParser( usage=usage )
+        for o in _options:
+            help_msg = msgs.render( o['help'] )
+            parser.add_option( o['o1'], 
+                               o['o2'], 
+                               dest=o['var'], 
+                               action=o['action'], 
+                               help=help_msg, 
+                               default=o['default'] )
+        
+        (options,args) = parser.parse_args()
+    
+        # make sure we have SECRET and API_KEY configured in the registry
+        # Use conditional 'setKey' if we have valid overriding values i.e. not None
+        r = reg.Registry()
+        for o in _options:
+            if ( not o['reg'] ):
+                continue  
             r.setKey('mindmeister', o['var'], getattr( options, o['var'] ), cond=True)
-        except Exception,e: 
-            ui.handleError(e)
-            sys.exit(0)
-
-    # == configuration ==
-    # ===================
-    params = {}
     
-    params['quiet'] = options.quiet
+        # == configuration ==
+        # ===================
+        params = {}
+        
+        params['quiet'] = options.quiet
+        
+        file    = params['file']    = r.getKey('mindmeister', 'file')
+        secret  = params['secret']  = r.getKey('mindmeister', 'secret')
+        api_key = params['api_key'] = r.getKey('mindmeister', 'api_key')
+         
+        backup.file    = file
+        backup.secret  = secret
+        backup.api_key = api_key
     
-    file    = params['file']    = r.getKey('mindmeister', 'file')
-    secret  = params['secret']  = r.getKey('mindmeister', 'secret')
-    api_key = params['api_key'] = r.getKey('mindmeister', 'api_key')
-     
-    backup.file    = file
-    backup.secret  = secret
-    backup.api_key = api_key
-
-    # == Config UI ==
-    # ===============
-    ui.setParams( msgs, params )
-
-    # == simple check ==
-    # ==================
-    if (secret is None) or (api_key is None):
-        print msgs.render( 'configuration' )
-        sys.exit(0)
-
-    # == command validation ==
-    # ========================
-    try:    
+        # == command validation ==
+        # ========================
         command = args[0]
         if (command not in backup.cmds):
-            print msgs.render( 'invalid_command', { 'cmd':args[0] } )
-            sys.exit(0)
-    except:
-        print msgs.render('use_help')
-        sys.exit(0)
-     
-    # get rid of command from the arg list
-    args.pop(0)
-     
-    # == DISPATCHER ==
-    # ================
-    try:
+            raise api.ErrorInvalidCommand( 'invalid command', {'cmd':command} )
+         
+        # get rid of command from the arg list
+        args.pop(0)
+         
+        # == DISPATCHER ==
+        # ================
         getattr( backup, "cmd_%s" % command )(args)
+        
     except Exception,e:
         ui.handleError( e )
         
