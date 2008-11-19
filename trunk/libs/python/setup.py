@@ -23,7 +23,7 @@ setup(
     long_description = jld.__desc__,
     version = jld.__version__,
     package_data = {'':['*.*']},
-    packages = ['jld',],
-    scripts=[ 'jld/backup/scripts/mm','jld/backup/scripts/mm.bat' ],
+    packages = ['jld', 'jld.api', 'jld.backup', 'jld.cmd', 'jld.registry', 'jld.tools' ],
+    scripts=[ 'jld/backup/scripts/mm.py','jld/backup/scripts/mm.bat' ],
     zip_safe = False,
 )
