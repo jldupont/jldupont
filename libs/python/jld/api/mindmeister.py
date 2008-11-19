@@ -118,13 +118,6 @@ class MM_Client(MM):
         raw = self.do(method='mm.maps.export', auth_token=self.auth_token, map_id=mapid)
         res = mmr.MM_Response_getMapExport(raw)
         return res.exports
-    
-#https://www.mindmeister.com/services/rest?
-    #api_key=c4f64204ca7ee60dd11da6d568b2b199&
-    #auth_token=d73f84e0e724cbd12daf503a63736387&
-    #map_id=6035985&
-    #method=mm.maps.export&
-    #api_sig=8d934f1fb65b0f06400628392b00925c
 
 # ===================================================================================
     

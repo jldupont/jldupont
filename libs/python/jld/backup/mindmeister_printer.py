@@ -9,15 +9,9 @@ import jld.tools.printer as printer
 
 class MM_Printer(printer.BasePrettyPrinter):
 
-    _fields = [ 'mapid', 'title', 'exported' ]
-
     def __init__(self, msgs):
         printer.BasePrettyPrinter.__init__(self)
         self.msgs = msgs
-
-    def header(self):
-        """Prints a header"""
-        print self.msgs.render( 'tbl_header' )
         
     def table_header(self, tpl_item = None):
         """Prints a table header"""
@@ -29,10 +23,6 @@ class MM_Printer(printer.BasePrettyPrinter):
         print result.rstrip(' ,')
         print '==='
     
-    def footer(self):
-        """Prints a footer"""
-        print self.msgs.render( 'tbl_footer' )
-    
     def line(self, entry):
         """Prints one line"""
         result = ''
@@ -43,7 +33,48 @@ class MM_Printer(printer.BasePrettyPrinter):
                 result = result + v + ' , '
             
         print result.rstrip(' ,') 
+       
+class MM_Printer_Maps(MM_Printer):
+    """ Prints map related info
+    """
+    _fields = [ 'mapid', 'title', 'exported' ]
+
+    def __init__(self, msgs):
+        MM_Printer.__init__(self, msgs)
+
+    def header(self):
+        """Prints a header"""
+        print self.msgs.render( 'tbl_header_maps' )
+
+    def footer(self):
+        """Prints a footer"""
+        print self.msgs.render( 'tbl_footer_maps' )
+    
             
+class MM_Printer_Export(MM_Printer):
+    """ Prints map export related info
+    """
+    _fields = [ 'image/png', 'freemind' ]
+    
+    def __init__(self, msgs):
+        MM_Printer.__init__(self, msgs)
+
+    def header(self):
+        """Prints a header"""
+        print self.msgs.render( 'tbl_header_export' )
+
+    def footer(self):
+        """Prints a footer"""
+        print self.msgs.render( 'tbl_footer_export' )
+
+    def line(self, entry):
+        """Prints one line"""
+        result = ''
+        for field in self._fields:
+            if (field in entry):
+                f = entry[field]
+                v = f if f else ''
+                print v.rstrip(' ,') 
 
 
 # ==============================================

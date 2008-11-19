@@ -154,17 +154,39 @@ class MM_Response_getMapExport(MM_ResponseBase):
         self.exports = []
         
         try:
+            entry={}            
             e = minidom.parseString(raw).documentElement
             images = e.getElementsByTagName('image')
+            param = "image"
             for image in images:
-                entry={}
-                entry['mimetype'] = image.getAttribute('mimetype')
-                entry['url'] = image.childNodes[0].nodeValue
-                self.exports.append( entry )
+                mimetype= image.getAttribute('mimetype')
+                param = mimetype
+                entry[mimetype] = image.childNodes[0].nodeValue
 
+            params = ['pdf', 'rtf', 'freemind', 'mindmeister']
+            for param in params:
+                i = e.getElementsByTagName(param)[0]
+                entry[param] = i.childNodes[0].nodeValue
+
+            self.exports.append( entry )
+            
         except Exception,e:
-            raise api.ErrorProtocol( 'expecting parameter "image"' )
+            raise api.ErrorProtocol( 'expecting %s' % param, {'param': param} )
 
+"""
+<rsp stat="ok"> 
+    <export> 
+        <image mimetype="image/gif">http://www.mindmeister.com/home/converttoimage?id=6035985&amp;img_format=gif</image> 
+        <image mimetype="image/jpg">http://www.mindmeister.com/home/converttoimage?id=6035985&amp;img_format=jpg</image> 
+        <image mimetype="image/png">http://www.mindmeister.com/home/converttoimage?id=6035985&amp;img_format=png</image> 
+        <freemind>http://www.mindmeister.com/home/freemind?id=6035985</freemind> 
+        <mindmanager>http://www.mindmeister.com/home/mindmanager?id=6035985</mindmanager> 
+        <rtf>http://www.mindmeister.com/home/rtf?id=6035985</rtf> 
+        <pdf>http://www.mindmeister.com/home/pdf?id=6035985</pdf> 
+        <mindmeister>http://www.mindmeister.com/home/mindmeister?id=6035985</mindmeister> 
+    </export> 
+</rsp> 
+"""
 
 # ==========================================================
 
