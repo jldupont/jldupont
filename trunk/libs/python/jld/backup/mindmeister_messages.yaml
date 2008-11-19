@@ -31,8 +31,10 @@ help_network: Maybe check the access to the Internet?
 help_access: Is the proper access right in place?
 help_method: Has the MindMeister API changed?
 help_validation: Check documentation
-help_protocol: Has the MindMeister API changed?
+help_protocol: Has the MindMeister API changed? [expecting '$param']
 help_registry_win: The registry key HKEY_LOCAL_MACHINE/Software/Python/Registry can't be accessed 
 help_registry_nix: The filesystem path /etc/python/registry can't be accessed
-tbl_header: Latest Maps
-tbl_footer: ==end==
+tbl_header_maps: Latest Maps
+tbl_footer_maps: ==end==
+tbl_header_export: Export Information
+tbl_footer_export: ==end==

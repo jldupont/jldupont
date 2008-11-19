@@ -59,14 +59,14 @@ class Backup(BaseCmd):
         """ List the latest maps """
         self._prepareAuthorizedCommand()
         all = self.mm.getAllMaps()
-        pp = printer.MM_Printer( self.msgs )
+        pp = printer.MM_Printer_Maps( self.msgs )
         pp.run( all )
         
     def cmd_listdb(self, *args):
         """List the database content"""
         self._initDb()
         all = db.Maps.getAll()
-        pp = printer.MM_Printer( self.msgs )
+        pp = printer.MM_Printer_Maps( self.msgs )
         pp.run( all )        
         
     def cmd_test(self, *args):
@@ -81,7 +81,8 @@ class Backup(BaseCmd):
             raise api.ErrorValidation( {'param':'mapid'} )
         self._prepareAuthorizedCommand()
         details = self.mm.getMapExport(mapid)
-        print details
+        pp = printer.MM_Printer_Export( self.msgs )
+        pp.run( details )        
         
     # =========================================================
     # =========================================================
