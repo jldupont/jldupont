@@ -78,7 +78,7 @@ class Backup(BaseCmd):
         try:
             mapid=args[0][0]
         except:
-            raise api.ErrorValidation( {'param':'mapid'} )
+            raise api.ErrorValidation( 'missing param', {'param':'mapid'} )
         self._prepareAuthorizedCommand()
         details = self.mm.getMapExport(mapid)
         pp = printer.MM_Printer_Export( self.msgs )
@@ -104,7 +104,7 @@ class Backup(BaseCmd):
         if (auth_token is None):
             frob = self.r.getKey('mindmeister', 'frob')
             if (frob is None):
-                raise api.ErrorAuth()
+                raise api.ErrorAuth("frob not acquired")
             auth_token = self._getAuthToken(frob)
         
         # token turns out to be invalid, help kickstart a re-authentication
