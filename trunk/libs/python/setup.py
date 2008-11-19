@@ -25,4 +25,5 @@ setup(
     package_data = {'':['*.*']},
     packages = ['jld',],
     scripts=[ 'jld/backup/scripts/mm','jld/backup/scripts/mm.bat' ],
+    zip_safe = False,
 )
