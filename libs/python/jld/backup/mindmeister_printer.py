@@ -9,7 +9,7 @@ import jld.tools.printer as printer
 
 class MM_Printer(printer.BasePrettyPrinter):
 
-    _fields = [ 'mapid', 'title' ]
+    _fields = [ 'mapid', 'title', 'exported' ]
 
     def __init__(self, msgs):
         printer.BasePrettyPrinter.__init__(self)
@@ -37,7 +37,10 @@ class MM_Printer(printer.BasePrettyPrinter):
         """Prints one line"""
         result = ''
         for field in self._fields:
-            result = result + entry[field] + ' , '
+            if (field in entry):
+                f = entry[field]
+                v = f if f else ''
+                result = result + v + ' , '
             
         print result.rstrip(' ,') 
             

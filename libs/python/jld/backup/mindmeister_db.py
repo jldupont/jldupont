@@ -78,12 +78,13 @@ class Maps(SQLObject):
                          created=entry['created'])
             else:
                 updated = updated  + 1
-                map.set( title=entry['title'],
+                map[0].set( title=entry['title'],
                          modified=entry['modified'], 
-                         exported=entry['exported'], 
+                         #exported=entry['exported'], 
                          tags=entry['tags'],
                          created=entry['created'])
-            
+        
+        
     @classmethod
     def formatEntry(cls, entry):
         """
