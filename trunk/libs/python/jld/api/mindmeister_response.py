@@ -27,6 +27,7 @@ class MM_ResponseBase(object):
                      '96':  ("Invalid signature",                                                 api.ErrorAuth),
                      '97':  ("Missing signature",                                                 api.ErrorAuth),
                      '98':  ("Login failed",                                                      api.ErrorAuth),
+                     '99':  ("The method requires authentication",                                api.ErrorAuth),
                      '100': ("Invalid API key",                                                   api.ErrorAuth),
                      '112': ("Method not found",                                                  api.ErrorMethod),
                      
@@ -58,7 +59,7 @@ class MM_ResponseBase(object):
         """ Raises a correlated exception
         """
         if (not self.MM_ErrorCodes.has_key( code )):
-            raise Exception('Found an undocumented Exception Code [%s]' % code)
+            raise Exception('Found an undocumented Exception Code [%s] [%s]' % (code,msg))
         
         #RAISE!
         raise self.MM_ErrorCodes[code][1](msg)
@@ -143,6 +144,27 @@ class MM_Response_getList(MM_ResponseBase):
             self.count = len( self.maps )
         except Exception,e:
             raise api.ErrorProtocol( 'expecting parameter "map"' )
+
+
+class MM_Response_getMapExport(MM_ResponseBase):
+    """ In response to mm.maps.export
+    """
+    def __init__(self, raw):
+        MM_ResponseBase.__init__(self, raw)
+        self.exports = []
+        
+        try:
+            e = minidom.parseString(raw).documentElement
+            images = e.getElementsByTagName('image')
+            for image in images:
+                entry={}
+                entry['mimetype'] = image.getAttribute('mimetype')
+                entry['url'] = image.childNodes[0].nodeValue
+                self.exports.append( entry )
+            return self.exports
+        except Exception,e:
+            raise api.ErrorProtocol( 'expecting parameter "image"' )
+
 
 # ==========================================================
 

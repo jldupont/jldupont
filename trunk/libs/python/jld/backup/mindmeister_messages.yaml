@@ -24,6 +24,7 @@ error_validation: Parameter validation error
 error_property: Property error
 error_protocol: Protocol level error
 error_registry: Registry level error
+error_validation_parameter: Parameter validation error [$param]
 help_db: Is the filesystem path specified by the -f option accessible?
 help_auth: Please perform authentication using the 'auth' command and the -s , -k options
 help_network: Maybe check the access to the Internet?

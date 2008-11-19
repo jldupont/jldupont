@@ -8,8 +8,7 @@ import md5
 import urllib2
 import jld.api as api
 
-class MM_Exception_HTTP(Exception):
-    pass
+import jld.api.mindmeister_response as mmr
 
 class MM(object):
     """MindMeister WEB API
@@ -72,6 +71,54 @@ class MM(object):
 
     def do_network_error(self):
         raise api.ErrorNetwork('do_network_error')
+
+# ===================================================================================
+
+class MM_Client(MM):
+    """High-level interface to MindMeister"""
+    
+    def __init__(self, secret, api_key, auth_token = None):
+        MM.__init__( self, secret, api_key, auth_token )
+        
+    def getAllMaps(self):
+        """ Retrieves a current list of all maps
+            @throws jld.api.Error*
+        """
+        per_page = 100;  pages = 0
+        total = 0;  count = 0;  page = 1;  maps = []
+        while True:
+            batch = self.getMapsPage( page, per_page)
+            maps.extend( batch.maps )
+            pages = int( batch.pages )
+            count = count + int( batch.count )
+            total = int( batch.total )
+            page = page + 1
+            if (count>=total):
+                break
+        return maps
+        
+    def getMapsPage(self, page, per_page):
+        """ Retrieves one page of the map list
+            @throws jld.api.Error*
+        """
+        raw = self.do(method='mm.maps.getList', auth_token = self.auth_token, 
+                      page = page, per_page = per_page)
+        res = mmr.MM_Response_getList(raw)
+        return res
+        
+    def checkToken(self, auth_token):
+        """Verifies the validity of an authorization token
+        """
+        raw = self.do(method='mm.auth.checkToken', auth_token = auth_token)
+        res = mmr.MM_Response_getAuthToken(raw)
+        return res.auth_token==auth_token
+
+    def getMapExport(self, mapid):
+        """ mm.maps.export method
+        """
+        raw = self.do(method='mm.maps.export', auth_token=self.auth_token, mapid=mapid)
+        res = mmr.MM_Response_getMapExport(raw)
+        return res
 
 # ===================================================================================
     

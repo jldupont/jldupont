@@ -7,6 +7,7 @@ import os.path
 import logging
 import webbrowser
 
+import jld.api as api
 from   jld.cmd import BaseCmd
 import jld.registry as reg
 import jld.api.mindmeister as mm
@@ -48,16 +49,16 @@ class Backup(BaseCmd):
             
     def cmd_umaps(self, *args):
         """ Updates the local database with the latest list of maps """
-        auth_token = self._prepareAuthorizedCommand()
-        all = self._getAllMaps(auth_token)
+        self._prepareAuthorizedCommand()
+        all = self.mm.getAllMaps()
         
         self._initDb()
         db.Maps.updateFromList( all )
         
     def cmd_listmaps(self, *args):
         """ List the latest maps """
-        auth_token = self._prepareAuthorizedCommand()
-        all = self._getAllMaps(auth_token)
+        self._prepareAuthorizedCommand()
+        all = self.mm.getAllMaps()
         pp = printer.MM_Printer( self.msgs )
         pp.run( all )
         
@@ -72,6 +73,15 @@ class Backup(BaseCmd):
         """Test: for development/debugging purpose only"""
         self._initDb()
 
+    def cmd_getexport(self, *args):
+        """List the export details of one mapid"""
+        try:
+            mapid=args[0]
+        except:
+            raise api.ErrorValidation( {'param':'mapid'} )
+        self._prepareAuthorizedCommand()
+        details = self.mm.getMapExport(mapid)
+        print details
         
     # =========================================================
     # =========================================================
@@ -85,6 +95,7 @@ class Backup(BaseCmd):
                 2b) try to get a token
                     inform user to auth
         """
+        self._initMM()
         auth_token = self.r.getKey('mindmeister', 'auth_token')
         
         #If there is no auth_token,
@@ -96,46 +107,12 @@ class Backup(BaseCmd):
             auth_token = self._getAuthToken(frob)
         
         # token turns out to be invalid, help kickstart a re-authentication
-        if (not self._checkToken(auth_token)):   
+        if (not self.mm.checkToken(auth_token)):   
             self.r.setKey('mindmeister', 'auth_token', None)
             self.r.setKey('mindmeister', 'frob', None)
-            
-        return auth_token
-        
-    
-    def _getAllMaps(self, auth_token):
-        """ Retrieves all maps
-        """
-        run = True
-        per_page = 100;  pages = 0
-        total = 0;  count = 0;  page = 1;  maps = []
-        while run:
-            batch = self._getOnePage(auth_token, page, per_page)
-            maps.extend( batch.maps )
-            pages = int( batch.pages )
-            count = count + int( batch.count )
-            total = int( batch.total )
-            page = page + 1
-            #print "total [%s]  count[%s] pages[%s]" % (total, count, pages)
-            if (count>=total):
-                run = False
-                
-        return maps
-        
-    def _getOnePage(self, auth_token, page, per_page):
-        """Retrieves one page of the map list"""
-        self._initMM()
-        raw = self.mm.do(method='mm.maps.getList', auth_token = auth_token, page = page, per_page = per_page)
-        res = mmr.MM_Response_getList(raw)
-        return res
-        
-    def _checkToken(self, auth_token):
-        """Verifies the validity of an authorization token
-        """
-        self._initMM()
-        raw = self.mm.do(method='mm.auth.checkToken', auth_token = auth_token)
-        res = mmr.MM_Response_getAuthToken(raw)
-        return res.auth_token==auth_token
+            return
+
+        self.mm.auth_token = auth_token
         
     def _getAuthToken(self, frob = None):
         """ Retrieves an authentication token.
@@ -156,7 +133,7 @@ class Backup(BaseCmd):
 
     def _initMM(self):
         if (self.mm is None):
-            self.mm = mm.MM(self.secret, self.api_key)
+            self.mm = mm.MM_Client(self.secret, self.api_key)
 
     def _initDb(self):
         if (self.db is None):
