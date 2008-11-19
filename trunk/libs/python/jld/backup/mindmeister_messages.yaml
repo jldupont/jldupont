@@ -13,6 +13,7 @@ reg_update_error: Unable to update registry
 invalid_command: Invalid command [$cmd]
 use_help: Please use '-h' for help
 do_auth: Please authentication application (use 'auth' command)
+error_command: Invalid command [$cmd]
 error_getmaps: Error fetching maps [$msg]
 error_db: Error whilst creating the database file [$file]
 error_auth: Authentication error
@@ -25,6 +26,7 @@ error_property: Property error
 error_protocol: Protocol level error
 error_registry: Registry level error
 error_validation_parameter: Parameter validation error [$param]
+help_command: Use -h to review commands
 help_db: Is the filesystem path specified by the -f option accessible?
 help_auth: Please perform authentication using the 'auth' command and the -s , -k options
 help_network: Maybe check the access to the Internet?

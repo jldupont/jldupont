@@ -81,6 +81,10 @@ class ErrorProtocol(ErrorGeneric):
     """ Generic protocol error e.g. expecting parameter X but not found
     """
 
+class ErrorInvalidCommand(ErrorGeneric):
+    """ Generic command error e.g. invalid command from cmd-line utility 
+    """
+
 # =========================================================================
 
 if __name__ == "__main__":
