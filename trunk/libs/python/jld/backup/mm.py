@@ -32,10 +32,10 @@ from   jld.tools.template import ExTemplate
 
 # ========================================================================================
 _options =[
-  {'o1':'-s', 'o2':'--secret',  'var':'secret', 'action':'store',        'help':'config_secret', 'reg': True, 'default': None},
-  {'o1':'-k', 'o2':'--key',     'var':'api_key','action':'store',        'help':'config_key',    'reg': True, 'default': None},
-  {'o1':'-f', 'o2':'--file',    'var':'file',   'action':'store',        'help':'config_file',   'reg': True, 'default': None},
-  {'o1':'-q', 'o2':'--quiet',   'var':'quiet',  'action':'store_true',   'help':'quiet',         'reg': False, 'default': False },          
+  {'o1':'-s', 'var':'secret', 'action':'store',        'help':'config_secret', 'reg': True, 'default': None},
+  {'o1':'-k', 'var':'api_key','action':'store',        'help':'config_key',    'reg': True, 'default': None},
+  {'o1':'-f', 'var':'file',   'action':'store',        'help':'config_file',   'reg': True, 'default': None},
+  #{'o1':'-q', 'var':'quiet',  'action':'store_true',   'help':'quiet',         'reg': False, 'default': False },          
 ]
 
 def main():
@@ -49,9 +49,7 @@ def main():
     
     # all the exceptions are handled by 'ui'
     try:
-
         backup = Backup()
-        
         usage_template = """%prog [options] command
     
 version $Id$ by Jean-Lou Dupont
@@ -65,20 +63,17 @@ The '-f' option is required for running 'mmd' daemon. This option configures
 the local Sqlite database used for storing map related information. 
 
 Commands:
-^^{commands}
-"""
+^^{commands}"""
             
         commands_help = backup.genCommandsHelp()
             
         tpl = ExTemplate( usage_template )
-        tpl_values = {'commands' : commands_help}
-        usage = tpl.substitute( tpl_values )
+        usage = tpl.substitute( {'commands' : commands_help} )
     
         parser = OptionParser( usage=usage )
         for o in _options:
             help_msg = msgs.render( o['help'] )
             parser.add_option( o['o1'], 
-                               o['o2'], 
                                dest=o['var'], 
                                action=o['action'], 
                                help=help_msg, 
@@ -90,15 +85,14 @@ Commands:
         # Use conditional 'setKey' if we have valid overriding values i.e. not None
         r = reg.Registry()
         for o in _options:
-            if ( not o['reg'] ):
-                continue  
-            r.setKey('mindmeister', o['var'], getattr( options, o['var'] ), cond=True)
+            if ( o['reg'] ): 
+                r.setKey('mindmeister', o['var'], getattr( options, o['var'] ), cond=True)
     
         # == configuration ==
         # ===================
         params = {}
         
-        params['quiet'] = options.quiet
+        #params['quiet'] = options.quiet
         
         file    = params['file']    = r.getKey('mindmeister', 'file')
         secret  = params['secret']  = r.getKey('mindmeister', 'secret')

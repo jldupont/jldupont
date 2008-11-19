@@ -27,7 +27,7 @@ class BaseCmd(object):
         if (self.commands_help==''):
             for name, doc in self.commands:
                 if (not name.startswith('test')):
-                    self.commands_help = self.commands_help + "\t" + name + ' :  ' + doc + "\n"
+                    self.commands_help = self.commands_help + "  " + name + ' :  ' + doc + "\n"
 
         return self.commands_help
     
