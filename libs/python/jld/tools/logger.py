@@ -7,7 +7,19 @@ __author__  = "Jean-Lou Dupont"
 __version__ = "$Id$"
 
 import sys
+import logging
 import logging.handlers
+
+def logger( name ):
+    """ Returns a simple cross-platform logger
+        E.g.
+        log = logger.logger('my_logger')
+        log.info('message')
+    """
+    handler = xcLogger( name )
+    _logger = logging.Logger( name )
+    _logger.addHandler( handler )
+    return _logger
 
 def xcLogger( appname ):
     """ Cross-platform log handler
@@ -17,8 +29,10 @@ def xcLogger( appname ):
     if (sys.platform[:3] == 'win'):
         return logging.handlers.NTEventLogHandler( appname )
     
-    return logging.handlers.SysLogHandler() 
-        
+    return logging.handlers.SysLogHandler(address='/dev/log')
+
+    #More difficult to configure as it defaults to localhost:514 
+    #return logging.handlers.SysLogHandler()         
 
 # ==============================================
 # ==============================================
@@ -32,5 +46,5 @@ if __name__ == "__main__":
     logger = logging.Logger('Test_xcLogger')
     logger.addHandler( handler )
     
-    logger.info( 'TestMessage' )
+    logger.info( 'xcLogger -- TestMessage' )
     
