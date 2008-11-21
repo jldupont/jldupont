@@ -28,7 +28,7 @@ class ServiceMM( webapp.RequestHandler ):
         try:
             res = self.fetch(format, id)
         except:
-            self.response.out.write('map with id[%s] not found' % id);
+            self.response.out.write('map with id[%s] not found/available' % id);
             self.response.set_status(404)
         
         self.response.headers["Content-Type"] = mime
