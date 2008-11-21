@@ -95,8 +95,8 @@ Commands:
         # == command validation ==
         # ========================
         try: command = ui.args[0]
-        except: command = None
-        backup.validateCommand(command)
+        except: command = None       
+        backup.validateCommand(command)       
          
         # get rid of command from the arg list
         ui.popArg()

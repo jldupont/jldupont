@@ -79,10 +79,10 @@ class Backup(BaseCmd):
             mapid=args[0][0]
         except:
             raise api.ErrorValidation( 'missing param', {'param':'mapid'} )
-        self._prepareAuthorizedCommand()
+        self._prepareAuthorizedCommand()      
         details = self.mm.getMapExport(mapid)
-        pp = printer.MM_Printer_Export( self.msgs )
-        pp.run( details )        
+        pp = printer.MM_Printer_Export( self.msgs )       
+        pp.run( details )
         
     # =========================================================
     # =========================================================

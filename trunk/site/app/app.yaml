@@ -6,6 +6,9 @@ runtime: python
 
 handlers:
 
+- url: /mm/(.*)
+  script: server/services/mindmeister/v1.py
+
 # iGoogle Gadgets
 # ---------------
 - url: /test_gwt_gadget/(.*)
