@@ -57,7 +57,7 @@ class RawDoc(object):
         if (body is None):
             raise api.ErrorProtocol('missing_element', {'element':'body'})
 
-        revision = body['revision']
+        revision = raw.body['revision']
 
         style = raw.style
         if (style is None):
@@ -93,7 +93,16 @@ if __name__ == "__main__":
     h = RawDoc('dgstxrxv_138fh5wphfc')
     result = h.fetch()
     
-    print result.body
-    print result.revision
+    #print result.body
+    #print result.revision
     #print result.style
+    
+    for line in result.body:
+        if (line is None):
+            continue
+        line = str( line ).lstrip()
+        if (not len(line)):
+            continue
+        print "** "+str(line)
+        
     
