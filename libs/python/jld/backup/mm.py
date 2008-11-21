@@ -11,7 +11,6 @@ __version__ = "$Id$"
 import sys
 import logging
 import os.path
-from string import Template
 from optparse import OptionParser
 
 # ASSUME THAT THE REQUIRED LIBS are available
@@ -70,23 +69,14 @@ Commands:
         tpl = ExTemplate( usage_template )
         usage = tpl.substitute( {'commands' : commands_help} )
     
-        parser = OptionParser( usage=usage )
-        for o in _options:
-            help_msg = msgs.render( o['help'] )
-            parser.add_option( o['o1'], 
-                               dest=o['var'], 
-                               action=o['action'], 
-                               help=help_msg, 
-                               default=o['default'] )
-        
-        (options,args) = parser.parse_args()
-    
+        ui.handleArguments(usage, _options)
+
         # make sure we have SECRET and API_KEY configured in the registry
         # Use conditional 'setKey' if we have valid overriding values i.e. not None
         r = reg.Registry()
         for o in _options:
             if ( o['reg'] ): 
-                r.setKey('mindmeister', o['var'], getattr( options, o['var'] ), cond=True)
+                r.setKey('mindmeister', o['var'], getattr( ui.options, o['var'] ), cond=True)
     
         # == configuration ==
         # ===================
@@ -104,17 +94,17 @@ Commands:
     
         # == command validation ==
         # ========================
-        try: command = args[0]
+        try: command = ui.args[0]
         except: command = None
         if (command not in backup.cmds):
             raise api.ErrorInvalidCommand( 'invalid command', {'cmd':command} )
          
         # get rid of command from the arg list
-        args.pop(0)
+        ui.args.pop(0)
          
         # == DISPATCHER ==
         # ================
-        getattr( backup, "cmd_%s" % command )(args)
+        getattr( backup, "cmd_%s" % command )(ui.args)
         
     except Exception,e:
         ui.handleError( e )
