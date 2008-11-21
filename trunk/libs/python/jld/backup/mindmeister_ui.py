@@ -5,10 +5,6 @@
 __author__  = "Jean-Lou Dupont"
 __version__ = "$Id$"
 
-import re
-import sys
-import jld.api as api
-import jld.registry as reg
 import jld.tools.cmd_ui as ui
 
 class MM_UI(ui.UIBase):

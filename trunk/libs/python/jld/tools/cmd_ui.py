@@ -8,6 +8,7 @@ __version__ = "$Id$"
 import re
 import sys
 from string import Template
+from optparse import OptionParser
 
 class UIBase(object):
     """ Base class for Command Line UI
@@ -25,6 +26,8 @@ class UIBase(object):
     
     def __init__(self, msgs = None):
         self.msgs = msgs
+        self.options = None
+        self.args = None
     
     def setParams(self, msgs):
         """ Generic parameter setting interface
@@ -73,5 +76,18 @@ class UIBase(object):
         
         return None
                 
+    def handleArguments(self, usage, _options):
+        """ Processes command line options
+        """ 
+        parser = OptionParser( usage=usage )
+        for o in _options:
+            help_msg = self.msgs.render( o['help'] )
+            parser.add_option( o['o1'], 
+                               dest=o['var'], 
+                               action=o['action'], 
+                               help=help_msg, 
+                               default=o['default'] )
 
+        (self.options,self.args) = parser.parse_args()
+        
     
