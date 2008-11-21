@@ -5,6 +5,7 @@ __author__  = "Jean-Lou Dupont"
 __version__ = "$Id$"
 
 import sys
+import jld.api as api
 import jld.tools.klass as tclass
 
 class BaseCmd(object):
