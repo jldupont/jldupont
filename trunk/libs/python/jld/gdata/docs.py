@@ -7,8 +7,6 @@ __version__ = "$Id$"
 
 __all__ = [ 'RawDoc' ]
 
-from xml.dom import minidom
-
 from BeautifulSoup import BeautifulSoup
 
 # Google AppEngine
@@ -53,26 +51,16 @@ class RawDoc(object):
         
     def _process(self, content):
         
-        raw = BeautifulSoup(content).prettify()
+        raw = BeautifulSoup(content)
         
-        try:
-            e = minidom.parseString(raw).documentElement
-            bodyE = e.getElementsByTagName('body')[0]  #only one body element of course
-            body  = bodyE.childNodes[0].nodeValue
-        except Exception,e:
+        body = raw.body
+        if (body is None):
             raise api.ErrorProtocol('missing_element', {'element':'body'})
 
-        print body
+        revision = body['revision']
 
-        try:
-            revision = bodyE.getAttribute('revision')
-        except Exception,e:
-            raise api.ErrorProtocol('missing_attribute', {'attribute':'revision'} )
-        
-        try:
-            styleE = e.getElementsByTagName('style')[0]
-            style   = styleE.childNodes[0].nodeValue            
-        except Exception,e:
+        style = raw.style
+        if (style is None):
             raise api.ErrorProtocol('missing_element', {'element':'style'})
         
         return ResultDoc( style, body, revision )
@@ -105,6 +93,7 @@ if __name__ == "__main__":
     h = RawDoc('dgstxrxv_138fh5wphfc')
     result = h.fetch()
     
+    print result.body
     print result.revision
     #print result.style
     
