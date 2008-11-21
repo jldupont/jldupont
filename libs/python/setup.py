@@ -1,5 +1,16 @@
 """ Jean-Lou Dupont's Python Library
     EGG setup
+    
+    Dependencies:
+    =============
+    Registry package:
+        Yaml
+    Backup.mindmeister_db:
+        Sqlobject
+    Tools.messages package:
+        Yaml
+    
+    
 """
 import sys
 import os.path
