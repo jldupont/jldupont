@@ -31,9 +31,9 @@ class ServiceMM( webapp.RequestHandler ):
             self.response.out.write('map with id[%s] not found' % id);
             self.response.set_status(404)
         
-        self.response.headers.add_header("Content-Type", mime)
+        self.response.headers["Content-Type"] = mime
         self.response.set_status(200)
-        self.response.out.write(res);
+        self.response.out.write( res );
         logging.info('mm format[%s] id[%s]' % (format, id))
         
     def fetch(self, format, id):
