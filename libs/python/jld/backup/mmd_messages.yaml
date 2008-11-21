@@ -1,2 +1,4 @@
 # YAML based messages for mmd.py
 # @author: Jean-Lou Dupont
+
+unhandled_exception: An unhandled exception occured [$exc]

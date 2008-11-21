@@ -96,11 +96,10 @@ Commands:
         # ========================
         try: command = ui.args[0]
         except: command = None
-        if (command not in backup.cmds):
-            raise api.ErrorInvalidCommand( 'invalid command', {'cmd':command} )
+        backup.validateCommand(command)
          
         # get rid of command from the arg list
-        ui.args.pop(0)
+        ui.popArg()
          
         # == DISPATCHER ==
         # ================

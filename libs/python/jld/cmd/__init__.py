@@ -35,7 +35,12 @@ class BaseCmd(object):
         """ Configures various parameters
         """
 
-
+    def validateCommand(self, command):
+        """ Validates the specified command
+        """ 
+        if (command not in self.cmds):
+            raise api.ErrorInvalidCommand( 'invalid command', {'cmd':command} )
+        
 
 # ==============================================
 # ==============================================

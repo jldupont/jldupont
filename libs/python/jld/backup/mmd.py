@@ -64,7 +64,7 @@ class mmdMessages(Messages):
 # ==============================================
 
 from   jld.cmd import BaseCmd
-class CmdLineInterface(BaseCmd):
+class mmdCmd(BaseCmd):
     """ Handles the command line interface of this daemon
     """
     def __init__(self):
@@ -98,23 +98,17 @@ def main():
     ui.setParams( msgs )    
 
     try:
-        backup = Backup()
+        cmd = mmdCmd()
         usage_template = """%prog [options] command
     
 version $Id$ by Jean-Lou Dupont
 
 *** Interface to MindMeister (http://www.mindmeister.com/) ***
-This command-line utility requires valid 'API_KEY' and 'SECRET' parameters
-obtained from MindMeister. In order to use this tool, the 'auth' command
-must first be called with the said valid parameters.
-
-The '-f' option is required for running 'mmd' daemon. This option configures
-the local Sqlite database used for storing map related information. 
 
 Commands:
 ^^{commands}"""
             
-        commands_help = backup.genCommandsHelp()
+        commands_help = cmd.genCommandsHelp()
             
         tpl = ExTemplate( usage_template )
         usage = tpl.substitute( {'commands' : commands_help} )
@@ -126,8 +120,20 @@ Commands:
           #{'o1':'-q', 'var':'quiet',  'action':'store_true',   'help':'quiet',         'reg': False, 'default': False },          
         ]
     
-    
         ui.handleArguments(usage, _options)
+
+        # == command validation ==
+        # ========================
+        try:    command = ui.args[0]
+        except: command = None
+        cmd.validateCommand(command)
+        
+        # get rid of command from the arg list
+        ui.popArg()
+         
+        # == DISPATCHER ==
+        # ================
+        getattr( cmd, "cmd_%s" % command )(ui.args)
 
     except Exception,e:
         ui.handleError(e)

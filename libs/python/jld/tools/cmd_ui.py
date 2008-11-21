@@ -34,6 +34,11 @@ class UIBase(object):
         """
         self.msgs = msgs
 
+    def popArg(self):
+        """ Pops one argument from the list
+        """
+        return self.args.pop(0)
+
     def handleError( self, exc ):
         """ Displays, if required, an appropriate user message
             corresponding to an error condition.
@@ -90,4 +95,3 @@ class UIBase(object):
 
         (self.options,self.args) = parser.parse_args()
         
-    
