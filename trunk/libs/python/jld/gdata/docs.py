@@ -57,13 +57,18 @@ class RawDoc(object):
         if (body is None):
             raise api.ErrorProtocol('missing_element', {'element':'body'})
 
+        body = map( lambda X: str(X), body.contents  )
+        body = "".join( body )
+
         revision = raw.body['revision']
+        if (revision is None):
+            raise api.ErrorProtocol('missing_attribute', {'attribute':'revision'})            
 
         style = raw.style
         if (style is None):
             raise api.ErrorProtocol('missing_element', {'element':'style'})
         
-        return ResultDoc( style, body, revision )
+        return ResultDoc( unicode( style ), unicode( body ), unicode( revision ) )
 
 class ResultDoc(object):
     """ Result doc
@@ -93,10 +98,11 @@ if __name__ == "__main__":
     h = RawDoc('dgstxrxv_138fh5wphfc')
     result = h.fetch()
     
-    #print result.body
-    #print result.revision
+    print result.body
+    print result.revision
     #print result.style
-    
+
+"""    
     for line in result.body:
         if (line is None):
             continue
@@ -104,5 +110,5 @@ if __name__ == "__main__":
         if (not len(line)):
             continue
         print "** "+str(line)
-        
+"""     
     
