@@ -19,16 +19,21 @@ def get_template_sources(template_name, template_dirs=None):
 def load_template_source(template_name, template_dirs=None):
     tried = []
     
-    #cached_template = memcache.get('/templates/'+template_name)
-    cached_template = None
-    if (cached_template is not None):
-        #logging.info( 'got from memcache' )
-        return (cached_template, template_name)
-    
     for filepath in get_template_sources(template_name, template_dirs):
         try:
+            ts = os.path.getmtime(filepath)
+            cached_template    = memcache.get('/templates/content/'+template_name)
+            cached_template_ts = memcache.get('/templates/mtime/'+template_name)
+            if (cached_template is not None):
+                if (ts == cached_template_ts):
+                    logging.info( 'got from memcache [%s]' % template_name )
+                    return (cached_template, template_name)   
+            
             tpl = (open(filepath).read(), filepath)
-            memcache.set('/templates/'+template_name, tpl[0], 5*60 )
+            ts  = os.path.getmtime(filepath)
+            memcache.set('/templates/mtime/'+template_name, ts, 5*60 )
+            memcache.set('/templates/content/'+template_name, tpl[0], 5*60 )
+            logging.info( 'saved in memcache [%s]' % template_name )
             return tpl
         except IOError:
             tried.append(filepath)

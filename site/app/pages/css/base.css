@@ -27,7 +27,7 @@ a:hover { color:#ffe761; }
 #nav-global { position:absolute; margin:0; bottom:0; right:0; font-family:"Trebuchet MS",sans-serif; white-space:nowrap; }
 #nav-global li { display:block; float:left; list-style-type:none; margin:0; padding:0; }
 #nav-global a { display:block; float:left; padding:5em 16px 10px 16px; background:#477791; }
-#nav-global a:hover { color:white; background:#234f32; }
+#nav-global a:hover { color:white; background:#6DB6DE; }
 #homepage #nav-homepage a, #overview #nav-overview a, #download #nav-download a, #documentation #nav-documentation a, #weblog #nav-weblog a, #community #nav-community a, #blogroll #nav-blogroll a, #code #nav-code a { color:white; background:#477791 url(/pages/img/nav_bg.gif) bottom repeat-x; }
 
 /* COLUMNS */
