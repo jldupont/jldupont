@@ -9,33 +9,24 @@ import wsgiref.handlers
 from google.appengine.ext import webapp
 from google.appengine.api import urlfetch
 
+import libs.django.template as tpl
+
 class Main( webapp.RequestHandler ):
+    
+    main_tpl = '/templates/main.html'
     
     def __init__(self):
         pass
 
-    def get( self, format, id ):
-        if (format not in self._formats):
-            self.response.out.write('unsupported format[%s]' % format);
-            return
+    def get( self ):
         
-        mime = self._formats[format]
+        tpl_path = os.path.dirname( __file__ ) + self.main_tpl
+        res = tpl.render( tpl_path, {} )
+        logging.info( tpl_path )
         
-        try:
-            res = self.fetch(format, id)
-        except:
-            self.response.out.write('map with id[%s] not found/available' % id);
-            self.response.set_status(404)
-        
-        self.response.headers["Content-Type"] = mime
+        self.response.headers["Content-Type"] = "text/html"
         self.response.set_status(200)
         self.response.out.write( res );
-        logging.info('mm format[%s] id[%s]' % (format, id))
-        
-    def fetch(self, format, id):
-        url = self._api % (id, format)
-        res = urlfetch.fetch( url )
-        return res.content
         
 #/**
 # *  Initialize http handler

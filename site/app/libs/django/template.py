@@ -25,7 +25,7 @@ import django.conf
 #django_loader.template_source_loaders = None
 
 _loaders = (    'libs.django.filesystem_template_loader.load_template_source',
-                'libs.django.db_template_loader.load_template_source',
+                #'libs.django.db_template_loader.load_template_source',
                 )
 
 try:

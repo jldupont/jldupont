@@ -74,8 +74,7 @@ handlers:
   upload: pages/img/favicon.ico
 
 - url: /
-  static_files: pages/main.html
-  upload: pages/main.html
+  script: pages/main.py
 
 - url: /pages/(.*)
   static_files: pages/\1
