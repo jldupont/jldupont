@@ -67,17 +67,33 @@ handlers:
   script: server/oldsite/wiki.py
 # [/old]
 
+# MAIN
+
 - url: /favicon.ico
-  static_files: client/www/com.jldupont.project.main/favicon.ico
-  upload: client/www/com.jldupont.project.main/favicon.ico
+  static_files: pages/img/favicon.ico
+  upload: pages/img/favicon.ico
 
 - url: /
-  static_files: client/www/com.jldupont.project.main/main.html
-  upload: client/www/com.jldupont.project.main/main.html
+  static_files: pages/main.html
+  upload: pages/main.html
 
-- url: /(.*\.(js|html|css|gif|png|jpg))
-  static_files: client/www/com.jldupont.project.main/\1
-  upload: client/www/com.jldupont.project.main/(.*\.(js|html|css|gif|png|jpg))
+- url: /pages/(.*)
+  static_files: pages/\1
+  upload: pages/(.*\.(js|html|css|gif|png|jpg|ico))
+
+
+#==old==
+#- url: /favicon.ico
+#  static_files: client/www/com.jldupont.project.main/favicon.ico
+#  upload: client/www/com.jldupont.project.main/favicon.ico
+
+#- url: /
+#  static_files: client/www/com.jldupont.project.main/main.html
+#  upload: client/www/com.jldupont.project.main/main.html
+
+#- url: /(.*\.(js|html|css|gif|png|jpg))
+#  static_files: client/www/com.jldupont.project.main/\1
+#  upload: client/www/com.jldupont.project.main/(.*\.(js|html|css|gif|png|jpg))
 
 
 # CATCH-ALL
