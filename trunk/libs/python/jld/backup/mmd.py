@@ -22,9 +22,11 @@ while levelsUp>0:
     levelsUp = levelsUp - 1    
 sys.path.append( path )
 
+
 # ==============================================
 # ==============================================
-class mmdDaemon(object):
+import jld.tools.daemon as daemon
+class mmdDaemon(daemon.BaseDaemon):
     """ Daemon
     """
     def __init__(self):
