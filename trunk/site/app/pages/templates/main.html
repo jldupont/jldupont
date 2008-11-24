@@ -33,23 +33,13 @@
 				<br/>
 				some more contents
 				
-					<div id="content-secondary"> 
-					  <h2 id="comments">Questions/Feedback</h2> 
-					  <p>Having trouble? We'd like to help!</p> 
-					  <ul> 
-					    <li> 
-					      Search for information in the <a 
-					      href="http://groups.google.com/group/django-users/">archives of the
-					      django-users mailing list</a>, or <a 
-					      href="http://groups.google.com/group/django-users/">post a question</a>.
-					    </li> 
-					  </ul> 
+					<div id="content-secondary">
+						{% include "footer.html" %}
 					</div><!-- END #content-secondary --> 
 				</div><!-- END content-main -->
 				 
 				<div id="content-related" class="sidebar">
-					<h2>Contents</h2>
-					<h2>Help</h2>
+					{% include "sidebar.html" %}
 				</div> <!-- END content-related , sidebar -->
 				
 			</div><!-- END columnwrap -->
