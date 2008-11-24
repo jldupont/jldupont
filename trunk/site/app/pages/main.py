@@ -22,14 +22,14 @@ from google.appengine.ext import webapp
 
 class Main( webapp.RequestHandler ):
     
-    main_tpl = 'main.html'
+    _base_tpl = 'base.html'
     
     def __init__(self):
         pass
 
     def get( self ):
         
-        res = mydjango.render( self.main_tpl, {} )
+        res = mydjango.render( self._base_tpl, {'content':'some content here'} )
         
         self.response.headers["Content-Type"] = "text/html"
         self.response.set_status(200)
