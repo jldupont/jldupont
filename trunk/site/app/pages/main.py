@@ -6,6 +6,7 @@ import sys
 import logging
 
 import wsgiref.handlers
+from google.appengine.api import users
 from google.appengine.api import urlfetch
 
 import libs.django as mydjango
@@ -28,8 +29,14 @@ class Main( webapp.RequestHandler ):
         pass
 
     def get( self ):
-        
-        res = mydjango.render( self._base_tpl, {'content':'some content here'} )
+        user = users.get_current_user()
+        logx_href  = users.create_logout_url("/") if user else users.create_login_url("/")
+        logx_title = "Logout" if user else "Login"
+        params = { 'content':'some content',
+                   'logx_href':  logx_href,
+                   'logx_title': logx_title,
+                  }
+        res = mydjango.render( self._base_tpl, params )
         
         self.response.headers["Content-Type"] = "text/html"
         self.response.set_status(200)
