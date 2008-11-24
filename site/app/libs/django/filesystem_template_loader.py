@@ -19,7 +19,8 @@ def get_template_sources(template_name, template_dirs=None):
 def load_template_source(template_name, template_dirs=None):
     tried = []
     
-    cached_template = memcache.get('/templates/'+template_name)
+    #cached_template = memcache.get('/templates/'+template_name)
+    cached_template = None
     if (cached_template is not None):
         #logging.info( 'got from memcache' )
         return (cached_template, template_name)
