@@ -85,6 +85,10 @@ class ErrorInvalidCommand(ErrorGeneric):
     """ Generic command error e.g. invalid command from cmd-line utility 
     """
 
+class ErrorDaemon(ErrorGeneric):
+    """ Generic daemon error e.g. can't os.fork
+    """
+
 # =========================================================================
 
 if __name__ == "__main__":

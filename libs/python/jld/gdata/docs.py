@@ -5,7 +5,7 @@
 __author__  = "Jean-Lou Dupont"
 __version__ = "$Id$"
 
-__all__ = [ 'RawDoc' ]
+__all__ = [ 'RawDoc', 'ResultDoc' ]
 
 from BeautifulSoup import BeautifulSoup
 
