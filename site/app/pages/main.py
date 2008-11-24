@@ -6,23 +6,30 @@ import sys
 import logging
 
 import wsgiref.handlers
-from google.appengine.ext import webapp
 from google.appengine.api import urlfetch
 
-import libs.django.template as tpl
+import libs.django as mydjango
+
+_loaders = (    'libs.django.filesystem_template_loader.load_template_source',
+                )
+_dir = os.path.dirname( __file__ ) + os.sep + 'templates'
+_dirs = ( _dir, )
+
+mydjango.setLoaders( _loaders )
+mydjango.setDirs( _dirs )
+
+from google.appengine.ext import webapp
 
 class Main( webapp.RequestHandler ):
     
-    main_tpl = '/templates/main.html'
+    main_tpl = 'main.html'
     
     def __init__(self):
         pass
 
     def get( self ):
         
-        tpl_path = os.path.dirname( __file__ ) + self.main_tpl
-        res = tpl.render( tpl_path, {} )
-        logging.info( tpl_path )
+        res = mydjango.render( self.main_tpl, {} )
         
         self.response.headers["Content-Type"] = "text/html"
         self.response.set_status(200)
