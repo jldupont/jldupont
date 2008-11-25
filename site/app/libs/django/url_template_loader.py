@@ -17,13 +17,22 @@ _CACHE_TIMEOUT = 15*60
 _CACHE_TEMPLATE_KEY_CONTENT = "/templates/url/content/%s"
 _CACHE_TEMPLATE_KEY_ETAG    = "/templates/url/etag/%s"
 
+# OPTIONAL CONFIGURATION
+# ======================
+_LISTE = settings.TEMPLATE_ALLOWED_EXTENSIONS
+_EXTENSIONS = _LISTE if _LISTE else []
+
 def get_template_sources(template_name, template_url_bases=None):
     
     if not template_url_bases:
         template_url_bases = settings.TEMPLATE_URL_BASES
         
     for template_url_base in template_url_bases:
-        yield template_url_base % template_name
+        for extension in _EXTENSIONS:
+            if (template_name.endswith(extension)):
+                yield template_url_base % template_name
+            else:
+                yield template_url_base % str( template_name + extension ) 
 
 def load_template_source(template_name, template_url_bases=None):
     tried = []

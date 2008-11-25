@@ -15,13 +15,22 @@ __all__ = ['get_template_sources','load_template_source' ]
 _CACHE_TEMPLATE_KEY_CONTENT = "/templates/file/content/%s"
 _CACHE_TEMPLATE_KEY_TS      = "/templates/file/ts/%s"
 
+# OPTIONAL CONFIGURATION
+# ======================
+_LISTE = settings.TEMPLATE_ALLOWED_EXTENSIONS
+_EXTENSIONS = _LISTE if _LISTE else []
+
 def get_template_sources(template_name, template_dirs=None):
     
     if not template_dirs:
         template_dirs = settings.TEMPLATE_DIRS
         
     for template_dir in template_dirs:
-        yield os.path.join(template_dir, template_name)
+        for extension in _EXTENSIONS:
+            if (template_name.endswith(extension)):
+                yield os.path.join(template_dir, template_name)
+            else:
+                yield os.path.join(template_dir, template_name + extension)
 
 def load_template_source(template_name, template_dirs=None):
     tried = []
@@ -36,7 +45,7 @@ def load_template_source(template_name, template_dirs=None):
             if (not _DEBUG):
                 if (cached_template is not None):
                     if (ts == cached_template_ts):
-                        #logging.info( 'got from memcache [%s]' % template_name )
+                        logging.info( 'got from memcache [%s]' % template_name )
                         return (cached_template, template_name)   
             
             tpl = (open(filepath).read(), filepath)
@@ -57,3 +66,4 @@ def load_template_source(template_name, template_dirs=None):
     raise TemplateDoesNotExist, error_msg
 
 load_template_source.is_usable = True
+
