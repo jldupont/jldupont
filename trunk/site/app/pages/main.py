@@ -17,10 +17,12 @@ import libs.django as mydjango
 _loaders = (    'libs.django.filesystem_template_loader.load_template_source',
                 'libs.django.url_template_loader.load_template_source',
                 )
-_dir = os.path.dirname( __file__ ) + os.sep + 'templates'
-_dirs = ( _dir, )
+_thisPath = os.path.dirname( __file__ )
+_dir    = _thisPath + os.sep + 'templates'
+_dirSVN = os.path.abspath( _thisPath + '/../../' ) + os.sep + 'templates'
+_dirs = ( _dir, _dirSVN )
 _urls = ( "http://jldupont.googlecode.com/svn/trunk/site/templates/%s", )
-_extensions = ['.html','.xml']
+_extensions = ['.html', '.xml']
 
 mydjango.setConfig( 'TEMPLATE_URL_BASES', _urls ) #not django standard
 mydjango.setConfig( 'TEMPLATE_ALLOWED_EXTENSIONS', _extensions ) #not django standard
@@ -43,7 +45,7 @@ class Main( webapp.RequestHandler ):
     def get( self, page = None ):
         
         if (page is None):
-            page = 'main.html'
+            page = 'svn/main'
         
         user = users.get_current_user()
         logx_href  = users.create_logout_url("/") if user else users.create_login_url("/")
