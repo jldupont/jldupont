@@ -72,7 +72,7 @@ ins { text-decoration: none; }
 ins a { text-decoration: none; }
 
 /* LISTS */
-
+li.no_bullet { list-style: none; }
 ul { padding-left:2em; }
 ol { padding-left:30px; }
 ul li { list-style-type:square; margin-bottom:.4em; }

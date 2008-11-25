@@ -4,8 +4,8 @@
 import os
 import sys
 import logging
-
 import wsgiref.handlers
+
 from google.appengine.ext import webapp
 from google.appengine.api import users
 from google.appengine.api import urlfetch
@@ -20,10 +20,13 @@ _loaders = (    'libs.django.filesystem_template_loader.load_template_source',
 _dir = os.path.dirname( __file__ ) + os.sep + 'templates'
 _dirs = ( _dir, )
 _urls = ( "http://jldupont.googlecode.com/svn/trunk/site/templates/%s", )
+_extensions = ['.html','.xml']
 
+mydjango.setConfig( 'TEMPLATE_URL_BASES', _urls ) #not django standard
+mydjango.setConfig( 'TEMPLATE_ALLOWED_EXTENSIONS', _extensions ) #not django standard
 mydjango.setConfig( 'TEMPLATE_LOADERS', _loaders )
 mydjango.setConfig( 'TEMPLATE_DIRS', _dirs )
-mydjango.setConfig( 'TEMPLATE_URL_BASES', _urls )
+
 
 # === GLOBAL VARS ===
 # ===================
@@ -48,10 +51,10 @@ class Main( webapp.RequestHandler ):
         
         content,code = self.getPage(page, {'page': page} )
         
-        params = { 'content':content,
+        params = { 'content':    content,
                    'logx_href':  logx_href,
                    'logx_title': logx_title,
-                   'is_remote':IS_REMOTE
+                   'is_remote':  IS_REMOTE
                   }
         res = mydjango.render( self._base_tpl, params )
         
