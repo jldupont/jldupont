@@ -13,8 +13,9 @@ from google.appengine.api import urlfetch
 
 __all__ = ['get_template_sources','load_template_source' ]
 
+_CACHE_TIMEOUT = 15*60
 _CACHE_TEMPLATE_KEY_CONTENT = "/templates/url/content/%s"
-_CACHE_TEMPLATE_KEY_ETAG      = "/templates/url/etag/%s"
+_CACHE_TEMPLATE_KEY_ETAG    = "/templates/url/etag/%s"
 
 def get_template_sources(template_name, template_url_bases=None):
     
@@ -33,14 +34,11 @@ def load_template_source(template_name, template_url_bases=None):
             cached_template      = memcache.get(_CACHE_TEMPLATE_KEY_CONTENT % template_name)
             cached_template_etag = memcache.get(_CACHE_TEMPLATE_KEY_ETAG % template_name)
             
-            if (cached_template is None):
-                tpl,etag = cond_fetch(url)
-            else:
-                tpl,etag = cond_fetch(url, content = cached_template, etag = cached_template_etag)
+            tpl,etag = cond_fetch(url, content = cached_template, etag = cached_template_etag)
                 
             if tpl:
-                memcache.set(_CACHE_TEMPLATE_KEY_ETAG % template_name, etag, 15*60 )
-                memcache.set(_CACHE_TEMPLATE_KEY_CONTENT % template_name, tpl, 15*60 )
+                memcache.set(_CACHE_TEMPLATE_KEY_ETAG % template_name, etag, _CACHE_TIMEOUT )
+                memcache.set(_CACHE_TEMPLATE_KEY_CONTENT % template_name, tpl, _CACHE_TIMEOUT )
                 #logging.info( 'saved in memcache [%s]' % template_name )
                 return (tpl, template_name)
             
@@ -61,24 +59,19 @@ load_template_source.is_usable = True
 
 def cond_fetch(url, content = None, etag = None):
     
-    headers = { 'If-None-Match': etag } if etag else None
+    headers = { 'If-None-Match': etag } if etag else {}
     
     try:
-        if (headers):
-            result = urlfetch.fetch(url=url, headers = headers)
-        else:
-            result = urlfetch.fetch(url=url)
+        result = urlfetch.fetch(url=url, headers = headers)
         
         if (result.status_code == 304):
             logging.info('not changed etag[%s]' % etag)
             return ( content, etag )
         
-        if result.status_code != 200:
-            return (None,None)
-        
-        current_etag = result.headers['ETag']
-        logging.info('fetched url[%s] etag[%s]' % (url,current_etag))
-        return (result.content, current_etag)
+        if result.status_code == 200:       
+            current_etag = result.headers['ETag']
+            logging.info('fetched url[%s] etag[%s]' % (url,current_etag))
+            return (result.content, current_etag)
     
     except Exception,e:
         logging.info('tried url[%s] msg[%s]' % (url,e))

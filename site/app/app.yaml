@@ -70,8 +70,9 @@ handlers:
 # MAIN
 
 - url: /favicon.ico
-  static_files: pages/img/favicon.ico
-  upload: pages/img/favicon.ico
+  static_files: res/img/favicon.ico
+  upload: res/img/favicon.ico
+  expiration: "7d"
 
 - url: /page/(.*)
   script: pages/main.py
@@ -79,9 +80,10 @@ handlers:
 - url: /
   script: pages/main.py
   
-- url: /pages/(.*)
-  static_files: pages/\1
-  upload: pages/(.*\.(js|html|css|gif|png|jpg|ico))
+- url: /res/(.*)
+  static_files: res/\1
+  upload: res/(.*\.(js|html|css|gif|png|jpg|ico))
+  expiration: "1d"
 
 
 #==old==
