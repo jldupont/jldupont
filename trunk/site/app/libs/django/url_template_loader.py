@@ -1,6 +1,8 @@
 """ Django url based template loader with memcache
     @author: Jean-Lou Dupont
 """
+_DEBUG = False
+
 import os
 import logging
 
@@ -12,7 +14,7 @@ from google.appengine.api import urlfetch
 __all__ = ['get_template_sources','load_template_source' ]
 
 _CACHE_TEMPLATE_KEY_CONTENT = "/templates/url/content/%s"
-_CACHE_TEMPLATE_KEY_ETAG      = "/emplates/url/etag/%s"
+_CACHE_TEMPLATE_KEY_ETAG      = "/templates/url/etag/%s"
 
 def get_template_sources(template_name, template_url_bases=None):
     
@@ -30,6 +32,7 @@ def load_template_source(template_name, template_url_bases=None):
             logging.info("trying [%s]" % url)
             cached_template      = memcache.get(_CACHE_TEMPLATE_KEY_CONTENT % template_name)
             cached_template_etag = memcache.get(_CACHE_TEMPLATE_KEY_ETAG % template_name)
+            
             if (cached_template is None):
                 tpl,etag = cond_fetch(url)
             else:
@@ -38,17 +41,17 @@ def load_template_source(template_name, template_url_bases=None):
             if tpl:
                 memcache.set(_CACHE_TEMPLATE_KEY_ETAG % template_name, etag, 15*60 )
                 memcache.set(_CACHE_TEMPLATE_KEY_CONTENT % template_name, tpl, 15*60 )
-                logging.info( 'saved in memcache [%s]' % template_name )
+                #logging.info( 'saved in memcache [%s]' % template_name )
                 return (tpl, template_name)
             
-        except IOError:
+        except Exception,e:
             tried.append(url)
     if tried:
         error_msg = "Tried %s" % tried
     else:
         error_msg = "Your TEMPLATE_URL_BASES setting is empty."
     
-    logging.info('not found')
+    logging.info('NOT FOUND [%s]' % template_name)
     raise TemplateDoesNotExist, error_msg
 
 load_template_source.is_usable = True
@@ -61,17 +64,24 @@ def cond_fetch(url, content = None, etag = None):
     headers = { 'If-None-Match': etag } if etag else None
     
     try:
-        result = urlfetch.fetch(url=url, headers = headers)
+        if (headers):
+            result = urlfetch.fetch(url=url, headers = headers)
+        else:
+            result = urlfetch.fetch(url=url)
+        
         if (result.status_code == 304):
+            logging.info('not changed etag[%s]' % etag)
             return ( content, etag )
         
         if result.status_code != 200:
             return (None,None)
+        
         current_etag = result.headers['ETag']
         logging.info('fetched url[%s] etag[%s]' % (url,current_etag))
-        return (result.body, current_etag)
+        return (result.content, current_etag)
+    
     except Exception,e:
-        logging.error('tried url[%s]' % url)
+        logging.info('tried url[%s] msg[%s]' % (url,e))
         
     return (None,None)
     

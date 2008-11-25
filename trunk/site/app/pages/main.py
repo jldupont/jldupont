@@ -37,10 +37,17 @@ class Main( webapp.RequestHandler ):
         pass
 
     def get( self, page = None ):
+        
+        if (page is None):
+            page = 'main.html'
+        
         user = users.get_current_user()
         logx_href  = users.create_logout_url("/") if user else users.create_login_url("/")
         logx_title = "Logout" if user else "Login"
-        params = { 'content':'some content',
+        
+        content,code = self.getPage(page, {'page': page} )
+        
+        params = { 'content':content,
                    'logx_href':  logx_href,
                    'logx_title': logx_title,
                    'is_remote':IS_REMOTE
@@ -48,12 +55,22 @@ class Main( webapp.RequestHandler ):
         res = mydjango.render( self._base_tpl, params )
         
         self.response.headers["Content-Type"] = "text/html"
-        self.response.set_status(200)
+        self.response.set_status( code )
         self.response.out.write( res );
         
-    def getPage(self, page):
+    def getPage(self, page, params = None):
         """ Retrieves and renders the specified page
         """
+        try:
+            page = mydjango.render( page, params )
+            return (page,200)
+        except:
+            try:
+                page = mydjango.render( 'not_found.html' , params )
+                return (page,404)                
+            except:
+                logging.error('Default page "not_found.html" error')
+        return (None,500)
         
 #/**
 # *  Initialize http handler
