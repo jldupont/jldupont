@@ -110,7 +110,7 @@ a.rss:hover, a.rss:link, a.rss:visited { color:#fff; text-decoration:none; }
 
 /* BILLBOARDS */
 
-#billboard { background:#6DB6DE url(/pages/img/bb_bg.gif) repeat-x; border-bottom:6px solid #6DB6DE; }
+#billboard { background:#6DB6DE url(/res/img/bb_bg.gif) repeat-x; border-bottom:6px solid #6DB6DE; }
 #billboard h2 { margin:0; }
 #generic #billboard { display:none; }
 #homepage #billboard { background-image: url(/pages/img/bbd_bg.gif); }

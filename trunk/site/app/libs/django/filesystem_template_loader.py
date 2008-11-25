@@ -36,7 +36,7 @@ def load_template_source(template_name, template_dirs=None):
             if (not _DEBUG):
                 if (cached_template is not None):
                     if (ts == cached_template_ts):
-                        logging.info( 'got from memcache [%s]' % template_name )
+                        #logging.info( 'got from memcache [%s]' % template_name )
                         return (cached_template, template_name)   
             
             tpl = (open(filepath).read(), filepath)

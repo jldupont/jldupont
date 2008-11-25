@@ -31,6 +31,7 @@ IS_REMOTE = not os.environ.get('SERVER_SOFTWARE').startswith('Dev')
 
 class Main( webapp.RequestHandler ):
     
+    _MAX_AGE  = "600"
     _base_tpl = 'base.html'
     
     def __init__(self):
@@ -53,6 +54,9 @@ class Main( webapp.RequestHandler ):
                    'is_remote':IS_REMOTE
                   }
         res = mydjango.render( self._base_tpl, params )
+        
+        if (code == 200):
+            self.response.headers["Cache-Control"] = self._MAX_AGE
         
         self.response.headers["Content-Type"] = "text/html"
         self.response.set_status( code )
