@@ -32,23 +32,11 @@ def verifyQuotes(tag_name, obj):
         if not (obj[0] == obj[-1] and obj[0] in ('"', "'")):
             raise template.django.template.TemplateSyntaxError, "%r tag's parameter[%s] be in quotes" % (tag_name, obj)
     
-def setLoaders( _loaders ):
+def setConfig( name, value ):
     try:
-        setattr(django.conf.settings, 'TEMPLATE_LOADERS', _loaders )
-    except AttributeError:
-        django.conf.settings.configure( TEMPLATE_LOADERS = _loaders )       
+        setattr(django.conf.settings, name, value )
     except (EnvironmentError, RuntimeError):
-        logging.error('libs.django: error init Django')
-
-
-def setDirs( _dirs ):
-    try:
-        setattr(django.conf.settings, 'TEMPLATE_DIRS', _dirs )
-    except AttributeError:
-        django.conf.settings.configure( TEMPLATE_DIRS = _dirs )       
-    except (EnvironmentError, RuntimeError):
-        logging.error('libs.django: error init Django')
-
+        logging.error('libs.django: error setConfig[%s, %s]' % (name, value))   
 
 # =====================================================
 
