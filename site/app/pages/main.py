@@ -20,9 +20,13 @@ _loaders = (    'libs.django.filesystem_template_loader.load_template_source',
 _thisPath = os.path.dirname( __file__ )
 _dir    = _thisPath + os.sep + 'templates'
 _dirSite = _thisPath + os.sep + 'site'
-_dirs = ( _dirSite, _dir )
-_urls = ( "http://jldupont.googlecode.com/svn/trunk/site/templates/%s", )
-_extensions = ['.html', '.xml']
+_dirs = ( _dirSite, 
+          _dir 
+        )
+_urls = ( "http://jldupont.googlecode.com/svn/trunk/site/app/pages/site/%s", 
+          "http://jldupont.googlecode.com/svn/trunk/site/app/pages/templates/%s",
+        )
+_extensions = ['.html',]
 
 mydjango.setConfig( 'TEMPLATE_URL_BASES', _urls ) #not django standard
 mydjango.setConfig( 'TEMPLATE_ALLOWED_EXTENSIONS', _extensions ) #not django standard
