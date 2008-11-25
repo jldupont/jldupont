@@ -1,6 +1,8 @@
 """
     @author: Jean-Lou Dupont
 """
+import logging
+
 import django
 import django.conf
 
@@ -30,10 +32,12 @@ def verifyQuotes(tag_name, obj):
     if (type(obj) == 'list'):
         for o in obj:
             if not (o[0] == o[-1] and o[0] in ('"', "'")):
+                logging.warn('verifyQuotes: error')
                 raise django.template.TemplateSyntaxError, "%r tag's parameter[%s] be in quotes" % (tag_name, o)
             
     if (type(obj) == 'str'):
         if not (obj[0] == obj[-1] and obj[0] in ('"', "'")):
+            logging.warn('verifyQuotes: error')            
             raise django.template.TemplateSyntaxError, "%r tag's parameter[%s] be in quotes" % (tag_name, obj)
     
 def setConfig( name, value ):

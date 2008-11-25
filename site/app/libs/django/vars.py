@@ -4,6 +4,7 @@
 """
 
 import os
+import logging
 import google.appengine.ext.webapp.template as template
 from libs.django import verifyQuotes
 
@@ -31,7 +32,7 @@ class VarSetNode(template.django.template.Node):
         self.value = value
         
     def render(self, context):
-        context[key] = value
+        context[self.key] = self.value
         return ""
     
 # REGISTER WITH DJANGO
@@ -57,7 +58,7 @@ class VarGetNode(template.django.template.Node):
         self.key  = key
         
     def render(self, context):
-        value = context[key] if (key in context) else None
+        value = context[self.key] if (self.key in context) else None
         return value
     
 # REGISTER WITH DJANGO
