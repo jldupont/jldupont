@@ -37,7 +37,13 @@ def load_template_source(template_name, template_dirs=None):
     
     for filepath in get_template_sources(template_name, template_dirs):
         #logging.info('processing template_name[%s]' % template_name)
-        logging.info('processing template_name[%s] filepath[%s]' % (template_name, filepath))
+        part1     = filepath.rpartition(os.sep)
+        lastPart  = part1[2]
+        part2     = part1[0].rpartition(os.sep)
+        firstPart = part2[2]
+        path = firstPart + os.sep + lastPart
+        
+        logging.info('processing template_name[%s] path[%s]' % (template_name, path))
         try:
             ts = os.path.getmtime(filepath)
             cached_template    = memcache.get(_CACHE_TEMPLATE_KEY_CONTENT % template_name)
@@ -48,11 +54,8 @@ def load_template_source(template_name, template_dirs=None):
                         logging.info( 'got from memcache [%s]' % template_name )
                         return (cached_template, template_name)   
             
-            logging.info('>1')
             tpl = (open(filepath,'r').read(), filepath)
-            logging.info('>2')
             ts  = os.path.getmtime(filepath)
-            logging.info('>3')
             memcache.set(_CACHE_TEMPLATE_KEY_TS % template_name, ts, 5*60 )
             memcache.set(_CACHE_TEMPLATE_KEY_CONTENT % template_name, tpl[0], 5*60 )
             #logging.info( 'saved in memcache [%s]' % template_name )
