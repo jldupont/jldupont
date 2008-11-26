@@ -43,7 +43,7 @@ def load_template_source(template_name, template_dirs=None):
         firstPart = part2[2]
         path = firstPart + os.sep + lastPart
         
-        logging.info('processing template_name[%s] path[%s]' % (template_name, path))
+        logging.debug('processing template_name[%s] path[%s]' % (template_name, path))
         try:
             ts = os.path.getmtime(filepath)
             cached_template    = memcache.get(_CACHE_TEMPLATE_KEY_CONTENT % template_name)
@@ -68,7 +68,7 @@ def load_template_source(template_name, template_dirs=None):
     else:
         error_msg = "Your TEMPLATE_DIRS setting is empty. Change it to point to at least one template directory."
         
-    logging.info('NOT FOUND [%s]' % template_name)
+    logging.debug('NOT FOUND [%s]' % template_name)
     raise TemplateDoesNotExist, error_msg
 
 load_template_source.is_usable = True

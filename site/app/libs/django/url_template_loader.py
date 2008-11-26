@@ -39,7 +39,7 @@ def load_template_source(template_name, template_url_bases=None):
     
     for url in get_template_sources(template_name, template_url_bases):
         try:
-            logging.info("trying [%s]" % url)
+            logging.debug("trying [%s]" % url)
             cached_template      = memcache.get(_CACHE_TEMPLATE_KEY_CONTENT % template_name)
             cached_template_etag = memcache.get(_CACHE_TEMPLATE_KEY_ETAG % template_name)
             
@@ -58,7 +58,7 @@ def load_template_source(template_name, template_url_bases=None):
     else:
         error_msg = "Your TEMPLATE_URL_BASES setting is empty."
     
-    logging.info('NOT FOUND [%s]' % template_name)
+    logging.debug('NOT FOUND [%s]' % template_name)
     raise TemplateDoesNotExist, error_msg
 
 load_template_source.is_usable = True
