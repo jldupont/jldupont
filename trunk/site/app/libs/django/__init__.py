@@ -26,15 +26,18 @@ def render(template_name, template_dict, debug=False):
         logging.warn('Rendering error template[%s] msg[%s]' % (template_name, e) )
     return rendered
 
+def makelist(target):
+    def wrapper(*arg):
+        obj = arg[0]
+        if (type(obj) is not ListType):
+            obj = [obj,]
+        return target(obj)
+    return wrapper    
+
+@makelist
 def unquote(obj):
     """ Remove single/double quotes
     """
-    if (type(obj) is NoneType):
-        return []
-    
-    if (type(obj) is not ListType):
-        obj = [obj,]
-    
     liste = []
     for o in obj:
         item = o
