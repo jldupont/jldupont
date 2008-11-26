@@ -43,8 +43,6 @@ def do_varset(parser, token):
         verifyQuotes( tag_name, varValue )
         varValue = liste[2][1:-1]
 
-    logging.info("varValue [%s]" % varValue)
-
     return VarSetNode( varName[1:-1], varValue )
 
 class VarSetNode(template.django.template.Node):
@@ -69,7 +67,7 @@ register.tag( 'varset', do_varset )
 def do_varget(parser, token):
     """
         var get
-        {% varset "var-name" %}
+        {% varget "var-name" %}
     """
     try:
         tag_name, varName = token.split_contents()
