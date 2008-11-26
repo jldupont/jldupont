@@ -48,7 +48,11 @@ def setConfig( name, value ):
 
 # =====================================================
 
+# === TAGS ===
 django.template.add_to_builtins( "libs.django.anchor" )
 django.template.add_to_builtins( "libs.django.include" )
 django.template.add_to_builtins( "libs.django.vars" )
+
+# === FILTERS ===
+django.template.add_to_builtins( "libs.django.filters" )
 
