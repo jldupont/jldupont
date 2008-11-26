@@ -28,7 +28,7 @@ class ServiceMM( webapp.RequestHandler ):
         try:
             res = self.fetch(format, id)
         except:
-            self.response.out.write('map with id[%s] not found/available' % id);
+            self.response.out.write('map with id[%s] not found/available (or timeout occured)' % id);
             self.response.set_status(404)
             return
         
