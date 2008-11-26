@@ -5,25 +5,47 @@
 
 import os
 import logging
+from types import *
+
 import google.appengine.ext.webapp.template as template
 from libs.django import verifyQuotes
+from django.template import NodeList
 
 register = template.create_template_register()
 
 def do_varset(parser, token):
     """
         var set
-        {% varset "var-name" "var-value" %}
+        Form #1:
+            {% varset "var-name" "var-value" %}
+        Form #2:
+            {% varset "var-name" %}
+                value
+            {% endvarset %}
     """
     try:
-        tag_name, varName, varValue = token.split_contents()
-    except:
-        raise template.django.template.TemplateSyntaxError, "%r tag requires two arguments" % token.contents.split()[0]
+        liste = token.split_contents()
+        assert(len(liste)>=2)
+    except Exception,e:
+        logging.warn('varset: msg[%s]' % e)
+        raise template.django.template.TemplateSyntaxError, "%r tag requires 2 or 3 arguments" % token.contents.split()[0]
 
+    tag_name = liste[0]
+    varName  = liste[1]
     verifyQuotes( tag_name, varName )
-    verifyQuotes( tag_name, varValue )
-    
-    return VarSetNode( varName[1:-1], varValue[1:-1] )
+
+    if (len(liste) == 2):
+        varValue = parser.parse(('endvarset',))
+        parser.delete_first_token()
+        
+    if (len(liste) == 3):
+        varValue = liste[2]
+        verifyQuotes( tag_name, varValue )
+        varValue = liste[2][1:-1]
+
+    logging.info("varValue [%s]" % varValue)
+
+    return VarSetNode( varName[1:-1], varValue )
 
 class VarSetNode(template.django.template.Node):
     
@@ -32,7 +54,13 @@ class VarSetNode(template.django.template.Node):
         self.value = value
         
     def render(self, context):
-        context[self.key] = self.value
+        if (type(self.value) == StringType):
+            context[self.key] = self.value
+        else:
+            nodelist = NodeList()
+            for node in self.value:
+                nodelist.append(node.render(context))
+            context[self.key] = nodelist.render(context)
         return ""
     
 # REGISTER WITH DJANGO
