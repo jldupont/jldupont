@@ -28,6 +28,7 @@ def render(template_name, template_dict, debug=False):
 
 def makelist(target):
     def wrapper(*arg):
+        assert(len(arg)==1)
         obj = arg[0]
         if (type(obj) is not ListType):
             obj = [obj,]
@@ -42,8 +43,7 @@ def unquote(obj):
     for o in obj:
         item = o
         if (o is not None):
-            item = item.lstrip("'\"")
-            item = item.rstrip("'\"")
+            item = o.lstrip("'\"").rstrip("'\"")
         liste.append(item)
 
     return liste
