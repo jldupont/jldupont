@@ -1,37 +1,50 @@
 # @author: Jean-Lou Dupont
 
 import os
+import logging
+
 import google.appengine.ext.webapp.template as template
-from libs.django import verifyQuotes
+from libs.django import verifyQuotes, unquote
 
 register = template.create_template_register()
 
+@register.tag('a')
 def do_anchor(parser, token):
     """
         Anchor
-        {% a "url" "text" %}
+        {% a "url" "text" ["target"] %}
     """
     try:
-        tag_name, url, text = token.split_contents()
+        liste = token.split_contents()
+        tag_name = liste[0]
+        url  = liste[1]
+        text = liste[2]
     except:
-        raise template.django.template.TemplateSyntaxError, "%r tag requires two arguments" % token.contents.split()[0]
+        raise template.django.template.TemplateSyntaxError, "%r tag requires two or three arguments" % token.contents.split()[0]
 
-    verifyQuotes( tag_name, url )
-    verifyQuotes( tag_name, text )
-    
-    return AnchorNode( url[1:-1], text[1:-1] )
+    target = liste[3] if (len(liste)==4) else None
+    if (target):
+        verifyQuotes( tag_name, target )
+       
+    verifyQuotes( tag_name, (url,text) )
+    url, text, target = unquote( [url, text, target] )   
+    return AnchorNode( url, text, target )
 
 class AnchorNode(template.django.template.Node):
-    def __init__(self, url, text):
+    def __init__(self, url, text, target = None):
         self.url  = url
         self.text = text
+        self.target = target
         
     def render(self, context):
+        if (self.target):
+            return "<a href='%s' target='%s'>%s</a>" % (self.url, self.target, self.text)
+        
         return "<a href='%s'>%s</a>" % (self.url, self.text)
-    
-# REGISTER WITH DJANGO
-register.tag( 'a', do_anchor )
 
+# ============================================================
+    
+@register.tag('ai')
 def do_anchor_image(parser, token):
     """
         Anchor with Image
@@ -56,6 +69,3 @@ class AnchorImageNode(template.django.template.Node):
         
     def render(self, context):
         return "<a href='%s' title='%s'><img src='%s'></a>" % (self.url, self.title, self.src)
-    
-# REGISTER WITH DJANGO
-register.tag( 'ai', do_anchor_image )
