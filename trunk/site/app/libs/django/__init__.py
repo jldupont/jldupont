@@ -2,6 +2,7 @@
     @author: Jean-Lou Dupont
 """
 import logging
+from types import *
 
 import django
 import django.conf
@@ -24,6 +25,25 @@ def render(template_name, template_dict, debug=False):
     except Exception,e:
         logging.warn('Rendering error template[%s] msg[%s]' % (template_name, e) )
     return rendered
+
+def unquote(obj):
+    """ Remove single/double quotes
+    """
+    if (type(obj) is NoneType):
+        return []
+    
+    if (type(obj) is not ListType):
+        obj = [obj,]
+    
+    liste = []
+    for o in obj:
+        item = o
+        if (o is not None):
+            item = item.lstrip("'\"")
+            item = item.rstrip("'\"")
+        liste.append(item)
+
+    return liste
 
 def verifyQuotes(tag_name, obj):
     if (obj is None):
