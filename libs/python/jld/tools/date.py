@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """
     @author: Jean-Lou Dupont
 """
@@ -18,3 +19,11 @@ def convertDate( date ):
     """
     sdate = date.split('.')    
     return datetime.datetime.strptime(sdate[0], "%Y-%m-%d %H:%M:%S")
+
+# ==============================================
+# ==============================================
+
+if __name__ == "__main__":
+    """ Tests
+    """
+    print "test!"
