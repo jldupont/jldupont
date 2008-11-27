@@ -1,6 +1,8 @@
 #! /usr/bin/env python
-""" Cross-platform
+""" Cross-platform logger
     @author: Jean-Lou Dupont
+    
+    XXX not tested thoroughly... do not use!
 """
 
 __author__  = "Jean-Lou Dupont"
@@ -29,7 +31,7 @@ def xcLogger( appname ):
     if (sys.platform[:3] == 'win'):
         return logging.handlers.NTEventLogHandler( appname )
     
-    return logging.handlers.SysLogHandler(address='/dev/log')
+    return logging.handlers.SysLogHandler('/dev/log')
 
     #More difficult to configure as it defaults to localhost:514 
     #return logging.handlers.SysLogHandler()         
