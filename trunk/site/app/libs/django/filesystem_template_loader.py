@@ -1,7 +1,9 @@
 """ Django filesystem based template loader with memcache
     @author: Jean-Lou Dupont
 """
-_DEBUG = True
+IS_REMOTE = not os.environ.get('SERVER_SOFTWARE').startswith('Dev')
+
+_DEBUG = not IS_REMOTE
 
 import os
 import logging
