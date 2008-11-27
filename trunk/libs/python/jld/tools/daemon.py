@@ -22,7 +22,6 @@ while levelsUp>0:
 sys.path.append( path )
 
 import jld.api as api
-import process as process
 
 class BaseDaemon(object):
     """ Base class for daemon
@@ -38,6 +37,7 @@ class BaseDaemon(object):
         """
         self.name = name
         self.logger = logger
+        self.pidfile = "/var/run/%s.pid" % name
 
     def loginfo(self, msg):
         if (self.logger):
@@ -49,23 +49,53 @@ class BaseDaemon(object):
         if (self.logger):
             self.logger.error(msg)
 
+    def findPID(self):
+        try:
+            pf = open(self.pidfile,'r')
+            pid = int( pf.read().strip() )
+            pf.close()
+        except Exception,e:
+            pid = None
+
+        return pid
+
+    def _writePID(self):
+        pid = str( os.getpid() )
+        try:
+            pf = open(self.pidfile,'w+')
+            pf.write('%s\n' % pid)
+            pf.close()
+        except Exception,e:
+            self.logerror("cannot write to pidfile [%s]" % self.pidfile)
+
+    def _delPID(self):
+        try:
+            os.remove(self.pidfile)
+        except:
+            pass
+
     def start(self):
         """ Tries to start the daemon
         """
-        pid = process.findPid( self.name )
+        pid = self.findPID()
         if (pid):
             raise api.ErrorDaemon('daemon_exists',{'pid':pid})
         
         self.daemonize()
+        #=== from this point, all parent resources are closed:
+        #=== no more file handlers etc.
+        #=== need to grab a logger of our own
+        self._writePID()
         self.run()
 
     def stop(self):
         """ Tries to stop the daemon
         """
-        pid = process.findPid( self.name )
+        pid = self.findPID()
         if (pid):
             self.loginfo('stopping [%s] pid[%s]' % (self.name, pid))
-            self.kill( pid )
+            self._kill( pid )
+            self._delPID()
         else:
             self.logwarning('cannot find [%s]' % self.name)
             raise api.ErrorDaemon('cant_find_pid',{})
@@ -78,7 +108,7 @@ class BaseDaemon(object):
     def _kill(self, pid):
         try:
             while True:
-                os.kill(pid, SIGTERM)
+                os.kill(pid, signal.SIGTERM)
                 time.sleep(0.1)
         except OSError,e:
             if ('No such process' in str(e)):
@@ -146,8 +176,21 @@ if __name__ == "__main__":
         print "usage: daemon cmd"
         sys.exit(0)
     
+    _logfile = '/var/log/daemon_test.log'
+    
+    if (not os.path.exists(_logfile) ):
+        fp = open(_logfile,'w+')
+        fp.close()
+        
+    
+    import logging
+    import logging.handlers
+    hdlr = logging.handlers.TimedRotatingFileHandler( _logfile )
+    logger = logging.Logger('daemon_test')
+    logger.addHandler(hdlr)
+    
     cmds = ['start', 'stop', 'restart']
-    daemon = BaseDaemon( 'daemon.py' )
+    daemon = BaseDaemon( 'daemon_test', logger )
     
     cmd = sys.argv[1]
     if (not cmd in cmds):
