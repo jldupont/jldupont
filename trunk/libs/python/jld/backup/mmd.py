@@ -1,4 +1,5 @@
-""" MindMeister backup daemon
+""" 
+    MindMeister backup daemon
     @author: Jean-Lou Dupont
     
     Prerequisites:
