@@ -1,12 +1,12 @@
 """ Django filesystem based template loader with memcache
     @author: Jean-Lou Dupont
 """
+import os
+import logging
+
 IS_REMOTE = not os.environ.get('SERVER_SOFTWARE').startswith('Dev')
 
 _DEBUG = not IS_REMOTE
-
-import os
-import logging
 
 from google.appengine.api import memcache
 from django.conf import settings
