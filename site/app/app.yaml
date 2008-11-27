@@ -6,8 +6,13 @@ runtime: python
 
 handlers:
 
+# SERVICES
+# ========
 - url: /mm/(.*)
   script: server/services/mindmeister/v1.py
+  
+- url: /services/feedburner/aw/(.*)
+  script: server/services/feedburner/aw.py
 
 # iGoogle Gadgets
 # ---------------
