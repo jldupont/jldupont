@@ -29,8 +29,27 @@ except:
 # =================================================
 
 
+
+def defaultLogger(name):
+    """ Default logger factory
+    """
+    import logging
+    import logging.handlers
+    formatter = logging.Formatter("%(levelname)s - %(message)s")
+    
+    _file = "/var/log/%s.log" % name
+    hdlr = logging.handlers.TimedRotatingFileHandler( _file )
+    hdlr.setFormatter( formatter )
+    logger = logging.Logger( name )
+    logger.addHandler(hdlr)
+    return logger
+    
+# ==============================================
+
 class BaseDaemon(object):
     """ Base class for daemon
+        Implements commands: start, stop, restart, run
+        Writes PID info in /var/run/$name.log
     """
     _UMASK   = 0
     _WORKDIR = "/"
@@ -38,7 +57,7 @@ class BaseDaemon(object):
     
     _REDIRECT_TO = os.devnull if hasattr(os,"devnull") else "/dev/null"
     
-    def __init__(self, name, loggerFactory = None):
+    def __init__(self, name, loggerFactory = defaultLogger):
         """ name:  name of the daemon
             loggerFactory: a function acting as factory
                             that creates a logger instance
@@ -113,10 +132,11 @@ class BaseDaemon(object):
     def start(self):
         """ Tries to start the daemon
         """
+        print 'daemon.start(): name[%s]' % self.name
         pid = self.findPID()
         if (pid):
             raise api.ErrorDaemon('daemon_exists',{'pid':pid})
-        
+
         #===============
         self.daemonize()
         #=== from this point, all parent resources are closed:
@@ -161,6 +181,8 @@ class BaseDaemon(object):
         except Exception,e:
             raise api.ErrorDaemon('cant_fork',{'msg':str(e)})
         
+        self._createLogger()
+        
         if (pid == 0):
             os.setsid()
             try:
@@ -169,6 +191,8 @@ class BaseDaemon(object):
                 self.logerror('Daemonize: cannot fork 2nd time')
                 raise api.ErrorDaemon('cant_fork',{'msg':str(e)})
             
+            self._createLogger()
+            
             if (pid == 0):
                 os.chdir( self._WORKDIR )
                 os.umask( self._UMASK )
@@ -176,6 +200,8 @@ class BaseDaemon(object):
                 os._exit(0)
         else:
             os._exit(0)
+        
+        self._createLogger()
         
         import resource
         maxfd = resource.getrlimit( resource.RLIMIT_NOFILE )[1]
@@ -199,7 +225,7 @@ class BaseDaemon(object):
         while True:
             signal.pause()
 
-    
+
 # ==============================================
 # ==============================================
 
@@ -214,19 +240,9 @@ if __name__ == "__main__":
         sys.exit(0)
     
     _logfile = '/var/log/daemon_test.log'
-    
-    def createLogger(name):
-        formatter = logging.Formatter("%(levelname)s - %(message)s")
         
-        _file = "/var/log/%s.log" % name
-        hdlr = logging.handlers.TimedRotatingFileHandler( _file )
-        hdlr.setFormatter( formatter )
-        logger = logging.Logger( name )
-        logger.addHandler(hdlr)
-        return logger
-    
     cmds = ['start', 'stop', 'restart']
-    daemon = BaseDaemon( 'daemon_test', createLogger )
+    daemon = BaseDaemon( 'daemon_test', defaultLogger )
     
     cmd = sys.argv[1]
     if (not cmd in cmds):
