@@ -5,6 +5,7 @@ __author__  = "Jean-Lou Dupont"
 __version__ = "$Id$"
 
 import datetime
+
 from sqlobject import *
 import sqlite3 as sql
 
@@ -32,6 +33,16 @@ class Maps(SQLObject):
                 OR exported == None
         """
         return cls.select(OR(cls.q.modified > cls.q.exported, cls.q.exported == None))
+    
+    @classmethod
+    def getExportList(cls):
+        list = []
+        all = cls.getToExportList()
+  
+        for one in all:
+            entry = cls.formatOne(one)
+            list.append( entry )
+        return list
     
     @classmethod
     def getAll(cls):

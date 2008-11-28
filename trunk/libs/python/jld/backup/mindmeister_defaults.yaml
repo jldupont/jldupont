@@ -1,0 +1,7 @@
+# MindMeister Backup
+# Default Configuration
+# @author: Jean-Lou Dupont
+# ========================
+
+export_path: ~/mm
+export_maxnum: 100

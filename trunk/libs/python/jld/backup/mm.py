@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 """ Backup for MindMeister mindmaps
 
     Dependencies:
@@ -34,7 +34,9 @@ _options =[
   {'o1':'-s', 'var':'secret', 'action':'store',        'help':'config_secret', 'reg': True, 'default': None},
   {'o1':'-k', 'var':'api_key','action':'store',        'help':'config_key',    'reg': True, 'default': None},
   {'o1':'-f', 'var':'file',   'action':'store',        'help':'config_file',   'reg': True, 'default': None},
-  #{'o1':'-q', 'var':'quiet',  'action':'store_true',   'help':'quiet',         'reg': False, 'default': False },          
+  {'o1':'-p', 'var':'path',   'action':'store',        'help':'config_path',   'reg': True, 'default': None},
+  {'o1':'-m', 'var':'maxnum', 'action':'store',        'help':'config_maxnum', 'reg': True, 'default': '100'},
+  #{'o1':'-q', 'var':'quiet',  'action':'store_true',   'help':'quiet',        'reg': False, 'default': False },          
 ]
 
 def main():
@@ -84,13 +86,17 @@ Commands:
         
         #params['quiet'] = options.quiet
         
-        file    = params['file']    = r.getKey('mindmeister', 'file')
-        secret  = params['secret']  = r.getKey('mindmeister', 'secret')
-        api_key = params['api_key'] = r.getKey('mindmeister', 'api_key')
+        file          = params['file']          = r.getKey('mindmeister', 'file')
+        secret        = params['secret']        = r.getKey('mindmeister', 'secret')
+        api_key       = params['api_key']       = r.getKey('mindmeister', 'api_key')
+        export_path   = params['export_path']   = r.getKey('mindmeister', 'export_path')
+        export_maxnum = params['export_maxnum'] = r.getKey('mindmeister', 'export_maxnum')
          
         backup.file    = file
         backup.secret  = secret
         backup.api_key = api_key
+        backup.export_path = export_path
+        backup.export_maxnum = export_maxnum
     
         # == command validation ==
         # ========================
