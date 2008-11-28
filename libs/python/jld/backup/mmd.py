@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """ 
     MindMeister backup daemon
     @author: Jean-Lou Dupont
@@ -30,9 +31,18 @@ import jld.tools.daemon as daemon
 class mmdDaemon(daemon.BaseDaemon):
     """ Daemon
     """
+    _name = 'mmd'
     def __init__(self):
-        pass
+        daemon.BaseDaemon.__init__(self, mmdDaemon._name)
     
+    def run(self):
+        """
+        """
+        self.loginfo('Default run()')        
+        while True:
+            signal.pause()
+        
+      
 # ==============================================
 # ==============================================   
 import jld.tools.cmd_ui as ui
@@ -40,6 +50,7 @@ class mmdUI(ui.UIBase):
     """ Handles user interface
     """
     _map = {
+        'jld.api.ErrorDaemon':          { 'msg': 'error_daemon',    'help': 'help_daemon', },
         'jld.api.ErrorDb':              { 'msg': 'error_db',        'help': 'help_db', },
         'jld.api.ErrorAuth':            { 'msg': 'error_auth',      'help': 'help_auth', },
         'jld.api.ErrorNetwork':         { 'msg': 'error_network',   'help': 'help_network', },
@@ -59,7 +70,7 @@ from jld.tools.messages import Messages
 class mmdMessages(Messages):
     """ Messages
     """
-    filepath = os.path.dirname( os.path.abspath( __file__ )) + os.sep + "mmd_messages.yaml"
+    filepath = os.path.dirname( os.path.abspath( __file__ )) + os.sep + "mindmeister_messages.yaml"
     def __init__(self):
         Messages.__init__(self, self.filepath)
 
@@ -70,17 +81,30 @@ from   jld.cmd import BaseCmd
 class mmdCmd(BaseCmd):
     """ Handles the command line interface of this daemon
     """
-    def __init__(self):
+    def __init__(self, daemon, msgs):
         BaseCmd.__init__(self)
+        self.daemon = daemon
+        self.msgs = msgs
+        self.quiet = False
 
     def cmd_start(self, *args):
         """ Starts the daemon """
+        self._sendMsg( 'daemon_start' )
+        self.daemon.start()
 
     def cmd_stop(self, *args):
         """ Stops the daemon """
+        self._sendMsg( 'daemon_stop' )
+        self.daemon.stop()
         
     def cmd_restart(self, *args):
         """ Restarts the daemon """
+        self._sendMsg( 'daemon_restart' )
+        self.daemon.restart()
+
+    def _sendMsg(self, msg, params = None):
+        if (not self.quiet):
+            print self.msgs.render( msg, params )
 
 # ==============================================
 # ==============================================
@@ -101,7 +125,9 @@ def main():
     ui.setParams( msgs )    
 
     try:
-        cmd = mmdCmd()
+        daemon = mmdDaemon()
+        
+        cmd = mmdCmd(daemon, msgs)
         usage_template = """%prog [options] command
     
 version $Id$ by Jean-Lou Dupont
@@ -120,7 +146,7 @@ Commands:
           #{'o1':'-s', 'var':'secret', 'action':'store',        'help':'config_secret', 'reg': True, 'default': None},
           #{'o1':'-k', 'var':'api_key','action':'store',        'help':'config_key',    'reg': True, 'default': None},
           #{'o1':'-f', 'var':'file',   'action':'store',        'help':'config_file',   'reg': True, 'default': None},
-          #{'o1':'-q', 'var':'quiet',  'action':'store_true',   'help':'quiet',         'reg': False, 'default': False },          
+          {'o1':'-q', 'var':'quiet',  'action':'store_true',   'help':'quiet',         'reg': False, 'default': False },          
         ]
     
         ui.handleArguments(usage, _options)
@@ -133,6 +159,9 @@ Commands:
         
         # get rid of command from the arg list
         ui.popArg()
+         
+        # Configuration cmd
+        cmd.quiet = getattr( ui.options, 'quiet' )
          
         # == DISPATCHER ==
         # ================
