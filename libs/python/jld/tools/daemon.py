@@ -28,8 +28,6 @@ except:
     import jld.api as api
 # =================================================
 
-
-
 def defaultLogger(name):
     """ Default logger factory
     """
@@ -131,21 +129,14 @@ class BaseDaemon(object):
 
     def start(self):
         """ Tries to start the daemon
+            Returns the PID of the first child
         """
-        print 'daemon.start(): name[%s]' % self.name
         pid = self.findPID()
         if (pid):
             raise api.ErrorDaemon('daemon_exists',{'pid':pid})
 
         #===============
-        self.daemonize()
-        #=== from this point, all parent resources are closed:
-        #=== no more file handlers etc.
-        #=== need to grab a logger of our own
-        self._createLogger()
-        self._writePID()
-        self.loginfo('Issuing run()')
-        self.run()
+        return self.daemonize()
 
     def stop(self):
         """ Tries to stop the daemon
@@ -181,28 +172,40 @@ class BaseDaemon(object):
         except Exception,e:
             raise api.ErrorDaemon('cant_fork',{'msg':str(e)})
         
+        #in the parent
+        if (pid > 0):
+            self.logdebug('Created 1st child')
+            return pid
+        
+        # === from this point, the parent is returned ===
+        # ===============================================
+        
+
+        # 1st child
+        # =========
+        self._createLogger() # do we need that??
+        self.logdebug('Daemonize: child 1: start')
+        
+        os.setsid()
+        try:
+            pid = os.fork()
+        except Exception,e:
+            self.logerror('Daemonize: cannot fork 2nd time')
+            sys.exit(1)
+
+        # == Exit from a 2nd parent ==
+        if (pid>0):
+            sys.exit(0)
+
+        # ==== DAEMON PROCESS STARTS HERE ===
+        # ===================================
         self._createLogger()
-        
-        if (pid == 0):
-            os.setsid()
-            try:
-                pid = os.fork()
-            except Exception,e:
-                self.logerror('Daemonize: cannot fork 2nd time')
-                raise api.ErrorDaemon('cant_fork',{'msg':str(e)})
-            
-            self._createLogger()
-            
-            if (pid == 0):
-                os.chdir( self._WORKDIR )
-                os.umask( self._UMASK )
-            else:
-                os._exit(0)
-        else:
-            os._exit(0)
-        
-        self._createLogger()
-        
+        self.logdebug('Daemonize: daemon: start')
+
+        os.chdir( self._WORKDIR )
+        os.umask( self._UMASK )
+       
+        """
         import resource
         maxfd = resource.getrlimit( resource.RLIMIT_NOFILE )[1]
         if (maxfd == resource.RLIM_INFINITY):
@@ -217,6 +220,12 @@ class BaseDaemon(object):
         os.open(self._REDIRECT_TO, os.O_RDWR)
         os.dup2(0,1)
         os.dup2(0,2)
+        """
+        self.logdebug('Daemonize: writing PID')
+        self._writePID()
+        self.loginfo('Daemonize: issuing run()')
+        self.run()
+
         
     def run(self):
         """ Run - to subclass
