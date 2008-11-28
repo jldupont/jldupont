@@ -8,6 +8,8 @@ config_email: configure email address
 config_secret: configure secret
 config_key: configure api key
 config_file: configure database filesystem path
+config_path: configure filesystem path for exports
+config_maxnum: configuration the maximum number of exports per run
 
 quiet: quiet mode
 configuration: Please configure 'secret' and 'api_key'

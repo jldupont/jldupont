@@ -26,6 +26,8 @@ class Backup(BaseCmd):
         self.secret = None
         self.api_key = None
         self.auth_token = None
+        self.export_path = None
+        self.export_maxnum = None
         self.mm = None
         self.file = None        
         self.db = None
@@ -83,6 +85,29 @@ class Backup(BaseCmd):
         details = self.mm.getMapExport(mapid)
         pp = printer.MM_Printer_Export( self.msgs )       
         pp.run( details )
+
+    def cmd_exportlist(self, *args):
+        """Lists the complete export list
+        """
+        self._initDb()
+        full_list = db.Maps.getExportList()
+        pp = printer.MM_Printer_Maps( self.msgs )
+        pp.run( full_list )
+        
+    def cmd_export(self, *args):
+        """Export (retrieves from MindMeister) up to 'maxnum' mindmaps which need refreshing.
+        """
+        self._initDb()
+        full_list = db.Maps.getExportList()
+        pp = printer.MM_Printer_Maps( self.msgs )
+        cnt = self.export_maxnum
+        print cnt
+        while cnt > 0:
+            item = full_list.pop(0) if len(full_list) else None
+            if item is None:
+                break
+            print item
+            cnt = cnt - 1
         
     # =========================================================
     # =========================================================

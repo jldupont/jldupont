@@ -33,7 +33,7 @@ def defaultLogger(name):
     """
     import logging
     import logging.handlers
-    formatter = logging.Formatter("%(levelname)s - %(message)s")
+    formatter = logging.Formatter("%(levelname)s - %(asctime)s - %(message)s")
     
     _file = "/var/log/%s.log" % name
     hdlr = logging.handlers.TimedRotatingFileHandler( _file )
@@ -223,7 +223,7 @@ class BaseDaemon(object):
         """
         self.logdebug('Daemonize: writing PID')
         self._writePID()
-        self.loginfo('Daemonize: issuing run()')
+        self.logdebug('Daemonize: issuing run()')
         self.run()
 
         

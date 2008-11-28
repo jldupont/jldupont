@@ -94,7 +94,12 @@ a.rss { font:bold 10px Verdana, sans-serif; padding:0 .2em; border: 1px solid; t
 a.rss:hover, a.rss:link, a.rss:visited { color:#fff; text-decoration:none; }
 
 /* BLOCKQUOTES */
-
+blockquote {
+	background-color: #EEE;
+	padding: 2mm;
+	border-left: 5px solid #BBB;
+	}
+	
 #weblog blockquote { padding-left:0.8em; padding-right:1em; font:125%/1.2em "Trebuchet MS", sans-serif; color:#234f32; border-left:2px solid #94da3a; }
 .sidebar blockquote { margin-top:1.5em; margin-bottom:1.5em; }
 .sidebar blockquote p { font:italic 175%/1.2em "Trebuchet MS",sans-serif; color:#94da3a; }
@@ -103,7 +108,7 @@ a.rss:hover, a.rss:link, a.rss:visited { color:#fff; text-decoration:none; }
 
 /* NOTES & ADMONITIONS */
 
-.note, .admonition, .caution { padding:.8em 1em .8em; margin: 1em 0; border:1px solid #94da3a; }
+.note, .admonition, .caution { padding:.8em 1em .8em; margin: 1em 0; border:1px solid #00008B; }
 .admonition-title { font-weight:bold; margin-top:0 !important; margin-bottom:0 !important;}
 .admonition .last { margin-bottom:0 !important; }
 .admonition, .admonition-note, .caution { padding-left:65px; background:url(/pages/img/docicons-note.gif) .8em .8em no-repeat;}
