@@ -12,16 +12,22 @@ import sys
 import signal
 import time
 
-# ASSUME THAT THE REQUIRED LIBS are available
-# RELATIVE to this script => simplified install
-levelsUp = 3
-path = os.path.abspath( __file__ )
-while levelsUp>0:
-    path = os.path.dirname( path )
-    levelsUp = levelsUp - 1    
-sys.path.append( path )
+# =================================================
+try:
+    import jld.api as api
+except:
+    # ASSUME THAT THE REQUIRED LIBS are available
+    # RELATIVE to this script => simplified install
+    levelsUp = 3
+    path = os.path.abspath( __file__ )
+    while levelsUp>0:
+        path = os.path.dirname( path )
+        levelsUp = levelsUp - 1    
+    sys.path.append( path )
+    # =============================================
+    import jld.api as api
+# =================================================
 
-import jld.api as api
 
 class BaseDaemon(object):
     """ Base class for daemon
@@ -32,41 +38,71 @@ class BaseDaemon(object):
     
     _REDIRECT_TO = os.devnull if hasattr(os,"devnull") else "/dev/null"
     
-    def __init__(self, name, logger = None):
-        """ 
+    def __init__(self, name, loggerFactory = None):
+        """ name:  name of the daemon
+            loggerFactory: a function acting as factory
+                            that creates a logger instance
         """
         self.name = name
-        self.logger = logger
+        self.loggerFactory = loggerFactory
+        self.logger = None
         self.pidfile = "/var/run/%s.pid" % name
 
+    def _createLogger(self):
+        if (self.logger):
+            return
+        self.logger = self.loggerFactory(self.name)
+
+    def _format(self, msg):
+        """ Performs as first pass formatting
+            of log messages.
+        """
+        return "[%s] - %s" % (self.name, msg)
+
+    def logdebug(self, msg):
+        self._createLogger()
+        msg = self._format(msg)
+        if (self.logger):
+            self.logger.debug(msg)
     def loginfo(self, msg):
+        self._createLogger()
+        msg = self._format(msg)
         if (self.logger):
             self.logger.info(msg)
     def logwarning(self, msg):
+        self._createLogger()
+        msg = self._format(msg)
         if (self.logger):
             self.logger.warning(msg)
     def logerror(self, msg):
+        self._createLogger()
+        msg = self._format(msg)
         if (self.logger):
             self.logger.error(msg)
 
     def findPID(self):
+        pf = None
         try:
             pf = open(self.pidfile,'r')
             pid = int( pf.read().strip() )
-            pf.close()
         except Exception,e:
             pid = None
-
+        finally:
+            if (pf):
+                pf.close()            
         return pid
 
     def _writePID(self):
+        pf = None
         pid = str( os.getpid() )
         try:
             pf = open(self.pidfile,'w+')
             pf.write('%s\n' % pid)
-            pf.close()
         except Exception,e:
             self.logerror("cannot write to pidfile [%s]" % self.pidfile)
+        finally:
+            if (pf):
+                pf.close()            
 
     def _delPID(self):
         try:
@@ -81,11 +117,14 @@ class BaseDaemon(object):
         if (pid):
             raise api.ErrorDaemon('daemon_exists',{'pid':pid})
         
+        #===============
         self.daemonize()
         #=== from this point, all parent resources are closed:
         #=== no more file handlers etc.
         #=== need to grab a logger of our own
+        self._createLogger()
         self._writePID()
+        self.loginfo('Issuing run()')
         self.run()
 
     def stop(self):
@@ -93,13 +132,11 @@ class BaseDaemon(object):
         """
         pid = self.findPID()
         if (pid):
-            self.loginfo('stopping [%s] pid[%s]' % (self.name, pid))
+            self.loginfo('Stopping pid[%s]' % pid)
             self._kill( pid )
             self._delPID()
         else:
-            self.logwarning('cannot find [%s]' % self.name)
             raise api.ErrorDaemon('cant_find_pid',{})
-
 
     def restart(self):
         self.stop()
@@ -112,10 +149,9 @@ class BaseDaemon(object):
                 time.sleep(0.1)
         except OSError,e:
             if ('No such process' in str(e)):
-                self.loginfo('killed [%s]' % pid)
+                self.loginfo('Killed pid[%s]' % pid)
             else:
-                self.logerror('cannot kill pid[%s]' % pid)
-                sys.exit(0)
+                self.logerror('Cannot kill pid[%s]' % pid)
 
     def daemonize(self):
         """ Creates the daemon
@@ -123,7 +159,6 @@ class BaseDaemon(object):
         try:
             pid = os.fork()
         except Exception,e:
-            self.logerror('daemonize: cannot fork')
             raise api.ErrorDaemon('cant_fork',{'msg':str(e)})
         
         if (pid == 0):
@@ -131,7 +166,7 @@ class BaseDaemon(object):
             try:
                 pid = os.fork()
             except Exception,e:
-                self.logerror('daemonize: cannot fork 2nd')
+                self.logerror('Daemonize: cannot fork 2nd time')
                 raise api.ErrorDaemon('cant_fork',{'msg':str(e)})
             
             if (pid == 0):
@@ -141,7 +176,7 @@ class BaseDaemon(object):
                 os._exit(0)
         else:
             os._exit(0)
-            
+        
         import resource
         maxfd = resource.getrlimit( resource.RLIMIT_NOFILE )[1]
         if (maxfd == resource.RLIM_INFINITY):
@@ -158,10 +193,9 @@ class BaseDaemon(object):
         os.dup2(0,2)
         
     def run(self):
-        """ Run
-            Pattern "Strategy"
+        """ Run - to subclass
         """
-        self.loginfo('default run')        
+        self.loginfo('Default run()')        
         while True:
             signal.pause()
 
@@ -172,25 +206,27 @@ class BaseDaemon(object):
 if __name__ == "__main__":
     """ Tests
     """
+    import logging
+    import logging.handlers
+    
     if (len(sys.argv) != 2):
         print "usage: daemon cmd"
         sys.exit(0)
     
     _logfile = '/var/log/daemon_test.log'
     
-    if (not os.path.exists(_logfile) ):
-        fp = open(_logfile,'w+')
-        fp.close()
+    def createLogger(name):
+        formatter = logging.Formatter("%(levelname)s - %(message)s")
         
-    
-    import logging
-    import logging.handlers
-    hdlr = logging.handlers.TimedRotatingFileHandler( _logfile )
-    logger = logging.Logger('daemon_test')
-    logger.addHandler(hdlr)
+        _file = "/var/log/%s.log" % name
+        hdlr = logging.handlers.TimedRotatingFileHandler( _file )
+        hdlr.setFormatter( formatter )
+        logger = logging.Logger( name )
+        logger.addHandler(hdlr)
+        return logger
     
     cmds = ['start', 'stop', 'restart']
-    daemon = BaseDaemon( 'daemon_test', logger )
+    daemon = BaseDaemon( 'daemon_test', createLogger )
     
     cmd = sys.argv[1]
     if (not cmd in cmds):
