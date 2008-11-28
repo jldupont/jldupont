@@ -47,9 +47,12 @@ class Main( webapp.RequestHandler ):
         pass
 
     def get( self, page = None ):
-        
         if (page is None):
-            page = 'main'
+            page = 'main'        
+        
+        ua = self.request.headers['User-Agent']
+        ip = self.request.remote_addr
+        logging.info('ip[%s] page[%s] ua[%s]' %(ip,page,ua))
         
         user = users.get_current_user()
         logx_href  = users.create_logout_url("/") if user else users.create_login_url("/")

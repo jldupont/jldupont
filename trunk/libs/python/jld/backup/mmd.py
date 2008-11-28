@@ -14,6 +14,7 @@ __version__ = "$Id$"
 
 import os
 import sys
+import signal
 
 # ASSUME THAT THE REQUIRED LIBS are available
 # RELATIVE to this script => simplified install
@@ -38,7 +39,7 @@ class mmdDaemon(daemon.BaseDaemon):
     def run(self):
         """
         """
-        self.loginfo('Default run()')        
+        self.loginfo('mmd: default run()')        
         while True:
             signal.pause()
         
@@ -90,7 +91,7 @@ class mmdCmd(BaseCmd):
     def cmd_start(self, *args):
         """ Starts the daemon """
         self._sendMsg( 'daemon_start' )
-        self.daemon.start()
+        childpid = self.daemon.start()
 
     def cmd_stop(self, *args):
         """ Stops the daemon """
