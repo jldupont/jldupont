@@ -98,15 +98,14 @@ class Backup(BaseCmd):
         """Export (retrieves from MindMeister) up to 'maxnum' mindmaps which need refreshing.
         """
         self._initDb()
-        full_list = db.Maps.getExportList()
-        pp = printer.MM_Printer_Maps( self.msgs )
+        full_list = db.Maps.getToExportList()
+
         cnt = self.export_maxnum
         print cnt
         while cnt > 0:
             item = full_list.pop(0) if len(full_list) else None
             if item is None:
                 break
-            print item
             cnt = cnt - 1
         
     # =========================================================
