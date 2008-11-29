@@ -11,6 +11,7 @@ class MM_UI(ui.UIBase):
     """ Handles user interface
     """
     _map = {
+        'jld.api.ErrorConfig':          { 'msg': 'error_defaults',  'help': 'help_defaults', },
         'jld.api.ErrorDb':              { 'msg': 'error_db',        'help': 'help_db', },
         'jld.api.ErrorAuth':            { 'msg': 'error_auth',      'help': 'help_auth', },
         'jld.api.ErrorNetwork':         { 'msg': 'error_network',   'help': 'help_network', },

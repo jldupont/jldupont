@@ -6,6 +6,8 @@ import sys
 import os.path
 import logging
 import webbrowser
+import datetime
+from stat import *
 
 import jld.api as api
 from   jld.cmd import BaseCmd
@@ -21,6 +23,8 @@ import jld.backup.mindmeister_db as db
 class Backup(BaseCmd):
     """MindMeister Backup class
     """
+    _regDomain = 'mindmeister'
+    
     def __init__(self):
         BaseCmd.__init__(self)
         self.secret = None
@@ -44,7 +48,7 @@ class Backup(BaseCmd):
         res = mmr.MM_Response_getFrob(raw)
         
         #keep this frob in order to retrieve an authentication token later on
-        self.r.setKey('mindmeister', 'frob', res.frob, cond = True)
+        self.r.setKey(self._regDomain, 'frob', res.frob, cond = True)
         
         url = self.mm.gen_auth_url('read', res.frob)
         webbrowser.open_new(url)
@@ -110,6 +114,48 @@ class Backup(BaseCmd):
         
     # =========================================================
     # =========================================================
+    def _init_export_folder(self):
+        """ Creates the export folder IF it does not
+            already exists
+        """
+        rep = self._validate_export_folder()
+        if (not rep):
+            self._create_export_folder()
+
+        self._validate_export_folder(True)
+            
+    def _create_export_folder(self):
+        """ Creates the export folder
+        """
+        
+    
+    def _validate_export_folder(self, do_raise = False):
+        """ Verifies if the export folder exists
+        """
+        
+        # Does the path even exists?
+        try:
+            info  = os.stat(self.export_path)
+        except:
+            if (do_raise):
+                raise api.ErrorConfig('')
+            return false
+
+        # The path exists... is it a directory?
+        try:
+            mode  = info[ST_MODE]
+            isdir = stat.S_ISDIR(mode)
+        except:
+            raise api.ErrorConfig('')
+        
+        #Not a directory... error then!
+        if (not isdir):
+            raise api.ErrorConfig('')
+        
+        return isdir
+
+    # =========================================================
+    # =========================================================
     
     def _prepareAuthorizedCommand(self):
         """Prepares for an authorized command.
@@ -121,20 +167,20 @@ class Backup(BaseCmd):
                     inform user to auth
         """
         self._initMM()
-        auth_token = self.r.getKey('mindmeister', 'auth_token')
+        auth_token = self.r.getKey(self._regDomain, 'auth_token')
         
         #If there is no auth_token,
         # check for an existing frob and try to retrieve a token
         if (auth_token is None):
-            frob = self.r.getKey('mindmeister', 'frob')
+            frob = self.r.getKey(self._regDomain, 'frob')
             if (frob is None):
                 raise api.ErrorAuth("frob not acquired")
             auth_token = self._getAuthToken(frob)
         
         # token turns out to be invalid, help kickstart a re-authentication
         if (not self.mm.checkToken(auth_token)):   
-            self.r.setKey('mindmeister', 'auth_token', None)
-            self.r.setKey('mindmeister', 'frob', None)
+            self.r.setKey(self._regDomain, 'auth_token', None)
+            self.r.setKey(self._regDomain, 'frob', None)
             return
 
         self.mm.auth_token = auth_token
@@ -147,14 +193,16 @@ class Backup(BaseCmd):
         self._initMM()
 
         if (frob is None):
-            frob = self.r.getKey('mindmeister', 'frob')
+            frob = self.r.getKey(self._regDomain, 'frob')
         raw = self.mm.do(method='mm.auth.getToken', frob=frob)
         res = mmr.MM_Response_getAuthToken(raw)
            
-        self.r.setKey('mindmeister', 'auth_token', res.auth_token)
+        self.r.setKey(self._regDomain, 'auth_token', res.auth_token)
         
         return res.auth_token
         
+    # LAZY INITIALIZERS
+    # =================
 
     def _initMM(self):
         if (self.mm is None):

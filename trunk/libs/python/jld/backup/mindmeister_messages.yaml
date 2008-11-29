@@ -10,6 +10,7 @@ config_key: configure api key
 config_file: configure database filesystem path
 config_path: configure filesystem path for exports
 config_maxnum: configuration the maximum number of exports per run
+error_load_file: error occured whilst file [$path]
 
 quiet: quiet mode
 configuration: Please configure 'secret' and 'api_key'
@@ -20,6 +21,7 @@ do_auth: Please authentication application (use 'auth' command)
 
 # Errors / Exceptions
 # ===================
+error_defaults: Defaults configuration error
 error_command: Invalid command [$cmd]
 error_getmaps: Error fetching maps [$msg]
 error_db: Error whilst creating the database file [$file]
@@ -38,6 +40,7 @@ unhandled_exception: An unhandled exception occured [$exc]
 
 # HELP
 # ====
+help_defaults: The defaults file is located in the Python's sitepackages directory along with the other scripts of this command-line utility
 help_command: Use -h to review commands
 help_db: Is the filesystem path specified by the -f option accessible?
 help_auth: Please perform authentication using the 'auth' command and the -s , -k options
