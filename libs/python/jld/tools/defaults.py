@@ -7,20 +7,28 @@ __version__ = "$Id$"
 import yaml
 import os.path
 import sys
-from string import Template
+import logging
+
+import jld.api as api
 
 class Defaults(object):
     """
     """
-    def __init__(self, filepath):
+    _path = None
+    
+    def __init__(self, filepath = None):
         self.filepath = filepath
         self.defaults = None
+        self._load()
         
     def _load(self):
+        
+        path = self.filepath if self.filepath else self._path
+        
         try:
-            file = open(self.filepath,'r')
+            file = open(path,'r')
             self.defaults = yaml.load(file)
             file.close()
         except Exception,e:
-            pass
+            raise api.ErrorConfig('error_load_file', {'path':path})
         

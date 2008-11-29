@@ -89,6 +89,10 @@ class ErrorDaemon(ErrorGeneric):
     """ Generic daemon error e.g. can't os.fork
     """
 
+class ErrorConfig(ErrorGeneric):
+    """ Generic configuration error e.g. can't load configuration from filesystem
+    """ 
+    
 # =========================================================================
 
 if __name__ == "__main__":
