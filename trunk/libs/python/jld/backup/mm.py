@@ -35,7 +35,7 @@ _options =[
   {'o1':'-k', 'var':'api_key','action':'store',        'help':'config_key',    'reg': True, 'default': None},
   {'o1':'-f', 'var':'file',   'action':'store',        'help':'config_file',   'reg': True, 'default': None},
   {'o1':'-p', 'var':'path',   'action':'store',        'help':'config_path',   'reg': True, 'default': None},
-  {'o1':'-m', 'var':'maxnum', 'action':'store',        'help':'config_maxnum', 'reg': True, 'default': '100'},
+  {'o1':'-m', 'var':'maxnum', 'action':'store',        'help':'config_maxnum', 'reg': True, 'default': None},
   #{'o1':'-q', 'var':'quiet',  'action':'store_true',   'help':'quiet',        'reg': False, 'default': False },          
 ]
 
@@ -73,15 +73,27 @@ Commands:
     
         ui.handleArguments(usage, _options)
 
-        # make sure we have SECRET and API_KEY configured in the registry
-        # Use conditional 'setKey' if we have valid overriding values i.e. not None
+        # == configuration ==
+        # PRECEDENCE:
+        #  1) Command Line
+        #  2) Registry
+        #  3) Defaults
+        # ===================
+
+        # Process options from the command line:
+        #  If an option is missing from the command line, look for it
+        #  in the registry.Use conditional 'setKey' if we have valid 
+        #  overriding values (i.e. not None) to update the registry.
+        #  Finally, for missing parameters, look for defaults.
         r = reg.Registry()
         for o in _options:
             if ( o['reg'] ): 
                 r.setKey('mindmeister', o['var'], getattr( ui.options, o['var'] ), cond=True)
     
-        # == configuration ==
-        # ===================
+        # load default config
+        
+    
+    
         params = {}
         
         #params['quiet'] = options.quiet
