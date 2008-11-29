@@ -27,6 +27,7 @@ import jld.registry as reg
 from   jld.backup.mindmeister_backup import Backup
 import jld.backup.mindmeister_messages as msg
 import jld.backup.mindmeister_ui as mui
+import jld.backup.mindmeister_defaults as mdef
 from   jld.tools.template import ExTemplate
 
 # ========================================================================================
@@ -89,27 +90,24 @@ Commands:
         for o in _options:
             if ( o['reg'] ): 
                 r.setKey('mindmeister', o['var'], getattr( ui.options, o['var'] ), cond=True)
-    
-        # load default config
-        
-    
-    
+
         params = {}
+            
+        # integrate default config
+        defs = mdef.MM_Defaults()
+        for o in _options:
+            key = o['var']
+            val = r.getKey('mindmeister', key)
+            if val is None:
+                val = defs.defaults[key] if (key in defs.defaults) else None
+            params[key] = val
         
-        #params['quiet'] = options.quiet
+        # Configure Backup cmd object
+        for o in _options:
+            key = o['var']
+            val = params[key]
+            setattr( backup, key, val )
         
-        file          = params['file']          = r.getKey('mindmeister', 'file')
-        secret        = params['secret']        = r.getKey('mindmeister', 'secret')
-        api_key       = params['api_key']       = r.getKey('mindmeister', 'api_key')
-        export_path   = params['export_path']   = r.getKey('mindmeister', 'export_path')
-        export_maxnum = params['export_maxnum'] = r.getKey('mindmeister', 'export_maxnum')
-         
-        backup.file    = file
-        backup.secret  = secret
-        backup.api_key = api_key
-        backup.export_path = export_path
-        backup.export_maxnum = export_maxnum
-    
         # == command validation ==
         # ========================
         try: command = ui.args[0]
