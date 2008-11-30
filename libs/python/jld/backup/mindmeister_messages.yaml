@@ -21,6 +21,8 @@ do_auth: Please authentication application (use 'auth' command)
 
 # Errors / Exceptions
 # ===================
+error_create_folder: Error whilst creating folder
+error_init_folder: Error whilst accessing folder
 error_defaults: Defaults configuration error
 error_command: Invalid command [$cmd]
 error_getmaps: Error fetching maps [$msg]
@@ -36,6 +38,7 @@ error_property: Property error
 error_protocol: Protocol level error
 error_registry: Registry level error
 error_validation_parameter: Parameter validation error [$param]
+missing_param: Missing parameter.
 unhandled_exception: An unhandled exception occured [$exc]
 
 # HELP

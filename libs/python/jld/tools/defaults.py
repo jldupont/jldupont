@@ -5,7 +5,7 @@ __author__  = "Jean-Lou Dupont"
 __version__ = "$Id$"
 
 import yaml
-import os.path
+import os
 import sys
 import logging
 

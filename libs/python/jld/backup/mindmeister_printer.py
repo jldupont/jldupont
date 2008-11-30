@@ -4,6 +4,7 @@
 
 __author__  = "Jean-Lou Dupont"
 __version__ = "$Id$"
+__msgs__ = ['tbl_header_maps', 'tbl_footer_maps', 'tbl_header_export', 'tbl_footer_export', ]
 
 import jld.tools.printer as printer
 

@@ -4,6 +4,7 @@
 
 __author__  = "Jean-Lou Dupont"
 __version__ = "$Id$"
+__msgs__ = ['unhandled_exception',]
 
 import re
 import sys
@@ -20,7 +21,6 @@ class UIBase(object):
                 'help_nix': nix_dependent_help_key,  #OPTIONAL
              }
         }
-    
     """
     _platform_win32 = sys.platform[:3] == 'win'
     
@@ -43,16 +43,23 @@ class UIBase(object):
         """ Displays, if required, an appropriate user message
             corresponding to an error condition.
         """
-        try:
-            params = exc.params
-        except:
-            params = None
+        try:    params = exc.params
+        except: params = None
             
         #TODO: Also generates logging and/or email messages as appropriate.
         classe = re.compile("\'(.*)\'").search( str( exc.__class__ ) ).group(1)
         if (classe not in self._map):
             print self.msgs.render( 'unhandled_exception', {'exc': str( exc ) } )
             return
+
+        #Additional 'postfix' message?
+        try:    
+            possible_msg = exc.msg
+            if (possible_msg.startswith('msg:')):
+                msgid = possible_msg[4:]
+            pmsg = self.msgs.render( msgid )
+        except: 
+            pmsg = ''
 
         _entry = self._map[classe]
         
@@ -65,7 +72,7 @@ class UIBase(object):
             help = self.msgs.render( help_key, params )
             msg = msg + ': ' + help
         
-        print msg
+        print msg + ' ' + pmsg
         
     def _resolveHelp(self, entry):
         if (self._platform_win32):
