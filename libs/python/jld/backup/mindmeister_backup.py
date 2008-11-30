@@ -17,6 +17,7 @@ import jld.api.mindmeister_response as mmr
 import jld.backup.mindmeister_messages as msg
 import jld.backup.mindmeister_printer as printer
 import jld.backup.mindmeister_db as db
+import jld.tools.os as jldos
 
 # ========================================================================================
 
@@ -104,6 +105,8 @@ class Backup(BaseCmd):
         self._initDb()
         full_list = db.Maps.getToExportList()
 
+        self._init_export_folder()
+        
         cnt = self.export_maxnum
         print cnt
         while cnt > 0:
@@ -118,42 +121,21 @@ class Backup(BaseCmd):
         """ Creates the export folder IF it does not
             already exists
         """
-        rep = self._validate_export_folder()
-        if (not rep):
+        rep = jldos.existsDir(self.export_path)
+        if (rep is False):
             self._create_export_folder()
 
-        self._validate_export_folder(True)
+        rep = jldos.existsDir(self.export_path)
+        if (rep is False):
+            raise api.ErrorConfig('init_folder')
             
     def _create_export_folder(self):
         """ Creates the export folder
         """
-        
-    
-    def _validate_export_folder(self, do_raise = False):
-        """ Verifies if the export folder exists
-        """
-        
-        # Does the path even exists?
-        try:
-            info  = os.stat(self.export_path)
-        except:
-            if (do_raise):
-                raise api.ErrorConfig('')
-            return false
-
-        # The path exists... is it a directory?
-        try:
-            mode  = info[ST_MODE]
-            isdir = stat.S_ISDIR(mode)
-        except:
-            raise api.ErrorConfig('')
-        
-        #Not a directory... error then!
-        if (not isdir):
-            raise api.ErrorConfig('')
-        
-        return isdir
-
+        try:    os.makedirs(self.export_path)
+        except: raise api.ErrorConfig('create_folder')
+        return  True
+            
     # =========================================================
     # =========================================================
     
