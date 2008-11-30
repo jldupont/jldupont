@@ -43,6 +43,7 @@ class ErrorGeneric(Exception):
     """
     def __init__(self, msg, params = None):
         Exception.__init__(self, msg)
+        self.msg = msg
         self.params = params
         
 class ErrorDb(ErrorGeneric):

@@ -3,7 +3,7 @@
 __author__  = "Jean-Lou Dupont"
 __version__ = "$Id$"
 
-import os.path
+import os
 from jld.tools.messages import Messages
 
 class MM_Messages(Messages):

@@ -1,7 +1,9 @@
 # MindMeister Backup
 # Default Configuration
 # @author: Jean-Lou Dupont
-# ========================
+#
+# The '~' will be evaluated to $HOME under Windows environment
+# ============================================================
 
 export_path: ~/mm
 export_maxnum: 100

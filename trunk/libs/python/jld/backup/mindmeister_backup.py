@@ -2,8 +2,10 @@
 """
 __author__  = "Jean-Lou Dupont"
 __version__ = "$Id$"
+__msgs__ = ['error_init_folder', 'error_create_folder', 'frob_not_acquired', '', ]
+
 import sys
-import os.path
+import os
 import logging
 import webbrowser
 import datetime
@@ -17,7 +19,7 @@ import jld.api.mindmeister_response as mmr
 import jld.backup.mindmeister_messages as msg
 import jld.backup.mindmeister_printer as printer
 import jld.backup.mindmeister_db as db
-import jld.tools.os as jldos
+import jld.tools.mos as mos
 
 # ========================================================================================
 
@@ -31,6 +33,7 @@ class Backup(BaseCmd):
         self.secret = None
         self.api_key = None
         self.auth_token = None
+        self.export_path_init = None
         self.export_path = None
         self.export_maxnum = None
         self.mm = None
@@ -85,7 +88,7 @@ class Backup(BaseCmd):
         try:
             mapid=args[0][0]
         except:
-            raise api.ErrorValidation( 'missing param', {'param':'mapid'} )
+            raise api.ErrorValidation( 'missing_param', {'param':'mapid'} )
         self._prepareAuthorizedCommand()      
         details = self.mm.getMapExport(mapid)
         pp = printer.MM_Printer_Export( self.msgs )       
@@ -121,19 +124,28 @@ class Backup(BaseCmd):
         """ Creates the export folder IF it does not
             already exists
         """
-        rep = jldos.existsDir(self.export_path)
+        if (not self.export_path_init):
+            self.export_path_init = mos.replaceHome( self.export_path )
+
+        rep = mos.existsDir(self.export_path_init)
+        if (rep):
+            return
+               
         if (rep is False):
             self._create_export_folder()
-
-        rep = jldos.existsDir(self.export_path)
+                    
+        rep = mos.existsDir(self.export_path_init)       
         if (rep is False):
-            raise api.ErrorConfig('init_folder')
+            raise api.ErrorConfig('msg:error_init_folder')            
             
     def _create_export_folder(self):
         """ Creates the export folder
         """
-        try:    os.makedirs(self.export_path)
-        except: raise api.ErrorConfig('create_folder')
+        try:    
+            os.makedirs(self.export_path_init)
+        except: 
+            print 'os.makedirs'
+            raise api.ErrorConfig('msg:error_create_folder')
         return  True
             
     # =========================================================
@@ -156,7 +168,7 @@ class Backup(BaseCmd):
         if (auth_token is None):
             frob = self.r.getKey(self._regDomain, 'frob')
             if (frob is None):
-                raise api.ErrorAuth("frob not acquired")
+                raise api.ErrorAuth("msg:frob_not_acquired")
             auth_token = self._getAuthToken(frob)
         
         # token turns out to be invalid, help kickstart a re-authentication
