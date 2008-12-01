@@ -30,6 +30,16 @@ def concatenateParams(liste):
     return result
 
 
+def makeList(liste):
+    """ Makes an url encoded list
+        item1+item2+...
+    """
+    result = ''
+    for item in liste:
+        result = result + str( item ) + '+'
+    
+    return result.rstrip('+')
+
 def formatParams(liste):
     """ Formats the parameters list for usage in an
         HTTP method. Performs URI encoding.
