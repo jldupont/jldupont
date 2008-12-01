@@ -136,9 +136,7 @@ class Backup(BaseCmd):
         try:
             details = self.mm.getMapExport(mapid)
             url  = details[0]['freemind']
-            print url
             data = self._fetchOne(mapid, url)
-
             self._writeOne(mapid, data, timestamp)
         except Exception,e:
             return e
@@ -148,8 +146,11 @@ class Backup(BaseCmd):
     def _fetchOne(self, mapid, url):
         """ Fetches one map
         """
+        params = {'id':mapid}
+        signed_url = self.mm.sign_url(url, params)
+        print signed_url
         try:
-            response = urllib2.urlopen(url)
+            response = urllib2.urlopen(signed_url)
         except Exception,e:
             raise api.ErrorNetwork(e) 
         return response.read()
@@ -168,7 +169,7 @@ class Backup(BaseCmd):
         """
         path = self._genFilePath(mapid, timestamp)
         try:
-            fh  = open( path, 'w' )
+            fh = open( path, 'w' )
             fh.write( data )
             fh.close()
         except Exception,e:
