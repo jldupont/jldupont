@@ -33,12 +33,12 @@ def existsDir(path):
 
 def replaceHome(path):
     """ Replaces the '~' string with
-        the configured $HOME environment variable
+        the configured $HOME or $HOMEDRIVE+$HOMEPATH environment variables
     """
     try:
-        home      = os.environ['HOME'] if ('HOME' in os.environ ) else None
+        home      = os.environ['HOME']      if ('HOME' in os.environ ) else None
         homedrive = os.environ['HOMEDRIVE'] if ('HOMEDRIVE' in os.environ ) else None
-        homepath  = os.environ['HOMEPATH'] if ('HOMEPATH' in os.environ ) else None
+        homepath  = os.environ['HOMEPATH']  if ('HOMEPATH' in os.environ ) else None
 
         if (home):
             return path.replace('~', home)

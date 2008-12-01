@@ -148,6 +148,7 @@ class MM_Response_getList(MM_ResponseBase):
 
 class MM_Response_getMapExport(MM_ResponseBase):
     """ In response to mm.maps.export
+        exports[image] = url
     """
     def __init__(self, raw):
         MM_ResponseBase.__init__(self, raw)
@@ -157,10 +158,8 @@ class MM_Response_getMapExport(MM_ResponseBase):
             entry={}            
             e = minidom.parseString(raw).documentElement
             images = e.getElementsByTagName('image')
-            param = "image"
             for image in images:
                 mimetype= image.getAttribute('mimetype')
-                param = mimetype
                 entry[mimetype] = image.childNodes[0].nodeValue
 
             params = ['pdf', 'rtf', 'freemind', 'mindmeister']

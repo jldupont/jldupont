@@ -2,13 +2,14 @@
 """
 __author__  = "Jean-Lou Dupont"
 __version__ = "$Id$"
-__msgs__ = ['error_init_folder', 'error_create_folder', 'frob_not_acquired', '', ]
+__msgs__ = ['error_init_folder', 'error_create_folder', 'frob_not_acquired', 'error_cant_write', ]
 
 import sys
 import os
 import logging
 import webbrowser
 import datetime
+import urllib2
 from stat import *
 
 import jld.api as api
@@ -103,7 +104,7 @@ class Backup(BaseCmd):
         pp.run( full_list )
         
     def cmd_export(self, *args):
-        """Export (retrieves from MindMeister) up to 'maxnum' mindmaps which need refreshing.
+        """Export (retrieves from MindMeister) up to 'export_maxnum' mindmaps which need refreshing.
         """
         self._initDb()
         full_list = db.Maps.getToExportList()
@@ -111,12 +112,65 @@ class Backup(BaseCmd):
         self._init_export_folder()
         
         cnt = self.export_maxnum
-        print cnt
-        while cnt > 0:
-            item = full_list.pop(0) if len(full_list) else None
-            if item is None:
-                break
+        self._prepareAuthorizedCommand()
+        stack_result = []  
+        for item in full_list:
+            res = self._exportOne( item.mapid )
+            if (res is True):
+                self._exportUpdateOne( item )
+                
+            # record result
+            stack_result.append((item.mapid, res))
+            
             cnt = cnt - 1
+            if (cnt==0):
+                break
+                      
+    def _exportOne(self, mapid):
+        """ Exports one map
+        """
+        try:
+            details = self.mm.getMapExport(mapid)
+            url = details.exports['freemind']
+            res = self._fetchOne(mapid, url)
+            ts = datetime.datetime.now()
+            timestamp = "%s%s%s%s%s%s" % (ts.year, ts.month, ts.day, ts.hour, ts.minute, ts.second)
+            self._writeOne(mapid, res, timestamp)
+            self._updateOne(map, ts)
+        except Exception,e:
+            return e
+        
+        return True
+        
+    def _fetchOne(self, mapid, url):
+        """ Fetches one map
+        """
+        try:
+            response = urllib2.urlopen(url)
+        except Exception,e:
+            raise api.ErrorNetwork(e) 
+        return response.read()
+        
+    def _updateOne(self, map, timestamp):
+        """ Updates the database
+        """  
+        
+    def _writeOne(self, mapid, data, timestamp):
+        """ Writes one map to the export folder
+        """
+        path = self._genFilePath(mapid, timestamp)
+        try:
+            fh  = open( path, 'w' )
+            fh.write( data )
+            fh.close()
+        except Exception,e:
+            raise api.ErrorFile('msg:cant_write', {'path':path})        
+        
+    def _genFilePath(self, mapid, timestamp):
+        """ Generates a filepath related
+            to an export map.
+        """ 
+        return self.export_path_init + os.sep + mapid + '_' + timestamp + '.mm'
         
     # =========================================================
     # =========================================================
