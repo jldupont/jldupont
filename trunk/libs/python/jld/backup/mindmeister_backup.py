@@ -114,29 +114,32 @@ class Backup(BaseCmd):
         cnt = self.export_maxnum
         self._prepareAuthorizedCommand()
         stack_result = []  
-        for item in full_list:
-            res = self._exportOne( item.mapid )
-            if (res is True):
-                self._exportUpdateOne( item )
+        for map in full_list:
+            ts = datetime.datetime.now()
+            timestamp = "%s%s%s%s%s%s" % (ts.year, ts.month, ts.day, ts.hour, ts.minute, ts.second)                            
+            res = self._exportOne( map.mapid, ts, timestamp )
+            #if (res is True):
+            #    self._updateDbOne( map, timestamp )
                 
             # record result
-            stack_result.append((item.mapid, res))
+            stack_result.append((map.mapid, res))
             
             cnt = cnt - 1
             if (cnt==0):
                 break
                       
-    def _exportOne(self, mapid):
+        print stack_result
+                      
+    def _exportOne(self, mapid, ts, timestamp):
         """ Exports one map
         """
         try:
             details = self.mm.getMapExport(mapid)
-            url = details.exports['freemind']
-            res = self._fetchOne(mapid, url)
-            ts = datetime.datetime.now()
-            timestamp = "%s%s%s%s%s%s" % (ts.year, ts.month, ts.day, ts.hour, ts.minute, ts.second)
-            self._writeOne(mapid, res, timestamp)
-            self._updateOne(map, ts)
+            url  = details[0]['freemind']
+            print url
+            data = self._fetchOne(mapid, url)
+
+            self._writeOne(mapid, data, timestamp)
         except Exception,e:
             return e
         
@@ -151,9 +154,14 @@ class Backup(BaseCmd):
             raise api.ErrorNetwork(e) 
         return response.read()
         
-    def _updateOne(self, map, timestamp):
+    def _updateDbOne(self, map, timestamp):
         """ Updates the database
-        """  
+        """
+        try:
+            map.set( exported = timestamp )
+        except:
+            raise api.ErrorDb('msg:error_update_db')
+        
         
     def _writeOne(self, mapid, data, timestamp):
         """ Writes one map to the export folder
