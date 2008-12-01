@@ -46,6 +46,10 @@ class ErrorGeneric(Exception):
         self.msg = msg
         self.params = params
         
+class ErrorFile(ErrorGeneric):
+    """ Generic filesystem error e.g. can't write to filepath
+    """
+        
 class ErrorDb(ErrorGeneric):
     """ Generic Db error e.g. can't open database file
     """

@@ -78,7 +78,7 @@ class MM_Client(MM):
     
     def __init__(self, secret, api_key, auth_token = None):
         MM.__init__( self, secret, api_key, auth_token )
-        
+               
     def getAllMaps(self):
         """ Retrieves a current list of all maps
             @throws jld.api.Error*
