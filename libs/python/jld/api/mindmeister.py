@@ -14,6 +14,7 @@ class MM(object):
     """MindMeister WEB API
     """
     
+    _generic = "%s&api_key=%s&api_sig=%s&auth_token=%s"
     _auth = "http://www.mindmeister.com/services/auth?api_key=%s&perms=%s&frob=%s&api_sig=%s"
     _api  = "http://www.mindmeister.com/services/rest?%s"
     
@@ -32,6 +33,20 @@ class MM(object):
         string = "%s%s" % (self.secret, liste)
         sign = md5.new(string)
         return binascii.hexlify( sign.digest() )
+       
+    def sign_url(self, url, params):
+        """ Signs an url
+            Useful for export url generated
+            by the method mm.maps.export
+        """
+        params['api_key'] = self.api_key
+        params['auth_token'] = self.auth_token
+        sorted_list = api.alphaOrderParams( params )
+        liste = api.concatenateParams( sorted_list )
+        string = "%s%s" % (self.secret, liste)
+        sign = md5.new(string)
+        sig = binascii.hexlify( sign.digest() )
+        return self._generic % (url, self.api_key, sig, self.auth_token)
        
     def gen_auth_url(self, perm, frob):
         """ Generates the authentication URL used to point
