@@ -49,7 +49,27 @@ def replaceHome(path):
         pass
     
     return path
+
+def createPathIfNotExists(path):
+    """ Creates the required path
+        IF it does not already exists.
+        If the path is a directory => create directory hierarchy
+        
+        Does not attempt to trap/process exceptions.
+    """
+    # exists already... bail out
+    if (os.path.exists(path)):
+        return
     
+    # does the folder hierarchy exists?
+    dir = os.path.dirname(path)
+    if (os.path.exists(dir)):
+        return    
+    
+    if (not os.path.exists(path)):
+        os.makedirs( dir )
+
+
 # ==============================================
 # ==============================================
 
