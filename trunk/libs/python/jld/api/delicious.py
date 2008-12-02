@@ -105,8 +105,9 @@ class Client(object):
         """ Retrieves the time of the last update
             Method: https://api.del.icio.us/v1/posts/update
         """
-        result = self.api.do_method('posts/update')
-        return result
+        raw = self.api.do_method('posts/update')
+        return delObjects.Update( raw )
+        #return result
         
 
     def getAllBundles(self):
@@ -171,10 +172,11 @@ if __name__ == "__main__":
     password = os.environ['DELICIOUS_PASSWORD']
     c = Client(username, password)
 
-    print c.getLastUpdate()
-    print c.getBundle('my-stuff')
-    print c.getAllBundles()
+    u = c.getLastUpdate()
+    print 'time: %s' % u.time
+    #print c.getBundle('my-stuff')
+    #print c.getAllBundles()
     #print c.getAllTags()
-    print c.getRecentPosts(count=2)
-    print c.getRecentPosts(tag='business')
+    #print c.getRecentPosts(count=2)
+    #print c.getRecentPosts(tag='business333')
     

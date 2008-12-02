@@ -8,18 +8,8 @@ __version__ = "$Id$"
 
 from xml.dom import minidom
 
+import jld.api as api
 
-__sample_update = """
-<?xml version="1.0" encoding="UTF-8"?>
-<update time="2008-12-01T20:36:01Z" inboxnew="0"/>
-"""
-
-__sample_bundle = """
-<?xml version="1.0" encoding="UTF-8"?>
-<bundles>
-  <bundle name="my-stuff" tags="my-diagrams my-mindmaps"/>
-</bundles>
-"""
 
 __sample_bundles = """
 <?xml version="1.0" encoding="UTF-8"?>
@@ -52,6 +42,41 @@ __sample_recent = """
 </posts>
 """
 
-class Update(object):
+#no matching posts
+__sample_recent2 = """
+https://api.del.icio.us/v1/posts/recent?count=100&tag=business333
+<?xml version="1.0" encoding="UTF-8"?>
+<posts user="jldupont" tag="business333"/>
+"""
+
+__sample_update = """
+<?xml version="1.0" encoding="UTF-8"?>
+<update time="2008-12-01T20:36:01Z" inboxnew="0"/>
+"""
+
+class Update(object):   
     def __init__(self, raw):
-        pass
+        try:
+            e = minidom.parseString(raw).documentElement
+            self.time = e.getAttribute('time')
+            self.inbox = e.getAttribute('inboxnew')
+        except Exception,e:
+            raise api.ErrorProtocol( 'msg:expecting', {'param':'update'} )
+    
+
+__sample_bundle = """
+<?xml version="1.0" encoding="UTF-8"?>
+<bundles>
+  <bundle name="my-stuff" tags="my-diagrams my-mindmaps"/>
+</bundles>
+"""
+class Bundle(object):
+    def __init__(self, raw):
+        try:
+            e = minidom.parseString(raw).documentElement
+            b = e.getElementByTagName('bundle')[0]
+            self.time = b.getAttribute('time')
+            self.inbox = e.getAttribute('inboxnew')
+        except Exception,e:
+            raise api.ErrorProtocol( 'msg:expecting', {'param':'update'} )
+    
