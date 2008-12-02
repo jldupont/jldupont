@@ -69,9 +69,9 @@ class Api(object):
     def do_method(self, query, **args):
         """ Generic method handler
         """
-        param = api.versaUrlEncode( args )
-        frag = param if param else ''
-        url = self._API % query + '?' + frag
+        param = api.versaUrlEncode( args, True )
+        frag = '?' + param if param else ''
+        url = self._API % query + frag
         return self._get(url)
         
     def _get(self, url):
@@ -106,43 +106,36 @@ class Client(object):
             Method: https://api.del.icio.us/v1/posts/update
         """
         raw = self.api.do_method('posts/update')
-        return delObjects.Update( raw )
-        #return result
-        
+        return delObjects.Update( raw )        
 
     def getAllBundles(self):
         """ Retrieves all bundles
             Returns a list of bundles
             Method: https://api.del.icio.us/v1/tags/bundles/all
         """
-        result = self.api.do_method('tags/bundles/all')
-        return result
+        raw = self.api.do_method('tags/bundles/all')
+        return delObjects.Bundles(raw)
         
     def getBundle(self, name):
         """ Returns a specific bundle
             Method: https://api.del.icio.us/v1/tags/bundles/all?bundle=NAME
         """
-        result = self.api.do_method('tags/bundles/all', bundle=name)
-        return result
+        raw = self.api.do_method('tags/bundles/all', bundle=name)
+        return delObjects.Bundle(raw)
         
     def getAllTags(self):
         """ Retrieves all tags
             Method: https://api.del.icio.us/v1/tags/get
         """
-        result = self.api.do_method('tags/get')
-        return result
+        raw = self.api.do_method('tags/get')
+        return delObjects.Tags(raw)
 
-    def getAllPosts(self, tag = None):
-        """ Retrieves all posts
-            Returns a list of posts
-            Method: https://api.del.icio.us/v1/posts/all
-        """ 
-
-    def getPosts(self, tag = None, url = None, hash = None, dt = None):
+    def getPosts(self, tag = None, url = None, hashes = None, dt = None, meta = 'yes'):
         """ Retrieves a specific post
             Method: https://api.del.icio.us/v1/posts/get
         """
-        
+        raw = self.api.do_method('posts/get', tag=tag, url=url, hashes=hashes, dt=dt, meta=meta )
+        return delObjects.Posts(raw)
 
     def getRecentPosts(self, tag = None, count = 100):
         """ Retrieves the recent posts up to COUNT
@@ -150,17 +143,19 @@ class Client(object):
             Method: https://api.del.icio.us/v1/posts/recent
         """
         if (tag):
-            result = self.api.do_method('posts/recent', tag=tag, count=count)
+            raw = self.api.do_method('posts/recent', tag=tag, count=count)
         else:
-            result = self.api.do_method('posts/recent', count=count)
+            raw = self.api.do_method('posts/recent', count=count)
             
-        return result
+        return delObjects.Posts(raw)
         
     def getAllHashes(self):
         """ Retrieves the list of all hashes
             Method: https://api.del.icio.us/v1/posts/all?hashes
         """
-
+        raw = self.api.do_method('posts/all?hashes')
+        return delObjects.Hashes(raw)
+    
 # ==============================================
 # ==============================================
 
@@ -173,10 +168,26 @@ if __name__ == "__main__":
     c = Client(username, password)
 
     u = c.getLastUpdate()
-    print 'time: %s' % u.time
-    #print c.getBundle('my-stuff')
-    #print c.getAllBundles()
-    #print c.getAllTags()
-    #print c.getRecentPosts(count=2)
-    #print c.getRecentPosts(tag='business333')
+    print u
     
+    b = c.getBundle('my-stuff')
+    print b
+    
+    bs = c.getAllBundles()
+    print bs
+    
+    ts = c.getAllTags()
+    print ts
+    
+    ps = c.getRecentPosts(count=2)
+    print ps
+    
+    ps = c.getRecentPosts(tag='php')
+    print ps
+    
+    ps = c.getPosts(tag='php')
+    print ps
+    
+    #possibly long list!
+    #hs = c.getAllHashes()
+    #print hs

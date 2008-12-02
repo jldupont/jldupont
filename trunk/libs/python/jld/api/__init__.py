@@ -46,7 +46,7 @@ def formatParams(liste):
     """     
     return urllib.urlencode( liste, True )
 
-def versaUrlEncode(liste):
+def versaUrlEncode(liste, RemoveNone = False):
     """ Cases:
         a) 'key'
         b) ('key', 'value')
@@ -57,14 +57,17 @@ def versaUrlEncode(liste):
     if (type(liste) is DictType):
         keys = liste.keys()
         for key in keys:
-            #key
-            result = result + urllib.quote( key )
+            
             right_side = liste[key]
             
             #key
-            if (right_side is None):
-                result = result + '&'
+            if (type(right_side) is NoneType):              
+                if (not RemoveNone):
+                    result = result + urllib.quote( key )
+                    result = result + '&'
                 continue
+
+            result = result + urllib.quote( key )
             
             #key=int value
             if (type(right_side) is IntType):
