@@ -55,7 +55,9 @@ class Backup(BaseCmd):
         #keep this frob in order to retrieve an authentication token later on
         self.r.setKey(self._regDomain, 'frob', res.frob, cond = True)
         
-        url = self.mm.gen_auth_url('read', res.frob)
+        # Write permission is required for the export operation;
+        # there is a bug on MindMeister's side...
+        url = self.mm.gen_auth_url('write', res.frob)
         webbrowser.open_new(url)
             
     def cmd_umaps(self, *args):

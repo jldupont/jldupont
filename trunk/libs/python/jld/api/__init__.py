@@ -51,7 +51,7 @@ def versaUrlEncode(liste, RemoveNone = False):
         a) 'key'
         b) ('key', 'value')
         c) ('key', [ value list ] )
-        d) { 'key1': 'value1', 'key2':['v1', 'v2'] }
+        d) { 'key1': 'value1', 'key2':['v1', 'v2'] , 'some_key':None } #RemoveNone affects 'some_key'
     """
     result = ''
     if (type(liste) is DictType):
