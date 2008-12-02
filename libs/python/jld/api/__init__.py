@@ -6,6 +6,7 @@ __version__ = "$Id$"
 __author__ = "Jean-Lou Dupont"
 
 import urllib
+from types import *
 
 def alphaOrderParams(liste):
     """ Orders a dictionary based parameters list 
@@ -29,23 +30,76 @@ def concatenateParams(liste):
     
     return result
 
-
 def makeList(liste):
     """ Makes an url encoded list
         item1+item2+...
     """
     result = ''
     for item in liste:
-        result = result + str( item ) + '+'
-    
+        result = result + urllib.quote( item ) + '+'
+        
     return result.rstrip('+')
-
+ 
 def formatParams(liste):
     """ Formats the parameters list for usage in an
         HTTP method. Performs URI encoding.
     """     
     return urllib.urlencode( liste, True )
 
+def versaUrlEncode(liste):
+    """ Cases:
+        a) 'key'
+        b) ('key', 'value')
+        c) ('key', [ value list ] )
+        d) { 'key1': 'value1', 'key2':['v1', 'v2'] }
+    """
+    result = ''
+    if (type(liste) is DictType):
+        keys = liste.keys()
+        for key in keys:
+            #key
+            result = result + urllib.quote( key )
+            right_side = liste[key]
+            
+            #key
+            if (right_side is None):
+                result = result + '&'
+                continue
+            
+            #key=int value
+            if (type(right_side) is IntType):
+                result = result + '=' + str( liste[key] ) + '&'
+                continue
+            
+            #key=value
+            if (type(right_side) is StringType):
+                result = result + '=' + urllib.quote(liste[key]) + '&'
+                continue
+            
+            #key=[]
+            if (type(right_side) is ListType):
+                result = result + '=' + makeList( liste[key] ) + '&'
+                continue
+                
+        return result.rstrip('&')
+    
+    for item in liste:
+        if (type(item) is StringType):
+            result = result + urllib.quote( str(item) )
+        
+        if (type(item) is TupleType):
+            assert( type(item[0]) is StringType )
+            result = result + urllib.quote( str( item[0] ) ) + "="
+            if (type(item[1]) is ListType):
+                result = result + makeList( item[1] )
+            else:
+                assert( type(item[1]) is StringType )
+                result = result + urllib.quote( item[1] )
+                       
+        result = result + '&'
+        
+    return result.rstrip('&')
+            
 
 # =========================================================================
 class ErrorGeneric(Exception):
@@ -122,3 +176,17 @@ if __name__ == "__main__":
     
     print "============"
     print formatParams( sorted_list )
+    print "============"
+    print formatParams( liste )
+    print "============"
+    
+    liste2 = ['tag1', 'tag2', 'tag3', 'tag4\special']
+    print makeList(liste2)
+    print "============"
+    #liste3 = { 'key1':'value1', 'key2':['value2a', 'value2b'] }
+    liste3 = [ 'first', ('key1','value1'), ('key2',["value2a", "value2b\special", "value2c"]), ('key3','value3') ]
+    print versaUrlEncode(liste3)
+    print "============"
+    liste4 = { 'first':None, 'key1':'value1', 'key2':["value2a", "value2b\special", "value2c"], 'key3':'value3' }
+    print versaUrlEncode(liste4)
+    

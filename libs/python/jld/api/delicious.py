@@ -54,7 +54,7 @@ class Waiter(object):
         
         
 class Api(object):
-    """
+    """ Low-level API to Delicious
     """
     _API = 'https://api.del.icio.us/v1/%s'
     
@@ -66,33 +66,18 @@ class Api(object):
         self.password = password
         self.auth = "Basic %s" % ( base64.encodestring("%s:%s" % (self.username, self.password)).strip() )
         
-    def method_update(self):
-        """ posts/update
-        """
-        query = "posts/update"
-        rep = self._get(query)
-        return rep
-        
-    def method_bundles_all(self):
-        query = "tags/bundles/all"
-        rep = self._get(query)
-        return rep
-    
-    def method_bundle(self, name):
-        query = "tags/bundles/all?bundle=%s" % name
-        rep = self._get(query)
-        return rep
-        
     def do_method(self, query, **args):
         """ Generic method handler
         """
-
+        param = api.versaUrlEncode( args )
+        frag = param if param else ''
+        url = self._API % query + '?' + frag
+        return self._get(url)
         
-    def _get(self, query):
+    def _get(self, url):
         """ All GET operations go through here
         """
-        url = self._API % query
-
+        print url
         # respect terms of use i.e. throttle
         self.waiter.wait()
         
@@ -120,22 +105,31 @@ class Client(object):
         """ Retrieves the time of the last update
             Method: https://api.del.icio.us/v1/posts/update
         """
+        result = self.api.do_method('posts/update')
+        return result
+        
 
     def getAllBundles(self):
         """ Retrieves all bundles
             Returns a list of bundles
             Method: https://api.del.icio.us/v1/tags/bundles/all
         """
+        result = self.api.do_method('tags/bundles/all')
+        return result
         
     def getBundle(self, name):
         """ Returns a specific bundle
             Method: https://api.del.icio.us/v1/tags/bundles/all?bundle=NAME
         """
+        result = self.api.do_method('tags/bundles/all', bundle=name)
+        return result
         
     def getAllTags(self):
         """ Retrieves all tags
             Method: https://api.del.icio.us/v1/tags/get
         """
+        result = self.api.do_method('tags/get')
+        return result
 
     def getAllPosts(self, tag = None):
         """ Retrieves all posts
@@ -147,13 +141,20 @@ class Client(object):
         """ Retrieves a specific post
             Method: https://api.del.icio.us/v1/posts/get
         """
+        
 
     def getRecentPosts(self, tag = None, count = 100):
         """ Retrieves the recent posts up to COUNT
             and filtered by TAG.
             Method: https://api.del.icio.us/v1/posts/recent
         """
-
+        if (tag):
+            result = self.api.do_method('posts/recent', tag=tag, count=count)
+        else:
+            result = self.api.do_method('posts/recent', count=count)
+            
+        return result
+        
     def getAllHashes(self):
         """ Retrieves the list of all hashes
             Method: https://api.del.icio.us/v1/posts/all?hashes
@@ -168,7 +169,12 @@ if __name__ == "__main__":
     import os
     username = os.environ['DELICIOUS_USERNAME']
     password = os.environ['DELICIOUS_PASSWORD']
-    d = Api(username, password)
-    print d.method_update()
+    c = Client(username, password)
+
+    print c.getLastUpdate()
+    print c.getBundle('my-stuff')
+    print c.getAllBundles()
+    #print c.getAllTags()
+    print c.getRecentPosts(count=2)
+    print c.getRecentPosts(tag='business')
     
-    print d.method_bundles_all()
