@@ -38,7 +38,7 @@ class Backup(BaseCmd):
         self.export_path = None
         self.export_maxnum = None
         self.mm = None
-        self.file = None        
+        self.db_path = None        
         self.db = None
         
         self.msgs = msg.MM_Messages()
@@ -269,4 +269,5 @@ class Backup(BaseCmd):
 
     def _initDb(self):
         if (self.db is None):
-            self.db = db.Db( self.file )
+            path = mos.replaceHome( self.db_path )
+            self.db = db.Db( path )

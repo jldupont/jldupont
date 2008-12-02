@@ -32,9 +32,9 @@ from   jld.tools.template import ExTemplate
 
 # ========================================================================================
 _options =[
-  {'o1':'-s', 'var':'secret', 'action':'store',        'help':'config_secret', 'reg': True, 'default': None},
-  {'o1':'-k', 'var':'api_key','action':'store',        'help':'config_key',    'reg': True, 'default': None},
-  {'o1':'-f', 'var':'file',   'action':'store',        'help':'config_file',   'reg': True, 'default': None},
+  {'o1':'-s', 'var':'secret',        'action':'store',        'help':'config_secret', 'reg': True, 'default': None},
+  {'o1':'-k', 'var':'api_key',       'action':'store',        'help':'config_key',    'reg': True, 'default': None},
+  {'o1':'-f', 'var':'db_path',       'action':'store',        'help':'config_file',   'reg': True, 'default': None},
   {'o1':'-p', 'var':'export_path',   'action':'store',        'help':'config_path',   'reg': True, 'default': None},
   {'o1':'-m', 'var':'export_maxnum', 'action':'store',        'help':'config_maxnum', 'reg': True, 'default': None},
   #{'o1':'-q', 'var':'quiet',  'action':'store_true',   'help':'quiet',        'reg': False, 'default': False },          

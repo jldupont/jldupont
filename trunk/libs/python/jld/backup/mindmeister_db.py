@@ -4,6 +4,7 @@
 __author__  = "Jean-Lou Dupont"
 __version__ = "$Id$"
 
+import os
 import datetime
 
 from sqlobject import *
@@ -11,6 +12,7 @@ import sqlite3 as sql
 
 import jld.api as api
 import jld.tools.date as tdate
+import jld.tools.mos as mos
 
 # =============================================
 
@@ -110,8 +112,16 @@ class Db(object):
     """ Db class: used to bootstrap SQLObject 
     """
     def __init__(self, filepath):
+        # verify that the db file exists first
+        self._createDb(filepath)
+
+        #on windows, watch-out for the \
+        #which are interpreted as escape code by SqlObject
+        #also, the : on windows should be switched to |        
+        sqlobject_filepath = filepath.replace('\\','/').replace(':','|')
+
         try:
-            connection_string = 'sqlite:/' + filepath
+            connection_string = 'sqlite:///' + sqlobject_filepath
             connection = connectionForURI( connection_string )
             sqlhub.processConnection = connection
         except Exception,e:
@@ -120,6 +130,24 @@ class Db(object):
         #table already exists ... no big deal
         Maps.createTable(ifNotExists=True)
     
+    def _createDb(self, filepath):
+        """ Handles the creation, if necessary,
+            of the database file. The tricky part
+            being the creation of the folder hierarchy
+            (if required).
+        """
+        try:
+            mos.createPathIfNotExists(filepath)
+        except Exception,e:
+            raise api.ErrorDb( e, {'file':filepath} )
+        
+        # lastly, try to create the db
+        try:
+            dbfile = sql.connect( filepath )
+            dbfile.close()
+        except Exception,e:
+            raise api.ErrorDb( e, {'file':filepath} )
+
     
 # ==============================================
 # ==============================================
