@@ -13,6 +13,7 @@ import sqlite3 as sql
 import jld.api as api
 import jld.tools.date as tdate
 import jld.tools.mos as mos
+import jld.tools.db as db
 
 # =============================================
 
@@ -118,7 +119,7 @@ class Db(object):
         #on windows, watch-out for the \
         #which are interpreted as escape code by SqlObject
         #also, the : on windows should be switched to |        
-        sqlobject_filepath = filepath.replace('\\','/').replace(':','|')
+        sqlobject_filepath = db.formatSqliteURI(filepath)
 
         try:
             connection_string = 'sqlite:///' + sqlobject_filepath
@@ -129,6 +130,15 @@ class Db(object):
 
         #table already exists ... no big deal
         Maps.createTable(ifNotExists=True)
+    
+    @classmethod
+    def deleteDb(cls, filepath):
+        """ Deletes the corresponding filesystem db file
+        """
+        try:
+            os.remove(filepath)
+        except:
+            pass
     
     def _createDb(self, filepath):
         """ Handles the creation, if necessary,

@@ -130,8 +130,15 @@ class Backup(BaseCmd):
             if (cnt==0):
                 break
                       
-        print stack_result
-                      
+                 
+    def cmd_deletedb(self, *args):
+        """Deletes the database
+        """
+        self._deleteDb()
+        
+    # =========================================================
+    # =========================================================
+
     def _exportOne(self, mapid, ts, timestamp):
         """ Exports one map
         """
@@ -271,3 +278,7 @@ class Backup(BaseCmd):
         if (self.db is None):
             path = mos.replaceHome( self.db_path )
             self.db = db.Db( path )
+
+    def _deleteDb(self):
+        path = mos.replaceHome( self.db_path )
+        db.Db.deleteDb(path)

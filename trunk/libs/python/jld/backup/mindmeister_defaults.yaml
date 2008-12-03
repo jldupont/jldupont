@@ -2,8 +2,8 @@
 # Default Configuration
 # @author: Jean-Lou Dupont
 #
-# The '~' will be evaluated to $HOME under Windows environment
-# ============================================================
+# The '~' will be evaluated to $HOME or $HOMEDRIVE+$HOMEPATH under Windows environment
+# ====================================================================================
 
 db_path: ~/mm/db/maps.sqlite
 export_path: ~/mm
