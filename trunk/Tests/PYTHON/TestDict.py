@@ -1,20 +1,28 @@
-class X(object):
+class Y(object):
     
-    def __getattr__(self, attr):
-        return object.__getattribute__(self, attr)
-
-    def getFromDict(self, attr):
-        return self.__dict__[attr]
+    def __init__(self):
+        self.container = {}
     
+    def __missing__(self, key):
+        print "missing key[%s]" % key
+    
+    def __getitem__(self, key):
+        print "getitem key[%s]" % key
+        return self.container[key]
+    
+    def __setitem__(self, key, value):
+        print "setitem key[%s] value[%s]" % (key,value)
+        self.container[key] = value
+        
+    def __contains__(self, key):
+        print "contains key[%s]" % key
+        return (key in self.container)
     
 if __name__ == "__main__":
-    x = X()
+
+    y=Y()
+    y['key1']='value1'
     
-    x.var1 = 'var1'
+    print y['key1']
     
-    print x.var1
-    print "============"
-    print x.getFromDict( 'var1' )
-    print "============"
-    print x.getFromDict( 'var2' )
-    
+    print ('key2' in y)

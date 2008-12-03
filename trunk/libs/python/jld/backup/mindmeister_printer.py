@@ -78,6 +78,22 @@ class MM_Printer_Export(MM_Printer):
                 print v.rstrip(' ,') 
 
 
+class MM_Printer_Config(MM_Printer):
+    """ Prints map related info
+    """
+    
+    def __init__(self, obj):
+        MM_Printer.__init__(self, obj)
+        self._fields = getattr(obj, '_configParams')
+
+    def header(self):
+        """Prints a header"""
+        print self.msgs.render( 'tbl_header_config' )
+
+    def footer(self):
+        """Prints a footer"""
+        print self.msgs.render( 'tbl_footer_config' )
+
 # ==============================================
 # ==============================================
 

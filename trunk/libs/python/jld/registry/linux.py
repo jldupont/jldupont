@@ -15,10 +15,30 @@ class LinuxRegistry(object):
     """
     _lin  = "/etc/python/registry/%s"
     
+    # FOR DEBUGGING PURPOSES ONLY
     _lind = "c:\\etc\\python\\registry\\%s"
         
-    def __init__(self, debug = False):
+    def __init__(self, file = None, debug = False):
         self._debug = debug
+        self.file = file
+        
+        # [path] = (mtime, yaml_obj)
+        self.cache = {} 
+        
+    def __getitem__(self, key):
+        if (self.file is None):
+            raise Exception('file property must be set to use the dict interface')        
+        return self.getKey(self.file, key)
+        
+    def __setitem__(self, key, value):
+        if (self.file is None):
+            raise Exception('file property must be set to use the dict interface')        
+        return self.setKey(self.file, key, value)
+        
+    def __contains__(self, key):
+        if (self.file is None):
+            raise Exception('file property must be set to use the dict interface')        
+        return (self.getKey(self.file, key) is not None)
         
     def getKey(self, file, key):
         """Retrieves a key and its corresponding value
@@ -42,6 +62,10 @@ class LinuxRegistry(object):
         self._save(file, yaml.dump(d) )
 
     def _extractKey(self, obj, key):
+        """ Extracts the value of 'key' from 'obj'.
+            Obj is really a YAML object accessible
+            through normal Dict/List interface
+        """
         if (type(obj) is ListType ):
             for i in obj:
                 if (type(i) is DictType):
@@ -64,18 +88,28 @@ class LinuxRegistry(object):
             
 
     def _load(self, file):
-        result = None
+
         path = self._getPath(file)
             
         if (not os.path.exists(path) or not os.path.isfile(path)):
-            return result
+            return None
+        
+        mtime = os.path.getmtime(path)
+        
+        # check cache
+        if (path in self.cache):
+            if (mtime == self.cache[path][0]):
+                return self.cache[path][1]
+        
         try:
             infile = open(path,'r')
         except:
             raise RegistryException( 'LinuxRegistry: error loading file[%s]' % file )
 
+        result = None
         try:
             result = yaml.load(infile)
+            self.cache[path] = (mtime, result)
         except:
             raise RegistryException('LinuxRegistry: error parsing yaml from file [%s]' % file)
         finally:

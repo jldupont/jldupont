@@ -7,18 +7,23 @@ import sys
 
 class Registry(object):
     """Facade for the cross-platform Registry
+        Can be accessed like a dictionary: for this
+        functionality, an instance must be constructed
+        with the 'file' parameter specified.
     """
     reg = None
     
-    def __init__(self):
+    def __init__(self, file = None):
+        self.file = file
+        
         if (Registry.reg is not None):
             return
         if sys.platform[:3] == 'win':
             from jld.registry.windows import WindowsRegistry 
-            Registry.reg = WindowsRegistry()
+            Registry.reg = WindowsRegistry(file)
         else:
             from jld.registry.linux import LinuxRegistry
-            Registry.reg = LinuxRegistry()
+            Registry.reg = LinuxRegistry(file)
     
     def getKey(self, file, key):
         """GETS the specified key
@@ -36,6 +41,18 @@ class Registry(object):
                 return
         return Registry.reg.setKey(file, key, value)
     
+    # DICTIONARY INTERFACE
+    # ====================
+    
+    def __getitem__(self, key):
+        return Registry.reg[key]
+    
+    def __setitem__(self, key, value):
+        Registry.reg[key] = value
+    
+    def __contains__(self, key):
+        return (key in Registry.reg)
+        
 # ================================================================================
 
 if __name__=="__main__":
