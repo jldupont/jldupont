@@ -16,20 +16,18 @@ class Registry(object):
     def __init__(self, file = None):
         self.file = file
         
-        if (Registry.reg is not None):
-            return
         if sys.platform[:3] == 'win':
             from jld.registry.windows import WindowsRegistry 
-            Registry.reg = WindowsRegistry(file)
+            self.reg = WindowsRegistry(file)
         else:
             from jld.registry.linux import LinuxRegistry
-            Registry.reg = LinuxRegistry(file)
+            self.reg = LinuxRegistry(file)
     
     def getKey(self, file, key):
         """GETS the specified key
             @throws RegistryException
         """
-        return Registry.reg.getKey(file, key)
+        return self.reg.getKey(file, key)
     
     def setKey(self, file, key, value, cond = False):
         """SETS the specified key
@@ -39,19 +37,23 @@ class Registry(object):
             if (value is None):
                 #print "skipping key[%s]" % key
                 return
-        return Registry.reg.setKey(file, key, value)
+        return self.reg.setKey(file, key, value)
     
     # DICTIONARY INTERFACE
     # ====================
     
     def __getitem__(self, key):
-        return Registry.reg[key]
+        """ Returns the value associated with key ELSE None
+        """
+        if (key not in self.reg):
+            return None
+        return self.reg[key]
     
     def __setitem__(self, key, value):
-        Registry.reg[key] = value
+        self.reg[key] = value
     
     def __contains__(self, key):
-        return (key in Registry.reg)
+        return (key in self.reg)
         
 # ================================================================================
 

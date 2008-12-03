@@ -8,8 +8,11 @@ __msgs__ = ['unhandled_exception',]
 
 import re
 import sys
+from types import *
 from string import Template
 from optparse import OptionParser
+
+import jld.api as api
 
 class UIBase(object):
     """ Base class for Command Line UI
@@ -102,3 +105,39 @@ class UIBase(object):
 
         (self.options,self.args) = parser.parse_args()
         
+    def updateRegistry(self, reg, options, args):
+        """Updates the registry from the command-line args"""
+        for o in options:
+            #if we are told to update the registry
+            if ( o['reg'] ):
+                key = o['var']
+                val = getattr( args, key )
+                if (val is not None):
+                    reg[key] = val 
+
+    def integrateDefaults(self, defs, reg, options, params):
+        """Integrates the default values for each option if
+            no value can be found in the registry.
+            This method is used to build a complete parameters list.
+        """
+        for o in options:
+            key = o['var']
+            val = reg[key]
+            if val is None:
+                val = defs.defaults[key] if (key in defs.defaults) else None                    
+            params[key] = val
+
+    def verifyType(self, params, _options):
+        for o in _options:
+            if ('type' in o):
+                key  = o['var']
+                tipe = o['type']
+                value = params[key]
+                #print "key[%s] type[%s] value[%s] type value[%s]" % (key,tipe, value, type(value))
+                                
+                if (tipe is 'int') and (type(value) is not IntType):
+                    try:
+                        intVal = int(value)
+                        params[key] = intVal
+                    except:
+                        raise api.ErrorConfig('msg:error_config_type', {'key':key, 'type':tipe})

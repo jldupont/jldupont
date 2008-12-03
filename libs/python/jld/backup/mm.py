@@ -90,39 +90,17 @@ Commands:
         # ===================
 
         r = reg.Registry('mindmeister')
-        for o in _options:
-            if ( o['reg'] ):
-                val = getattr( ui.options, o['var'] )
-                if (val is not None):
-                    r[o['var']] = value 
-                #r.setKey('mindmeister', o['var'], getattr( ui.options, o['var'] ), cond=True)
-
+        ui.updateRegistry(r, _options, ui.options)
+        
         params = {}
             
         # integrate default config
         defs = mdef.MM_Defaults()
-        for o in _options:
-            key = o['var']
-            val = r.getKey('mindmeister', key)
-            if val is None:
-                val = defs.defaults[key] if (key in defs.defaults) else None
-            params[key] = val
-
+        ui.integrateDefaults(defs, r, _options, params)
+        
         # Verify parameter type
-        for o in _options:
-            if ('type' in o):
-                key  = o['var']
-                tipe = o['type']
-                value = params[key]
-                #print "key[%s] type[%s] value[%s] type value[%s]" % (key,tipe, value, type(value))
-                                
-                if (tipe is 'int') and (type(value) is not IntType):
-                    try:
-                        intVal = int(value)
-                        params[key] = intVal
-                    except:
-                        raise api.ErrorConfig('msg:error_config_type', {'key':key, 'type':tipe})
-                    
+        ui.verifyType(params, _options)
+                 
         # Configure Backup cmd object
         for o in _options:
             key = o['var']
