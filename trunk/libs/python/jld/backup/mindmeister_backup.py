@@ -45,12 +45,36 @@ class Backup(BaseCmd):
         
         self.msgs = msg.MM_Messages()
         self.r = reg.Registry()
+
+    # =========================================================
+    # =========================================================
+    def __contains__(self, key):
+        return key in self._configParams
+    
+    def __getitem__(self, key):
+        return getattr(self, key)
+    
+    def __setitem(self, key, value):
+        setattr(self, key, value)
+    
+    def __iter__(self):
+        self.iter = True
+        return self
+    
+    def next(self):
+        if (self.iter):
+            self.iter = False
+            return self
+        else:
+            raise StopIteration
+    
+    # =========================================================
+    # =========================================================
         
     def cmd_listconfig(self, *args):
         """Lists the configuration"""
-        pp = printer.MM_Printer_Config( self )
-        pp.run( all )
-        
+        pp = printer.MM_Printer_Config( self.msgs, self )
+        pp.run( self )
     
     def cmd_auth(self, *args):
         """Generates an authentication URL and opens a browser instance for the user"""
