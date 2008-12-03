@@ -76,21 +76,26 @@ Commands:
         ui.handleArguments(usage, _options)
 
         # == configuration ==
+        #
+        # Process options from the command line:
+        #  If an option is missing from the command line, look for it
+        #  in the registry.Use conditional 'setKey' if we have valid 
+        #  overriding values (i.e. not None) to update the registry.
+        #  Finally, for missing parameters, look for defaults.
+        #
         # PRECEDENCE:
         #  1) Command Line
         #  2) Registry
         #  3) Defaults
         # ===================
 
-        # Process options from the command line:
-        #  If an option is missing from the command line, look for it
-        #  in the registry.Use conditional 'setKey' if we have valid 
-        #  overriding values (i.e. not None) to update the registry.
-        #  Finally, for missing parameters, look for defaults.
-        r = reg.Registry()
+        r = reg.Registry('mindmeister')
         for o in _options:
-            if ( o['reg'] ): 
-                r.setKey('mindmeister', o['var'], getattr( ui.options, o['var'] ), cond=True)
+            if ( o['reg'] ):
+                val = getattr( ui.options, o['var'] )
+                if (val is not None):
+                    r[o['var']] = value 
+                #r.setKey('mindmeister', o['var'], getattr( ui.options, o['var'] ), cond=True)
 
         params = {}
             

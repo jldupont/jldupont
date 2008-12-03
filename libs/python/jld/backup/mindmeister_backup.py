@@ -29,6 +29,8 @@ class Backup(BaseCmd):
     """
     _regDomain = 'mindmeister'
     
+    _configParams = ['secret', 'api_key', 'export_path', 'export_maxnum', 'db_path']
+    
     def __init__(self):
         BaseCmd.__init__(self)
         self.secret = None
@@ -43,6 +45,11 @@ class Backup(BaseCmd):
         
         self.msgs = msg.MM_Messages()
         self.r = reg.Registry()
+        
+    def cmd_listconfig(self, *args):
+        """Lists the configuration"""
+        pp = printer.MM_Printer_Config( self )
+        pp.run( all )
         
     
     def cmd_auth(self, *args):

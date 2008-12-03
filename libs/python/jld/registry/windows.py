@@ -12,6 +12,24 @@ class WindowsRegistry(object):
     
     _win = "Software\\Python\\Registry\\%s"
 
+    def __init__(self, file = None):
+        self.file = file
+
+    def __getitem__(self, key):
+        if (self.file is None):
+            raise Exception('file property must be set to use the dict interface')        
+        return self.getKey(self.file, key)
+        
+    def __setitem__(self, key, value):
+        if (self.file is None):
+            raise Exception('file property must be set to use the dict interface')        
+        return self.setKey(self.file, key, value)
+        
+    def __contains__(self, key):
+        if (self.file is None):
+            raise Exception('file property must be set to use the dict interface')        
+        return (self.getKey(self.file, key) is not None)
+
     def getKey(self, file, key):
 
         result = None

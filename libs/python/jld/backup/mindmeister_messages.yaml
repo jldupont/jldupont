@@ -57,10 +57,15 @@ help_validation: Check documentation (missing [$param])
 help_protocol: Has the MindMeister API changed? [expecting '$param']
 help_registry_win: The registry key HKEY_LOCAL_MACHINE/Software/Python/Registry can't be accessed 
 help_registry_nix: The filesystem path /etc/python/registry can't be accessed
+
+# PRINTER related
+# ===============
 tbl_header_maps: Latest Maps
 tbl_footer_maps: ==end==
 tbl_header_export: Export Information
 tbl_footer_export: ==end==
+tbl_header_config: Configuration
+tbl_footer_config: ==end==
 
 # Daemon related
 # ==============
