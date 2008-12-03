@@ -21,7 +21,8 @@ do_auth: Please authentication application (use 'auth' command)
 
 # Errors / Exceptions
 # ===================
-error_update_db: Error whilst updateing the database
+error_config_type: Parameter [$key] should be of type[$type] 
+error_update_db: Error whilst updating the database
 error_cant_write: Error whilst writing to [$path]
 error_create_folder: Error whilst creating folder
 error_init_folder: Error whilst accessing folder

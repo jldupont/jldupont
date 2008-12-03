@@ -98,16 +98,14 @@ class Backup(BaseCmd):
         pp.run( details )
 
     def cmd_exportlist(self, *args):
-        """Lists the complete export list
-        """
+        """Lists the complete export list"""
         self._initDb()
         full_list = db.Maps.getExportList()
         pp = printer.MM_Printer_Maps( self.msgs )
         pp.run( full_list )
         
     def cmd_export(self, *args):
-        """Export (retrieves from MindMeister) up to 'export_maxnum' mindmaps which need refreshing.
-        """
+        """Export (retrieves from MindMeister) up to 'export_maxnum' mindmaps which need refreshing"""
         self._initDb()
         full_list = db.Maps.getToExportList()
 
@@ -120,9 +118,10 @@ class Backup(BaseCmd):
             ts = datetime.datetime.now()
             timestamp = "%s%s%s%s%s%s" % (ts.year, ts.month, ts.day, ts.hour, ts.minute, ts.second)                            
             res = self._exportOne( map.mapid, ts, timestamp )
-            #if (res is True):
-            #    self._updateDbOne( map, timestamp )
-                
+
+            if (res is True):
+                self._updateDbOne( map, ts )
+            
             # record result
             stack_result.append((map.mapid, res))
             
@@ -132,8 +131,7 @@ class Backup(BaseCmd):
                       
                  
     def cmd_deletedb(self, *args):
-        """Deletes the database
-        """
+        """Deletes the database"""
         self._deleteDb()
         
     # =========================================================
@@ -157,7 +155,6 @@ class Backup(BaseCmd):
         """
         params = {'id':mapid}
         signed_url = self.mm.sign_url(url, params)
-        print signed_url
         try:
             response = urllib2.urlopen(signed_url)
         except Exception,e:
@@ -168,9 +165,9 @@ class Backup(BaseCmd):
         """ Updates the database
         """
         try:
-            map.set( exported = timestamp )
-        except:
-            raise api.ErrorDb('msg:error_update_db')
+            map.exported = timestamp
+        except Exception,e:
+            raise api.ErrorDb('msg:error_update_db',{})
         
         
     def _writeOne(self, mapid, data, timestamp):
@@ -266,6 +263,10 @@ class Backup(BaseCmd):
         self.r.setKey(self._regDomain, 'auth_token', res.auth_token)
         
         return res.auth_token
+
+    def _deleteDb(self):
+        path = mos.replaceHome( self.db_path )
+        db.Db.deleteDb(path)
         
     # LAZY INITIALIZERS
     # =================
@@ -279,6 +280,3 @@ class Backup(BaseCmd):
             path = mos.replaceHome( self.db_path )
             self.db = db.Db( path )
 
-    def _deleteDb(self):
-        path = mos.replaceHome( self.db_path )
-        db.Db.deleteDb(path)

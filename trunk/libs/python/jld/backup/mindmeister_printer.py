@@ -31,7 +31,7 @@ class MM_Printer(printer.BasePrettyPrinter):
             if (field in entry):
                 f = entry[field]
                 v = f if f else ''
-                result = result + v + ' , '
+                result = result + str( v ) + ' , '
             
         print result.rstrip(' ,') 
        

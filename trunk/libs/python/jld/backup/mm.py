@@ -11,6 +11,7 @@ __version__ = "$Id$"
 import sys
 import logging
 import os.path
+from types import *
 from optparse import OptionParser
 
 # ASSUME THAT THE REQUIRED LIBS are available
@@ -36,7 +37,7 @@ _options =[
   {'o1':'-k', 'var':'api_key',       'action':'store',        'help':'config_key',    'reg': True, 'default': None},
   {'o1':'-f', 'var':'db_path',       'action':'store',        'help':'config_file',   'reg': True, 'default': None},
   {'o1':'-p', 'var':'export_path',   'action':'store',        'help':'config_path',   'reg': True, 'default': None},
-  {'o1':'-m', 'var':'export_maxnum', 'action':'store',        'help':'config_maxnum', 'reg': True, 'default': None},
+  {'o1':'-m', 'var':'export_maxnum', 'action':'store',        'help':'config_maxnum', 'reg': True, 'default': None, 'type':'int'},
   #{'o1':'-q', 'var':'quiet',  'action':'store_true',   'help':'quiet',        'reg': False, 'default': False },          
 ]
 
@@ -101,7 +102,22 @@ Commands:
             if val is None:
                 val = defs.defaults[key] if (key in defs.defaults) else None
             params[key] = val
-        
+
+        # Verify parameter type
+        for o in _options:
+            if ('type' in o):
+                key  = o['var']
+                tipe = o['type']
+                value = params[key]
+                #print "key[%s] type[%s] value[%s] type value[%s]" % (key,tipe, value, type(value))
+                                
+                if (tipe is 'int') and (type(value) is not IntType):
+                    try:
+                        intVal = int(value)
+                        params[key] = intVal
+                    except:
+                        raise api.ErrorConfig('msg:error_config_type', {'key':key, 'type':tipe})
+                    
         # Configure Backup cmd object
         for o in _options:
             key = o['var']
@@ -113,10 +129,9 @@ Commands:
         try: command = ui.args[0]
         except: command = None       
         backup.validateCommand(command)       
-         
+                 
         # get rid of command from the arg list
         ui.popArg()
-         
         # == DISPATCHER ==
         # ================
         getattr( backup, "cmd_%s" % command )(ui.args)
