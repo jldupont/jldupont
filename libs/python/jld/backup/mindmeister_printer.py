@@ -82,8 +82,8 @@ class MM_Printer_Config(MM_Printer):
     """ Prints map related info
     """
     
-    def __init__(self, obj):
-        MM_Printer.__init__(self, obj)
+    def __init__(self, msgs, obj):
+        MM_Printer.__init__(self, msgs)
         self._fields = getattr(obj, '_configParams')
 
     def header(self):
