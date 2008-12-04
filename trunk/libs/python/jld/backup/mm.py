@@ -38,7 +38,7 @@ _options =[
   {'o1':'-f', 'var':'db_path',       'action':'store',        'help':'config_file',   'reg': True, 'default': None},
   {'o1':'-p', 'var':'export_path',   'action':'store',        'help':'config_path',   'reg': True, 'default': None},
   {'o1':'-m', 'var':'export_maxnum', 'action':'store',        'help':'config_maxnum', 'reg': True, 'default': None, 'type':'int'},
-  #{'o1':'-q', 'var':'quiet',  'action':'store_true',   'help':'quiet',        'reg': False, 'default': False },          
+  {'o1':'-q', 'var':'quiet',         'action':'store_true',   'help':'quiet',         'reg': False, 'default': False },          
 ]
 
 def main():
@@ -88,24 +88,23 @@ Commands:
         #  2) Registry
         #  3) Defaults
         # ===================
-
         r = reg.Registry('mindmeister')
         ui.updateRegistry(r, _options, ui.options)
         
         params = {}
-            
+        
+        # integrate options which aren't subjected to the registry
+        ui.integrateOptions(ui.options, params, _options)
+        
         # integrate default config
         defs = mdef.MM_Defaults()
         ui.integrateDefaults(defs, r, _options, params)
-        
+
         # Verify parameter type
         ui.verifyType(params, _options)
-                 
+        
         # Configure Backup cmd object
-        for o in _options:
-            key = o['var']
-            val = params[key]
-            setattr( backup, key, val )
+        ui.copyOptions(params, backup, _options)
         
         # == command validation ==
         # ========================

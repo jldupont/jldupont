@@ -21,12 +21,16 @@ class Maps(SQLObject):
     """ MindMeister Maps database
         Used to store map related information
     """
+    # MindMeister attributes
     mapid    = StringCol()
     title    = StringCol()
     created  = DateTimeCol()
     modified = DateTimeCol()
     tags     = StringCol()
+    # internal attribute
     exported = DateTimeCol()
+    
+    _attributesToVerify = ['title', 'modified', 'tags']
     
     @classmethod
     def getToExportList(cls):
@@ -72,7 +76,9 @@ class Maps(SQLObject):
     def updateFromList(cls, list):
         """ Updates the database from the specified list
         """
-        updated = 0;  created = 0;
+        total = len(list);
+        updated = 0;  
+        created = 0;
         for entry in list:
             id = entry['mapid']
             map = Maps.select( Maps.q.mapid == id )
@@ -91,14 +97,44 @@ class Maps(SQLObject):
                          tags=entry['tags'],
                          created=entry['created'])
             else:
-                updated = updated  + 1
+                if (cls._processOne(entry, map[0])):
+                    updated = updated  + 1
+                """
                 map[0].set( title=entry['title'],
                          modified=entry['modified'], 
                          #exported=entry['exported'], 
                          tags=entry['tags'],
                          created=entry['created'])
+                """
+        return (total, updated, created)
         
-        
+    @classmethod
+    def _processOne(cls, entry, map):
+        """Processes one entry: verifies if the entry needs updating
+            entry
+                the map entry
+            map
+                the map sqlobject
+            
+            Returns True if the entry needed updating
+        """
+        updated = False
+        for att in cls._attributesToVerify:
+            local  = getattr(map, att)
+            remote = entry[att]
+            #print "att[%s] local[%s] remote[%s]" % (att, local, remote)
+            if (local != remote):
+                updated = True
+                break
+            
+        if (updated):
+            map.set( title=entry['title'],
+                     modified=entry['modified'], 
+                     tags=entry['tags'],
+                     created=entry['created'])           
+                
+        return updated
+    
     @classmethod
     def formatEntry(cls, entry):
         """

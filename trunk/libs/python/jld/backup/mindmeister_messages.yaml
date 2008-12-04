@@ -2,6 +2,10 @@
 # for MindMeister backup utility
 # @author: Jean-Lou Dupont
 
+# Reporting related
+report_update: Total[$total] Updated[$updated] New[$new]
+report_export: Total to export[$total] Successes[$successes]
+
 # CONFIG related
 # ==============
 config_email: configure email address
