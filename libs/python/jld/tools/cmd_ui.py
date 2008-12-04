@@ -115,17 +115,55 @@ class UIBase(object):
                 if (val is not None):
                     reg[key] = val 
 
-    def integrateDefaults(self, defs, reg, options, params):
+    def copyOptions(self, source, target, _options):
+        """ Copies all options from source to target
+            source
+                the source dictionary
+            target
+                the target object with dictionary access
+            _options
+                the reference options list
+        """
+        for o in _options:
+            key = o['var']
+            val = source[key]
+            setattr( target, key, val )
+
+    def integrateDefaults(self, defs, reg, _options, params):
         """Integrates the default values for each option if
             no value can be found in the registry.
-            This method is used to build a complete parameters list.
+            defs
+                the defaults dictionary
+            reg
+                the registry dictionary
+            _options
+                the options list
+            params
+                the result dictionary
         """
-        for o in options:
+        for o in _options:
             key = o['var']
-            val = reg[key]
-            if val is None:
-                val = defs.defaults[key] if (key in defs.defaults) else None                    
-            params[key] = val
+            # only options subjected to the registry!
+            if (o['reg']):
+                val = reg[key]
+                if val is None:
+                    val = defs.defaults[key] if (key in defs.defaults) else None                    
+                params[key] = val
+
+    def integrateOptions(self, options, params, _options):
+        """Integrate options that aren't subjected to the registry
+            options
+                the current options as parsed from the command line
+            params
+                the result dictionary
+            _options
+                the reference options list
+        """
+        for o in _options:
+            key = o['var']
+            if (not o['reg']):
+                val = getattr(options, key)
+                params[key] = val
 
     def verifyType(self, params, _options):
         for o in _options:

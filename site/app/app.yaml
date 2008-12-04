@@ -23,8 +23,9 @@ handlers:
 #BLOGGER
 #=======
 
-- url: /scripts
-  static_dir: scripts
+- url: /scripts/(.*)
+  static_files: scripts/\1
+  upload: scripts/(.*\.(css|js))
 
 #SERVER
 #======

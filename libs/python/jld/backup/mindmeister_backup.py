@@ -33,6 +33,7 @@ class Backup(BaseCmd):
     
     def __init__(self):
         BaseCmd.__init__(self)
+        self.quiet = False
         self.secret = None
         self.api_key = None
         self.auth_token = None
@@ -47,6 +48,8 @@ class Backup(BaseCmd):
         self.r = reg.Registry()
 
     # =========================================================
+    # Iteration & Dict access interfaces
+    #  Used for the command ''listconfig''
     # =========================================================
     def __contains__(self, key):
         return key in self._configParams
@@ -74,7 +77,8 @@ class Backup(BaseCmd):
     def cmd_listconfig(self, *args):
         """Lists the configuration"""
         pp = printer.MM_Printer_Config( self.msgs, self )
-        pp.run( self )
+        if (not self.quiet):
+            pp.run( self )
     
     def cmd_auth(self, *args):
         """Generates an authentication URL and opens a browser instance for the user"""
@@ -97,21 +101,25 @@ class Backup(BaseCmd):
         all = self.mm.getAllMaps()
         
         self._initDb()
-        db.Maps.updateFromList( all )
+        report = db.Maps.updateFromList( all )
+        if (not self.quiet):
+            print self.msgs.render('report_update', {'total':report[0],'updated': report[1], 'new': report[2]})
         
     def cmd_listmaps(self, *args):
         """ List the latest maps """
         self._prepareAuthorizedCommand()
         all = self.mm.getAllMaps()
         pp = printer.MM_Printer_Maps( self.msgs )
-        pp.run( all )
+        if (not self.quiet):
+            pp.run( all )
         
     def cmd_listdb(self, *args):
         """List the database content"""
         self._initDb()
         all = db.Maps.getAll()
         pp = printer.MM_Printer_Maps( self.msgs )
-        pp.run( all )        
+        if (not self.quiet):
+            pp.run( all )        
         
     def cmd_test(self, *args):
         """Test: for development/debugging purpose only"""
@@ -125,15 +133,17 @@ class Backup(BaseCmd):
             raise api.ErrorValidation( 'missing_param', {'param':'mapid'} )
         self._prepareAuthorizedCommand()      
         details = self.mm.getMapExport(mapid)
-        pp = printer.MM_Printer_Export( self.msgs )       
-        pp.run( details )
+        pp = printer.MM_Printer_Export( self.msgs ) 
+        if (not self.quiet):      
+            pp.run( details )
 
     def cmd_exportlist(self, *args):
         """Lists the complete export list"""
         self._initDb()
         full_list = db.Maps.getExportList()
         pp = printer.MM_Printer_Maps( self.msgs )
-        pp.run( full_list )
+        if (not self.quiet):
+            pp.run( full_list )
         
     def cmd_export(self, *args):
         """Export (retrieves from MindMeister) up to 'export_maxnum' mindmaps which need refreshing"""
@@ -144,13 +154,19 @@ class Backup(BaseCmd):
         
         cnt = self.export_maxnum
         self._prepareAuthorizedCommand()
-        stack_result = []  
+        stack_result = []
+        success = 0
+        total = 0
         for map in full_list:
+            
+            #SqlObject SelectResults has no 'len' method...
+            total = total + 1
             ts = datetime.datetime.now()
             timestamp = "%s%s%s%s%s%s" % (ts.year, ts.month, ts.day, ts.hour, ts.minute, ts.second)                            
             res = self._exportOne( map.mapid, ts, timestamp )
 
             if (res is True):
+                success = success + 1
                 self._updateDbOne( map, ts )
             
             # record result
@@ -159,7 +175,9 @@ class Backup(BaseCmd):
             cnt = cnt - 1
             if (cnt==0):
                 break
-                      
+                
+        if (not self.quiet):
+            print self.msgs.render('report_export', {'total': total, 'successes': success} )
                  
     def cmd_deletedb(self, *args):
         """Deletes the database"""
