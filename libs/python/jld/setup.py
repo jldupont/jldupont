@@ -1,16 +1,6 @@
 """ Jean-Lou Dupont's Python Library
     EGG setup
     
-    Dependencies:
-    =============
-    Registry package:
-        Yaml
-    Backup.mindmeister_db:
-        Sqlobject
-    Tools.messages package:
-        Yaml
-    
-    
 """
 import sys
 import os.path
@@ -28,17 +18,38 @@ URL = 'http://jldupont.googlecode.com/svn/tags/eggs/%s' % egg_name
 
 print "URL: %s" % URL
 
+_packages = ['jld',
+             'jld.api', 
+            'jld.backup', 
+            'jld.cmd', 
+            'jld.registry', 
+            'jld.tools'
+            ]
+
+_dependencies = []
+for p in _packages:
+    print "Processing package[%s] for dependencies" % p
+    __import__(p)
+    mod = sys.modules[p]
+    deps = getattr(mod,'__dependencies__')
+    if (len(deps)>0):
+        _dependencies = _dependencies + deps
+
+#some redundancies....
+print _dependencies
+
 setup(
     name = "jld",
     description = jld.__desc__,
     author_email = jld.__email__,
     author = jld.__author__,
     url    = URL,
-    long_description = jld.__desc__,
+    long_description = jld.__long_desc,
     version = jld.__version__,
     package_data = {'':['*.*']},
-    packages = ['jld', 'jld.api', 'jld.backup', 'jld.cmd', 'jld.registry', 'jld.tools' ],
-    scripts=[ 'jld/backup/scripts/mm.py','jld/backup/scripts/mm.bat' ],
+    packages = _packages,
+    scripts=[ 'jld/backup/scripts/mm.py','jld/backup/scripts/mm.bat', 'jld/backup/scripts/mm' ],
+    install_requires = _dependencies,
     zip_safe = False,
 )
 

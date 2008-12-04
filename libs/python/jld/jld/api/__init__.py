@@ -4,6 +4,7 @@
 
 __version__ = "$Id$"
 __author__ = "Jean-Lou Dupont"
+__dependencies__ = []
 
 import urllib
 from types import *
