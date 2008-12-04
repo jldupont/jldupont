@@ -6,6 +6,15 @@ runtime: python
 
 handlers:
 
+#FriendConnect
+- url: /canvas.html
+  static_files: res/friendconnect/canvas.html
+  upload: res/friendconnect/canvas.html
+- url: /rpc_relay.html
+  static_files: res/friendconnect/rpc_relay.html
+  upload: res/friendconnect/rpc_relay.html
+  
+
 # SERVICES
 # ========
 - url: /mm/(.*)
