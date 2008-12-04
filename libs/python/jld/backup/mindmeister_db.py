@@ -28,7 +28,10 @@ class Maps(SQLObject):
     modified = DateTimeCol()
     tags     = StringCol()
     # internal attribute
-    exported = DateTimeCol()
+    
+    #timestamp of the map exported i.e. corresponds to the
+    #'modified' attribute of the mindmeister map attributes
+    exported = DateTimeCol() 
     
     _attributesToVerify = ['title', 'modified', 'tags']
     
@@ -39,7 +42,7 @@ class Maps(SQLObject):
             i.e. exported datime is older
                 OR exported == None
         """
-        return cls.select(OR(cls.q.modified > cls.q.exported, cls.q.exported == None))
+        return cls.select(OR(cls.q.modified != cls.q.exported, cls.q.exported == None))
     
     @classmethod
     def getExportList(cls):
@@ -99,13 +102,7 @@ class Maps(SQLObject):
             else:
                 if (cls._processOne(entry, map[0])):
                     updated = updated  + 1
-                """
-                map[0].set( title=entry['title'],
-                         modified=entry['modified'], 
-                         #exported=entry['exported'], 
-                         tags=entry['tags'],
-                         created=entry['created'])
-                """
+                    
         return (total, updated, created)
         
     @classmethod

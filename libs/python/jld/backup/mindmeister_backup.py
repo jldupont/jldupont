@@ -95,7 +95,7 @@ class Backup(BaseCmd):
         url = self.mm.gen_auth_url('write', res.frob)
         webbrowser.open_new(url)
             
-    def cmd_umaps(self, *args):
+    def cmd_updatedb(self, *args):
         """ Updates the local database with the latest list of maps """
         self._prepareAuthorizedCommand()
         all = self.mm.getAllMaps()
@@ -112,6 +112,7 @@ class Backup(BaseCmd):
         pp = printer.MM_Printer_Maps( self.msgs )
         if (not self.quiet):
             pp.run( all )
+            print self.msgs.render('report_maps', {'total':len(all)})
         
     def cmd_listdb(self, *args):
         """List the database content"""
@@ -119,7 +120,8 @@ class Backup(BaseCmd):
         all = db.Maps.getAll()
         pp = printer.MM_Printer_Maps( self.msgs )
         if (not self.quiet):
-            pp.run( all )        
+            pp.run( all )   
+            print self.msgs.render('report_maps', {'total':len(all)})     
         
     def cmd_test(self, *args):
         """Test: for development/debugging purpose only"""
@@ -167,7 +169,7 @@ class Backup(BaseCmd):
 
             if (res is True):
                 success = success + 1
-                self._updateDbOne( map, ts )
+                self._updateDbOne( map )
             
             # record result
             stack_result.append((map.mapid, res))
@@ -210,11 +212,11 @@ class Backup(BaseCmd):
             raise api.ErrorNetwork(e) 
         return response.read()
         
-    def _updateDbOne(self, map, timestamp):
+    def _updateDbOne(self, map ):
         """ Updates the database
         """
         try:
-            map.exported = timestamp
+            map.exported = map.modified
         except Exception,e:
             raise api.ErrorDb('msg:error_update_db',{})
         
@@ -234,10 +236,19 @@ class Backup(BaseCmd):
         """ Generates a filepath related
             to an export map.
         """ 
-        return self.export_path_init + os.sep + mapid + '_' + timestamp + '.mm'
+        dir = self.export_path_init + os.sep + mapid
+        self._create_map_export_folder(dir)
+        
+        return dir + os.sep + mapid + '_' +timestamp + '.mm'
         
     # =========================================================
     # =========================================================
+    def _create_map_export_folder(self, dir):
+        """
+        """
+        mos.createDirIfNotExists(dir)
+    
+    
     def _init_export_folder(self):
         """ Creates the export folder IF it does not
             already exists

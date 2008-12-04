@@ -5,6 +5,7 @@
 # Reporting related
 report_update: Total[$total] Updated[$updated] New[$new]
 report_export: Total to export[$total] Successes[$successes]
+report_maps: Total maps found[$total]
 
 # CONFIG related
 # ==============

@@ -21,7 +21,8 @@ sys.path.append( path )
 
 import jld as jld
 
-URL = 'http://jldupont.googlecode.com/svn/trunk/libs/python/dist/jld-%s-py2.5.egg' % jld.__version__
+version = jld.__version__
+URL = 'http://jldupont.googlecode.com/svn/tags/eggs/jld-%s-py2.5.egg' % version
 
 print "URL: %s" % URL
 
@@ -38,3 +39,10 @@ setup(
     scripts=[ 'jld/backup/scripts/mm.py','jld/backup/scripts/mm.bat' ],
     zip_safe = False,
 )
+
+# Copy to tags directory
+import shutil
+
+#Find /tags by recursing downwards
+
+
