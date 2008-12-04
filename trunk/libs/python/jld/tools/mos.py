@@ -70,6 +70,17 @@ def createPathIfNotExists(path):
         os.makedirs( dir )
 
 
+def createDirIfNotExists(dir):
+    """ Creates the specified directory path
+        if it does not exist already.
+    """
+    if (os.path.exists(dir)):
+        return
+
+    if (not os.path.exists(dir)):
+        os.makedirs( dir )
+    
+
 # ==============================================
 # ==============================================
 
