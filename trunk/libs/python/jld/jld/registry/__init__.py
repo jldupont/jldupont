@@ -2,6 +2,7 @@
 """
 __author__  = "Jean-Lou Dupont"
 __version__ = "$Id$"
+__dependencies__ = ['pyyaml>=3.06']
 
 import sys
 
