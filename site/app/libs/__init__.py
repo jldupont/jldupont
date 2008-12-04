@@ -1,1 +1,0 @@
-# @author: Jean-Lou Dupont
