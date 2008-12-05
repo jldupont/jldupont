@@ -6,7 +6,7 @@ runtime: python
 
 handlers:
 
-#FriendConnect
+#FriendConnect on www.jldupont.com
 - url: /canvas.html
   static_files: res/friendconnect/canvas.html
   upload: res/friendconnect/canvas.html
@@ -34,20 +34,10 @@ handlers:
 
 - url: /scripts/(.*)
   static_files: scripts/\1
-  upload: scripts/(.*\.(css|js))
+  upload: scripts/(.*\.(css|js|gif|jpg|ico|html|png|jpeg))
 
 #SERVER
 #======
-
-# PEAR channel
-- url: /channel.xml
-  script: server/services/pear/channel.py
-  
-- url: /rest/(.*)
-  script: server/services/pear/rest.py
-  
-- url: /tags/(.*)
-  script: server/services/pear/tags.py
 
 # ACCESS service
 - url: /services/access/urls/(.*)/
@@ -89,6 +79,8 @@ handlers:
   upload: res/img/favicon.ico
   expiration: "7d"
 
+# ** DO NOT CHANGE THE ORDER **
+#==============================
 - url: /page/(.*)
   script: pages/main.py
 
@@ -101,7 +93,7 @@ handlers:
   expiration: "1d"
 
 
-#==old==
+#==old== GWT based front-page
 #- url: /favicon.ico
 #  static_files: client/www/com.jldupont.project.main/favicon.ico
 #  upload: client/www/com.jldupont.project.main/favicon.ico

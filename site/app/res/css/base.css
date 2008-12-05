@@ -2,8 +2,8 @@
 
 body { margin:0; padding:0; background:#477791; color:white; }
 body, th, td { font:12px/1.4em Verdana,sans-serif; }
-#container { position:relative; min-width:55em; max-width:100em; }
-#homepage #container { max-width:100em; }
+#container { position:relative; min-width:55em; max-width:120em; }
+#homepage #container { max-width:120em; }
 
 /* LINKS */
 
