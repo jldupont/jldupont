@@ -90,7 +90,7 @@ def load_template_source(template_name, template_dirs=None):
             return tpl
         except Exception,e:
             tried.append(filepath)
-            logging.debug('Exception [%s] type[%s]' % (e,type(e)))
+            logging.debug('filesystem_template_loader/load_template_source: Exception [%s] type[%s]' % (e,type(e)))
     if tried:
         error_msg = "Tried %s" % tried
     else:

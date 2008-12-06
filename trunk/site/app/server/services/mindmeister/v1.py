@@ -32,10 +32,11 @@ class ServiceMM( webapp.RequestHandler ):
             self.response.set_status(404)
             return
         
+        ip = self.request.remote_addr
         self.response.headers["Content-Type"] = mime
         self.response.set_status(200)
         self.response.out.write( res );
-        logging.info('mm format[%s] id[%s]' % (format, id))
+        logging.info('ip[%s] mm format[%s] id[%s]' % (ip, format, id))
         
     def fetch(self, format, id):
         url = self._api % (id, format)
