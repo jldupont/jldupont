@@ -12,15 +12,26 @@ import sys
 import logging
 import logging.handlers
 
-def logger( name ):
+def logger( name, include_console = True ):
     """ Returns a simple cross-platform logger
         E.g.
         log = logger.logger('my_logger')
         log.info('message')
     """
+    logging.basicConfig(level=logging.DEBUG,
+                        format="%(asctime)s %(name)-12s %(levelname)-8s: %(message)s ",
+                        )        
+        
+    formatter = logging.Formatter("%(asctime)s %(name)-12s %(levelname)-8s: %(message)s ")
     handler = xcLogger( name )
-    _logger = logging.Logger( name )
-    _logger.addHandler( handler )
+    handler.setFormatter(formatter)
+    _logger = logging.getLogger(name)
+    _logger.addHandler(handler)
+    if include_console:
+        console = logging.StreamHandler()
+        console.setFormatter(formatter)
+        _logger.addHandler(console)
+
     return _logger
 
 def xcLogger( appname ):
@@ -31,7 +42,7 @@ def xcLogger( appname ):
     if (sys.platform[:3] == 'win'):
         return logging.handlers.NTEventLogHandler( appname )
     
-    return logging.handlers.SysLogHandler('/dev/log')
+    return logging.handlers.SysLogHandler('/dev/log/%s.log' % appname )
 
     #More difficult to configure as it defaults to localhost:514 
     #return logging.handlers.SysLogHandler()         
@@ -42,11 +53,7 @@ def xcLogger( appname ):
 if __name__ == "__main__":
     """ Tests
     """
-    import logging
+    log = logger('Test_xcLogger', True)
     
-    handler = xcLogger('Test_xcLogger')
-    logger = logging.Logger('Test_xcLogger')
-    logger.addHandler( handler )
-    
-    logger.info( 'xcLogger -- TestMessage' )
+    log.info( 'TestMessage' )
     
