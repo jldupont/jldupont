@@ -12,7 +12,7 @@ import sys
 import logging
 import logging.handlers
 
-def logger( name, include_console = True ):
+def logger( name, include_console = True, include_syslog = True ):
     """ Returns a simple cross-platform logger
         E.g.
         log = logger.logger('my_logger')
@@ -23,10 +23,11 @@ def logger( name, include_console = True ):
                         )        
         
     formatter = logging.Formatter("%(asctime)s %(name)-12s %(levelname)-8s: %(message)s ")
-    handler = xcLogger( name )
-    handler.setFormatter(formatter)
-    _logger = logging.getLogger(name)
-    _logger.addHandler(handler)
+    syslog = xcLogger( name )
+    syslog.setFormatter(formatter)
+    _logger = logging.getLogger(name)    
+    if include_syslog:
+        _logger.addHandler(syslog)
     if include_console:
         console = logging.StreamHandler()
         console.setFormatter(formatter)
