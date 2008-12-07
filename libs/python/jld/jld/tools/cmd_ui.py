@@ -28,6 +28,7 @@ class UIBase(object):
     _platform_win32 = sys.platform[:3] == 'win'
     
     def __init__(self, msgs = None):
+        self.logger = None
         self.msgs = msgs
         self.options = None
         self.args = None
@@ -75,7 +76,8 @@ class UIBase(object):
             help = self.msgs.render( help_key, params )
             msg = msg + ': ' + help
         
-        print msg + ' ' + pmsg
+        result_msg = msg + ' ' + pmsg
+        self.logger.error( result_msg )
         
     def _resolveHelp(self, entry):
         if (self._platform_win32):
