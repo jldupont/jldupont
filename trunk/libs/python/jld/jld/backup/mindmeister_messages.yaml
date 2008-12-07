@@ -3,9 +3,10 @@
 # @author: Jean-Lou Dupont
 
 # Reporting related
-report_update: Total[$total] Updated[$updated] New[$new]
-report_export: Total to export[$total] Successes[$successes]
+report_update: cmd[updatedb] Total     [$total] Updated[$updated] New[$new]
+report_export: cmd[export]   Exportable[$total] Successes[$successes] Failure[$failures]
 report_maps: Total maps found[$total]
+report_auth: cmd[auth] frob[$frob]
 
 # CONFIG related
 # ==============
@@ -17,6 +18,7 @@ config_path: configure filesystem path for exports
 config_maxnum: configuration the maximum number of exports per run
 error_load_file: error occured whilst file [$path]
 
+syslog: syslog disable mode
 quiet: quiet mode
 configuration: Please configure 'secret' and 'api_key'
 reg_update_error: Unable to update registry

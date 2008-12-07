@@ -33,6 +33,7 @@ class Backup(BaseCmd):
     
     def __init__(self):
         BaseCmd.__init__(self)
+        self.logger = None
         self.quiet = False
         self.secret = None
         self.api_key = None
@@ -93,17 +94,19 @@ class Backup(BaseCmd):
         # Write permission is required for the export operation;
         # there is a bug on MindMeister's side...
         url = self.mm.gen_auth_url('write', res.frob)
+        msg = self.msgs.render('cmd_auth', {'frob':res.frob})
+        self.logger.info(msg)
         webbrowser.open_new(url)
             
     def cmd_updatedb(self, *args):
-        """ Updates the local database with the latest list of maps """
+        """ Updates the local database with the latest list of maps (logged) """
         self._prepareAuthorizedCommand()
         all = self.mm.getAllMaps()
         
         self._initDb()
         report = db.Maps.updateFromList( all )
-        if (not self.quiet):
-            print self.msgs.render('report_update', {'total':report[0],'updated': report[1], 'new': report[2]})
+        msg=self.msgs.render('report_update', {'total':report[0],'updated': report[1], 'new': report[2]})
+        self.logger.info( msg )
         
     def cmd_listmaps(self, *args):
         """ List the latest maps """
@@ -148,7 +151,7 @@ class Backup(BaseCmd):
             pp.run( full_list )
         
     def cmd_export(self, *args):
-        """Export (retrieves from MindMeister) up to 'export_maxnum' mindmaps which need refreshing"""
+        """Export (retrieves from MindMeister) up to 'export_maxnum' mindmaps which need refreshing (logged) """
         self._initDb()
         full_list = db.Maps.getToExportList()
 
@@ -158,9 +161,10 @@ class Backup(BaseCmd):
         self._prepareAuthorizedCommand()
         stack_result = []
         success = 0
+        failure = 0
         total = 0
         for map in full_list:
-            
+            self.logger.info('Exporting title[%s] mapid[%s]' % (map.title, map.mapid))
             #SqlObject SelectResults has no 'len' method...
             total = total + 1
             ts = datetime.datetime.now()
@@ -170,6 +174,8 @@ class Backup(BaseCmd):
             if (res is True):
                 success = success + 1
                 self._updateDbOne( map )
+            else:
+                failure = failure + 1
             
             # record result
             stack_result.append((map.mapid, res))
@@ -178,8 +184,8 @@ class Backup(BaseCmd):
             if (cnt==0):
                 break
                 
-        if (not self.quiet):
-            print self.msgs.render('report_export', {'total': total, 'successes': success} )
+        msg = self.msgs.render('report_export', {'total': total, 'successes': success, 'failures': failure} )
+        self.logger.info(msg)
                  
     def cmd_deletedb(self, *args):
         """Deletes the database"""

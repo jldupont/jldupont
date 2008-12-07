@@ -30,6 +30,7 @@ import jld.backup.mindmeister_messages as msg
 import jld.backup.mindmeister_ui as mui
 import jld.backup.mindmeister_defaults as mdef
 from   jld.tools.template import ExTemplate
+import jld.tools.logger as mlogger
 
 # ========================================================================================
 _options =[
@@ -39,10 +40,11 @@ _options =[
   {'o1':'-p', 'var':'export_path',   'action':'store',        'help':'config_path',   'reg': True, 'default': None},
   {'o1':'-m', 'var':'export_maxnum', 'action':'store',        'help':'config_maxnum', 'reg': True, 'default': None, 'type':'int'},
   {'o1':'-q', 'var':'quiet',         'action':'store_true',   'help':'quiet',         'reg': False, 'default': False },          
+  {'o1':'-l', 'var':'syslog',        'action':'store_true',   'help':'syslog',        'reg': False, 'default': False },  
 ]
 
 def main():
-
+    
     msgs   = msg.MM_Messages()
     ui     = mui.MM_UI()
     
@@ -73,7 +75,15 @@ Commands:
         tpl = ExTemplate( usage_template )
         usage = tpl.substitute( {'commands' : commands_help} )
     
+        # Use OptParse to process arguments
         ui.handleArguments(usage, _options)
+        
+        # Configure ourselves a logger
+        _quiet  = True  if ui.options.quiet  else False
+        _syslog = False if ui.options.syslog else True        
+        logger = mlogger.logger('mm', include_console = _quiet, include_syslog = _syslog )
+
+        backup.logger = logger
 
         # == configuration ==
         #
