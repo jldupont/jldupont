@@ -64,8 +64,7 @@ This command-line utility requires valid 'API_KEY' and 'SECRET' parameters
 obtained from MindMeister. In order to use this tool, the 'auth' command
 must first be called with the said valid parameters.
 
-The '-f' option is required for running 'mmd' daemon. This option configures
-the local Sqlite database used for storing map related information. 
+The commands which generate log entries are flagged with (logged) below.
 
 Commands:
 ^^{commands}"""
@@ -84,6 +83,7 @@ Commands:
         logger = mlogger.logger('mm', include_console = _quiet, include_syslog = _syslog )
 
         backup.logger = logger
+        ui.logger = logger
 
         # == configuration ==
         #
