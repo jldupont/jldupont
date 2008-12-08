@@ -64,6 +64,11 @@ This command-line utility requires valid 'API_KEY' and 'SECRET' parameters
 obtained from MindMeister. In order to use this tool, the 'auth' command
 must first be called with the said valid parameters.
 
+Usage:
+ Step 1) Authentication: use the 'auth' command with the '-s' and '-k' parameters
+ Step 2) Update local database: use the 'updatedb' command to retrieve/update the local map database
+ Step 3) Export: use the 'export' command to retrieve new maps / update existing ones 
+
 The commands which generate log entries are flagged with (logged) below.
 
 Commands:
