@@ -50,7 +50,6 @@ class UIBase(object):
         try:    params = exc.params
         except: params = None
             
-        #TODO: Also generates logging and/or email messages as appropriate.
         classe = re.compile("\'(.*)\'").search( str( exc.__class__ ) ).group(1)
         if (classe not in self._map):
             print self.msgs.render( 'unhandled_exception', {'exc': str( exc ) } )
