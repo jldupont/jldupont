@@ -3,7 +3,7 @@
 # @author: Jean-Lou Dupont
 
 # Reporting related
-report_update: cmd[updatedb] Total     [$total] Updated  [$updated]   New[$new]
+report_update: cmd[updatedb]      Total[$total]   Updated[$updated]       New[$new]
 report_export: cmd[export]   Exportable[$total] Successes[$successes] Failure[$failures]
 
 # CONFIG related
@@ -15,11 +15,10 @@ error_load_file: error occured whilst file [$path]
 
 syslog: syslog disable mode
 quiet: quiet mode
-configuration: Please configure 'secret' and 'api_key'
+configuration: 
 reg_update_error: Unable to update registry
 invalid_command: Invalid command [$cmd]
 use_help: Please use '-h' for help
-do_auth: Please authentication application (use 'auth' command)
 
 # Errors / Exceptions
 # ===================
@@ -30,10 +29,7 @@ error_create_folder: Error whilst creating folder
 error_init_folder: Error whilst accessing folder
 error_defaults: Defaults configuration error
 error_command: Invalid command [$cmd]
-error_getmaps: Error fetching maps [$msg]
 error_db: Error whilst creating the database file [$file]
-error_daemon: Daemon error
-error_auth: Authentication error
 error_network: Network error
 error_access: Access error
 error_object: Object access error
@@ -62,8 +58,6 @@ help_registry_nix: The filesystem path /etc/python/registry can't be accessed
 
 # PRINTER related
 # ===============
-tbl_header_maps: Latest Maps
-tbl_footer_maps: ==end==
 tbl_header_export: Export Information
 tbl_footer_export: ==end==
 tbl_header_config: Configuration

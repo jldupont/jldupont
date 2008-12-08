@@ -1,6 +1,6 @@
-#!/usr/bin/env python
+#! /usr/bin/env python
 """ Backup for Delicious bookmarks
-
+    @author: Jean-Lou Dupont
 """
 __author__  = "Jean-Lou Dupont"
 __version__ = "$Id$"
@@ -13,6 +13,8 @@ from optparse import OptionParser
 
 # ASSUME THAT THE REQUIRED LIBS are available
 # RELATIVE to this script => simplified install
+# TODO good for testing in dev environment,
+#      bad for eggs...
 levelsUp = 3
 path = os.path.abspath( __file__ )
 while levelsUp>0:
@@ -64,7 +66,7 @@ version $Id$ by Jean-Lou Dupont
 
 Usage:
  Step 1) Update local database: use the 'updatedb' command to retrieve/update the local database
- Step 2) Export: use the 'export' command to retrieve new / updated entries 
+ Step 2) Export: use the 'export' command to ...  
 
 The commands which generate log entries are flagged with (logged) below.
 
