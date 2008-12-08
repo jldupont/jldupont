@@ -41,7 +41,7 @@ def xcLogger( appname ):
     if (sys.platform[:3] == 'win'):
         return logging.handlers.NTEventLogHandler( appname )
     
-    return logging.handlers.TimedRotatingFileHandler('/var/log/%s' % appname)
+    return logging.handlers.TimedRotatingFileHandler('/var/log/%s.log' % appname)
 
     #More difficult to configure as it defaults to localhost:514 
     #return logging.handlers.SysLogHandler()         
