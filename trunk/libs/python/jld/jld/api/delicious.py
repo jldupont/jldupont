@@ -5,6 +5,7 @@
 
 __author__  = "Jean-Lou Dupont"
 __version__ = "$Id$"
+__all__ = ['Client']
 
 import os
 import sys
