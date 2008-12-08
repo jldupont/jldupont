@@ -1,4 +1,6 @@
-"""MindMeister WEB Service API
+""" MindMeister WEB Service API
+    Change List:
+    - Added 'public' attribute to the getlist method
 """
 __author__ = "Jean-Lou Dupont"
 __version__= "$Id$"
@@ -101,7 +103,7 @@ class MM_Response_getAuthToken(MM_ResponseBase):
 class MM_Response_getList(MM_ResponseBase):
     """ In response to mm.maps.getList
     """
-    _attribs = ( 'id', 'title', 'created', 'modified', 'tags')
+    _attribs = ( 'id', 'title', 'created', 'modified', 'tags', 'public')
     _remap   = { 'id': 'mapid' }
     
     def __init__(self, raw):
