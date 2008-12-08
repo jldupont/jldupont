@@ -32,7 +32,7 @@ class Backup(BaseCmd):
     """
     _regDomain = 'delicious'
     
-    # configuration parameters expected from the command-line ui
+    # configuration parameters expected from the coDeliciousand-line ui
     _configParams = ['username', 'password', 'export_path', 'export_maxnum', 'db_path']
     
     def __init__(self):
@@ -42,7 +42,6 @@ class Backup(BaseCmd):
         self.export_path_init = None
         self.export_path = None
         self.export_maxnum = None
-        self.mm = None
         self.db_path = None        
         self.db = None
         
@@ -78,13 +77,12 @@ class Backup(BaseCmd):
         
     def cmd_listconfig(self, *args):
         """Lists the configuration"""
-        pp = printer.MM_Printer_Config( self.msgs, self )
+        pp = printer.Delicious_Printer_Config( self.msgs, self )
         if (not self.quiet):
             pp.run( self )
     
     def cmd_updatedb(self, *args):
-        """ Updates the local database with the latest list of maps (logged) """
-        self._prepareAuthorizedCommand()
+        """ Updates the local database (logged) """
         all = self.mm.getAllMaps()
         
         self._initDb()
@@ -153,30 +151,6 @@ class Backup(BaseCmd):
     # =========================================================
     # =========================================================
 
-    def _exportOne(self, mapid, ts, timestamp):
-        """ Exports one map
-        """
-        try:
-            details = self.mm.getMapExport(mapid)
-            url  = details[0]['freemind']
-            data = self._fetchOne(mapid, url)
-            self._writeOne(mapid, data, timestamp)
-        except Exception,e:
-            return e
-        
-        return True
-        
-    def _fetchOne(self, mapid, url):
-        """ Fetches one map
-        """
-        params = {'id':mapid}
-        signed_url = self.mm.sign_url(url, params)
-        try:
-            response = urllib2.urlopen(signed_url)
-        except Exception,e:
-            raise api.ErrorNetwork(e) 
-        return response.read()
-        
     def _updateDbOne(self, map ):
         """ Updates the database
         """
@@ -184,27 +158,6 @@ class Backup(BaseCmd):
             map.exported = map.modified
         except Exception,e:
             raise api.ErrorDb('msg:error_update_db',{})
-        
-        
-    def _writeOne(self, mapid, data, timestamp):
-        """ Writes one map to the export folder
-        """
-        path = self._genFilePath(mapid, timestamp)
-        try:
-            fh = open( path, 'w' )
-            fh.write( data )
-            fh.close()
-        except Exception,e:
-            raise api.ErrorFile('msg:cant_write', {'path':path})        
-        
-    def _genFilePath(self, mapid, timestamp):
-        """ Generates a filepath related
-            to an export map.
-        """ 
-        dir = self.export_path_init + os.sep + mapid
-        self._create_map_export_folder(dir)
-        
-        return dir + os.sep + mapid + '_' +timestamp + '.mm'
         
     # =========================================================
     # =========================================================
