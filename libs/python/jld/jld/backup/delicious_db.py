@@ -149,7 +149,10 @@ class Db(object):
         sqlobject_filepath = db.formatSqliteURI(filepath)
 
         try:
-            connection_string = 'sqlite:///' + sqlobject_filepath
+            if (filepath == ':memory:'):
+                connection_string = 'sqlite:/:memory:'
+            else:
+                connection_string = 'sqlite:///' + sqlobject_filepath
             connection = connectionForURI( connection_string )
             sqlhub.processConnection = connection
         except Exception,e:
@@ -173,10 +176,11 @@ class Db(object):
             being the creation of the folder hierarchy
             (if required).
         """
-        try:
-            mos.createPathIfNotExists(filepath)
-        except Exception,e:
-            raise api.ErrorDb( e, {'file':filepath} )
+        if (filepath != ':memory:'):
+            try:
+                mos.createPathIfNotExists(filepath)
+            except Exception,e:
+                raise api.ErrorDb( e, {'file':filepath} )
         
         # lastly, try to create the db
         try:

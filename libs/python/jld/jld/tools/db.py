@@ -6,7 +6,6 @@
 __author__  = "Jean-Lou Dupont"
 __version__ = "$Id$"
 
-
 def formatSqliteURI( path ):
     """ Formats a filesystem path
         to a valid Sqlite URI.
@@ -16,5 +15,7 @@ def formatSqliteURI( path ):
         to a pipe character |.
         For a complete URI, just prepend sqlite:///
     """
+    if (path is ':memory:'):
+        return path
     return  path.replace('\\','/').replace(':','|')
 
