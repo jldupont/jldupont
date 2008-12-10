@@ -52,6 +52,10 @@ __sample_recent = """
   <post href="http://dev.chromium.org/developers/design-documents/extensions" hash="b02e129cdaa64cbbb54252cfbfebeeee" description="Extensions " tag="chromium, google" time="2008-12-01T19:31:46Z" extended=""/>
 </posts>
 """
+
+#<post href="http://www.gliffy.com/publish/1553333/" hash="77b18cae662d6935ca223de83607795d" description="AccessPoint" tag="my-diagrams" time="2008-12-08T19:10:03Z" extended=""/>
+# Hash parameter is not a function of the TAG nor the DESCRIPTION fields
+
 _posts_fields = ['href', 'hash', 'description', 'tag', 'time', 'extended']
 def Posts(raw):
     """ Response Processor
