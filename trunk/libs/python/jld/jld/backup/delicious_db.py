@@ -21,37 +21,14 @@ class Posts(SQLObject):
     """ Delicious Posts database
     """
     # Delicious attributes
-    mapid    = StringCol()
-    title    = StringCol()
-    created  = DateTimeCol()
-    modified = DateTimeCol()
-    tags     = StringCol()
+    #_posts_fields = ['href', 'hash', 'description', 'tag', 'time', 'extended']
+    href         = StringCol()
+    hash         = StringCol()
+    description  = StringCol()
+    time         = StringCol() #don't want to have conversion here...
+    tags         = StringCol()
     # internal attribute
-    
-    #timestamp of the map exported i.e. corresponds to the
-    #'modified' attribute of the mindmeister map attributes
-    exported = DateTimeCol() 
-    
-    _attributesToVerify = ['title', 'modified', 'tags']
-    
-    @classmethod
-    def getToExportList(cls):
-        """ Selects the maps for which 
-            'exported' < 'modified' 
-            i.e. exported datime is older
-                OR exported == None
-        """
-        return cls.select(OR(cls.q.modified != cls.q.exported, cls.q.exported == None))
-    
-    @classmethod
-    def getExportList(cls):
-        list = []
-        all = cls.getToExportList()
-  
-        for one in all:
-            entry = cls.formatOne(one)
-            list.append( entry )
-        return list
+    changed      = DateTimeCol() #timestamp of last detected modification
     
     @classmethod
     def getAll(cls):
@@ -66,12 +43,12 @@ class Posts(SQLObject):
     @classmethod
     def formatOne(cls, entry):
         result = {}
-        result['mapid'] = entry.mapid
-        result['title'] = entry.title
-        result['created'] = entry.created
-        result['modified'] = entry.modified
+        result['href'] = entry.href
+        result['hash'] = entry.hash
+        result['description'] = entry.description
+        result['time'] = entry.time
         result['tags'] = entry.tags
-        result['exported'] = entry.exported
+        result['changed'] = entry.changed
         return result
     
     @classmethod
@@ -82,27 +59,35 @@ class Posts(SQLObject):
         updated = 0;  
         created = 0;
         for entry in list:
-            id = entry['mapid']
-            map = Maps.select( Maps.q.mapid == id )
+            hash = entry['hash']
+            posts = cls.select( cls.q.hash == hash )
+            
+            #post already exists?
             try:
-                mid = map[0].mapid
+                post = posts[0].hash
             except:
-                mid = None
+                post = None
                 
             cls.formatEntry( entry )
             if (mid is None):
                 created = created + 1
-                Maps(   mapid=entry['mapid'], 
-                         title=entry['title'],
-                         modified=entry['modified'], 
-                         exported=entry.get('exported'), 
-                         tags=entry['tags'],
-                         created=entry['created'])
+                cls._createOne( entry )
             else:
                 if (cls._processOne(entry, map[0])):
                     updated = updated  + 1
                     
         return (total, updated, created)
+
+    @classmethod
+    def _createOne(cls, entry):
+        """ Creates one post entry
+        """
+        Posts(   hash=entry['hash'], 
+                 href=entry['href'],
+                 description=entry['description'], 
+                 tags=entry['tags'], 
+                 time=entry['time'],
+                 changed=None )
         
     @classmethod
     def _processOne(cls, entry, map):
