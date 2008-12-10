@@ -11,7 +11,6 @@ from sqlobject import *
 import sqlite3 as sql
 
 import jld.api as api
-import jld.tools.date as tdate
 import jld.tools.mos as mos
 import jld.tools.db as db
 
@@ -30,18 +29,30 @@ class Posts(SQLObject):
     # internal attribute
     changed      = DateTimeCol() #timestamp of last detected modification
     
+    _attributesToVerify = ['href', 'hash', 'description','time', 'tags']
+
+    @classmethod
+    def getChangedList(cls, dt):
+        """ Returns a list of entries changed since 'dt'
+            dt
+                the datetime timestamp to compare against
+        """
+        return cls.select(OR(cls.q.changed > dt, cls.q.changed == None))
+    
     @classmethod
     def getAll(cls):
+        """ Returns all the entries
+        """
         list = []
         all = cls.select()
         for one in all:
-            entry = cls.formatOne( one )
+            entry = cls._formatOne( one )
             list.append( entry )
             
         return list
     
     @classmethod
-    def formatOne(cls, entry):
+    def _formatOne(cls, entry):
         result = {}
         result['href'] = entry.href
         result['hash'] = entry.hash
@@ -54,6 +65,10 @@ class Posts(SQLObject):
     @classmethod
     def updateFromList(cls, list):
         """ Updates the database from the specified list
+            list
+                the list of dict entries
+            Returns:
+                tuple( total, updated, created )
         """
         total = len(list);
         updated = 0;  
@@ -64,16 +79,16 @@ class Posts(SQLObject):
             
             #post already exists?
             try:
-                post = posts[0].hash
+                post = posts[0]
             except:
                 post = None
                 
             cls.formatEntry( entry )
-            if (mid is None):
+            if (post is None):
                 created = created + 1
                 cls._createOne( entry )
             else:
-                if (cls._processOne(entry, map[0])):
+                if (cls._updateOne(entry, post)):
                     updated = updated  + 1
                     
         return (total, updated, created)
@@ -87,41 +102,36 @@ class Posts(SQLObject):
                  description=entry['description'], 
                  tags=entry['tags'], 
                  time=entry['time'],
-                 changed=None )
+                 changed=datetime.datetime.now() )
         
     @classmethod
-    def _processOne(cls, entry, map):
+    def _updateOne(cls, entry, post):
         """Processes one entry: verifies if the entry needs updating
             entry
-                the map entry
-            map
-                the map sqlobject
+                the entry
+            post
+                the sqlobject
             
             Returns True if the entry needed updating
         """
-        updated = False
+        needsUpdate = False
         for att in cls._attributesToVerify:
             local  = getattr(map, att)
             remote = entry[att]
             #print "att[%s] local[%s] remote[%s]" % (att, local, remote)
             if (local != remote):
-                updated = True
+                needsUpdate = True
                 break
             
-        if (updated):
-            map.set( title=entry['title'],
-                     modified=entry['modified'], 
+        if (needsUpdate):
+            post.set( href=entry['href'],
+                     hash=entry['hash'], 
                      tags=entry['tags'],
-                     created=entry['created'])           
+                     description=entry['description'],
+                     time=entry['time'],
+                     changed=datetime.datetime.now() )           
                 
-        return updated
-    
-    @classmethod
-    def formatEntry(cls, entry):
-        """
-        """
-        entry['modified'] = tdate.convertDate( entry['modified'] )
-        entry['created'] = tdate.convertDate( entry['created'] )
+        return needsUpdate
             
 # ==============================================        
 
@@ -146,7 +156,7 @@ class Db(object):
             raise api.ErrorDb( e, {'file':filepath} )
 
         #table already exists ... no big deal
-        Maps.createTable(ifNotExists=True)
+        Posts.createTable(ifNotExists=True)
     
     @classmethod
     def deleteDb(cls, filepath):
