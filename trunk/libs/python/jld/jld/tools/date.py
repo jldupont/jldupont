@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""
+"""Date related tools
     @author: Jean-Lou Dupont
 """
 
@@ -15,7 +15,7 @@ def convertDate( date ):
         Input format:   YYYY-MM-DD HH:MM:SS.ssssss
         Output format:  datetime
         
-        @throws Exception
+        throws: Exception
     """
     sdate = date.split('.')    
     return datetime.datetime.strptime(sdate[0], "%Y-%m-%d %H:%M:%S")
