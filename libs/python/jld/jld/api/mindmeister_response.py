@@ -1,6 +1,6 @@
 """ MindMeister WEB Service API
     Change List:
-    - Added 'public' attribute to the getlist method
+     - Added 'public' attribute to the getlist method
 """
 __author__ = "Jean-Lou Dupont"
 __version__= "$Id$"

@@ -1,5 +1,5 @@
 """ API tools
-    @author Jean-Lou Dupont
+    @author: Jean-Lou Dupont
 """
 
 __version__ = "$Id$"

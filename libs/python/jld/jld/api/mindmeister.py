@@ -96,7 +96,7 @@ class MM_Client(MM):
                
     def getAllMaps(self):
         """ Retrieves a current list of all maps
-            @throws jld.api.Error*
+            @throws: jld.api.Error*
         """
         per_page = 100;  pages = 0
         total = 0;  count = 0;  page = 1;  maps = []
@@ -113,7 +113,7 @@ class MM_Client(MM):
         
     def getMapsPage(self, page, per_page):
         """ Retrieves one page of the map list
-            @throws jld.api.Error*
+            @throws: jld.api.Error*
         """
         raw = self.do(method='mm.maps.getList', auth_token = self.auth_token, 
                       page = page, per_page = per_page)
