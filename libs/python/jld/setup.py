@@ -65,7 +65,6 @@ for p in _packages:
 print "Dependencies:", 
 print _dependencies
 
-"""
 setup(
     name = "jld",
     description = jld.__desc__,
@@ -80,7 +79,6 @@ setup(
     install_requires = _dependencies,
     zip_safe = False,
 )
-"""
 
 import shutil
 
