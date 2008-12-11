@@ -26,13 +26,13 @@ class Registry(object):
     
     def getKey(self, file, key):
         """GETS the specified key
-            @throws RegistryException
+            @raise RegistryException: exception
         """
         return self.reg.getKey(file, key)
     
     def setKey(self, file, key, value, cond = False):
         """SETS the specified key
-            @throws RegistryException
+            @raise RegistryException: exception
         """
         if (cond):
             if (value is None):

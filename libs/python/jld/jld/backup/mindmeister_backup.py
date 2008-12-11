@@ -288,12 +288,6 @@ class Backup(BaseCmd):
     
     def _prepareAuthorizedCommand(self):
         """Prepares for an authorized command.
-            Existing auth_token in registry
-                1a) valid?  then proceed
-                1b) else: remove frob & token from registry
-            Existing frob?
-                2b) try to get a token
-                    inform user to auth
         """
         self._initMM()
         auth_token = self.r.getKey(self._regDomain, 'auth_token')

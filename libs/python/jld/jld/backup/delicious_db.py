@@ -34,8 +34,7 @@ class Posts(SQLObject):
     @classmethod
     def getChangedList(cls, dt):
         """ Returns a list of entries changed since 'dt'
-            dt
-                the datetime timestamp to compare against
+            @param dt: the datetime timestamp to compare against
         """
         return cls.select(OR(cls.q.changed > dt, cls.q.changed == None))
     
@@ -65,10 +64,8 @@ class Posts(SQLObject):
     @classmethod
     def updateFromList(cls, list):
         """ Updates the database from the specified list
-            list
-                the list of dict entries
-            Returns:
-                tuple( total, updated, created )
+            @param list: the list of dict entries
+            @return: tuple( total, updated, created )
         """
         total = len(list);
         updated = 0;  
@@ -107,12 +104,10 @@ class Posts(SQLObject):
     @classmethod
     def _updateOne(cls, entry, post):
         """Processes one entry: verifies if the entry needs updating
-            entry
-                the entry
-            post
-                the sqlobject
+            @param entry: the entry
+            @param post:  the sqlobject
             
-            Returns True if the entry needed updating
+            @return: True if the entry needed updating
         """
         needsUpdate = False
         for att in cls._attributesToVerify:
@@ -137,7 +132,7 @@ class Posts(SQLObject):
 
 
 class Db(object):
-    """ Db class: used to bootstrap SQLObject 
+    """ Db class; used to bootstrap SQLObject 
     """
     def __init__(self, filepath):
         # verify that the db file exists first

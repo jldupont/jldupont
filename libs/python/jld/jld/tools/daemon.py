@@ -56,9 +56,8 @@ class BaseDaemon(object):
     _REDIRECT_TO = os.devnull if hasattr(os,"devnull") else "/dev/null"
     
     def __init__(self, name, loggerFactory = defaultLogger):
-        """ name:  name of the daemon
-            loggerFactory: a function acting as factory
-                            that creates a logger instance
+        """ @param name: name of the daemon
+            @param loggerFactory: a function acting as factory that creates a logger instance
         """
         self.name = name
         self.loggerFactory = loggerFactory
@@ -77,27 +76,33 @@ class BaseDaemon(object):
         return "[%s] - %s" % (self.name, msg)
 
     def logdebug(self, msg):
+        """Debug"""
         self._createLogger()
         msg = self._format(msg)
         if (self.logger):
             self.logger.debug(msg)
     def loginfo(self, msg):
+        """Info"""
         self._createLogger()
         msg = self._format(msg)
         if (self.logger):
             self.logger.info(msg)
     def logwarning(self, msg):
+        """Warning"""
         self._createLogger()
         msg = self._format(msg)
         if (self.logger):
             self.logger.warning(msg)
     def logerror(self, msg):
+        """Error"""
         self._createLogger()
         msg = self._format(msg)
         if (self.logger):
             self.logger.error(msg)
 
     def findPID(self):
+        """ Returns the I{pid} of the currently running instance of this daemon class. 
+        """
         pf = None
         try:
             pf = open(self.pidfile,'r')

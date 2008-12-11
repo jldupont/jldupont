@@ -17,8 +17,8 @@ def Logger(console_quiet = False, syslog_address = '/dev/log/mm.log'):
     """ Builds a Logger
         By default, outputs to stdout & syslog
         
-        console_quiet
-            True: disables logging to stdout
+        @param console_quiet: if True, disables logging to stdout
+        @param syslog_address: the address to use for syslog
     """
     logging.basicConfig(level=logging.DEBUG,
                         format="%(asctime)s %(name)-12s %(levelname)-8s: %(message)s ",

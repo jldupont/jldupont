@@ -23,7 +23,7 @@ __sample__tags = """
 <tags>
 """
 def Tags(raw):
-    """ Response Processor
+    """ Response Processor for B{Tags} objects
     """
     try:
         e = minidom.parseString(raw).documentElement
@@ -58,7 +58,7 @@ __sample_recent = """
 
 _posts_fields = ['href', 'hash', 'description', 'tag', 'time', 'extended']
 def Posts(raw):
-    """ Response Processor
+    """ Response Processor for B{Posts} objects
     """
     try:
         e = minidom.parseString(raw).documentElement
@@ -89,7 +89,7 @@ __sample_update = """
 <update time="2008-12-01T20:36:01Z" inboxnew="0"/>
 """
 def Update(raw):
-    """ Response Processor
+    """ Response Processor for B{Update} objects
     """
     try:
         e = minidom.parseString(raw).documentElement
@@ -107,6 +107,8 @@ __sample_bundle = """
 </bundles>
 """
 def Bundle(raw):
+    """ Response processor for B{Bundle} object
+    """
     try:
         e = minidom.parseString(raw).documentElement
         b = e.getElementsByTagName('bundle')[0]
@@ -129,6 +131,8 @@ __sample_bundles = """
 """
 
 def Bundles(raw):
+    """ Response processor for B{Bundles} objects
+    """
     try:
         e = minidom.parseString(raw).documentElement
         
@@ -150,6 +154,8 @@ __sample_hashes = """
 </posts>
 """
 def Hashes(raw):
+    """ Response processor B{Hashes} objects
+    """ 
     try:
         e = minidom.parseString(raw).documentElement
         
