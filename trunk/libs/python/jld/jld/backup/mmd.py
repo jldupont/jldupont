@@ -4,9 +4,9 @@
     @author: Jean-Lou Dupont
     
     Prerequisites:
-    - the keys 'secret', 'api_key' and 'file' be properly set in the registry.
-      This filesystem path points to the Sqlite database used to
-      store the map related information.
+     - the keys 'secret', 'api_key' and 'file' be properly set in the registry.
+       This filesystem path points to the Sqlite database used to
+       store the map related information.
       
 """
 __author__  = "Jean-Lou Dupont"

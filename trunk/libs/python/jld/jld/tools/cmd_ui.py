@@ -16,14 +16,7 @@ import jld.api as api
 
 class UIBase(object):
     """ Base class for Command Line UI
-        This class expects a _map dict with the following format:
-        {    exception_class : {
-                'msg':      message_key,
-                'help':     OS_independent_help_key  #OPTIONAL and only used if help_win nor help_nix present
-                'help_win': win_dependent_help_key,  #OPTIONAL
-                'help_nix': nix_dependent_help_key,  #OPTIONAL
-             }
-        }
+        @see: mindmeister.py for example
     """
     _platform_win32 = sys.platform[:3] == 'win'
     
@@ -46,6 +39,7 @@ class UIBase(object):
     def handleError( self, exc ):
         """ Displays, if required, an appropriate user message
             corresponding to an error condition.
+            @param exc: Exception being raised
         """
         try:    params = exc.params
         except: params = None
@@ -118,12 +112,9 @@ class UIBase(object):
 
     def copyOptions(self, source, target, _options):
         """ Copies all options from source to target
-            source
-                the source dictionary
-            target
-                the target object with dictionary access
-            _options
-                the reference options list
+            @param source: the source dictionary
+            @param target: the target object with dictionary access
+            @param _options: the reference options list
         """
         for o in _options:
             key = o['var']
@@ -133,14 +124,10 @@ class UIBase(object):
     def integrateDefaults(self, defs, reg, _options, params):
         """Integrates the default values for each option if
             no value can be found in the registry.
-            defs
-                the defaults dictionary
-            reg
-                the registry dictionary
-            _options
-                the options list
-            params
-                the result dictionary
+            @param defs: the defaults dictionary
+            @param reg: the registry dictionary
+            @param _options: the options list
+            @param params: the result dictionary
         """
         for o in _options:
             key = o['var']
@@ -153,12 +140,9 @@ class UIBase(object):
 
     def integrateOptions(self, options, params, _options):
         """Integrate options that aren't subjected to the registry
-            options
-                the current options as parsed from the command line
-            params
-                the result dictionary
-            _options
-                the reference options list
+            @param options: the current options as parsed from the command line
+            @param params: the result dictionary
+            @param _options: the reference options list
         """
         for o in _options:
             key = o['var']
@@ -167,6 +151,8 @@ class UIBase(object):
                 params[key] = val
 
     def verifyType(self, params, _options):
+        """ Performs type verification
+        """
         for o in _options:
             if ('type' in o):
                 key  = o['var']

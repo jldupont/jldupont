@@ -39,8 +39,7 @@ class Maps(SQLObject):
     def getToExportList(cls):
         """ Selects the maps for which 
             'exported' < 'modified' 
-            i.e. exported datime is older
-                OR exported == None
+            ie: exported datime is older OR exported == None
         """
         return cls.select(OR(cls.q.modified != cls.q.exported, cls.q.exported == None))
     
@@ -108,12 +107,9 @@ class Maps(SQLObject):
     @classmethod
     def _processOne(cls, entry, map):
         """Processes one entry: verifies if the entry needs updating
-            entry
-                the map entry
-            map
-                the map sqlobject
-            
-            Returns True if the entry needed updating
+            @param entry: the map entry
+            @param map: the map sqlobject
+            @return: True if the entry needed updating
         """
         updated = False
         for att in cls._attributesToVerify:
@@ -134,7 +130,7 @@ class Maps(SQLObject):
     
     @classmethod
     def formatEntry(cls, entry):
-        """
+        """ Formats one entry
         """
         entry['modified'] = tdate.convertDate( entry['modified'] )
         entry['created'] = tdate.convertDate( entry['created'] )

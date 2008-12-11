@@ -2,7 +2,7 @@
 """ Backup for MindMeister mindmaps
 
     Dependencies:
-        module yaml   (available @ http://pyyaml.org/wiki/PyYAML)
+     - module yaml   (available @ http://pyyaml.org/wiki/PyYAML)
 
 """
 __author__  = "Jean-Lou Dupont"

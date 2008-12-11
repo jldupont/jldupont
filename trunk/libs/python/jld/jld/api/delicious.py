@@ -32,6 +32,8 @@ import jld.api.delicious_objects as delObjects
 
 class Waiter(object):
     """ Serves as throttle to play nice with the terms of use.
+        This class does not need to be directly manipulated by
+        a client of this library.
     """
     def __init__(self):
         self.lastAccess = None
@@ -68,7 +70,9 @@ class Api(object):
         self.auth = "Basic %s" % ( base64.encodestring("%s:%s" % (self.username, self.password)).strip() )
         
     def do_method(self, query, **args):
-        """ Generic method handler
+        """ Generic method handler.
+            @param query: the query method string
+            @param args: the argument list 
         """
         param = api.versaUrlEncode( args, True )
         frag = '?' + param if param else ''
@@ -105,14 +109,15 @@ class Client(object):
     def getLastUpdate(self):
         """ Retrieves the time of the last update
             Method: https://api.del.icio.us/v1/posts/update
+            @return: an B{Update} object
         """
         raw = self.api.do_method('posts/update')
         return delObjects.Update( raw )        
 
     def getAllBundles(self):
         """ Retrieves all bundles
-            Returns a list of bundles
             Method: https://api.del.icio.us/v1/tags/bundles/all
+            @return: a list of B{Bundle} objects
         """
         raw = self.api.do_method('tags/bundles/all')
         return delObjects.Bundles(raw)
@@ -120,6 +125,8 @@ class Client(object):
     def getBundle(self, name):
         """ Returns a specific bundle
             Method: https://api.del.icio.us/v1/tags/bundles/all?bundle=NAME
+            @param name: the input bundle name 
+            @return: a B{Bundle} object
         """
         raw = self.api.do_method('tags/bundles/all', bundle=name)
         return delObjects.Bundle(raw)
@@ -127,6 +134,7 @@ class Client(object):
     def getAllTags(self):
         """ Retrieves all tags
             Method: https://api.del.icio.us/v1/tags/get
+            @return: list of B{Tags} objects
         """
         raw = self.api.do_method('tags/get')
         return delObjects.Tags(raw)
@@ -134,6 +142,12 @@ class Client(object):
     def getPosts(self, tag = None, url = None, hashes = None, dt = None, meta = 'yes'):
         """ Retrieves a specific post
             Method: https://api.del.icio.us/v1/posts/get
+            @param tag: optional tag (serves as filter)
+            @param url: optional url (serves as filter)
+            @param hashes: optional hash list (filter)
+            @param dt: optional date (filter)
+            @param meta: optional meta parameter    
+            @return: a B{Post} object
         """
         raw = self.api.do_method('posts/get', tag=tag, url=url, hashes=hashes, dt=dt, meta=meta )
         return delObjects.Posts(raw)
@@ -142,6 +156,9 @@ class Client(object):
         """ Retrieves the recent posts up to COUNT
             and filtered by TAG.
             Method: https://api.del.icio.us/v1/posts/recent
+            @param tag: optional filter by tag
+            @param count: optional limit count
+            @return: list of B{Post} objects  
         """
         if (tag):
             raw = self.api.do_method('posts/recent', tag=tag, count=count)
@@ -153,6 +170,7 @@ class Client(object):
     def getAllHashes(self):
         """ Retrieves the list of all hashes
             Method: https://api.del.icio.us/v1/posts/all?hashes
+            @return: list of B{Hashes} objects
         """
         raw = self.api.do_method('posts/all?hashes')
         return delObjects.Hashes(raw)

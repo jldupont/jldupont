@@ -11,8 +11,9 @@ from types import *
 
 def alphaOrderParams(liste):
     """ Orders a dictionary based parameters list 
-        (e.g. {key:value} ) by alphabetical key order.
-        Returns the resulting list
+        by alphabetical key order.
+        @param liste: input dictionary 
+        @return: the resulting list
     """
     keys = liste.keys()
     keys.sort()
@@ -23,7 +24,9 @@ def alphaOrderParams(liste):
 
 
 def concatenateParams(liste):
-    """Concatenates [ (key,value) ] list
+    """Concatenates list of tuples of the form (key,value)
+       into the form I{key=value}
+       @param liste: input list of tuples(key,value)
     """
     result = ''
     for key,value in liste:
@@ -34,6 +37,8 @@ def concatenateParams(liste):
 def makeList(liste):
     """ Makes an url encoded list
         item1+item2+...
+        @param liste: input item list
+        @return: string of the form I{item1+item2+...}
     """
     result = ''
     for item in liste:
@@ -48,11 +53,14 @@ def formatParams(liste):
     return urllib.urlencode( liste, True )
 
 def versaUrlEncode(liste, RemoveNone = False):
-    """ Cases:
-        a) 'key'
-        b) ('key', 'value')
-        c) ('key', [ value list ] )
-        d) { 'key1': 'value1', 'key2':['v1', 'v2'] , 'some_key':None } #RemoveNone affects 'some_key'
+    """ Versatile URL encoder. Handles the following cases:
+        1. list of key
+        2. list of tuple (key,value)
+        3. list of tuple (key, [values])
+        4. dictionary of the form { 'key1': 'value1', 'key2':['v1', 'v2'] , 'some_key':None } 
+        
+        @param RemoveNone: affects 'some_key' in the use case #4 above
+        @return: url encoded string
     """
     result = ''
     if (type(liste) is DictType):
@@ -115,15 +123,15 @@ class ErrorGeneric(Exception):
         self.params = params
         
 class ErrorFile(ErrorGeneric):
-    """ Generic filesystem error e.g. can't write to filepath
+    """ Generic filesystem error eg  can't write to filepath
     """
         
 class ErrorDb(ErrorGeneric):
-    """ Generic Db error e.g. can't open database file
+    """ Generic Db error eg  can't open database file
     """
 
 class ErrorNetwork(ErrorGeneric):
-    """ Error at the network layer e.g. DNS error, no connection etc. 
+    """ Error at the network layer eg  DNS error, no connection etc. 
     """
 
 class ErrorAuth(ErrorGeneric):
@@ -131,39 +139,39 @@ class ErrorAuth(ErrorGeneric):
     """
 
 class ErrorAccess(ErrorGeneric):
-    """ Generic Access error e.g. restricted access
+    """ Generic Access error eg  restricted access
     """
 
 class ErrorObject(ErrorGeneric):
-    """ Generic object error e.g. object not found
+    """ Generic object error eg  object not found
     """
 
 class ErrorMethod(ErrorGeneric):
-    """ Generic method error e.g. unavailable method for API end-point etc.
+    """ Generic method error eg  unavailable method for API end-point etc.
     """
 
 class ErrorValidation(ErrorGeneric):
-    """ Generic validation error e.g. invalid parameter
+    """ Generic validation error eg  invalid parameter
     """
 
 class ErrorProperty(ErrorGeneric):
-    """ Generic property error e.g. feature X not available
+    """ Generic property error eg  feature X not available
     """
 
 class ErrorProtocol(ErrorGeneric):
-    """ Generic protocol error e.g. expecting parameter X but not found
+    """ Generic protocol error eg  expecting parameter X but not found
     """
 
 class ErrorInvalidCommand(ErrorGeneric):
-    """ Generic command error e.g. invalid command from cmd-line utility 
+    """ Generic command error eg  invalid command from cmd-line utility 
     """
 
 class ErrorDaemon(ErrorGeneric):
-    """ Generic daemon error e.g. can't os.fork
+    """ Generic daemon error eg  can't os.fork
     """
 
 class ErrorConfig(ErrorGeneric):
-    """ Generic configuration error e.g. can't load configuration from filesystem
+    """ Generic configuration error eg  can't load configuration from filesystem
     """ 
     
 # =========================================================================

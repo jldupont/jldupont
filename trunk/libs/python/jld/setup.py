@@ -47,6 +47,11 @@ _packages = ['jld',
             'jld.tools'
             ]
 
+_scripts = [ 'jld/backup/scripts/mm.py',
+            'jld/backup/scripts/mm.bat', 
+            'jld/backup/scripts/mm' 
+            ]
+
 _dependencies = []
 for p in _packages:
     print "Processing package[%s] for dependencies" % p
@@ -71,7 +76,7 @@ setup(
     version = jld.__version__,
     package_data = {'':['*.*']},
     packages = _packages,
-    scripts=[ 'jld/backup/scripts/mm.py','jld/backup/scripts/mm.bat', 'jld/backup/scripts/mm' ],
+    scripts  = _scripts,
     install_requires = _dependencies,
     zip_safe = False,
 )
