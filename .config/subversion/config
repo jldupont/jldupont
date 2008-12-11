@@ -1,0 +1,13 @@
+[miscellany]
+enable-auto-props = yes
+[auto-props]
+* = svn:keywords=LastChangedDate LastChangeRevision LastChangedBy Id
+*.jpg = svn:mime-type=image/jpeg
+*.png = svn:mime-type=image/png
+*.properties = svn:eol-style=native
+*.sh = svn:eol-style=native;svn:executable
+*.txt = svn:eol-style=native
+*.xml = svn:eol-style=native 
+*.html = svn:mime-type=text/html
+*.css  = svn:mime-type=text/css
+*.js   = svn:mime-type=text/javascript
