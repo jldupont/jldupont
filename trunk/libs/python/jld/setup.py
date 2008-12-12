@@ -71,11 +71,12 @@ setup(
     author_email = jld.__email__,
     author = jld.__author__,
     url    = doc_url,
-    long_description = jld.__long_desc,
+    long_description = jld.__long_desc___,
     version = jld.__version__,
     package_data = {'':['*.*']},
     packages = _packages,
     scripts  = _scripts,
+    classifiers = jld.__classifiers__,
     install_requires = _dependencies,
     zip_safe = False,
 )
