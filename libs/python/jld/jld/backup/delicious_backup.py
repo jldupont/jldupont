@@ -122,6 +122,15 @@ class Backup(BaseCmd):
             self.logger.info(msg)
         
     
+    def cmd_listdb(self, *args):
+        """ Lists the current entries in the database """
+        self._initDb()
+        all = db.Posts.getAll()
+        
+        pp = printer.Delicious_Printer_Posts( self.msgs )
+        if (not self.quiet):
+            pp.run( all )
+    
     def cmd_deletedb(self, *args):
         """Deletes the database"""
         self._deleteDb()

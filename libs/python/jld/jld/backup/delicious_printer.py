@@ -35,21 +35,21 @@ class Delicious_Printer(printer.BasePrettyPrinter):
             
         print result.rstrip(' ,') 
        
-class Delicious_Printer_Tags(Delicious_Printer):
+class Delicious_Printer_Posts(Delicious_Printer):
     """ Prints tags related info
     """
-    _fields = [ 'mapid', 'title', 'exported' ]
+    _fields = [ 'href', 'description', 'tag' ]
 
     def __init__(self, msgs):
         Delicious_Printer.__init__(self, msgs)
 
     def header(self):
         """Prints a header"""
-        print self.msgs.render( 'tbl_header_maps' )
+        print self.msgs.render( 'tbl_header_posts' )
 
     def footer(self):
         """Prints a footer"""
-        print self.msgs.render( 'tbl_footer_maps' )
+        print self.msgs.render( 'tbl_footer_posts' )
     
 class Delicious_Printer_Config(Delicious_Printer):
     """ Prints config related info
