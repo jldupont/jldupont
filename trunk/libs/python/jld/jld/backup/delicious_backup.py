@@ -117,7 +117,6 @@ class Backup(BaseCmd):
         total, updated, created = db.Posts.updateFromList( posts )
         db.Updates.create( self.username, remote )
         if (not self.quiet):
-            print total, updated, created
             msg = self.msgs.render('report_updatedb', {'total':total, 'updated':updated, 'created':created } )
             self.logger.info(msg)
         

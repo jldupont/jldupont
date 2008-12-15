@@ -31,14 +31,14 @@ class Delicious_Printer(printer.BasePrettyPrinter):
             if (field in entry):
                 f = entry[field]
                 v = f if f else ''
-                result = result + str( v ) + ' , '
+                result = result + unicode( v ) + ' , '
             
         print result.rstrip(' ,') 
        
 class Delicious_Printer_Posts(Delicious_Printer):
     """ Prints tags related info
     """
-    _fields = [ 'href', 'description', 'tag' ]
+    _fields = [ 'href', 'tag' ]
 
     def __init__(self, msgs):
         Delicious_Printer.__init__(self, msgs)
