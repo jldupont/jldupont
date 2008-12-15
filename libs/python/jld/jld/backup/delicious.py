@@ -25,22 +25,22 @@ sys.path.append( path )
 import jld.api as api
 import jld.registry as reg
 
-from   jld.backup.delicious_backup import Backup
 import jld.backup.delicious_messages as msg
 import jld.backup.delicious_ui as dui
 import jld.backup.delicious_defaults as ddef
+from   jld.backup.delicious_backup import Backup
 
 from   jld.tools.template import ExTemplate
 import jld.tools.logger as dlogger
 
 # ========================================================================================
 _options =[
-  {'o1':'-s', 'var':'username',      'action':'store',        'help':'config_username', 'reg': True, 'default': None},
-  {'o1':'-k', 'var':'password',      'action':'store',        'help':'config_password', 'reg': True, 'default': None},
+  {'o1':'-u', 'var':'username',      'action':'store',        'help':'config_username', 'reg': True, 'default': None},
+  {'o1':'-p', 'var':'password',      'action':'store',        'help':'config_password', 'reg': True, 'default': None},
    
   {'o1':'-f', 'var':'db_path',       'action':'store',        'help':'config_db_file',       'reg': True, 'default': None},
-  {'o1':'-p', 'var':'export_path',   'action':'store',        'help':'config_export_path',   'reg': True, 'default': None},
-  {'o1':'-m', 'var':'export_maxnum', 'action':'store',        'help':'config_export_maxnum', 'reg': True, 'default': None, 'type':'int'},
+#  {'o1':'-p', 'var':'export_path',   'action':'store',        'help':'config_export_path',   'reg': True, 'default': None},
+#  {'o1':'-m', 'var':'export_maxnum', 'action':'store',        'help':'config_export_maxnum', 'reg': True, 'default': None, 'type':'int'},
   
   {'o1':'-q', 'var':'quiet',         'action':'store_true',   'help':'quiet',         'reg': False, 'default': False },          
   {'o1':'-l', 'var':'syslog',        'action':'store_true',   'help':'syslog',        'reg': False, 'default': False },  

@@ -9,7 +9,7 @@ __msgs__ = ['tbl_header_maps', 'tbl_footer_maps', 'tbl_header_export', 'tbl_foot
 import jld.tools.printer as printer
 
 class Delicious_Printer(printer.BasePrettyPrinter):
-
+    """ Base class """
     def __init__(self, msgs):
         printer.BasePrettyPrinter.__init__(self)
         self.msgs = msgs
@@ -52,7 +52,7 @@ class Delicious_Printer_Tags(Delicious_Printer):
         print self.msgs.render( 'tbl_footer_maps' )
     
 class Delicious_Printer_Config(Delicious_Printer):
-    """ Prints map related info
+    """ Prints config related info
     """
     
     def __init__(self, msgs, obj):
