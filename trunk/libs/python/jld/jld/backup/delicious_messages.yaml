@@ -8,7 +8,9 @@ report_export: cmd[export]   Exportable[$total] Successes[$successes] Failure[$f
 
 # CONFIG related
 # ==============
-config_file: configure database filesystem path
+config_username: configure username
+config_password: configure password
+config_db_file: configure database filesystem path
 config_path: configure filesystem path for exports
 config_maxnum: configuration the maximum number of exports per run
 error_load_file: error occured whilst file [$path]
@@ -27,7 +29,7 @@ error_update_db: Error whilst updating the database
 error_cant_write: Error whilst writing to [$path]
 error_create_folder: Error whilst creating folder
 error_init_folder: Error whilst accessing folder
-error_defaults: Defaults configuration error
+error_config: Configuration error, parameter[$param]
 error_command: Invalid command [$cmd]
 error_db: Error whilst creating the database file [$file]
 error_network: Network error
@@ -44,7 +46,7 @@ unhandled_exception: An unhandled exception occured [$exc]
 
 # HELP
 # ====
-help_defaults: The defaults file is located in the Python's sitepackages directory along with the other scripts of this command-line utility
+help_config: The parameters ''username'' and ''password'' are required
 help_command: Use -h to review commands
 help_db: Is the filesystem path specified by the -f option accessible?
 help_auth: Please perform authentication using the 'auth' command and the -s , -k options
@@ -62,4 +64,3 @@ tbl_header_export: Export Information
 tbl_footer_export: ==end==
 tbl_header_config: Configuration
 tbl_footer_config: ==end==
-

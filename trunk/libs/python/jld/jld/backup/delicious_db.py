@@ -128,6 +128,12 @@ class Posts(SQLObject):
                 
         return needsUpdate
             
+# ==============================================
+class Updates(SQLObject):
+    """ Table for keeping track of the I{last update} indicator from Delicious """
+    username = StringCol()
+    last     = StringCol()
+
 # ==============================================        
 
 
@@ -155,6 +161,7 @@ class Db(object):
 
         #table already exists ... no big deal
         Posts.createTable(ifNotExists=True)
+        Updates.createTable(ifNotExists=True)
     
     @classmethod
     def deleteDb(cls, filepath):
