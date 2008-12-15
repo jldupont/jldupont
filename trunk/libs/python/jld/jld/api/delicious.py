@@ -151,6 +151,20 @@ class Client(object):
         raw = self.api.do_method('posts/get', tag=tag, url=url, hashes=hashes, dt=dt, meta=meta )
         return delObjects.Posts(raw)
 
+    def getPostsAll(self, tag = None, start = None, results = None, fromdt = None, todt = None, meta = 'yes'):
+        """ Retrieves a list of posts
+            Method: https://api.del.icio.us/v1/posts/get
+            @param tag: optional tag (serves as filter)
+            @param start: optional start (serves as filter)
+            @param results: optional results (serves as filter)
+            @param fromdt: optional ''from date'' list (filter)
+            @param todt: optional ''to date'' list (filter)
+            @param meta: optional meta parameter    
+            @return: a B{Post} object
+        """
+        raw = self.api.do_method('posts/all', tag=tag, start=start, results=results, fromdt=fromdt, todt=todt, meta=meta )
+        return delObjects.Posts(raw)
+
     def getRecentPosts(self, tag = None, count = 100):
         """ Retrieves the recent posts up to COUNT
             and filtered by TAG.
