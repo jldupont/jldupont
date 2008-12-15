@@ -84,13 +84,34 @@ class Backup(BaseCmd):
         if (not self.quiet):
             pp.run( self )
     
+    def cmd_llatest(self, *args):
+        """Displays the latest update timestamp recorded in the database"""
+        self._validateAuthParams()
+        self._initDb()
+        last = db.Updates.getLatest( self.username )
+        if (not self.quiet):
+            self.logger.info('local last update[%s]' % last)
+        
+    def cmd_rlatest(self, *args):
+        """Displays the latest update timestamp from Delicious"""
+        self._validateAuthParams()
+        self._initDelicious()
+        last = self.delicious.getLastUpdate()
+        if (not self.quiet):
+            self.logger.info('remote last update[%s]' % last[0])
+    
     def cmd_updatedb(self, *args):
         """Updates the local database with the most recent information"""
         self._validateAuthParams()
         self._initDelicious()
         
-        lastUpdate = self.delicious.getLastUpdate()
+        currentUpdate = self.delicious.getLastUpdate()
         print lastUpdate
+        
+        self._initDb()
+        lastUpdate = db.Updates()
+        
+        
     
     def cmd_deletedb(self, *args):
         """Deletes the database"""
@@ -126,4 +147,3 @@ class Backup(BaseCmd):
         if (self.db is None):
             path = mos.replaceHome( self.db_path )
             self.db = db.Db( path )
-

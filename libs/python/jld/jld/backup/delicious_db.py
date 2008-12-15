@@ -134,6 +134,19 @@ class Updates(SQLObject):
     username = StringCol()
     last     = StringCol()
 
+    @classmethod
+    def getLatest(cls, username):
+        result = cls.select( cls.q.username == username )
+        try:
+            entry = result[0]
+        except:
+            entry = None
+        
+        if entry:
+            return entry.last
+        
+        return None
+
 # ==============================================        
 
 
