@@ -136,7 +136,6 @@ class Updates(SQLObject):
     def create(cls, username, last):
         """ Creates an entry
         """
-        print username, last
         Updates( username=username, last=last )
 
     @classmethod
