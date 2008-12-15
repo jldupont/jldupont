@@ -23,7 +23,7 @@ class Posts(SQLObject):
     #_posts_fields = ['href', 'hash', 'description', 'tag', 'time', 'extended']
     href         = StringCol()
     hash         = StringCol()
-    description  = StringCol()
+    description  = UnicodeCol()
     time         = StringCol() #don't want to have conversion here...
     tag          = StringCol()
     # internal attribute
@@ -71,15 +71,12 @@ class Posts(SQLObject):
         updated = 0;  
         created = 0;
         for entry in list:
-            print entry
             hash = entry['hash']
             posts = cls.select( cls.q.hash == hash )
             
             #post already exists?
-            try:
-                post = posts[0]
-            except:
-                post = None
+            try:    post = posts[0]
+            except: post = None
                 
             if (post is None):
                 created = created + 1
@@ -104,14 +101,14 @@ class Posts(SQLObject):
     @classmethod
     def _updateOne(cls, entry, post):
         """Processes one entry: verifies if the entry needs updating
-            @param entry: the entry
+            @param entry: the entry from Delicious Client API
             @param post:  the sqlobject
             
             @return: True if the entry needed updating
         """
         needsUpdate = False
         for att in cls._attributesToVerify:
-            local  = getattr(map, att)
+            local  = getattr(post, att)
             remote = entry[att]
             #print "att[%s] local[%s] remote[%s]" % (att, local, remote)
             if (local != remote):
@@ -134,6 +131,13 @@ class Updates(SQLObject):
 
     username = StringCol()
     last     = StringCol()
+
+    @classmethod
+    def create(cls, username, last):
+        """ Creates an entry
+        """
+        print username, last
+        Updates( username=username, last=last )
 
     @classmethod
     def getLatest(cls, username):

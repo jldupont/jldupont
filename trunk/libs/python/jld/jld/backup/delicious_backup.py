@@ -104,7 +104,9 @@ class Backup(BaseCmd):
     def cmd_updatedb(self, *args):
         """Updates the local database with the most recent information"""
         local  = self._llatest()
-        remote = self._rlatest()
+        
+        try:    remote = self._rlatest()[0]
+        except: remote = None
         
         if (local == remote):
             msg = self.msgs.render('report_update_none')
@@ -112,12 +114,13 @@ class Backup(BaseCmd):
             return
 
         posts = self.delicious.getPostsAll()
-        result = db.Posts.updateFromList( posts )
+        total, updated, created = db.Posts.updateFromList( posts )
+        db.Updates.create( self.username, remote )
+        if (not self.quiet):
+            print total, updated, created
+            msg = self.msgs.render('report_updatedb', {'total':total, 'updated':updated, 'created':created } )
+            self.logger.info(msg)
         
-        upd = db.Updates()
-        upd.username = self.username
-        upd.last = remote
-
     
     def cmd_deletedb(self, *args):
         """Deletes the database"""

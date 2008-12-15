@@ -38,14 +38,14 @@ class Waiter(object):
     def __init__(self):
         self.lastAccess = None
         
-    def wait(self, secondsToWait = 1):
+    def wait(self, secondsToWait = 2):
         #first time around... don't need to way :-)
         if (self.lastAccess is None):
             self.lastAccess = time.time()
             return
         
         now = time.time()
-        diff = now = self.lastAccess 
+        diff = now - self.lastAccess + 1
         
         if (diff < secondsToWait):
             time.sleep( diff )
@@ -90,8 +90,11 @@ class Api(object):
             req.add_header('Authorization', self.auth)
             response = urllib2.urlopen(req)
         except Exception,e:
-            raise api.ErrorNetwork(e) 
-        return response.read()
+            raise api.ErrorNetwork(e, {'code':e.code})
+        
+        data = response.read()
+        response.close()
+        return data
 
 
 # =================================================================            

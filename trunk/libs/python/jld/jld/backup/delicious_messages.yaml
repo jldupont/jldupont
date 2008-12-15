@@ -6,6 +6,7 @@
 report_local_update: cmd[llatest] timestamp[$time]
 report_remote_update: cmd[rlatest] timestamp[$time]
 report_update_none: cmd[updatedb] no update required
+report_updatedb: cmd[updatedb] Total[$total] Updated[$updated] Created[$created]
 
 # CONFIG related
 # ==============
@@ -33,7 +34,7 @@ error_init_folder: Error whilst accessing folder
 error_config: Configuration error, parameter[$param]
 error_command: Invalid command [$cmd]
 error_db: Error whilst creating the database file [$file]
-error_network: Network error
+error_network: Network error, code[$code]
 error_access: Access error
 error_object: Object access error
 error_method: API method access error
