@@ -82,7 +82,6 @@ class Api(object):
     def _get(self, url):
         """ All GET operations go through here
         """
-        print url
         # respect terms of use i.e. throttle
         self.waiter.wait()
         
