@@ -66,3 +66,5 @@ tbl_header_export: Export Information
 tbl_footer_export: ==end==
 tbl_header_config: Configuration
 tbl_footer_config: ==end==
+tbl_header_posts: Posts
+tbl_footer_posts: ==end==
