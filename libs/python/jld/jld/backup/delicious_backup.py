@@ -87,10 +87,10 @@ class Backup(BaseCmd):
     def cmd_llatest(self, *args):
         """Displays the latest update timestamp recorded in the database"""
         self._validateAuthParams()
-        self._initDb()
-        last = db.Updates.getLatest( self.username )
+        last = self._llatest()
         if (not self.quiet):
-            self.logger.info('local last update[%s]' % last)
+            msg = self.msgs.render('report_local_update', {'time':last})
+            self.logger.info(msg)
         
     def cmd_rlatest(self, *args):
         """Displays the latest update timestamp from Delicious"""
@@ -98,20 +98,26 @@ class Backup(BaseCmd):
         self._initDelicious()
         last = self.delicious.getLastUpdate()
         if (not self.quiet):
-            self.logger.info('remote last update[%s]' % last[0])
+            msg = self.msgs.render('report_remote_update', {'time':last[0]})
+            self.logger.info(msg)
     
     def cmd_updatedb(self, *args):
         """Updates the local database with the most recent information"""
-        self._validateAuthParams()
-        self._initDelicious()
+        local  = self._llatest()
+        remote = self._rlatest()
         
-        currentUpdate = self.delicious.getLastUpdate()
-        print lastUpdate
+        if (local == remote):
+            msg = self.msgs.render('report_update_none')
+            self.logger.info(msg)
+            return
+
+        posts = self.delicious.getPostsAll()
+        result = db.Posts.updateFromList( posts )
         
-        self._initDb()
-        lastUpdate = db.Updates()
-        
-        
+        upd = db.Updates()
+        upd.username = self.username
+        upd.last = remote
+
     
     def cmd_deletedb(self, *args):
         """Deletes the database"""
@@ -119,6 +125,20 @@ class Backup(BaseCmd):
         
     # =========================================================
     # =========================================================
+    def _llatest(self):
+        """ Local Last Update"""
+        self._initDb()
+        last = db.Updates.getLatest( self.username )
+        return last
+    
+    def _rlatest(self):
+        """ Remote Last Update """
+        self._validateAuthParams()
+        self._initDelicious()
+        
+        currentUpdate = self.delicious.getLastUpdate()
+        return currentUpdate
+    
     def _validateAuthParams(self):
         """ Performs basic validation of the authentication parameters """
         

@@ -3,8 +3,9 @@
 # @author: Jean-Lou Dupont
 
 # Reporting related
-report_update: cmd[updatedb]      Total[$total]   Updated[$updated]       New[$new]
-report_export: cmd[export]   Exportable[$total] Successes[$successes] Failure[$failures]
+report_local_update: cmd[llatest] timestamp[$time]
+report_remote_update: cmd[rlatest] timestamp[$time]
+report_update_none: cmd[updatedb] no update required
 
 # CONFIG related
 # ==============

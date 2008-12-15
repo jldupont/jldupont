@@ -25,11 +25,11 @@ class Posts(SQLObject):
     hash         = StringCol()
     description  = StringCol()
     time         = StringCol() #don't want to have conversion here...
-    tags         = StringCol()
+    tag          = StringCol()
     # internal attribute
     changed      = DateTimeCol() #timestamp of last detected modification
     
-    _attributesToVerify = ['href', 'hash', 'description','time', 'tags']
+    _attributesToVerify = ['href', 'hash', 'description','time', 'tag']
 
     @classmethod
     def getChangedList(cls, dt):
@@ -57,7 +57,7 @@ class Posts(SQLObject):
         result['hash'] = entry.hash
         result['description'] = entry.description
         result['time'] = entry.time
-        result['tags'] = entry.tags
+        result['tag'] = entry.tag
         result['changed'] = entry.changed
         return result
     
@@ -71,6 +71,7 @@ class Posts(SQLObject):
         updated = 0;  
         created = 0;
         for entry in list:
+            print entry
             hash = entry['hash']
             posts = cls.select( cls.q.hash == hash )
             
@@ -80,7 +81,6 @@ class Posts(SQLObject):
             except:
                 post = None
                 
-            cls.formatEntry( entry )
             if (post is None):
                 created = created + 1
                 cls._createOne( entry )
@@ -97,7 +97,7 @@ class Posts(SQLObject):
         Posts(   hash=entry['hash'], 
                  href=entry['href'],
                  description=entry['description'], 
-                 tags=entry['tags'], 
+                 tag=entry['tag'], 
                  time=entry['time'],
                  changed=datetime.datetime.now() )
         
@@ -121,7 +121,7 @@ class Posts(SQLObject):
         if (needsUpdate):
             post.set( href=entry['href'],
                      hash=entry['hash'], 
-                     tags=entry['tags'],
+                     tag=entry['tag'],
                      description=entry['description'],
                      time=entry['time'],
                      changed=datetime.datetime.now() )           
@@ -131,6 +131,7 @@ class Posts(SQLObject):
 # ==============================================
 class Updates(SQLObject):
     """ Table for keeping track of the I{last update} indicator from Delicious """
+
     username = StringCol()
     last     = StringCol()
 
