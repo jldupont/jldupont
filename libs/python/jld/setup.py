@@ -2,6 +2,8 @@
     EGG setup
     
 """
+_DEBUG = False
+
 import sys
 import os.path
 from setuptools import setup, find_packages
@@ -65,27 +67,29 @@ for p in _packages:
 print "Dependencies:", 
 print _dependencies
 
-setup(
-    name = "jld",
-    description = jld.__desc__,
-    author_email = jld.__email__,
-    author = jld.__author__,
-    url    = doc_url,
-    long_description = jld.__long_desc__,
-    version = jld.__version__,
-    package_data = {'':['*.*']},
-    packages = _packages,
-    scripts  = _scripts,
-    classifiers = jld.__classifiers__,
-    install_requires = _dependencies,
-    zip_safe = False,
-)
+if (not _DEBUG):
+    setup(
+        name = "jld",
+        description = jld.__desc__,
+        author_email = jld.__email__,
+        author = jld.__author__,
+        url    = doc_url,
+        long_description = jld.__long_desc__,
+        version = jld.__version__,
+        package_data = {'':['*.*']},
+        packages = _packages,
+        scripts  = _scripts,
+        classifiers = jld.__classifiers__,
+        install_requires = _dependencies,
+        zip_safe = False,
+    )
 
 import shutil
 
 # Copy to tags directory
-print 'copying to tags directory'
-shutil.copy(source_egg_path, dest_egg_path)
+if (not _DEBUG):
+    print 'copying to tags directory'
+    shutil.copy(source_egg_path, dest_egg_path)
 
 #go one level down to please epydoc
 cur =  os.path.dirname( __file__ )
