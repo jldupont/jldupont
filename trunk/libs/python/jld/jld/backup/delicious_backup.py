@@ -86,7 +86,7 @@ class Backup(BaseCmd):
             return
         
         posts = self.delicious.getRecentPosts()
-        self._doUpdate(posts, remote, False)   #don't update Updates table, only the Posts table
+        self._doUpdate(posts, remote, 'report_updatedb', False)   #don't update Updates table, only the Posts table
     
     def cmd_updatedbfull(self, *args):
         """ Updates the local database with complete remote data (logged)"""
@@ -98,7 +98,7 @@ class Backup(BaseCmd):
             return
 
         posts = self.delicious.getPostsAll()
-        self._doUpdate(posts, remote)
+        self._doUpdate(posts, remote, 'report_updatedbfull' )
         
     
     def cmd_listdb(self, *args):
@@ -112,6 +112,7 @@ class Backup(BaseCmd):
         pp = printer.Delicious_Printer_Posts( self.msgs )
         if (not self.quiet):
             pp.run( all )
+            print "total[%s]" % str(len(all))
     
     def cmd_deletedb(self, *args):
         """Deletes the database"""
@@ -120,13 +121,13 @@ class Backup(BaseCmd):
     # =========================================================
     # HELPERS
     # =========================================================
-    def _doUpdate(self, list, remote, record_last = True):
+    def _doUpdate(self, list, remote, msg, record_last = True):
         """ Performs an update cycle """
         total, updated, created = db.Posts.updateFromList( list )
         if (record_last):
             db.Updates.update( self.username, remote )
         if (not self.quiet):
-            msg = self.msgs.render('report_updatedb', {'total':total, 'updated':updated, 'created':created } )
+            msg = self.msgs.render( msg, {'total':total, 'updated':updated, 'created':created } )
             self.logger.info(msg)
         
     def _getRemoteUpdate(self):
