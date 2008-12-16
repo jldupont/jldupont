@@ -49,9 +49,14 @@ _packages = ['jld',
             'jld.tools'
             ]
 
-_scripts = [ 'jld/backup/scripts/mm.py',
+_scripts = [ 
+            'jld/backup/scripts/mm.py',
             'jld/backup/scripts/mm.bat', 
-            'jld/backup/scripts/mm' 
+            'jld/backup/scripts/mm',
+            
+            'jld/backup/scripts/dlc.py',
+            'jld/backup/scripts/dlc.bat', 
+            'jld/backup/scripts/dlc',             
             ]
 
 _dependencies = []
