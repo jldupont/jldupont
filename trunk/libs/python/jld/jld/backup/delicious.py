@@ -86,7 +86,7 @@ Commands:
         # Configure ourselves a logger
         _quiet  = True  if ui.options.quiet  else False
         _syslog = False if ui.options.syslog else True        
-        logger = dlogger.logger('delicious', include_console = _quiet, include_syslog = _syslog )
+        logger = dlogger.logger('dlc', include_console = _quiet, include_syslog = _syslog )
 
         backup.logger = logger
         ui.logger = logger
