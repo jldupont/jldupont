@@ -6,7 +6,8 @@
 report_local_update: cmd[llatest] timestamp[$time]
 report_remote_update: cmd[rlatest] timestamp[$time]
 report_update_none: cmd[updatedb] no update required
-report_updatedb: cmd[updatedb] Total[$total] Updated[$updated] Created[$created]
+report_updatedb: cmd[updatedb]     Total[$total] Updated[$updated] Created[$created]
+report_updatedbfull: cmd[updatedbfull] Total[$total] Updated[$updated] Created[$created]
 
 # CONFIG related
 # ==============
