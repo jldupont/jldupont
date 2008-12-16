@@ -21,7 +21,9 @@ import jld.api.gliffy as glf
 
 import jld.backup.gliffy_messages as msg
 import jld.backup.gliffy_printer as printer
-import jld.backup.gliffy_db as db
+
+import jld.backup.gliffy_db as glfdb
+import jld.backup.delicious_db as dlcdb
 
 
 # ========================================================================================
@@ -41,8 +43,10 @@ class Backup(BaseCmd):
         self.gliffy = None
         self.logger = None
         self.quiet = False
-        self.db_path = None        
-        self.db = None
+        self.dlc_db_path = None
+        self.glf_db_path = None
+        self.dlc_db = None        
+        self.glf_db = None
         self.export_path = None
         self.export_maxnum = None
         
@@ -83,6 +87,10 @@ class Backup(BaseCmd):
         if (not self.quiet):
             pp.run( all )
     
+    def cmd_import(self, *args):
+        """ Imports the diagram id's from the Delicious database (logged) """
+        
+    
     def cmd_deletedb(self, *args):
         """Deletes the database"""
         self._deleteDb()
@@ -111,6 +119,9 @@ class Backup(BaseCmd):
             self.gliffy = glf.Client()
 
     def _initDb(self):
-        if (self.db is None):
-            path = mos.replaceHome( self.db_path )
-            self.db = db.Db( path )
+        if (self.glf_db is None):
+            glf_path = mos.replaceHome( self.glf_db_path )
+            self.glf_db = glf_db.Db( glf_path )
+            
+            dlc_path = mos.replaceHome( self.dlc_db_path )
+            self.dlc_db = dlc_db.Db( dlc_path )

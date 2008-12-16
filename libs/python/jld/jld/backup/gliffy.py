@@ -1,6 +1,14 @@
 #! /usr/bin/env python
 """ Backup for Gliffy diagrams
     @author: Jean-Lou Dupont
+    
+    1. Scans the Delicious database for entries with the I{my-diagrams} tag
+    2. Imports the 'ids' in the Gliffy database
+    3. Searches for diagrams that haven't been exported
+    4. Retrieves the diagrams through HTTP
+    5. Writes the diagrams (all representations) to the export folder
+    6. Updates the Gliffy database with the export information (i.e. time of export)
+    
 """
 __author__  = "Jean-Lou Dupont"
 __version__ = "$Id$"
