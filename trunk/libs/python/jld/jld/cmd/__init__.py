@@ -22,14 +22,15 @@ class BaseCmd(object):
         self.cmds, self.commands = tclass.searchForMethods( self, 'cmd_' )
         self.commands_help = ''
         
-    def genCommandsHelp(self):
+    def genCommandsHelp(self, padding=15):
         """ Generates the list of commands and their corresponding docstring.
             Methods with prefix 'test' are ignored.
         """
         if (self.commands_help==''):
             for name, doc in self.commands:
                 if (not name.startswith('test')):
-                    self.commands_help = self.commands_help + "  " + name + ' :  ' + doc + "\n"
+                    line = "%*s : %s\n" % (padding,name,doc)
+                    self.commands_help = self.commands_help + line #+ "  " + name + ' :  ' + doc + "\n"
 
         return self.commands_help
     

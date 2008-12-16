@@ -67,7 +67,6 @@ version $Id$ by Jean-Lou Dupont
 Usage notes:
   1- for high-rate updates, use the ''updatedb'' command
   2- for low-rate updates, use the ''updatedbfull'' command.
-  
   The ''low-rate updates'' should be used no more than once per hour in order to respect the Delicious policy.
   
 
