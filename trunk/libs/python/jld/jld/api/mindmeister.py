@@ -81,7 +81,9 @@ class MM(object):
             response = urllib2.urlopen(url)
         except Exception,e:
             raise api.ErrorNetwork(e) 
-        return response.read()
+        data = response.read()
+        response.close()
+        return data
 
     def do_network_error(self):
         raise api.ErrorNetwork('do_network_error')

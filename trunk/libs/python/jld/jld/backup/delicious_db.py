@@ -133,10 +133,17 @@ class Updates(SQLObject):
     last     = StringCol()
 
     @classmethod
-    def create(cls, username, last):
+    def update(cls, username, last):
         """ Creates an entry
         """
-        Updates( username=username, last=last )
+        c = cls.select( cls.q.username == username )
+        try: current = c[0]
+        except: current = None
+        if (current):
+            current.set(username = username, last=last)
+            return
+        else:
+            Updates( username=username, last=last )
 
     @classmethod
     def getLatest(cls, username):

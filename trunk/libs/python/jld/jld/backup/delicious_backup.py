@@ -102,23 +102,28 @@ class Backup(BaseCmd):
             self.logger.info(msg)
     
     def cmd_updatedb(self, *args):
-        """Updates the local database with the most recent information"""
-        local  = self._llatest()
+        """Updates the local database with the most recent entries"""
+        remote = self._getRemoteUpdate()
         
-        try:    remote = self._rlatest()[0]
-        except: remote = None
+        if (not self._shouldUpdate(remote)):
+            msg = self.msgs.render('report_update_none')
+            self.logger.info(msg)
+            return
         
-        if (local == remote):
+        posts = self.delicious.getRecentPosts()
+        self._doUpdate(posts, remote)
+    
+    def cmd_updatedbfull(self, *args):
+        """ Updates the local database with complete remote data """
+        remote = self._getRemoteUpdate()
+        
+        if (not self._shouldUpdate(remote)):
             msg = self.msgs.render('report_update_none')
             self.logger.info(msg)
             return
 
         posts = self.delicious.getPostsAll()
-        total, updated, created = db.Posts.updateFromList( posts )
-        db.Updates.create( self.username, remote )
-        if (not self.quiet):
-            msg = self.msgs.render('report_updatedb', {'total':total, 'updated':updated, 'created':created } )
-            self.logger.info(msg)
+        self._doUpdate(posts, remote)
         
     
     def cmd_listdb(self, *args):
@@ -136,6 +141,26 @@ class Backup(BaseCmd):
         
     # =========================================================
     # =========================================================
+    def _doUpdate(self, list, remote):
+        """ Performs an update cycle """
+        total, updated, created = db.Posts.updateFromList( list )
+        db.Updates.update( self.username, remote )
+        if (not self.quiet):
+            msg = self.msgs.render('report_updatedb', {'total':total, 'updated':updated, 'created':created } )
+            self.logger.info(msg)
+        
+    def _getRemoteUpdate(self):
+        """ Gets the remote update status """
+        try:    remote = self._rlatest()[0]
+        except: remote = None
+        
+        return remote
+        
+    def _shouldUpdate(self, remote):
+        """ Verifies if an update is in order """
+        local  = self._llatest()       
+        return (local != remote)
+        
     def _llatest(self):
         """ Local Last Update"""
         self._initDb()
