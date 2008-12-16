@@ -26,6 +26,9 @@ class Posts(SQLObject):
     description  = UnicodeCol()
     time         = StringCol() #don't want to have conversion here...
     tag          = StringCol()
+    tag1         = StringCol()
+    tag2         = StringCol()
+    tag3         = StringCol()
     # internal attribute
     changed      = DateTimeCol() #timestamp of last detected modification
     
@@ -39,11 +42,18 @@ class Posts(SQLObject):
         return cls.select(OR(cls.q.changed > dt, cls.q.changed == None))
     
     @classmethod
-    def getAll(cls):
+    def getAll(cls, tag = None):
         """ Returns all the entries
+            @param tag: filters by tag
+            @return: SQLObject list 
         """
         list = []
-        all = cls.select()
+        if (tag):
+            all = cls.select(OR( Posts.q.tag1 == tag, Posts.q.tag2 == tag, Posts.q.tag3 == tag ), 
+                             orderBy=DESC(Posts.q.changed))
+        else:
+            all = cls.select(orderBy=DESC(Posts.q.changed))
+            
         for one in all:
             entry = cls._formatOne( one )
             list.append( entry )
@@ -52,12 +62,18 @@ class Posts(SQLObject):
     
     @classmethod
     def _formatOne(cls, entry):
+        """ Format an SQLObject result object (entry)
+            to a dictionary object.
+        """
         result = {}
         result['href'] = entry.href
         result['hash'] = entry.hash
         result['description'] = entry.description
         result['time'] = entry.time
         result['tag'] = entry.tag
+        result['tag1'] = entry.tag1
+        result['tag2'] = entry.tag2
+        result['tag3'] = entry.tag3
         result['changed'] = entry.changed
         return result
     
@@ -88,13 +104,32 @@ class Posts(SQLObject):
         return (total, updated, created)
 
     @classmethod
+    def _extractTags(cls, list):
+        """ Extracts the first 3 tags from a list
+            @param list: string list
+            @return: tuple of 3 items
+        """
+        if (not list):
+            return (None, None, None)
+        bits  = list.split(' ',3)
+        sbits = bits[0:3]
+        cbits = ['' for i in range(0,3-len(sbits))]
+        if (cbits):
+            sbits.extend(cbits)
+        return sbits
+        
+    @classmethod
     def _createOne(cls, entry):
         """ Creates one post entry
         """
+        tag1,tag2,tag3 = cls._extractTags( entry['tag'] )
         Posts(   hash=entry['hash'], 
                  href=entry['href'],
                  description=entry['description'], 
-                 tag=entry['tag'], 
+                 tag=entry['tag'],
+                 tag1=tag1,
+                 tag2=tag2,
+                 tag3=tag3,
                  time=entry['time'],
                  changed=datetime.datetime.now() )
         
@@ -116,9 +151,13 @@ class Posts(SQLObject):
                 break
             
         if (needsUpdate):
+            tag1, tag2, tag3 = cls._extractTags( entry['tag'] )
             post.set( href=entry['href'],
                      hash=entry['hash'], 
                      tag=entry['tag'],
+                     tag1=tag1,
+                     tag2=tag2,
+                     tag3=tag3,                     
                      description=entry['description'],
                      time=entry['time'],
                      changed=datetime.datetime.now() )           

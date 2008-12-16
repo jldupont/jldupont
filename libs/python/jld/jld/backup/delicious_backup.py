@@ -19,7 +19,6 @@ import jld.registry as reg
 import jld.tools.mos as mos
 
 import jld.api.delicious as dlc
-import jld.api.delicious_objects as dlco
 
 import jld.backup.delicious_messages as msg
 import jld.backup.delicious_printer as printer
@@ -35,7 +34,7 @@ class Backup(BaseCmd):
     
     # configuration parameters expected from the Delicious command-line ui
     # used also by the Printer
-    _configParams = ['username', 'password', 'db_path' ] #'export_path', 'export_maxnum', 'db_path']
+    _configParams = ['username', 'password', 'db_path'] #'export_path', 'export_maxnum', 'db_path']
     
     def __init__(self):
         BaseCmd.__init__(self)
@@ -76,6 +75,7 @@ class Backup(BaseCmd):
             raise StopIteration
     
     # =========================================================
+    # COMMANDS
     # =========================================================
         
     def cmd_listconfig(self, *args):
@@ -111,7 +111,7 @@ class Backup(BaseCmd):
             return
         
         posts = self.delicious.getRecentPosts()
-        self._doUpdate(posts, remote)
+        self._doUpdate(posts, remote, False)   #don't update Updates table, only the Posts table
     
     def cmd_updatedbfull(self, *args):
         """ Updates the local database with complete remote data """
@@ -127,9 +127,12 @@ class Backup(BaseCmd):
         
     
     def cmd_listdb(self, *args):
-        """ Lists the current entries in the database """
+        """ Lists the current entries in the database, optional filter by tag"""
+        try:    tag = args[0]
+        except: tag = None
+        
         self._initDb()
-        all = db.Posts.getAll()
+        all = db.Posts.getAll(tag)
         
         pp = printer.Delicious_Printer_Posts( self.msgs )
         if (not self.quiet):
@@ -140,11 +143,13 @@ class Backup(BaseCmd):
         self._deleteDb()
         
     # =========================================================
+    # HELPERS
     # =========================================================
-    def _doUpdate(self, list, remote):
+    def _doUpdate(self, list, remote, record_last = True):
         """ Performs an update cycle """
         total, updated, created = db.Posts.updateFromList( list )
-        db.Updates.update( self.username, remote )
+        if (record_last):
+            db.Updates.update( self.username, remote )
         if (not self.quiet):
             msg = self.msgs.render('report_updatedb', {'total':total, 'updated':updated, 'created':created } )
             self.logger.info(msg)
@@ -183,10 +188,6 @@ class Backup(BaseCmd):
         
         if (not self.password):
             raise api.ErrorConfig('', {'param':'password'})
-        
-    
-    # =========================================================
-    # =========================================================
 
     def _deleteDb(self):
         path = mos.replaceHome( self.db_path )

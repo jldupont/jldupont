@@ -38,7 +38,7 @@ class Delicious_Printer(printer.BasePrettyPrinter):
 class Delicious_Printer_Posts(Delicious_Printer):
     """ Prints tags related info
     """
-    _fields = [ 'href', 'tag' ]
+    _fields = [ 'href', 'tag', 'tag1', 'tag2', 'tag3' ]
 
     def __init__(self, msgs):
         Delicious_Printer.__init__(self, msgs)
