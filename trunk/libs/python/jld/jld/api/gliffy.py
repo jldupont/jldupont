@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 """ Gliffy API
     @author: Jean-Lou Dupont
+    
 """
 
 __author__  = "Jean-Lou Dupont"
@@ -22,6 +23,14 @@ for p in _rawpatterns:
 
 def extractIdFromURI(uri):
     """ Extracts the diagram ID from a URI
+    
+        >>> tests = [ \
+        'http://www.gliffy.com/publish/1553333/', \
+        'http://www.gliffy.com/pubdoc/1554222/L.jpg',]
+        >>> for t in tests: \
+        print extractIdFromURI( t )
+        1553333
+        1554222
     """
     for p in _patterns:
         g = p.search( uri )
@@ -37,11 +46,19 @@ _representations = [
                     'http://www.gliffy.com/pubdoc/%s/L.jpg',
                     'http://www.gliffy.com/pubdoc/%s/M.jpg',
                     'http://www.gliffy.com/pubdoc/%s/S.jpg',
+                    'http://www.gliffy.com/pubdoc/%s/T.jpg',
                     ]
 
 def representations(id):
     """ Generator for representations
         @param id: the source diagram id 
+        @return: URI to target representation
+        
+    >>> for r in representations(123): print r
+    http://www.gliffy.com/pubdoc/123/L.jpg
+    http://www.gliffy.com/pubdoc/123/M.jpg
+    http://www.gliffy.com/pubdoc/123/S.jpg
+    http://www.gliffy.com/pubdoc/123/T.jpg
     """
     for r in _representations:
         yield r % id
@@ -52,16 +69,5 @@ def representations(id):
 if __name__ == "__main__":
     """ Tests
     """
-    tests = [
-             'http://www.gliffy.com/publish/1553333/',
-             'http://www.gliffy.com/pubdoc/1554222/L.jpg',
-             ]
-
-    print "EXTRACTION tests"
-    for t in tests:
-        print extractIdFromURI( t )
-
-    print "REPRESENTATIONS tests"
-    for r in representations(123):
-        print r
-        
+    import doctest
+    doctest.testmod()
