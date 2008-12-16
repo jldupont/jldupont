@@ -64,9 +64,12 @@ version $Id$ by Jean-Lou Dupont
 
 *** Interface to Delicious (http://www.delicious.com/) ***
 
-Usage:
- Step 1) Update local database: use the 'updatedb' command to retrieve/update the local database
- Step 2) Export: use the 'export' command to ...  
+Usage notes:
+  1- for high-rate updates, use the ''updatedb'' command
+  2- for low-rate updates, use the ''updatedbfull'' command.
+  
+  The ''low-rate updates'' should be used no more than once per hour in order to respect the Delicious policy.
+  
 
 The commands which generate log entries are flagged with (logged) below.
 
