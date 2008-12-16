@@ -63,6 +63,12 @@ def representations(id):
     for r in _representations:
         yield r % id
 
+
+class Client(object):
+    """ Client API to Gliffy
+    """
+
+
 # ==============================================
 # ==============================================
 

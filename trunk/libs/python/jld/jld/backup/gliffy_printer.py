@@ -4,7 +4,6 @@
 
 __author__  = "Jean-Lou Dupont"
 __version__ = "$Id$"
-__msgs__ = ['tbl_header_maps', 'tbl_footer_maps', 'tbl_header_export', 'tbl_footer_export', ]
 
 import jld.tools.printer as printer
 
@@ -38,7 +37,7 @@ class Gliffy_Printer(printer.BasePrettyPrinter):
 class Gliffy_Printer_Diagrams(Gliffy_Printer):
     """ Prints tags related info
     """
-    _fields = [ 'href', 'tag', 'tag1', 'tag2', 'tag3' ]
+    _fields = [ 'id' ]
 
     def __init__(self, msgs):
         Delicious_Printer.__init__(self, msgs)
