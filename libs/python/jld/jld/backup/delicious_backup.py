@@ -3,12 +3,11 @@
 __author__  = "Jean-Lou Dupont"
 __version__ = "$Id$"
 
-__msgs__ = ['error_init_folder', 'error_create_folder', 'frob_not_acquired', 'error_cant_write', ]
+__msgs__ = ['error_init_folder', 'error_create_folder', 'error_cant_write', ]
 
 import sys
 import os
 import logging
-import webbrowser
 import datetime
 import urllib2
 from stat import *
@@ -51,30 +50,6 @@ class Backup(BaseCmd):
         self.r = reg.Registry()
 
     # =========================================================
-    # Iteration & Dict access interfaces
-    #  Used for the command ''listconfig''
-    # =========================================================
-    def __contains__(self, key):
-        return key in self._configParams
-    
-    def __getitem__(self, key):
-        return getattr(self, key)
-    
-    def __setitem(self, key, value):
-        setattr(self, key, value)
-    
-    def __iter__(self):
-        self.iter = True
-        return self
-    
-    def next(self):
-        if (self.iter):
-            self.iter = False
-            return self
-        else:
-            raise StopIteration
-    
-    # =========================================================
     # COMMANDS
     # =========================================================
         
@@ -85,7 +60,7 @@ class Backup(BaseCmd):
             pp.run( self )
     
     def cmd_llatest(self, *args):
-        """Displays the latest update timestamp recorded in the database"""
+        """Displays the latest update timestamp recorded in the database (logged)"""
         self._validateAuthParams()
         last = self._llatest()
         if (not self.quiet):
@@ -99,10 +74,10 @@ class Backup(BaseCmd):
         last = self.delicious.getLastUpdate()
         if (not self.quiet):
             msg = self.msgs.render('report_remote_update', {'time':last[0]})
-            self.logger.info(msg)
+            print msg
     
     def cmd_updatedb(self, *args):
-        """Updates the local database with the most recent entries"""
+        """Updates the local database with the most recent entries (logged)"""
         remote = self._getRemoteUpdate()
         
         if (not self._shouldUpdate(remote)):
@@ -114,7 +89,7 @@ class Backup(BaseCmd):
         self._doUpdate(posts, remote, False)   #don't update Updates table, only the Posts table
     
     def cmd_updatedbfull(self, *args):
-        """ Updates the local database with complete remote data """
+        """ Updates the local database with complete remote data (logged)"""
         remote = self._getRemoteUpdate()
         
         if (not self._shouldUpdate(remote)):
