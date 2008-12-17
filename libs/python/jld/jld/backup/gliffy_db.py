@@ -24,7 +24,7 @@ class Diagrams(SQLObject):
     #datetime timestamp at which the entry was exported to the filesystem
     exported = DateTimeCol()
     
-    _attributesToVerify = ['id']
+    _attributesToVerify = ['did']
 
     @classmethod
     def getToExportList(cls):
@@ -38,7 +38,7 @@ class Diagrams(SQLObject):
             @return: SQLObject list 
         """
         list = []
-        all = cls.select(orderBy=DESC(Diagrams.q.added))
+        all = cls.select(orderBy=DESC(cls.q.added))
             
         for one in all:
             entry = cls._formatOne( one )
@@ -52,8 +52,8 @@ class Diagrams(SQLObject):
             to a dictionary object.
         """
         result = {}
-        result['did'] = entry.did
-        result['added'] = entry.added
+        result['did']      = entry.did
+        result['added']    = entry.added
         result['exported'] = entry.exported
         return result
     
@@ -118,6 +118,8 @@ class Diagrams(SQLObject):
 # ==============================================        
 
 class Db(db.BaseSQLObjectDb):
+    def __init__(self, filepath):
+        db.BaseSQLObjectDb.__init__(self, filepath)  
     def initTable(self):
         Diagrams.createTable(ifNotExists=True)
 
