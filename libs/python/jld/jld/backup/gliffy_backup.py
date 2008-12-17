@@ -22,7 +22,7 @@ import jld.api.gliffy as glf
 import jld.backup.gliffy_messages as msg
 import jld.backup.gliffy_printer as printer
 
-import jld.backup.gliffy_db as glfdb
+import jld.backup.gliffy_db    as glfdb
 import jld.backup.delicious_db as dlcdb
 
 
@@ -74,6 +74,7 @@ class Backup(BaseCmd):
         pp = printer.Gliffy_Printer_Diagrams( self.msgs )
         if (not self.quiet):
             pp.run( all )
+            print 'Total[%s]' % len(all)
     
     def cmd_import(self, *args):
         """ Imports the diagram id's from the Delicious database (logged) """
@@ -102,6 +103,7 @@ class Backup(BaseCmd):
         if (self.glf_db is None):
             glf_path = mos.replaceHome( self.glf_db_path )
             self.glf_db = glfdb.Db( glf_path )
-            
+
+        if (self.dlc_db is None):
             dlc_path = mos.replaceHome( self.dlc_db_path )
             self.dlc_db = dlcdb.Db( dlc_path )

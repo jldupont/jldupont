@@ -39,11 +39,13 @@ class Diagrams(SQLObject):
         """
         list = []
         all = cls.select(orderBy=DESC(cls.q.added))
-            
-        for one in all:
-            entry = cls._formatOne( one )
-            list.append( entry )
-            
+        try:           
+            for one in all:
+                entry = cls._formatOne( one )
+                list.append( entry )
+        except:
+            pass # no elements
+                    
         return list
     
     @classmethod

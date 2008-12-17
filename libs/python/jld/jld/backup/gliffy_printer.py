@@ -40,7 +40,7 @@ class Gliffy_Printer_Diagrams(Gliffy_Printer):
     _fields = [ 'id' ]
 
     def __init__(self, msgs):
-        Delicious_Printer.__init__(self, msgs)
+        Gliffy_Printer.__init__(self, msgs)
 
     def header(self):
         """Prints a header"""
