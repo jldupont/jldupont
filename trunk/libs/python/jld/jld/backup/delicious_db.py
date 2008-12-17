@@ -199,61 +199,16 @@ class Updates(SQLObject):
 
 # ==============================================        
 
-
-class Db(object):
+class Db(db.BaseSQLObjectDb):
     """ Db class; used to bootstrap SQLObject 
     """
     def __init__(self, filepath):
-        # verify that the db file exists first
-        self._createDb(filepath)
-
-        #on windows, watch-out for the \
-        #which are interpreted as escape code by SqlObject
-        #also, the : on windows should be switched to |        
-        sqlobject_filepath = db.formatSqliteURI(filepath)
-
-        try:
-            if (filepath == ':memory:'):
-                connection_string = 'sqlite:/:memory:'
-            else:
-                connection_string = 'sqlite:///' + sqlobject_filepath
-            connection = connectionForURI( connection_string )
-            sqlhub.processConnection = connection
-        except Exception,e:
-            raise api.ErrorDb( e, {'file':filepath} )
-
+        db.BaseSQLObjectDb.__init__(self, filepath)
+        
+    def initTable(self):
         #table already exists ... no big deal
         Posts.createTable(ifNotExists=True)
         Updates.createTable(ifNotExists=True)
-    
-    @classmethod
-    def deleteDb(cls, filepath):
-        """ Deletes the corresponding filesystem db file
-        """
-        try:
-            os.remove(filepath)
-        except:
-            pass
-    
-    def _createDb(self, filepath):
-        """ Handles the creation, if necessary,
-            of the database file. The tricky part
-            being the creation of the folder hierarchy
-            (if required).
-        """
-        if (filepath != ':memory:'):
-            try:
-                mos.createPathIfNotExists(filepath)
-            except Exception,e:
-                raise api.ErrorDb( e, {'file':filepath} )
-        
-        # lastly, try to create the db
-        try:
-            dbfile = sql.connect( filepath )
-            dbfile.close()
-        except Exception,e:
-            raise api.ErrorDb( e, {'file':filepath} )
-
     
 # ==============================================
 # ==============================================
