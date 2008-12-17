@@ -182,38 +182,12 @@ class Backup(BaseCmd):
         path = mos.replaceHome( self.glf_db_path )
         glfdb.Db.deleteDb(path)
         
-    def _create_map_export_folder(self, dir):
-        """
-        """
-        mos.createDirIfNotExists(dir)
-    
-    
     def _init_export_folder(self):
         """ Creates the export folder IF it does not
             already exists
         """
         if (not self.export_path_init):
-            self.export_path_init = mos.replaceHome( self.export_path )
-
-        rep = mos.existsDir(self.export_path_init)
-        if (rep):
-            return
-               
-        if (rep is False):
-            self._create_export_folder()
-                    
-        rep = mos.existsDir(self.export_path_init)       
-        if (rep is False):
-            raise api.ErrorConfig('msg:error_init_folder')            
-            
-    def _create_export_folder(self):
-        """ Creates the export folder
-        """
-        try:    
-            os.makedirs(self.export_path_init)
-        except: 
-            raise api.ErrorConfig('msg:error_create_folder')
-        return  True
+            self.export_path_init = mos.initPath( self.export_path )
 
         
     # LAZY INITIALIZERS
