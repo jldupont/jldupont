@@ -56,7 +56,11 @@ _scripts = [
             
             'jld/backup/scripts/dlc.py',
             'jld/backup/scripts/dlc.bat', 
-            'jld/backup/scripts/dlc',             
+            'jld/backup/scripts/dlc',
+            
+            'jld/backup/scripts/glf.py',
+            'jld/backup/scripts/glf.bat', 
+            'jld/backup/scripts/glf',             
             ]
 
 _dependencies = []

@@ -105,7 +105,7 @@ class Diagrams(SQLObject):
     def _updateOne(cls, entry, diagram):
         """Processes one entry: verifies if the entry needs updating
             @param entry: the entry from Client API
-            @param post:  the sqlobject
+            @param diagram:  the sqlobject
             
             @return: True if the entry needed updating
         """
