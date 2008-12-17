@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 """ Gliffy API
     @author: Jean-Lou Dupont
-    
 """
 
 __author__  = "Jean-Lou Dupont"
 __version__ = "$Id$"
 
 import re
+import urllib2
 
 # Patterns for extracting the diagram ID
 # ======================================
