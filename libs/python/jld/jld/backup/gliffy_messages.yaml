@@ -10,9 +10,10 @@ report_updatedb: cmd[updatedb] Total[$total] Updated[$updated] Created[$created]
 
 # CONFIG related
 # ==============
-config_db_file: configure database filesystem path
-config_path: configure filesystem path for exports
-config_maxnum: configuration the maximum number of exports per run
+config_dlc_db_file: configure Delicious database filesystem path
+config_glf_db_file: configure Gliffy database filesystem path
+config_export_path: configure filesystem path for exports
+config_export_maxnum: configuration the maximum number of exports per run
 error_load_file: error occured whilst file [$path]
 
 syslog: syslog disable mode

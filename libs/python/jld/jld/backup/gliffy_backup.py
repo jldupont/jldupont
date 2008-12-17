@@ -35,7 +35,7 @@ class Backup(BaseCmd):
     
     # configuration parameters expected from the Delicious command-line ui
     # used also by the Printer
-    _configParams = ['export_path', 'export_maxnum', 'db_path']
+    _configParams = ['export_path', 'export_maxnum', 'glf_db_path', 'dlc_db_path']
     
     def __init__(self):
         BaseCmd.__init__(self)
@@ -63,25 +63,13 @@ class Backup(BaseCmd):
         if (not self.quiet):
             pp.run( self )
     
-    def cmd_updatedb(self, *args):
-        """Updates the local database with the most recent entries"""
-        remote = self._getRemoteUpdate()
-        
-        if (not self._shouldUpdate(remote)):
-            msg = self.msgs.render('report_update_none')
-            self.logger.info(msg)
-            return
-        
-        posts = self.delicious.getRecentPosts()
-        self._doUpdate(posts, remote, False)   #don't update Updates table, only the Posts table
-    
     def cmd_listdb(self, *args):
         """ Lists the current entries in the database, optional filter by tag"""
         try:    tag = args[0]
         except: tag = None
         
         self._initDb()
-        all = db.Posts.getAll(tag)
+        all = glfdb.Diagrams.getAll()
         
         pp = printer.Gliffy_Printer_Diagrams( self.msgs )
         if (not self.quiet):
@@ -98,18 +86,10 @@ class Backup(BaseCmd):
     # =========================================================
     # HELPERS
     # =========================================================
-    def _doUpdate(self, list, remote, record_last = True):
-        """ Performs an update cycle """
-        total, updated, created = db.Posts.updateFromList( list )
-        if (record_last):
-            db.Updates.update( self.username, remote )
-        if (not self.quiet):
-            msg = self.msgs.render('report_updatedb', {'total':total, 'updated':updated, 'created':created } )
-            self.logger.info(msg)
         
     def _deleteDb(self):
-        path = mos.replaceHome( self.db_path )
-        db.Db.deleteDb(path)
+        path = mos.replaceHome( self.glf_db_path )
+        glfdb.Db.deleteDb(path)
         
     # LAZY INITIALIZERS
     # =================
@@ -121,7 +101,7 @@ class Backup(BaseCmd):
     def _initDb(self):
         if (self.glf_db is None):
             glf_path = mos.replaceHome( self.glf_db_path )
-            self.glf_db = glf_db.Db( glf_path )
+            self.glf_db = glfdb.Db( glf_path )
             
             dlc_path = mos.replaceHome( self.dlc_db_path )
-            self.dlc_db = dlc_db.Db( dlc_path )
+            self.dlc_db = dlcdb.Db( dlc_path )
