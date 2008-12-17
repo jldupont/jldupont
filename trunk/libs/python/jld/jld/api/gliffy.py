@@ -29,6 +29,8 @@ for p in _rawpatterns:
 
 def extractIdFromURI(uri):
     """ Extracts the diagram ID from a URI
+        @param uri: the uri
+        @return: the diagram id
     
         >>> tests = [ \
         'http://www.gliffy.com/publish/1553333/', \
@@ -48,6 +50,9 @@ def extractIdFromURI(uri):
 
 def extractIdFromListOfURI(list):
     """ Extracts the diagram ids' from a list of URI
+        @param list: a list of URI
+        @return: a list of diagram ids
+        
     >>> list = ['http://www.gliffy.com/pubdoc/123/L.jpg','http://www.gliffy.com/pubdoc/456/L.jpg']
     >>> result = extractIdFromListOfURI(list)
     >>> print result
@@ -99,6 +104,7 @@ class Client(object):
         req.request("HEAD", uri)
         try:
             response = req.getresponse()
+            req.close()
         except:
             raise api.ErrorNetwork()
         
@@ -131,6 +137,7 @@ class Client(object):
         
         try:
             data = response.read()
+            req.close()
         except:
             raise api.ErrorProtocol()
         
