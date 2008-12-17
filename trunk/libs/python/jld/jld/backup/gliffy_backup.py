@@ -67,7 +67,6 @@ class Backup(BaseCmd):
         """ Lists the current entries in the database """
         self._initDb()
         all = glfdb.Diagrams.getAll()
-        
         pp = printer.Gliffy_Printer_Diagrams( self.msgs )
         if (not self.quiet):
             pp.run( all )
@@ -77,7 +76,7 @@ class Backup(BaseCmd):
         """ Imports the diagram ids' from the Delicious database (logged) """
         try:    tag = args[0][0]
         except: raise api.ErrorValidation( 'missing_param', {'param':'tag'} )
-        print tag
+
         self._initDb()
         all = dlcdb.Posts.getAll( tag )
         self._doImport(all)        
@@ -102,9 +101,11 @@ class Backup(BaseCmd):
         """ Imports the diagram ids' from the list into the database
             @param list: diagram list 
         """
-        try:    ids = self._extractHref(list)
+        try:    uris = self._extractHref(list)
         except: raise api.ErrorProtocol('msg:error_expecting_href')
-            
+        
+        ids = glf.extractIdFromListOfURI(uris)
+        
         total, updated, created = glfdb.Diagrams.updateFromList(ids)
         msg = self.msgs.render('report_import', {'total':total, 'updated':updated, 'created':created })
         self.logger.info(msg)
@@ -124,7 +125,8 @@ class Backup(BaseCmd):
         if (self.glf_db is None):
             glf_path = mos.replaceHome( self.glf_db_path )
             self.glf_db = glfdb.Db( glf_path )
-
+        
         if (self.dlc_db is None):
             dlc_path = mos.replaceHome( self.dlc_db_path )
             self.dlc_db = dlcdb.Db( dlc_path )
+

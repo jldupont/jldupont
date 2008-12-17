@@ -37,7 +37,7 @@ class Gliffy_Printer(printer.BasePrettyPrinter):
 class Gliffy_Printer_Diagrams(Gliffy_Printer):
     """ Prints tags related info
     """
-    _fields = [ 'id' ]
+    _fields = [ 'did', 'added', 'exported' ]
 
     def __init__(self, msgs):
         Gliffy_Printer.__init__(self, msgs)

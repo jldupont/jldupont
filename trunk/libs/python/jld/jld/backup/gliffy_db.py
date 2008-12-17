@@ -69,10 +69,9 @@ class Diagrams(SQLObject):
         updated = 0;  
         created = 0;
         for did in list:
-            diagrams = cls.select( cls.q.did == did )
-            
+            dgs = cls.select( cls.q.did == did )
             #post already exists?
-            try:    diagram = diagrams[0]
+            try:    diagram = dgs[0]
             except: diagram = None
                 
             entry = {'did':did}
@@ -120,10 +119,11 @@ class Diagrams(SQLObject):
             
 # ==============================================        
 
-class Db(db.BaseSQLObjectDb):
+class Db(db.BaseSQLObjectDb2):
     def __init__(self, filepath):
-        db.BaseSQLObjectDb.__init__(self, filepath)  
-    def initTable(self):
+        db.BaseSQLObjectDb2.__init__(self, filepath)  
+    def initTable(self, connection):
+        Diagrams._connection = connection
         Diagrams.createTable(ifNotExists=True)
 
 
