@@ -1,13 +1,19 @@
 #!/usr/bin/env python
 """ Gliffy API
     @author: Jean-Lou Dupont
+    
+    >>> c = Client()
+    >>> result, etag = c.head(1472486)
+    >>> print result, etag # doctest:+ELLIPSIS
+    True...
 """
 
 __author__  = "Jean-Lou Dupont"
 __version__ = "$Id$"
 
 import re
-import urllib2
+import httplib
+import jld.api as api
 
 # Patterns for extracting the diagram ID
 # ======================================
@@ -59,33 +65,94 @@ def extractIdFromListOfURI(list):
 
 # Representations
 # ===============
-_representations = [
-                    'http://www.gliffy.com/pubdoc/%s/L.jpg',
-                    'http://www.gliffy.com/pubdoc/%s/M.jpg',
-                    'http://www.gliffy.com/pubdoc/%s/S.jpg',
-                    'http://www.gliffy.com/pubdoc/%s/T.jpg',
-                    ]
+_api = 'www.gliffy.com'
+_representations = {
+                    'large': '/pubdoc/%s/L.jpg',
+                    'medium':'/pubdoc/%s/M.jpg',
+                    'small': '/pubdoc/%s/S.jpg',
+                    'thumb': '/pubdoc/%s/T.jpg',
+                    }
 
 def representations(id):
     """ Generator for representations
         @param id: the source diagram id 
         @return: URI to target representation
         
-    >>> for r in representations(123): print r
-    http://www.gliffy.com/pubdoc/123/L.jpg
-    http://www.gliffy.com/pubdoc/123/M.jpg
-    http://www.gliffy.com/pubdoc/123/S.jpg
-    http://www.gliffy.com/pubdoc/123/T.jpg
-    """
-    for r in _representations:
-        yield r % id
-
+>>> for r in representations(123): print r
+/pubdoc/123/L.jpg
+/pubdoc/123/S.jpg
+/pubdoc/123/M.jpg
+/pubdoc/123/T.jpg"""
+    for k,v in _representations.iteritems():
+        yield v % id
 
 class Client(object):
     """ Client API to Gliffy
     """
+    def head(self, did):
+        """ Performs an HTTP HEAD command on the specified diagram resource
+            @param did: diagram id
+            @return: result, etag
+        """
+        host, uri = self._generateURI( did )
+        req = httplib.HTTPConnection(host)
+        req.request("HEAD", uri)
+        try:
+            response = req.getresponse()
+        except:
+            raise api.ErrorNetwork()
+        
+        if (response.status != 200):
+            return False, None
 
+        headers = response.getheaders()        
+        etag = self._extractEtag(headers)
+        
+        return True, etag
+        
+    def get(self, did):
+        """ Performs an HTTP GET command on the specified diagram resource
+            @param did: diagram id
+            @return: result, etag, data 
+        """
+        host, uri = self._generateURI( did )
+        req = httplib.HTTPConnection(host)
+        req.request("GET", uri)
+        try:
+            response = req.getresponse()
+        except:
+            raise api.ErrorNetwork()
+        
+        if (response.status != 200):
+            return False, None, None
 
+        headers = response.getheaders()        
+        etag = self._extractEtag(headers)
+        
+        try:
+            data = response.read()
+        except:
+            raise api.ErrorProtocol()
+        
+        return True, etag, data
+        
+    def _generateURI(self, did, representation = 'large'):
+        """ Generates the URL for a specified diagram + representation
+            @param did: diagram id
+            @param representation: one of large, medium, small, thumb
+            @return: HOST, URI 
+        """
+        return _api, _representations[representation] % did
+        
+    def _extractEtag(self, headers):
+        etag = None
+        for header in headers:
+            if header[0] == 'etag':
+                etag = header[1]
+                break
+        
+        return etag
+        
 # ==============================================
 # ==============================================
 

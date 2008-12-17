@@ -8,6 +8,7 @@ __version__ = "$Id$"
 
 import os
 from stat import *
+import jld.api as api
 
 def existsPath(path):
     """ Verifies the existence of 'path'
@@ -80,6 +81,37 @@ def createDirIfNotExists(dir):
     if (not os.path.exists(dir)):
         os.makedirs( dir )
     
+def initPath(path):
+    """ Initializes a path.
+        The folder hierarchy leading to
+        the said path is created IFF it is not
+        already in place.
+        @param path: the target path
+        @raise Exception:  
+    """
+    # replace the '~' meta path
+    ppath = replaceHome( path ) 
+
+    rep = existsDir(ppath)
+    if (rep):
+        return True
+           
+    if (rep is False):
+        createFolderHierarchy(ppath)
+                
+    rep = existsDir(ppath)       
+    if (rep is False):
+        raise api.ErrorConfig('msg:error_init_folder', {'path':ppath})            
+    
+    return True
+    
+def createFolderHierarchy(self, path):
+    """ Creates a folder hierarchy
+    """
+    try:    
+        os.makedirs(path)
+    except: 
+        raise api.ErrorConfig('msg:error_create_folder', {'path':path})
 
 # ==============================================
 # ==============================================
