@@ -62,25 +62,26 @@ class Diagrams(SQLObject):
     @classmethod
     def updateFromList(cls, list):
         """ Updates the database from the specified list
-            @param list: the list of dict entries
+            @param list: the list of ids
             @return: tuple( total, updated, created )
         """
         total = len(list);
         updated = 0;  
         created = 0;
-        for entry in list:
-            did = entry['did']
+        for did in list:
             diagrams = cls.select( cls.q.did == did )
             
             #post already exists?
             try:    diagram = diagrams[0]
             except: diagram = None
                 
+            entry = {'did':did}
+            
             if (diagram is None):
                 created = created + 1
                 cls._createOne( entry )
             else:
-                if (cls._updateOne(entry, post)):
+                if (cls._updateOne(entry, diagram)):
                     updated = updated  + 1
                     
         return (total, updated, created)

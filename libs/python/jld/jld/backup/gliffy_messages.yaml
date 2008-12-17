@@ -3,8 +3,7 @@
 # @author: Jean-Lou Dupont
 
 # Reporting related
-report_local_update: cmd[llatest] timestamp[$time]
-report_remote_update: cmd[rlatest] timestamp[$time]
+report_import: cmd[import] Total[$total] Updated[$updated] Created[$created]
 report_update_none: cmd[updatedb] no update required
 report_updatedb: cmd[updatedb] Total[$total] Updated[$updated] Created[$created]
 
@@ -25,6 +24,7 @@ use_help: Please use '-h' for help
 
 # Errors / Exceptions
 # ===================
+error_expecting_href: Expecting HREF parameter in the bookmark entry
 error_config_type: Parameter [$key] should be of type[$type] 
 error_update_db: Error whilst updating the database
 error_cant_write: Error whilst writing to [$path]

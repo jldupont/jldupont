@@ -40,6 +40,23 @@ def extractIdFromURI(uri):
             return id
     return None
 
+def extractIdFromListOfURI(list):
+    """ Extracts the diagram ids' from a list of URI
+    >>> list = ['http://www.gliffy.com/pubdoc/123/L.jpg','http://www.gliffy.com/pubdoc/456/L.jpg']
+    >>> result = extractIdFromListOfURI(list)
+    >>> print result
+    ['123', '456']
+    >>> list = None
+    >>> result = extractIdFromListOfURI(list)
+    >>> print result
+    []
+    """
+    result = []
+    list = list if list else []
+    for item in list:
+        result.append( extractIdFromURI(item) )
+    return result
+
 # Representations
 # ===============
 _representations = [
