@@ -53,11 +53,13 @@ class Posts(SQLObject):
                              orderBy=DESC(Posts.q.changed))
         else:
             all = cls.select(orderBy=DESC(Posts.q.changed))
-            
-        for one in all:
-            entry = cls._formatOne( one )
-            list.append( entry )
-            
+        
+        try:   
+            for one in all:
+                entry = cls._formatOne( one )
+                list.append( entry )
+        except:
+            pass
         return list
     
     @classmethod

@@ -64,10 +64,7 @@ class Backup(BaseCmd):
             pp.run( self )
     
     def cmd_listdb(self, *args):
-        """ Lists the current entries in the database, optional filter by tag"""
-        try:    tag = args[0]
-        except: tag = None
-        
+        """ Lists the current entries in the database """
         self._initDb()
         all = glfdb.Diagrams.getAll()
         
@@ -77,9 +74,14 @@ class Backup(BaseCmd):
             print 'Total[%s]' % len(all)
     
     def cmd_import(self, *args):
-        """ Imports the diagram id's from the Delicious database (logged) """
-        
-    
+        """ Imports the diagram ids' from the Delicious database (logged) """
+        try:    tag = args[0][0]
+        except: raise api.ErrorValidation( 'missing_param', {'param':'tag'} )
+        print tag
+        self._initDb()
+        all = dlcdb.Posts.getAll( tag )
+        self._doImport(all)        
+            
     def cmd_deletedb(self, *args):
         """Deletes the database"""
         self._deleteDb()
@@ -87,7 +89,26 @@ class Backup(BaseCmd):
     # =========================================================
     # HELPERS
     # =========================================================
+    def _extractHref(self,list):
+        """ Extracts the URI from the HREF entries in the list
+        """
+        result = []
+        list = list if list else []
+        for item in list:
+            result.append( item['href'] )
+        return result
         
+    def _doImport(self, list):
+        """ Imports the diagram ids' from the list into the database
+            @param list: diagram list 
+        """
+        try:    ids = self._extractHref(list)
+        except: raise api.ErrorProtocol('msg:error_expecting_href')
+            
+        total, updated, created = glfdb.Diagrams.updateFromList(ids)
+        msg = self.msgs.render('report_import', {'total':total, 'updated':updated, 'created':created })
+        self.logger.info(msg)
+    
     def _deleteDb(self):
         path = mos.replaceHome( self.glf_db_path )
         glfdb.Db.deleteDb(path)
