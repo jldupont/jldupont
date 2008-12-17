@@ -6,6 +6,7 @@
 __author__  = "Jean-Lou Dupont"
 __version__ = "$Id$"
 
+import os
 from sqlobject import *
 import sqlite3 as sql
 
