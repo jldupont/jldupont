@@ -3,8 +3,8 @@
 # @author: Jean-Lou Dupont
 
 # Reporting related
-report_update: cmd[updatedb] Total     [$total] Updated[$updated] New[$new]
-report_export: cmd[export]   Exportable[$total] Successes[$successes] Failure[$failures]
+report_update: cmd[updatedb] Total     [%(total)04d]   Updated[%(updated)04d]       New[%(new)04d]
+report_export: cmd[export]   Exportable[%(total)04d] Successes[%(successes)04d] Failure[%(failures)04d]
 report_maps: Total maps found[$total]
 report_auth: cmd[auth] frob[$frob]
 

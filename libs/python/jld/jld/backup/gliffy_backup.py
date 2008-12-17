@@ -111,7 +111,7 @@ class Backup(BaseCmd):
             else:
                 failures  = failures + 1 
             
-        msg = self.msgs.render('report_export', {'total':total, 'successes':successes, 'failures': failures} )
+        msg = self.msgs.render2('report_export', {'total':total, 'successes':successes, 'failures': failures} )
         self.logger.info(msg)
             
     def cmd_deletedb(self, *args):
@@ -208,11 +208,10 @@ class Backup(BaseCmd):
         """
         try:    uris = self._extractHref(list)
         except: raise api.ErrorProtocol('msg:error_expecting_href')
-        
+
         ids = glf.extractIdFromListOfURI(uris)
-        
         total, updated, created = glfdb.Diagrams.updateFromList(ids)
-        msg = self.msgs.render('report_import', {'total':total, 'updated':updated, 'created':created })
+        msg = self.msgs.render2('report_import', {'total':total, 'updated':updated, 'created':created })
         self.logger.info(msg)
     
     def _deleteDb(self):

@@ -11,7 +11,8 @@ from string import Template
 class Messages(object):
     
     def __init__(self, path):
-        """path: filesystem path to YAML messages
+        """
+            @param path: filesystem path to YAML messages
         """
         self.filepath = path
         self.msgs = None
@@ -30,9 +31,24 @@ class Messages(object):
     
     def render(self, key, params = None):
         """ Renders a message template with optional parameters
+            @param key: the message key
+            @param params: the optional parameters
+            @return: the rendered message (string)
         """
         tpl = Template( self[key] )
         return tpl.substitute( params ).lstrip()
+    
+    def render2(self, key, params = None):
+        """ Renders a template through the 'old' python string templating engine
+            @param key: the message key
+            @param params: the parameters
+            @return: rendered string
+        """
+        tpl = self[key]
+        if (params):
+            return tpl % params
+        
+        return tpl
     
 # =================================================================
     
