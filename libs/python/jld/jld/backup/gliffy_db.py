@@ -32,7 +32,8 @@ class Diagrams(SQLObject):
     def getToExportList(cls):
         """ Returns a list of entries that aren't exported yet
         """
-        return cls.select( cls.q.exported == None )
+        # the whole list must be returned
+        return cls.select( ) #cls.q.exported == None )
     
     @classmethod
     def getAll(cls):

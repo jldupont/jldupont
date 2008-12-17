@@ -48,6 +48,7 @@ class Backup(BaseCmd):
         self.dlc_db = None        
         self.glf_db = None
         self.export_path = None
+        self.export_path_init = False
         self.export_maxnum = None
         
         self.msgs = msg.Gliffy_Messages()
@@ -88,24 +89,30 @@ class Backup(BaseCmd):
         self._init_export_folder()
         
         # Get Export list
-        
+        #  This is a preliminary list of work to be done:
+        #  the gliffy API must be queried for getting
+        #  the up-to-date list. The 'etag' metadata is used.
         self._initDb()
-        all = glfdb.Diagrams.getToExportList()
-        
+        plist = glfdb.Diagrams.getToExportList()        
+        p2list = self._buildIdEtagList(plist)
+        all = self._buildListToExport(p2list)
+
         total = len (all) 
-        successes = failures = 0
+        successes = 0 
+        failures = 0
         # Export
-        for diagram in all:
-            did = diagram['did']
-            result, etag = self._exportOne(did)
+        for diagram, did, etag in all:
+            ts = datetime.datetime.now()
+            timestamp = "%s%s%s%s%s%s" % (ts.year, ts.month, ts.day, ts.hour, ts.minute, ts.second)
+            result, etag = self._exportOne(did, timestamp)
             if result: 
-                self._updateOne(diagram,etag)
+                self._updateOne(diagram, etag, ts)
                 successes = successes + 1
             else:
                 failures  = failures + 1 
             
         msg = self.msgs.render('report_export', {'total':total, 'successes':successes, 'failures': failures} )
-        self.logger(msg)
+        self.logger.info(msg)
             
     def cmd_deletedb(self, *args):
         """Deletes the database"""
@@ -114,15 +121,41 @@ class Backup(BaseCmd):
     # =========================================================
     # HELPERS
     # =========================================================
-    def _updateOne(self, diagram, etag):
+    def _buildIdEtagList(self, list):
+        """ Builds a diagram id+etag list from a diagram object list
+            @param list: the database diagram object list
+            @return: output diagram list consisting of (diagram, id,etag)
+        """
+        result = []
+        list = list if list else []
+        for diagram in list:
+            result.append( (diagram, diagram.did,diagram.etag) )
+        return result
+        
+    def _buildListToExport(self, list):
+        """ Builds the export list
+            @param list: the input diagram id+etag list
+            @return: the processed by diagram id list
+        """
+        self._initGliffy()
+        result = []
+        for item in list:
+            diagram, did, cetag = item
+            code, etag = self.gliffy.head(did)
+            if (code):
+                if (cetag != etag):
+                    result.append( (diagram, did, etag) )
+        return result
+    
+    def _updateOne(self, diagram, etag, timestamp):
         """ Updates the database diagram entry """
         try:
             diagram.etag = etag
-            diagram.exported = datetime.datetime.now()
+            diagram.exported = timestamp
         except Exception,e:
             raise api.ErrorDb('msg:error_update_db', {})
         
-    def _exportOne(self, did):
+    def _exportOne(self, did, timestamp):
         """ Exports one diagram to the export folder
             @param did: diagram id
             @return: result, etag  
@@ -131,16 +164,20 @@ class Backup(BaseCmd):
         self.logger.info(msg)
         
         #get just the 'large' representation URI
+        code, etag, data = self.gliffy.get(did)
 
         #write it
-        self._writeOne(did, data, timestamp)
+        if (code):
+            self._writeOne(did, data, timestamp)
+            
+        return code, etag
                 
     def _writeOne(self, did, data, timestamp):
         """ Writes one diagram to the export folder
         """
         path = self._genFilePath(did, timestamp)
         try:
-            fh = open( path, 'w' )
+            fh = open( path, 'wb' )
             fh.write( data )
             fh.close()
         except Exception,e:
@@ -152,7 +189,7 @@ class Backup(BaseCmd):
             Assumes a 'jpg' extension.
         """ 
         dir = self.export_path_init + os.sep + did
-        self._create_map_export_folder(dir)
+        mos.initPath(dir)
         
         return dir + os.sep + did + '_' +timestamp + '.jpg'
 

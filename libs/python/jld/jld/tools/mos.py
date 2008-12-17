@@ -94,7 +94,7 @@ def initPath(path):
 
     rep = existsDir(ppath)
     if (rep):
-        return True
+        return ppath
            
     if (rep is False):
         createFolderHierarchy(ppath)
@@ -103,9 +103,9 @@ def initPath(path):
     if (rep is False):
         raise api.ErrorConfig('msg:error_init_folder', {'path':ppath})            
     
-    return True
+    return ppath
     
-def createFolderHierarchy(self, path):
+def createFolderHierarchy(path):
     """ Creates a folder hierarchy
     """
     try:    
