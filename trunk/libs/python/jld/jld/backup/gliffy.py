@@ -114,7 +114,7 @@ Commands:
         ui.integrateOptions(ui.options, params, _options)
         
         # integrate default config
-        defs = ddef.Delicious_Defaults()
+        defs = ddef.Gliffy_Defaults()
         ui.integrateDefaults(defs, r, _options, params)
 
         # Verify parameter type

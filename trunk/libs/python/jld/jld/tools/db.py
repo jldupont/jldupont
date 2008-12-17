@@ -20,6 +20,9 @@ def formatSqliteURI( path ):
         as well as replacing the semicolon :
         to a pipe character |.
         For a complete URI, just prepend sqlite:///
+        
+        @param path: the input filesystem path
+        @return: the formatted Sqlite URI 
     """
     if (path is ':memory:'):
         return path
@@ -88,4 +91,4 @@ class BaseSQLObjectDb(object):
             dbfile.close()
         except Exception,e:
             raise api.ErrorDb( e, {'file':filepath} )
-        
+       

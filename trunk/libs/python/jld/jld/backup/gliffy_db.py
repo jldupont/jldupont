@@ -11,7 +11,6 @@ from sqlobject import *
 import sqlite3 as sql
 
 import jld.api as api
-import jld.tools.mos as mos
 import jld.tools.db as db
 
 # =============================================
@@ -119,11 +118,10 @@ class Diagrams(SQLObject):
 # ==============================================        
 
 class Db(db.BaseSQLObjectDb):
-
     def initTable(self):
         Diagrams.createTable(ifNotExists=True)
 
-    
+
 # ==============================================
 # ==============================================
 
