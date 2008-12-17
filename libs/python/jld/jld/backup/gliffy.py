@@ -71,6 +71,15 @@ version $Id$ by Jean-Lou Dupont
 
 *** Backup utility for Gliffy diagrams (http://www.gliffy.com/) ***
 
+Usage Notes:
+ 1- This command line utility is meant to complement the cousin 'dlc' command line
+ 2- The command 'import' is used to import bookmarks from the dlc (Delicious) database
+    The command 'import' is to be used with a parameter that denotes the 'tag' used to bookmark 
+    the Gliffy diagrams. 
+    E.g. glf import my-diagrams
+     Will import from the dlc database all the bookmarks tagged with 'my-diagrams'.
+ 3- The command 'export' is used to retrieve the diagrams from Gliffy.    
+
 The commands which generate log entries are flagged with (logged) below.
 
 Commands:

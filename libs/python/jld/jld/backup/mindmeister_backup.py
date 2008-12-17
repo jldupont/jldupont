@@ -279,7 +279,6 @@ class Backup(BaseCmd):
         try:    
             os.makedirs(self.export_path_init)
         except: 
-            print 'os.makedirs'
             raise api.ErrorConfig('msg:error_create_folder')
         return  True
             
