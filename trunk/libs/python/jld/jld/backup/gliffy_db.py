@@ -19,12 +19,14 @@ class Diagrams(SQLObject):
     """
     # diagram id
     did      = StringCol()
+    # etag - serves as revision id
+    etag     = StringCol()
     #datetime timestamp at which the entry was added to the database
     added    = DateTimeCol()
     #datetime timestamp at which the entry was exported to the filesystem
     exported = DateTimeCol()
     
-    _attributesToVerify = ['did']
+    _attributesToVerify = ['did', 'exported', 'etag']
 
     @classmethod
     def getToExportList(cls):
@@ -56,6 +58,7 @@ class Diagrams(SQLObject):
         result = {}
         result['did']      = entry.did
         result['added']    = entry.added
+        result['etag']     = entry.etag
         result['exported'] = entry.exported
         return result
     
@@ -74,7 +77,7 @@ class Diagrams(SQLObject):
             try:    diagram = dgs[0]
             except: diagram = None
                 
-            entry = {'did':did}
+            entry = {'did':did, 'etag': None}
             
             if (diagram is None):
                 created = created + 1
@@ -90,7 +93,8 @@ class Diagrams(SQLObject):
         """ Creates one post entry
         """
         Diagrams(did=entry['did'], 
-                 exported=None, 
+                 exported=None,
+                 etag=None,
                  added=datetime.datetime.now() )
         
     @classmethod
@@ -112,8 +116,9 @@ class Diagrams(SQLObject):
             
         if (needsUpdate):
             diagram.set( did=entry['did'],
+                         etag=entry['etag'],
                          added=entry['added'],
-                         exported=datetime.datetime.now() )           
+                         exported=entry['exported'] )           
                 
         return needsUpdate
             

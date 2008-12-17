@@ -55,7 +55,7 @@ class Gliffy_Printer_Config(Gliffy_Printer):
     """
     
     def __init__(self, msgs, obj):
-        Delicious_Printer.__init__(self, msgs)
+        Gliffy_Printer.__init__(self, msgs)
         self._fields = getattr(obj, '_configParams')
 
     def header(self):

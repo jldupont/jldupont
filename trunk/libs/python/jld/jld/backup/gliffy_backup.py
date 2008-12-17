@@ -81,6 +81,32 @@ class Backup(BaseCmd):
         all = dlcdb.Posts.getAll( tag )
         self._doImport(all)        
             
+    def cmd_export(self, *args):
+        """ Exports the diagrams to the export folder (logged) """
+        
+        # Verify export folder
+        self._init_export_folder()
+        
+        # Get Export list
+        
+        self._initDb()
+        all = glfdb.Diagrams.getToExportList()
+        
+        total = len (all) 
+        successes = failures = 0
+        # Export
+        for diagram in all:
+            did = diagram['did']
+            result, etag = self._exportOne(did)
+            if result: 
+                self._updateOne(diagram,etag)
+                successes = successes + 1
+            else:
+                failures  = failures + 1 
+            
+        msg = self.msgs.render('report_export', {'total':total, 'successes':successes, 'failures': failures} )
+        self.logger(msg)
+            
     def cmd_deletedb(self, *args):
         """Deletes the database"""
         self._deleteDb()
@@ -88,6 +114,48 @@ class Backup(BaseCmd):
     # =========================================================
     # HELPERS
     # =========================================================
+    def _updateOne(self, diagram, etag):
+        """ Updates the database diagram entry """
+        try:
+            diagram.etag = etag
+            diagram.exported = datetime.datetime.now()
+        except Exception,e:
+            raise api.ErrorDb('msg:error_update_db', {})
+        
+    def _exportOne(self, did):
+        """ Exports one diagram to the export folder
+            @param did: diagram id
+            @return: result, etag  
+        """
+        msg = self.msgs.render('report_export_one', {'id':did})
+        self.logger.info(msg)
+        
+        #get just the 'large' representation URI
+
+        #write it
+        self._writeOne(did, data, timestamp)
+                
+    def _writeOne(self, did, data, timestamp):
+        """ Writes one diagram to the export folder
+        """
+        path = self._genFilePath(did, timestamp)
+        try:
+            fh = open( path, 'w' )
+            fh.write( data )
+            fh.close()
+        except Exception,e:
+            raise api.ErrorFile('msg:cant_write', {'path':path})        
+
+    def _genFilePath(self, did, timestamp):
+        """ Generates a filepath related
+            to an export diagram.
+            Assumes a 'jpg' extension.
+        """ 
+        dir = self.export_path_init + os.sep + did
+        self._create_map_export_folder(dir)
+        
+        return dir + os.sep + did + '_' +timestamp + '.jpg'
+
     def _extractHref(self,list):
         """ Extracts the URI from the HREF entries in the list
         """
@@ -113,6 +181,40 @@ class Backup(BaseCmd):
     def _deleteDb(self):
         path = mos.replaceHome( self.glf_db_path )
         glfdb.Db.deleteDb(path)
+        
+    def _create_map_export_folder(self, dir):
+        """
+        """
+        mos.createDirIfNotExists(dir)
+    
+    
+    def _init_export_folder(self):
+        """ Creates the export folder IF it does not
+            already exists
+        """
+        if (not self.export_path_init):
+            self.export_path_init = mos.replaceHome( self.export_path )
+
+        rep = mos.existsDir(self.export_path_init)
+        if (rep):
+            return
+               
+        if (rep is False):
+            self._create_export_folder()
+                    
+        rep = mos.existsDir(self.export_path_init)       
+        if (rep is False):
+            raise api.ErrorConfig('msg:error_init_folder')            
+            
+    def _create_export_folder(self):
+        """ Creates the export folder
+        """
+        try:    
+            os.makedirs(self.export_path_init)
+        except: 
+            raise api.ErrorConfig('msg:error_create_folder')
+        return  True
+
         
     # LAZY INITIALIZERS
     # =================
