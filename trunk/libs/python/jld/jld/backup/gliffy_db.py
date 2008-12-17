@@ -65,7 +65,9 @@ class Diagrams(SQLObject):
     
     @classmethod
     def updateFromList(cls, list):
-        """ Updates the database from the specified list
+        """ Updates the database from the specified list.
+            Used solely during the ''import'' command.
+            
             @param list: the list of ids
             @return: tuple( total, updated, created )
         """
@@ -78,14 +80,15 @@ class Diagrams(SQLObject):
             try:    diagram = dgs[0]
             except: diagram = None
                 
-            entry = {'did':did, 'etag': None}
-            
             if (diagram is None):
+                entry = {'did':did}
                 created = created + 1
                 cls._createOne( entry )
-            else:
-                if (cls._updateOne(entry, diagram)):
-                    updated = updated  + 1
+            
+            #can't really update for now
+            #else:
+            #    if (cls._updateOne(entry, diagram)):
+            #        updated = updated  + 1
                     
         return (total, updated, created)
 

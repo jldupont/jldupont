@@ -3,8 +3,8 @@
 # @author: Jean-Lou Dupont
 
 # Reporting related
-report_import: cmd[import] Total[$total]   Updated[$updated] Created[$created]
-report_export: cmd[export] Total[$total] Successes[$successes] Failures[$failures]
+report_import: cmd[import] Total[%(total)04d]   Updated[%(updated)04d]  Created[%(created)04d]
+report_export: cmd[export] Total[%(total)04d] Successes[%(successes)04d] Failures[%(failures)04d]
 report_export_one: Exporting diagram[$id]
 
 # CONFIG related

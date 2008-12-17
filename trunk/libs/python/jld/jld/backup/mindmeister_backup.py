@@ -105,7 +105,7 @@ class Backup(BaseCmd):
         
         self._initDb()
         report = db.Maps.updateFromList( all )
-        msg=self.msgs.render('report_update', {'total':report[0],'updated': report[1], 'new': report[2]})
+        msg=self.msgs.render2('report_update', {'total':report[0],'updated': report[1], 'new': report[2]})
         self.logger.info( msg )
         
     def cmd_listmaps(self, *args):
@@ -184,7 +184,7 @@ class Backup(BaseCmd):
             if (cnt==0):
                 break
                 
-        msg = self.msgs.render('report_export', {'total': total, 'successes': success, 'failures': failure} )
+        msg = self.msgs.render2('report_export', {'total': total, 'successes': success, 'failures': failure} )
         self.logger.info(msg)
                  
     def cmd_deletedb(self, *args):
