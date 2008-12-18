@@ -4,12 +4,20 @@
 """
 
 __author__  = "Jean-Lou Dupont"
-__version__ = "0.0.18"
+__version__ = "0.0.19"
 __email__   = "python@jldupont.com"
 __url__     = "http://www.jldupont.com/"
 __desc__    = """ Jean-Lou Dupont's Python Library - WEB API & command line tools
 """
-__long_desc__ = """This library contains the following utilities:
+#
+# must be in reStructuredText format (see http://docutils.sf.net/)
+#
+__long_desc__ = r"""\
+====
+Jean-Lou Dupont's Python Library
+====
+This library contains the following utilities:
+
 - MindMeister mindmaps Backup command line: for exporting mindmaps from MindMeister in FreeMind format
 - Delicious API & Backup command line utility
 - Gliffy API & Backup command line utility
