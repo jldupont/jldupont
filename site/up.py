@@ -1,3 +1,6 @@
 #!/usr/bin/env python
 import os
-os.system("appcfg.py update --email=jeanlou.dupont@gmail.com app/")
+
+email = os.environ['GAE_EMAIL']
+cmd = "appcfg.py update --email=%s app/" % email
+os.system(cmd)
