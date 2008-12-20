@@ -12,6 +12,8 @@ from google.appengine.api import urlfetch
 
 import libs.django as mydjango
 
+import import_wrapper
+
 # My Django configuration
 # =======================
 _loaders = (    'libs.django.filesystem_template_loader.load_template_source',
@@ -32,7 +34,7 @@ mydjango.setConfig( 'TEMPLATE_URL_BASES', _urls ) #not django standard
 mydjango.setConfig( 'TEMPLATE_ALLOWED_EXTENSIONS', _extensions ) #not django standard
 mydjango.setConfig( 'TEMPLATE_LOADERS', _loaders )
 mydjango.setConfig( 'TEMPLATE_DIRS', _dirs )
-
+mydjango.setConfig( 'INSTALLED_APPS', ('django.contrib.markup',) )
 
 # === GLOBAL VARS ===
 # ===================
