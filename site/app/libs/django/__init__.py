@@ -75,6 +75,7 @@ def setConfig( name, value ):
 django.template.add_to_builtins( "libs.django.anchor" )
 django.template.add_to_builtins( "libs.django.include" )
 django.template.add_to_builtins( "libs.django.vars" )
+django.template.add_to_builtins( "libs.django.loadpage" )
 
 # === FILTERS ===
 django.template.add_to_builtins( "libs.django.filters" )
