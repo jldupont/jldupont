@@ -10,8 +10,11 @@ from google.appengine.api import memcache
 from google.appengine.api import urlfetch
 
 _CACHE_TIMEOUT = 15*60
+_CACHE_TEMPLATE_KEY_EXPIRY = "/web/url/expiry/%s"
 _CACHE_TEMPLATE_KEY_CONTENT = "/web/url/content/%s"
 _CACHE_TEMPLATE_KEY_ETAG    = "/web/url/etag/%s"
+
+IS_REMOTE = not os.environ.get('SERVER_SOFTWARE').startswith('Dev')
 
 def get(url, timeout=_CACHE_TIMEOUT):
     """ Fetches a resource through an HTTP GET.
@@ -20,16 +23,23 @@ def get(url, timeout=_CACHE_TIMEOUT):
         @param timeout: memcache timeout in seconds
         @return: (content, etag) 
     """
+    cached_expiry    = memcache.get(_CACHE_TEMPLATE_KEY_EXPIRY % url)
     cached_page      = memcache.get(_CACHE_TEMPLATE_KEY_CONTENT % url)
     cached_page_etag = memcache.get(_CACHE_TEMPLATE_KEY_ETAG % url)
     
-    content,etag = cond_fetch(url, content = cached_page, etag = cached_page_etag)
+    if (not cached_expiry or not cached_page or not cached_page_etag):
+        content,etag = cond_fetch(url, content = cached_page, etag = cached_page_etag)
+    else:
+        logging.info("web.get: got from memcache[%s]" %url)
+        return (cached_page,cached_page_etag)
         
     if not content:
         return (None, None)
     
-    memcache.set(_CACHE_TEMPLATE_KEY_ETAG % url, etag, timeout )
-    memcache.set(_CACHE_TEMPLATE_KEY_CONTENT % url, content, timeout )
+    if (IS_REMOTE):
+        memcache.set(_CACHE_TEMPLATE_KEY_EXPIRY  % url, "exp",   timeout )
+        memcache.set(_CACHE_TEMPLATE_KEY_ETAG    % url, etag,    0 )
+        memcache.set(_CACHE_TEMPLATE_KEY_CONTENT % url, content, 0 )
     
     return (content,etag)
 
