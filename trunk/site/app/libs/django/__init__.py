@@ -37,7 +37,7 @@ def makelist(target):
 
 @makelist
 def unquote(obj):
-    """ Remove single/double quotes
+    """ Remove single/double quotes from the list of strings
     """
     liste = []
     for o in obj:
@@ -49,20 +49,26 @@ def unquote(obj):
     return liste
 
 def verifyQuotes(tag_name, obj):
+    """ Verifies that the input object (either list or string)
+        is single or double quoted.
+        @param tag_name: context information
+        @param obj: input obj (either list of strings or single string) 
+    """
     if (obj is None):
         return
     
-    if (type(obj) == 'list'):
+    if (type(obj) is StringType):
+        obj = [obj]
+    
+    t = type(obj)
+    if (t is ListType or t is TupleType):       
         for o in obj:
             if not (o[0] == o[-1] and o[0] in ('"', "'")):
                 logging.warn('verifyQuotes: error')
                 raise django.template.TemplateSyntaxError, "%r tag's parameter[%s] be in quotes" % (tag_name, o)
-            
-    if (type(obj) == 'str'):
-        if not (obj[0] == obj[-1] and obj[0] in ('"', "'")):
-            logging.warn('verifyQuotes: error')            
-            raise django.template.TemplateSyntaxError, "%r tag's parameter[%s] be in quotes" % (tag_name, obj)
-    
+    else:
+        raise django.template.TemplateSyntaxError, "%r tag's: verifyQuotes only handles string, list of strings and tuple of strings" % tag_name
+                
 def setConfig( name, value ):
     try:
         setattr(django.conf.settings, name, value )
