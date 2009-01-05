@@ -29,13 +29,16 @@ while True:
 base_url = 'http://jldupont.googlecode.com/svn/tags/eggs/%s'
 
 #Compute source path of egg
+#==========================
 source_egg_path = this_path + os.sep + 'dist' + os.sep + egg_name 
 dest_egg_path = tags_path + os.sep + 'eggs'
  
 #Compute documentation path & URI
+#================================
 doc_fragment = 'doc/%s/index.html' % version
 doc_path = tags_path + os.sep + 'eggs' + os.sep + 'doc' + os.sep + version
 doc_url = base_url % doc_fragment
+doc_path_latest = os.path.join(tags_path, 'eggs', 'doc', 'latest')
 
 URL = 'http://jldupont.googlecode.com/svn/tags/eggs/%s' % egg_name
 
@@ -109,4 +112,4 @@ os.chdir(jld)
 print 'generating documentation'
 pkgs = ' '.join( _packages )
 cmd = """epydoc.py --html -v --output="%s" %s""" % (doc_path, pkgs)
-print os.system(cmd)
+os.system(cmd)
