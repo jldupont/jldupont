@@ -12,12 +12,12 @@ __desc__    = """ Jean-Lou Dupont's Python Library - WEB API & command line tool
 #
 # must be in reStructuredText format (see http://docutils.sf.net/)
 #
-__long_desc__ = r"""\
+__long_desc__ = """\
 ====
 Jean-Lou Dupont's Python Library
 ====
 This library contains the following utilities:
-
+  
 - MindMeister mindmaps Backup command line: for exporting mindmaps from MindMeister in FreeMind format
 - Delicious API & Backup command line utility
 - Gliffy API & Backup command line utility
@@ -32,5 +32,7 @@ __classifiers__ = [
     'License :: Public Domain',
     'Programming Language :: Python',
     'Topic :: Software Development :: Libraries :: Python Modules',
+    'Operating System :: Microsoft :: Windows',
+    'Operating System :: POSIX',
     ]
 
