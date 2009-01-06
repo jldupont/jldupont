@@ -5,6 +5,7 @@
 __author__  = "Jean-Lou Dupont"
 __version__ = "$Id$"
 __msgs__ = ['unhandled_exception',]
+__exceptions__ = ['ErrorConfig',]
 
 import re
 import sys
@@ -70,7 +71,8 @@ class UIBase(object):
             msg = msg + ': ' + help
         
         result_msg = msg + ' ' + pmsg
-        self.logger.error( result_msg )
+        try:    self.logger.error( result_msg )
+        except: pass
         
     def _resolveHelp(self, entry):
         if (self._platform_win32):
