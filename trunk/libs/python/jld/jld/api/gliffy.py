@@ -29,8 +29,6 @@ for p in _rawpatterns:
 
 def extractIdFromURI(uri):
     """ Extracts the diagram ID from a URI
-        @param uri: the uri
-        @return: the diagram id
     
         >>> tests = [ \
         'http://www.gliffy.com/publish/1553333/', \
@@ -39,6 +37,9 @@ def extractIdFromURI(uri):
         print extractIdFromURI( t )
         1553333
         1554222
+        
+        @param uri: the uri
+        @return: the diagram id        
     """
     for p in _patterns:
         g = p.search( uri )
@@ -49,10 +50,8 @@ def extractIdFromURI(uri):
     return None
 
 def extractIdFromListOfURI(list):
-    """ Extracts the diagram ids' from a list of URI
-        @param list: a list of URI
-        @return: a list of diagram ids
-        
+    """ Extracts the diagram ids from a list of URI
+    
     >>> list = ['http://www.gliffy.com/pubdoc/123/L.jpg','http://www.gliffy.com/pubdoc/456/L.jpg']
     >>> result = extractIdFromListOfURI(list)
     >>> print result
@@ -61,6 +60,9 @@ def extractIdFromListOfURI(list):
     >>> result = extractIdFromListOfURI(list)
     >>> print result
     []
+    
+        @param list: a list of URI
+        @return: a list of diagram ids    
     """
     result = []
     list = list if list else []
@@ -80,14 +82,16 @@ _representations = {
 
 def representations(id):
     """ Generator for representations
-        @param id: the source diagram id 
-        @return: URI to target representation
-        
+            
 >>> for r in representations(123): print r
 /pubdoc/123/L.jpg
 /pubdoc/123/S.jpg
 /pubdoc/123/M.jpg
-/pubdoc/123/T.jpg"""
+/pubdoc/123/T.jpg
+
+        @param id: the source diagram id 
+        @return: URI to target representation
+"""
     for k,v in _representations.iteritems():
         yield v % id
 
