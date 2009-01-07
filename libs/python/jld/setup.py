@@ -63,7 +63,9 @@ _scripts = [
             
             'jld/backup/scripts/glf.py',
             'jld/backup/scripts/glf.bat', 
-            'jld/backup/scripts/glf',             
+            'jld/backup/scripts/glf', 
+            
+            'jld/cmd/pypre.py',            
             ]
 
 _dependencies = []
