@@ -5,6 +5,7 @@
 
 __author__  = "Jean-Lou Dupont"
 __version__ = "$Id$"
+__dependencies__ = ['mako',]
 
 import os
 

@@ -48,7 +48,8 @@ _packages = ['jld',
              'jld.api', 
             'jld.backup', 
             'jld.cmd', 
-            'jld.registry', 
+            'jld.registry',
+            'jld.template',  
             'jld.tools'
             ]
 
