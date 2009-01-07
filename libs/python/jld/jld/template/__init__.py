@@ -20,6 +20,7 @@ class Tpl(object):
             serves as configuration for the template
             directory by default. If *dirs* is specified,
             it takes precedence.
+            
             @param input: the input file (complete file path)
             @param dirs: the template directory list   
             
@@ -32,9 +33,7 @@ class Tpl(object):
             
     def render(self, **params):
         """ Performs the preprocessing.
-                @param params: the input parameters
-                @return: rendered text
-                
+        
             **Example**
             
             >>> f = os.path.dirname( __file__ ) + '/test.tpl' 
@@ -45,6 +44,9 @@ class Tpl(object):
             >>> t2 = Tpl(f2)
             >>> t2.render()
             'Simple template.'
+            
+            @param params: the input parameters
+            @return: rendered text            
         """
         lookup = TemplateLookup(directories = self.dirs) if self.dirs else None
         tpl = Template(filename=self.input, lookup=lookup)

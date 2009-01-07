@@ -14,7 +14,10 @@ import jld.template as tpl
 _options =[]
 
 _usage = """%prog [options] input_file   
-version $LastChangeRevision$ by Jean-Lou Dupont"""
+
+Preprocessor based on the Mako template engine
+version $LastChangeRevision$ by Jean-Lou Dupont
+"""
 
 
 def main():
