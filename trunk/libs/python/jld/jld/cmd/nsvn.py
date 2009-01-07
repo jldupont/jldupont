@@ -10,6 +10,7 @@ __version__ = "$Id$"
 import glob
 import os
 from optparse import OptionParser
+from jld.tools.mos import nukedir
 
 _options =[ 
   {'o1':'-F', 'var':'force', 'action':'store_true', 'default': False, 'help': "Forces the delete action" },
@@ -24,16 +25,6 @@ version $LastChangeRevision$ by Jean-Lou Dupont
 The -F option must be used in order to actually perform the delete action or else only a list of the found targets is produced.
 """
 
-def nukedir(directory):
-    for root, dirs, files in os.walk(directory, topdown=False):
-        for name in files:
-            os.remove(os.path.join(root, name))
-        for name in dirs:
-            os.rmdir(os.path.join(root, name))
-
-    os.rmdir(directory)
-    
-
 def main():
     parser = OptionParser( usage=_usage )
     for o in _options:
@@ -45,10 +36,8 @@ def main():
     
     (options,args) = parser.parse_args()
 
-    try:
-        input  = args[0]
-    except:
-        input  = os.getcwd()
+    try:    input  = args[0]
+    except: input  = os.getcwd()
     
     if (not os.path.isdir(input)):
         print "Error: invalid input_directory parameter"
@@ -64,12 +53,16 @@ def main():
         if (os.path.basename(root) == ".svn"):
             targets.append( root )
 
-    for directory in targets:
-        if (not options.quiet):
-            print prepend % directory
-        if (options.force):
-            nukedir( directory )
-    
+    try:
+        for directory in targets:
+            if (not options.quiet):
+                print prepend % directory
+            if (options.force):
+                nukedir( directory )
+    except Exception,e:
+        print "Error: [%s]" % e
+        exit(0)
+        
     exit(1)
 
     

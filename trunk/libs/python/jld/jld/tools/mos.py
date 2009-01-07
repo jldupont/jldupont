@@ -113,6 +113,17 @@ def createFolderHierarchy(path):
     except: 
         raise api.ErrorConfig('msg:error_create_folder', {'path':path})
 
+def nukedir(directory):
+    """ Nukes an entire directory hierarchy (topdown)
+    """
+    for root, dirs, files in os.walk(directory, topdown=False):
+        for name in files:
+            os.remove(os.path.join(root, name))
+        for name in dirs:
+            os.rmdir(os.path.join(root, name))
+
+    os.rmdir(directory)
+
 # ==============================================
 # ==============================================
 
