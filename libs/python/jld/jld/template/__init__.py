@@ -27,7 +27,7 @@ class Tpl(object):
         if dirs:
             self.dirs = dirs
         else:
-            self.dirs = os.path.dirname( input )
+            self.dirs = [ os.path.dirname( input ) ]
             
     def render(self, **params):
         """ Performs the preprocessing.
