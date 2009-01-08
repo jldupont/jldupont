@@ -23,6 +23,8 @@ This library is made available through CheeseShop_ with *easy_install*
  easy_install jld
 
 
+.. LINKS
+.. =====
 
 .. _CheeseShop: http://www.python.org/pypi/
 .. _Gliffy: http://www.gliffy.com/

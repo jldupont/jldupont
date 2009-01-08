@@ -133,6 +133,8 @@ class Doc( Base ):
         
     def get(self, base_name = None):
         
+        self._dolog(base_name)
+        
         page = base_name + '.rst'
         
         try:

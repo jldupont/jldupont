@@ -85,18 +85,18 @@ print _dependencies
 if (not _DEBUG):
     setup(
         name = "jld",
-        description = jld.__desc__,
-        author_email = jld.__email__,
-        author = jld.__author__,
-        url    = doc_url,
+        description      = jld.__desc__,
+        author_email     = jld.__email__,
+        author           = jld.__author__,
+        url              = jld.__doc_url__,
         long_description = jld.__long_desc__,
-        version = jld.__version__,
-        package_data = {'':['*.*']},
-        packages = _packages,
-        scripts  = _scripts,
-        classifiers = jld.__classifiers__,
+        version          = jld.__version__,
+        package_data     = {'':['*.*']},
+        packages         = _packages,
+        scripts          = _scripts,
+        classifiers      = jld.__classifiers__,
         install_requires = _dependencies,
-        zip_safe = False,
+        zip_safe         = False,
     )
 
 import shutil
@@ -106,13 +106,14 @@ if (not _DEBUG):
     print 'copying to tags directory'
     shutil.copy(source_egg_path, dest_egg_path)
 
-#go one level down to please epydoc
-cur =  os.path.dirname( __file__ )
-jld = cur + os.sep + 'jld'
-os.chdir(jld)
-
 # Documentation
-print 'generating documentation'
-pkgs = ' '.join( _packages )
-cmd = """epydoc.py --html -v --output="%s" %s""" % (doc_path, pkgs)
-os.system(cmd)
+def gen_doc():
+    #go one level down to please epydoc
+    cur =  os.path.dirname( __file__ )
+    jld = cur + os.sep + 'jld'
+    os.chdir(jld)
+    
+    print 'generating documentation'
+    pkgs = ' '.join( _packages )
+    cmd = """epydoc.py --html -v --output="%s" %s""" % (doc_path, pkgs)
+    os.system(cmd)
