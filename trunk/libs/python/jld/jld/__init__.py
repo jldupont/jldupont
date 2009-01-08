@@ -22,7 +22,7 @@ __version__ = "0.0.20"
 __email__   = "python@jldupont.com"
 __url__     = "http://www.jldupont.com/"
 __desc__    = """ Jean-Lou Dupont's Python Library - WEB API & command line tools
-__doc_url__ = "http://www.jldupont.com/doc/lib/jld/index"
+__doc_url__ = "http://www.jldupont.com/doc/lib/jld/"
 """
 #
 # must be in reStructuredText format (see http://docutils.sf.net/)

@@ -1,5 +1,5 @@
-Python Library ''jld''
-======================
+Python Library jld
+===================
 
 My Python library consists mainly in the following 
 command-line utilities:
@@ -17,7 +17,7 @@ Futhermore, the following general purpose utilities are made available
 
 
 Installation
-============
+------------
 This library is made available through CheeseShop_ with *easy_install*
 
  easy_install jld
@@ -25,7 +25,6 @@ This library is made available through CheeseShop_ with *easy_install*
 
 .. LINKS
 .. =====
-
 .. _CheeseShop: http://www.python.org/pypi/
 .. _Gliffy: http://www.gliffy.com/
 .. _Delicious: http://www.delicious.com/
