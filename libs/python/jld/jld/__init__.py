@@ -9,6 +9,7 @@
     ==================
       The following tools will be installed as scripts:
        - pypre.py [preprocessor based on Mako]
+       - nsvn.py  [nuke svn]
        - dlc.py   [delicious backup]
        - mm.py    [mindmeister backup]
        - glf.py   [gliffy backup]
@@ -37,6 +38,7 @@ This library contains the following utilities:
 - Gliffy API & Backup command line utility
 - Command-Line tools
  - pypre   (preprocessor based on Mako)
+ - nsvn    (nuke svn: removes svn directories)
 - Cross-platform registry (Windows: uses the win32 registry, Linux: uses a filesystem path)
 """
 __dependencies__ = [] #listed throughout the individual modules

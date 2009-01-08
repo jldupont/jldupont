@@ -81,6 +81,9 @@ handlers:
 
 # ** DO NOT CHANGE THE ORDER **
 #==============================
+- url: /doc/(.*)
+  script: pages/main.py
+  
 - url: /page/(.*)
   script: pages/main.py
 
