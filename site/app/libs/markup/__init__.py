@@ -23,7 +23,7 @@ def getReSText(dirs, fragment_path):
     
     parts = publish_parts(source=content, writer_name="html4css1")
     
-    rendered_page = parts["fragment"]
+    rendered_page = parts["html_title"] + parts["html_subtitle"] + parts["fragment"]
     
     cache.storepage( abs_path, rendered_page )
     
