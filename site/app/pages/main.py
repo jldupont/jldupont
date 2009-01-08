@@ -132,6 +132,11 @@ class Doc( Base ):
         Base.__init__(self)
         
     def get(self, base_name = None):
+        if not base_name:
+            self._output_page( self._page_error )
+        
+        if (base_name[-1] == "/"):
+            base_name = base_name + "index" 
         
         self._dolog(base_name)
         
