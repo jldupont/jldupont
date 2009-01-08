@@ -1,56 +1,38 @@
-.. image:: /res/img/rss.png
+Python Library ''jld''
+======================
 
-1. numbers
+My Python library consists mainly in the following 
+command-line utilities:
 
-A. upper-case letters
-   and it goes over many lines
+* mm.py_  : MindMeister_ map backup
+* dlc.py_ : Delicious_   bookmark backup
+* glf.py_ : Gliffy_      diagrams backup
+ 
+The underlying WEB APIs are also abstracted in separate modules.
 
-   with two paragraphs and all!
+Futhermore, the following general purpose utilities are made available
 
-a. lower-case letters
+* pypre.py_ ( Mako_ based preprocessor )
+* nsvn.py_  ( *nuke svn* )
 
-   3. with a sub-list starting at a different number
-   4. make sure the numbers are in the correct sequence though!
 
-I. upper-case roman numerals
+Installation
+============
+This library is made available through CheeseShop_ with *easy_install*
 
-i. lower-case roman numerals
+ easy_install jld
 
-(1) numbers again
 
-1) and again
 
-Just like enumerated lists, start the line off with a bullet point character - either "-", "+" or "*":
+.. _CheeseShop: http://www.python.org/pypi/
+.. _Gliffy: http://www.gliffy.com/
+.. _Delicious: http://www.delicious.com/
+.. _MindMeister: http://www.mindmeister.com/
+.. _Mako: http://www.makotemplates.org/
 
-* a bullet point using "*"
+.. _mm.py:    /doc/lib/jld/mindmeister
+.. _dlc.py:   /doc/lib/jld/delicious
+.. _glf.py:   /doc/lib/jld/gliffy
+.. _pypre.py: /doc/lib/jld/pypre
+.. _nsvn.py:  /doc/lib/jld/nsvn
 
-  - a sub-list using "-"
-
-    + yet another sub-list
-
-  - another item
-  
-Unlike the other two, the definition lists consist of a term, and the definition of that term. The format of a definition list is:
-
-what
-  Definition lists associate a term with a definition.
-
-*how*
-  The term is a one-line phrase, and the definition is one or more
-  paragraphs or body elements, indented relative to the term.
-  Blank lines are not allowed between term and definition.
-  
-Chapter 1 Title
-===============
-
-Section 1.1 Title
------------------
-
-Subsection 1.1.1 Title
-~~~~~~~~~~~~~~~~~~~~~~
-
-Section 1.2 Title
------------------
-
-Chapter 2 Title
-===============
