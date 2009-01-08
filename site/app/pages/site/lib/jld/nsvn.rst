@@ -6,8 +6,12 @@ This component is part of the python library jld_.
 
 Usage Example
 -------------
+By default, *nsvn* will *nuke* the **.svn** directories from the current directory topdown. 
 
 
+ nsvn.py c:/some/directory
+ 
+The **-F** option must be used to effect the deletion else only the potential target directory list will be displayed.
 
  nsvn.py -F
  
