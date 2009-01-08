@@ -5,6 +5,26 @@ body, th, td { font:12px/1.4em Verdana,sans-serif; }
 #container { position:relative; min-width:55em; max-width:120em; }
 #homepage #container { max-width:120em; }
 
+/* ReSTructuredTEXT */
+ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+ol.arabic {
+  list-style: decimal }
+
+ol.loweralpha {
+  list-style: lower-alpha }
+
+ol.upperalpha {
+  list-style: upper-alpha }
+
+ol.lowerroman {
+  list-style: lower-roman }
+
+ol.upperroman {
+  list-style: upper-roman }
+
+
 /* LINKS */
 
 a {text-decoration: none;}
