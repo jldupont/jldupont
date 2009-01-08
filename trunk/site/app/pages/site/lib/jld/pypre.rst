@@ -1,14 +1,16 @@
 pypre
 =====
-This command-line utility is a *preprocessor* based on the Mako_ template engine.
+This command-line utility is a *preprocessor* based on the Mako_ template engine. 
+This component is part of the python library jld_.
 
 Usage Example
 -------------
 I actually devised this utility to fill a need: manage my Apache_ configuration files more effectively.
 I simply have to write *templates* such as this one::
 
+	#Mediawiki with "pretty-url"
 	<VirtualHost ``*``:80>
-	   ServerName w.jldupont.com
+	   ServerName wiki.jldupont.com
 	 
 	   DocumentRoot /var/wiki1_13_3
 	 
@@ -37,13 +39,12 @@ I simply have to write *templates* such as this one::
 	   RewriteRule ^/(images|skins)/     - [L]
 	   RewriteRule ^/config/             - [L]
 	   RewriteRule ^/(.+)$               /index.php?title=$1 [PT,L,QSA]
-	
 	</VirtualHost>
 
+The above *template* file can thus be processed by **pypre**:
 
-----
-
-This component is part of the python library jld_.
+ pypre.py wiki.tpl > wiki
+ 
 
 .. LINKS
 .. =====
