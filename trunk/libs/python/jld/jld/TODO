@@ -1,4 +1,5 @@
 BACKUP tools
+ - conflict with metamake:  change mm.py to bmm.py
  - statistics collection
  - statistics presentation
  - "disable logging" option
