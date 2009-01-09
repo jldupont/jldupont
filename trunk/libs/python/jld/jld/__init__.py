@@ -18,12 +18,12 @@
 """
 
 __author__  = "Jean-Lou Dupont"
-__version__ = "0.0.20"
+__version__ = "0.0.24"
 __email__   = "python@jldupont.com"
 __url__     = "http://www.jldupont.com/"
-__desc__    = """ Jean-Lou Dupont's Python Library - WEB API & command line tools
+__desc__    = """ Jean-Lou Dupont's Python Library - WEB API & command line tools"""
 __doc_url__ = "http://www.jldupont.com/doc/lib/jld/"
-"""
+
 #
 # must be in reStructuredText format (see http://docutils.sf.net/)
 #
