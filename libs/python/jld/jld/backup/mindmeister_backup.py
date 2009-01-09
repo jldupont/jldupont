@@ -29,7 +29,7 @@ class Backup(BaseCmd):
     """
     _regDomain = 'mindmeister'
     
-    _configParams = ['secret', 'api_key', 'export_path', 'export_maxnum', 'db_path']
+    _configParams = ['secret', 'api_key', 'export_path', 'export_maxnum', 'db_path', 'auth_token']
     
     def __init__(self):
         BaseCmd.__init__(self)
@@ -125,6 +125,21 @@ class Backup(BaseCmd):
         if (not self.quiet):
             pp.run( all )   
             print self.msgs.render('report_maps', {'total':len(all)})     
+        
+    def cmd_showauthtoken(self, *args):
+        """Show the current auth_token"""
+        auth_token = self.r.getKey(self._regDomain, 'auth_token')
+        print self.msgs.render( 'show_auth_token', {'auth_token':auth_token} )
+        
+    def cmd_setauthtoken(self, *args):
+        """Sets the auth_token parameter"""
+        try:
+            token = args[0][0]
+        except:
+            raise api.ErrorValidation( 'missing_param', {'param':'auth_token'} )
+        
+        self.r.setKey(self._regDomain, 'auth_token', token)
+        
         
     def cmd_test(self, *args):
         """Test: for development/debugging purpose only"""
