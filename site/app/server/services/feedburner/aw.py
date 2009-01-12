@@ -61,6 +61,7 @@ class ServiceAw( webapp.RequestHandler ):
         try:    if_none_match     = self.request.headers['If-None-Match']
         except: if_none_match     = ''        
         
+        logging.info( "FeedId [%s] UA[%s]" % (feed_id, user_agent) )
         logging.info( "HEAD request: If-Modified-Since (%s), If-None-Match (%s)" %  (if_modified_since, if_none_match) )
         
         [rawPage, page] = self.getPage( feed_id )
@@ -84,6 +85,7 @@ class ServiceAw( webapp.RequestHandler ):
         try:    if_none_match     = self.request.headers['If-None-Match']
         except: if_none_match     = ''
         
+        logging.info( "FeedId [%s] UA[%s]" % (feed_id, user_agent) )
         logging.info( "GET request: FeedId (%s) If-Modified-Since (%s), If-None-Match (%s)" %  (feed_id, if_modified_since, if_none_match) )
         
         [rawPage, page] = self.getPage( feed_id )
