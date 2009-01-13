@@ -18,7 +18,7 @@
 """
 
 __author__  = "Jean-Lou Dupont"
-__version__ = "0.0.25"
+__version__ = "0.0.28"
 __email__   = "python@jldupont.com"
 __url__     = "http://www.jldupont.com/"
 __desc__    = """ Jean-Lou Dupont's Python Library - WEB API & command line tools"""
@@ -27,7 +27,7 @@ __doc_url__ = "http://www.jldupont.com/doc/lib/jld/"
 #
 # must be in reStructuredText format (see http://docutils.sf.net/)
 #
-__long_desc__ = r"""\
+__long_desc__ = r"""
 This library contains the following utilities:
   
 - MindMeister mindmaps Backup command line: for exporting mindmaps from MindMeister in FreeMind format
