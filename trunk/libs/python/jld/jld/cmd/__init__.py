@@ -82,7 +82,7 @@ class BaseCmd(object):
         try:
             em = EventMgr(path, environ)
             if not em.exists():
-                return (True, None)
+                return True
             return em.run()
         except:
             raise api.ErrorPopen('', {'path':path, 'environ':environ})
@@ -102,9 +102,16 @@ class EventMgr(object):
     """
     def __init__(self, path, env_vars, shell = False):
         ""
-        self.env_vars = env_vars
+        self.env_vars = self._adjustEnvVars( env_vars )
         self.shell = shell
-        self.path = path
+        self.path = os.path.expanduser(path)
+    
+    def _adjustEnvVars(self, vars):
+        """ All environment variables must be string
+        """
+        for k,v in vars.iteritems():
+            vars[k] = str(v)
+        return vars
     
     def exists(self):
         """ Verifies if the target shell command exists.
@@ -115,14 +122,7 @@ class EventMgr(object):
         return os.path.exists(self.path)
     
     def run(self):
-        try:
-            retcode = subprocess.call(self.path, env=self.env_vars, shell=self.shell)
-            exc = None
-        except Exception,e:
-            retcode = None
-            exc = e
-            
-        return (retcode, exc)
+        return subprocess.call(self.path, env=self.env_vars, shell=self.shell)
 
 
 # ==============================================
