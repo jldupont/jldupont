@@ -174,6 +174,10 @@ class ErrorConfig(ErrorGeneric):
     """ Generic configuration error eg  can't load configuration from filesystem
     """ 
     
+class ErrorPopen(ErrorGeneric):
+    """ Generic Process Open error e.g. can't execute target script
+    """
+    
 # =========================================================================
 
 if __name__ == "__main__":

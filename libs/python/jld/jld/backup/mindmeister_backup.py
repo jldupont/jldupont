@@ -7,13 +7,12 @@ __msgs__ = ['error_init_folder', 'error_create_folder', 'frob_not_acquired', 'er
 import sys
 import os
 import logging
-import webbrowser
 import datetime
 import urllib2
 from stat import *
 
 import jld.api as api
-from   jld.cmd import BaseCmd
+from   jld.cmd import BaseCmd, EventMgr
 import jld.registry as reg
 import jld.api.mindmeister as mm
 import jld.api.mindmeister_response as mmr
@@ -29,7 +28,7 @@ class Backup(BaseCmd):
     """
     _regDomain = 'mindmeister'
     
-    _configParams = ['secret', 'api_key', 'export_path', 'export_maxnum', 'db_path', 'auth_token']
+    _configParams = ['secret', 'api_key', 'export_path', 'export_maxnum', 'db_path', 'eventmgr_path']
     
     def __init__(self):
         BaseCmd.__init__(self)
@@ -41,6 +40,7 @@ class Backup(BaseCmd):
         self.export_path_init = None
         self.export_path = None
         self.export_maxnum = None
+        self.eventmgr_path = None
         self.mm = None
         self.db_path = None        
         self.db = None
@@ -96,18 +96,10 @@ class Backup(BaseCmd):
         url = self.mm.gen_auth_url('write', res.frob)
         msg = self.msgs.render('cmd_auth', {'frob':res.frob})
         self.logger.info(msg)
+        
+        import webbrowser
         webbrowser.open_new(url)
             
-    def cmd_updatedb(self, *args):
-        """ Updates the local database with the latest list of maps (logged) """
-        self._prepareAuthorizedCommand()
-        all = self.mm.getAllMaps()
-        
-        self._initDb()
-        report = db.Maps.updateFromList( all )
-        msg=self.msgs.render2('report_update', {'total':report[0],'updated': report[1], 'new': report[2]})
-        self.logger.info( msg )
-        
     def cmd_listmaps(self, *args):
         """ List the latest maps """
         self._prepareAuthorizedCommand()
@@ -147,10 +139,9 @@ class Backup(BaseCmd):
 
     def cmd_getexport(self, *args):
         """List the export details of one mapid"""
-        try:
-            mapid=args[0][0]
-        except:
-            raise api.ErrorValidation( 'missing_param', {'param':'mapid'} )
+        try:    mapid=args[0][0]
+        except: raise api.ErrorValidation( 'missing_param', {'param':'mapid'} )
+        
         self._prepareAuthorizedCommand()      
         details = self.mm.getMapExport(mapid)
         pp = printer.MM_Printer_Export( self.msgs ) 
@@ -164,9 +155,21 @@ class Backup(BaseCmd):
         pp = printer.MM_Printer_Maps( self.msgs )
         if (not self.quiet):
             pp.run( full_list )
+
+    def cmd_updatedb(self, *args):
+        """ Updates the local database with the latest list of maps (logged) (event)"""
+        self._prepareAuthorizedCommand()
+        all = self.mm.getAllMaps()
         
+        self._initDb()
+        report = db.Maps.updateFromList( all )
+        params = {'total':report[0],'updated': report[1], 'new': report[2]}
+        msg=self.msgs.render2('report_update', params)
+        self.logger.info( msg )
+        self._fireEvent(self.eventmgr_path, params)
+                
     def cmd_export(self, *args):
-        """Export (retrieves from MindMeister) up to 'export_maxnum' mindmaps which need refreshing (logged) """
+        """Export (retrieves from MindMeister) up to 'export_maxnum' mindmaps which need refreshing (logged) (event)"""
         self._initDb()
         full_list = db.Maps.getToExportList()
 
@@ -199,8 +202,10 @@ class Backup(BaseCmd):
             if (cnt==0):
                 break
                 
-        msg = self.msgs.render2('report_export', {'total': total, 'successes': success, 'failures': failure} )
+        params = {'total': total, 'successes': success, 'failures': failure}
+        msg = self.msgs.render2('report_export', params)
         self.logger.info(msg)
+        self._fireEvent(self.eventmgr_path, params)
                  
     def cmd_deletedb(self, *args):
         """Deletes the database"""
