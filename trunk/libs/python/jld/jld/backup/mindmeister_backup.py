@@ -163,7 +163,7 @@ class Backup(BaseCmd):
         
         self._initDb()
         report = db.Maps.updateFromList( all )
-        params = {'total':report[0],'updated': report[1], 'new': report[2]}
+        params = {'cmd':'updatedb', 'total':report[0],'updated': report[1], 'new': report[2]}
         msg=self.msgs.render2('report_update', params)
         self.logger.info( msg )
         self._fireEvent(self.eventmgr_path, params)
@@ -202,7 +202,7 @@ class Backup(BaseCmd):
             if (cnt==0):
                 break
                 
-        params = {'total': total, 'successes': success, 'failures': failure}
+        params = {'cmd':'export', 'total': total, 'successes': success, 'failures': failure}
         msg = self.msgs.render2('report_export', params)
         self.logger.info(msg)
         self._fireEvent(self.eventmgr_path, params)
