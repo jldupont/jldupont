@@ -10,6 +10,7 @@ report_auth: cmd[auth] frob[$frob]
 
 # CONFIG related
 # ==============
+config_eventmgr: configure "EventManager script" path
 config_email: configure email address
 config_secret: configure secret
 config_key: configure api key
@@ -30,6 +31,7 @@ do_auth: Please authentication application (use 'auth' command)
 
 # Errors / Exceptions
 # ===================
+error_eventmgr: Error whilst executing the EventManager script [$path]
 error_config_type: Parameter [$key] should be of type[$type] 
 error_update_db: Error whilst updating the database
 error_cant_write: Error whilst writing to [$path]
@@ -55,6 +57,7 @@ unhandled_exception: An unhandled exception occured [$exc]
 
 # HELP
 # ====
+help_eventmgr: The EventManager script can be configured through the '-z' option
 help_defaults: The defaults file is located in the Python's sitepackages directory along with the other scripts of this command-line utility
 help_command: Use -h to review commands
 help_db: Is the filesystem path specified by the -f option accessible?

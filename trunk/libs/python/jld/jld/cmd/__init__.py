@@ -5,7 +5,12 @@ __author__  = "Jean-Lou Dupont"
 __version__ = "$Id$"
 __dependencies__ = []
 
+__all__ = ['BaseCmd', 'Hook']
+
+import os
 import sys
+import subprocess
+
 import jld.api as api
 import jld.tools.klass as tclass
 
@@ -67,7 +72,58 @@ class BaseCmd(object):
         """ 
         if (command not in self.cmds):
             raise api.ErrorInvalidCommand( 'invalid command', {'cmd':command} )
+
+    def _fireEvent(self, path, environ):
+        """ Fires the associated Event Manager
         
+            @return: (True, None) if the path is not available
+            @raise ErrorPopen 
+        """
+        try:
+            em = EventMgr(path, environ)
+            if not em.exists():
+                return (True, None)
+            return em.run()
+        except:
+            raise api.ErrorPopen('', {'path':path, 'environ':environ})
+
+# ==============================================
+# ==============================================
+
+class EventMgr(object):
+    """ For dispatching events to Event Manager scripts
+    
+        Windows Test, change to $HOOK_VAR for Linux
+        >>> h = EventMgr("echo %HOOK_VAR%", {"HOOK_VAR":"test!"} , shell=True)
+        >>> h.run()
+        (0, None)
+        >>> h.exists()
+        False
+    """
+    def __init__(self, path, env_vars, shell = False):
+        ""
+        self.env_vars = env_vars
+        self.shell = shell
+        self.path = path
+    
+    def exists(self):
+        """ Verifies if the target shell command exists.
+            Note that this method only verifies the existence
+            of filesystem path and not shell built-in commands
+            e.g. *echo*
+        """
+        return os.path.exists(self.path)
+    
+    def run(self):
+        try:
+            retcode = subprocess.call(self.path, env=self.env_vars, shell=self.shell)
+            exc = None
+        except Exception,e:
+            retcode = None
+            exc = e
+            
+        return (retcode, exc)
+
 
 # ==============================================
 # ==============================================
@@ -75,3 +131,6 @@ class BaseCmd(object):
 if __name__ == "__main__":
     """ Tests
     """
+    import doctest
+    doctest.testmod()
+
