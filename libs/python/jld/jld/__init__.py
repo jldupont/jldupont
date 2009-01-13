@@ -18,7 +18,7 @@
 """
 
 __author__  = "Jean-Lou Dupont"
-__version__ = "0.0.28"
+__version__ = "0.0.31"
 __email__   = "python@jldupont.com"
 __url__     = "http://www.jldupont.com/"
 __desc__    = """ Jean-Lou Dupont's Python Library - WEB API & command line tools"""
@@ -27,17 +27,19 @@ __doc_url__ = "http://www.jldupont.com/doc/lib/jld/"
 #
 # must be in reStructuredText format (see http://docutils.sf.net/)
 #
-__long_desc__ = r"""
+__long_desc__ = """\
+Content
+=======
 This library contains the following utilities:
   
-- MindMeister mindmaps Backup command line: for exporting mindmaps from MindMeister in FreeMind format
- - EventManager script interface 
-- Delicious API & Backup command line utility
-- Gliffy API & Backup command line utility
-- Command-Line tools
- - pypre   (preprocessor based on Mako, e.g. useful for pre-processing Apache config files) 
- - nsvn    (nuke svn: removes svn directories, e.g. useful under Windows where .dot files are difficult to handle)
-- Cross-platform registry (Windows: uses the win32 registry, Linux: uses a filesystem path)
+* MindMeister mindmaps Backup command line: for exporting mindmaps from MindMeister in FreeMind format
+ * EventManager script interface 
+* Delicious API & Backup command line utility
+* Gliffy API & Backup command line utility
+* Command-Line tools
+ * pypre   (preprocessor based on Mako, e.g. useful for pre-processing Apache config files) 
+ * nsvn    (nuke svn: removes svn directories, e.g. useful under Windows where .dot files are difficult to handle)
+* Cross-platform registry (Windows: uses the win32 registry, Linux: uses a filesystem path)
 """
 __dependencies__ = [] #listed throughout the individual modules
 
