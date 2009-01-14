@@ -34,21 +34,29 @@ Content
 
 This library contains the following utilities:
   
-* MindMeister mindmaps Backup command line: for exporting mindmaps from MindMeister in FreeMind format
+* MindMeister_ mindmaps Backup command line: for exporting mindmaps from MindMeister_ in FreeMind format
   
   * EventManager script interface
   
-* Delicious API & Backup command line utility
+* Delicious_ API & Backup command line utility
 
-* Gliffy API & Backup command line utility
+* Gliffy_ API & Backup command line utility
 
 * Command-Line tools
 
-  * pypre   (preprocessor based on Mako, e.g. useful for pre-processing Apache config files)
+  * pypre   (preprocessor based on Mako_ , e.g. useful for pre-processing Apache config files)
   
   * nsvn    (nuke svn: removes svn directories, e.g. useful under Windows where .dot files are difficult to handle)
  
-* Cross-platform registry (Windows: uses the win32 registry, Linux: uses a filesystem path)
+* Cross-platform registry (Windows: uses the win32 registry, Linux: uses a filesystem path) 
+
+.. _Mako: http://www.makotemplates.org/
+
+.. _MindMeister: http://www.mindmeister.com/
+
+.. _Gliffy: http://www.gliffy.com/
+
+.. _Delicious: http://www.delicious.com/
 
 """
 __dependencies__ = [] #listed throughout the individual modules
@@ -63,3 +71,27 @@ __classifiers__ = [
     'Operating System :: POSIX',
     ]
 
+# ==============================================
+# ==============================================
+
+if __name__ == "__main__":
+    """ Tests
+    """
+    import os
+    import webbrowser
+    
+    from docutils.core import publish_parts
+    
+    parts = publish_parts(source=__long_desc__, writer_name="html4css1")
+    
+    rendered_page = parts["html_title"] + parts["html_subtitle"] + parts["fragment"]
+
+    cpath = os.path.dirname( __file__ )
+    path = os.path.join(cpath, 'long_desc.html')
+     
+    file = open( path, "w" )
+    file.write( rendered_page )
+    file.close()
+
+    url = "file://%s" % path
+    webbrowser.open_new(url)
