@@ -20,12 +20,14 @@ class Service( webapp.RequestHandler ):
         self.response.out.write(content);
         
 
+import libs.xmlrpc as gaexmlrpc
+
 class ServicePypi( Service ):
     
     _methods = [ 'package_releases', 'release_urls', 'release_data' ]
     _formats = { 'json':'text/javascript' }
     
-    _server = xmlrpclib.Server('http://pypi.python.org/pypi')
+    _server = xmlrpclib.ServerProxy('http://pypi.python.org/pypi', gaexmlrpc.GAEXMLRPCTransport())
     
     def get( self, format, method, package_name, version = None ):
         if (format not in self._formats):
@@ -40,17 +42,20 @@ class ServicePypi( Service ):
         
         logging.info("method[%s] pkg[%s] version[%s]" % (method, package_name, version))
         
-        try:
+        #try:
+        if True:
             if version:
                 res = getattr(self, method)(package_name, version)
             else:
                 res = getattr(self, method)(package_name)
                 
-        except Exception,e:
+        #except Exception,e:
+        """
             logging.error( e )
-            self.response.out.write('map with id[%s] not found/available (or timeout occured)' % id);
+            #self.response.out.write('map with id[%s] not found/available (or timeout occured)' % id);
             self.response.set_status(404)
             return
+        """
         
         ip = self.request.remote_addr
         logging.info('ip[%s] mm format[%s] id[%s]' % (ip, format, id))
