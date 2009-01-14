@@ -36,6 +36,9 @@ def searchForMethods(obj, prefix, stripPrefix = True):
 if __name__ == "__main__":
     
     class X(object):
+        def __init__(self):
+            pass
+        
         def cmd_C1(self):
             """Command C1"""
             pass
@@ -48,3 +51,5 @@ if __name__ == "__main__":
     print searchForMethods(X, 'cmd_')
     x = X()
     print searchForMethods(x, 'cmd_')
+    
+    print searchForMethods(X, '')

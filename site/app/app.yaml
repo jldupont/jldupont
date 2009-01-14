@@ -41,6 +41,8 @@ handlers:
 
 #SERVER
 #======
+- url: /services/test/(.*)
+  script: server/services/test/test.py
 
 # ACCESS service
 - url: /services/access/urls/(.*)/
@@ -76,6 +78,7 @@ handlers:
 # [/old]
 
 # MAIN
+# ====
 
 - url: /favicon.ico
   static_files: res/img/favicon.ico
