@@ -29,17 +29,15 @@ class Service( webapp.RequestHandler ):
         t = Test()
         self.response.out.write(t.__doc__)
         for i in t._prefix_methods:
-            self.response.out.write(t.getDoc(i))
+            self.response.out.write(t.renderMethodDocString(i))
 
 class Test(webapi.WebApi):
     """\
-Content
-=======
+    Content
+    =======
+    
     """    
     def __init__(self):
-        """\
-Initialization:
-        """
         webapi.WebApi.__init__(self)
         
     def get(self, name):
@@ -50,19 +48,25 @@ Initialization:
         self._output(200, content)
         
     def method_a(self):
-        """ method-a
+        """\
+        Method_a
+        --------
         """
 
     def method_b(self):
         """ method-b
         """
+        
+    def method_c(self):
+        """ method-c
+        """
 
 # ===================================================
 # ===================================================
 
 
 
-_urls = [ ('/services/test/(.*?)', Test), 
+_urls = [ ('/services/test/(.*?)', Service), 
          ]                        
         
 #/**
