@@ -17,7 +17,7 @@ from google.appengine.api import urlfetch
 import libs.xmlrpc as gaexmlrpc
 import libs.simplejson as json
 import libs.markup as markup
-
+import libs.webapi as webapi
 
 class Service( webapp.RequestHandler ):
     """
@@ -30,9 +30,13 @@ class Service( webapp.RequestHandler ):
         self.response.set_status(code)
         self.response.out.write(content);
 
+    def show_help(self):
+        """
+        """
+
 
 class ServicePypi( Service ):
-    """ Supported methods:
+    """Supported methods: $methods
     """
     _methods = [ 'package_releases', 'release_urls', 'release_data' ]
     _formats = { 'json':'text/javascript' }
@@ -72,9 +76,6 @@ class ServicePypi( Service ):
         
         self._output(mime, 200, res)
 
-    def show_help(self):
-        """
-        """
 
     # =================================================
     # METHODS
