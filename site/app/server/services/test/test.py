@@ -28,21 +28,26 @@ class Service( webapp.RequestHandler ):
         """
         t = Test()
         self.response.out.write(t.__doc__)
-        for i in t._api_methods:
+        for i in t._prefix_methods:
             self.response.out.write(t.getDoc(i))
 
 class Test(webapi.WebApi):
     """\
 Content
 =======
-    """
-    __metaclass__ = webapi.metaWebApi
-    
+    """    
     def __init__(self):
         """\
 Initialization:
         """
         webapi.WebApi.__init__(self)
+        
+    def get(self, name):
+        """
+        """
+        content = self.methodExists(name)
+        logging.info( content )
+        self._output(200, content)
         
     def method_a(self):
         """ method-a
@@ -57,7 +62,7 @@ Initialization:
 
 
 
-_urls = [ ('/services/test/(.*?)', Service), 
+_urls = [ ('/services/test/(.*?)', Test), 
          ]                        
         
 #/**
