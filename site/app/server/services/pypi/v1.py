@@ -51,7 +51,7 @@ class ServicePypi( webapi.WebApi ):
             return
         
         if (method not in self._prefix_methods ):
-            self.response.out.write('unsupported method[%s]' % method)
+            self._help_method(method)
             return
         
         mime = self._mimes[format]
@@ -81,7 +81,6 @@ class ServicePypi( webapi.WebApi ):
     # HELP
     # =================================================
     def _help_format(self, format):
-        ""
         help =  """\
                 **Error**: unsupported format [$format]
                 
@@ -93,7 +92,16 @@ class ServicePypi( webapi.WebApi ):
         self.showHelp(help, params, True)
         
     def _help_method(self, method):
-        ""
+        help =  """\
+                **Error**: unsupported method [$method]
+                
+                For more information, consult Help_
+                
+                .. _Help: /services/pypi/
+                """
+        params = {'method':method}
+        self.showHelp(help, params, True)
+
         
 
     # =================================================
