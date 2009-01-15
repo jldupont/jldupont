@@ -66,7 +66,6 @@ class ServicePypi( webapi.WebApi ):
             return
         
         callback = self.request.get("callback")
-        logging.info("callback [%s]" % callback)
         
         mime = self._mimes[format]
         
