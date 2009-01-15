@@ -32,6 +32,16 @@ class ServicePypi( webapi.WebApi ):
     - Supported methods: $methods
     - Supported formats: $formats
     - JSONP callback: [optional] use the *?callback* parameter
+    
+    More information for a method can be obtained, e.g.:
+     
+     http://$host/services/pypi/json/package_releases/
+     
+    Testing
+    =======
+    
+    For a working example, use  http://$host/services/pypi/json/package_releases/jld?callback=cb
+     
     """
     _formats = [ 'json' ]
     _mimes   = { 'json':'text/javascript' }
@@ -44,7 +54,7 @@ class ServicePypi( webapi.WebApi ):
     def get( self, format = None, method = None, package_name = None, version = None ):
 
         if format is None or format == '':
-            params = {'methods':self._prefix_methods, 'formats':self._formats}
+            params = {'methods':self._prefix_methods, 'formats':self._formats, 'host':os.environ['HTTP_HOST']}
             return self.showServiceHelp( params )
         
         if (format not in self._formats):
@@ -76,12 +86,13 @@ class ServicePypi( webapi.WebApi ):
         try:
             raw = getattr(self, resolved_method)( **parameters )
             res = json.dumps( raw )
+            
         except TypeError,e:
             return self._help_method_parameters(method)
         
         except Exception, e:
             logging.error( "EXCEPTION type[%s] [%s]" % (type(e),e) )
-            self.response.set_status(404)
+            self.response.set_status(500)
             return
 
         if callback:
