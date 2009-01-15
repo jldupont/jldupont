@@ -10,6 +10,7 @@ __version__ = "$Id$"
 
 import logging
 from types import *
+from string import Template
 
 from google.appengine.ext import webapp
 
@@ -38,7 +39,8 @@ class metaWebApi(type):
         
     
     def _convertReSTDoc(cls, ns):
-        """ Converts all the docstrings from ReST format to HTML
+        """ Converts all the docstrings of the
+            class from ReST format to HTML
         """
         _classdocstring = getattr(cls, '__doc__')
         cls.__doc__ = cls.renderDocString(_classdocstring )
@@ -62,6 +64,9 @@ class metaWebApi(type):
         """ Trims leading spaces according to the first line.
             Helps keep docstring readable in the original python file.
         """
+        if not doc:
+            return ''
+        
         lines = doc.splitlines()
         try:    
             firstline = lines[0].strip()
@@ -84,9 +89,9 @@ class metaWebApi(type):
 
 
 class WebApi( webapp.RequestHandler ):
-    """
-    """
     __metaclass__ = metaWebApi
+    
+    _mime_html = "text/html"
     
     def renderMethodDocString(self, name, prefix='method_'):
         _doc = self.getDoc(name, prefix)
@@ -97,8 +102,6 @@ class WebApi( webapp.RequestHandler ):
     
     @classmethod
     def methodExists(cls, name):
-        """ 
-        """
         return name in cls._prefix_methods
 
     def _output(self, code, content, mime = "text/plain" ):
@@ -106,3 +109,14 @@ class WebApi( webapp.RequestHandler ):
         self.response.set_status(code)
         self.response.out.write(content);
 
+    def showServiceHelp(self, params = None):
+        """
+        """
+        self.showHelp(self.__doc__, params)
+        
+    def showHelp(self, doc, params, convert = False):
+        if convert:
+            doc = WebApi.renderDocString(doc)
+        t = Template(doc)
+        self._output(200, t.substitute(params), self._mime_html)
+        
