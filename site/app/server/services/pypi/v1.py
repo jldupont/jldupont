@@ -74,23 +74,18 @@ class ServicePypi( webapi.WebApi ):
              parameters['version'] = version
 
         try:
-            #if version:
-            #    raw = getattr(self, resolved_method)(package_name, version)
-            #else:
-            #    raw = getattr(self, resolved_method)(package_name)
-            
             raw = getattr(self, resolved_method)( **parameters )
-            
             res = json.dumps( raw )
-            
         except TypeError,e:
             return self._help_method_parameters(method)
         
         except Exception, e:
             logging.error( "EXCEPTION type[%s] [%s]" % (type(e),e) )
-            #self.response.out.write('map with id[%s] not found/available (or timeout occured)' % id);
             self.response.set_status(404)
             return
+
+        if callback:
+            res = "%s(%s)" % (callback, res)
         
         self._output(200, res, mime)
 
@@ -150,8 +145,9 @@ class ServicePypi( webapi.WebApi ):
 
 _urls = [ 
           ('/services/pypi/(.*?)/(.*?)/(.*?)/(.*?)', ServicePypi),
-          ('/services/pypi/(.*?)/(.*?)/(.*?)', ServicePypi),
-          ('/services/pypi/(.*?)', ServicePypi),  
+          ('/services/pypi/(.*?)/(.*?)/(.*?)',       ServicePypi),
+          ('/services/pypi/(.*?)/(.*?)',             ServicePypi),
+          ('/services/pypi/(.*?)',                   ServicePypi),  
          ]                        
         
 #/**
@@ -162,6 +158,5 @@ def main():
   wsgiref.handlers.CGIHandler().run(application)
 
 # Bootstrap
-#  It all starts here
 if __name__ == "__main__":
     main()
