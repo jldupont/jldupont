@@ -27,24 +27,30 @@ class Service( webapp.RequestHandler ):
         """
         """
         t = Test()
-        self.response.out.write(t.__doc__);
-        self.response.out.write(t.__init__.__doc__);
+        self.response.out.write(t.__doc__)
+        for i in t._api_methods:
+            self.response.out.write(t.getDoc(i))
 
-class Test(object):
+class Test(webapi.WebApi):
     """\
 Content
 =======
     """
-    __metaclass__ = webapi.WebApi
+    __metaclass__ = webapi.metaWebApi
     
     def __init__(self):
         """\
 Initialization:
         """
+        webapi.WebApi.__init__(self)
         
-    def method(self):
-        pass
+    def method_a(self):
+        """ method-a
+        """
 
+    def method_b(self):
+        """ method-b
+        """
 
 # ===================================================
 # ===================================================
