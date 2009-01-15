@@ -19,8 +19,11 @@ import libs.markup as markup
 class metaWebApi(type):
     """ Metaclass for Web based API handler classes
     """
+    
+    _prefix = 'method_'
+    
     def __init__(cls, name, bases, ns):
-        cls._scanMethods(ns, 'method_')
+        cls._scanMethods(ns, cls._prefix)
         try:
             cls._convertReSTDoc( ns )
         except Exception,e:
@@ -29,8 +32,8 @@ class metaWebApi(type):
     def _scanMethods(cls, ns, prefix = ''):
         """ 
         """
-        cls._all_methods    = map(    lambda X:X if type(getattr(cls,X)) is MethodType else None, ns)
-        cls._all_methods    = filter( lambda X: X is not None, cls._all_methods)
+        cls._all_methods = map(    lambda X: X if type(getattr(cls,X)) is MethodType else None, ns)
+        cls._all_methods = filter( lambda X: X is not None, cls._all_methods)
         if cls._all_methods:
             cls._prefix_methods = filter( lambda X: X.startswith(prefix), cls._all_methods )
         
@@ -44,15 +47,20 @@ class metaWebApi(type):
         """
         _classdocstring = getattr(cls, '__doc__')
         cls.__doc__ = cls.renderDocString(_classdocstring )
-        
-        for method in cls._prefix_methods:           
-            docstring = "%s%s" % (method,'.__doc__')
+
+        #logging.info( "cls.__dict__ class[%s] >>>> %s" % (cls.__class__, str(cls.__dict__) ))
+                    
+        for method_name in cls._prefix_methods:
             
-            try:    doc = getattr(cls, docstring)
+            prefixed_method_name = "%s%s" % (cls._prefix,method_name)
+            method = getattr(cls, prefixed_method_name)           
+            
+            try:    doc = getattr(method, '__doc__')
             except: doc = ''
-            
+
             res = cls.renderDocString(doc)
-            setattr(cls, docstring, res)
+            #logging.info("_convert method[%s] res[%s]" % ( method_name, res))
+            cls.__dict__[prefixed_method_name].__doc__ = res
 
     def renderDocString(cls, string):
         _processed = cls._preprocessDocString(string)
