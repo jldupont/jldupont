@@ -23,14 +23,15 @@ class metaWebApi(type):
         try:
             cls._convertReSTDoc( ns )
         except Exception,e:
-            logging.warn(e)
+            logging.warn("metaWebApi cls[%s] exception[%s]" % (cls, e))
 
-    def _scanMethods(cls, ns, prefix = None):
+    def _scanMethods(cls, ns, prefix = ''):
         """ 
         """
-        cls._all_methods    = map( lambda X:X if type(getattr(cls,X)) is MethodType else None, ns)
+        cls._all_methods    = map(    lambda X:X if type(getattr(cls,X)) is MethodType else None, ns)
         cls._all_methods    = filter( lambda X: X is not None, cls._all_methods)
-        cls._prefix_methods = filter( lambda X: X.startswith(prefix), cls._all_methods )
+        if cls._all_methods:
+            cls._prefix_methods = filter( lambda X: X.startswith(prefix), cls._all_methods )
         
         # drop the prefix
         cls._prefix_methods = map( lambda X: X[len(prefix):], cls._prefix_methods)
@@ -39,16 +40,43 @@ class metaWebApi(type):
     def _convertReSTDoc(cls, ns):
         """ Converts all the docstrings from ReST format to HTML
         """
-        cls.__doc__ = markup.renderReSText( cls.__doc__ )
+        _classdocstring = getattr(cls, '__doc__')
+        cls.__doc__ = cls.renderDocString(_classdocstring )
         
-        for method in cls._prefix_methods:
-            if not __doc__ in method: 
-                continue
-            docstring = "%s.__doc__" % method
-            doc = getattr(cls, docstring)
-            res = markup.renderReSText(doc)
+        for method in cls._prefix_methods:           
+            docstring = "%s%s" % (method,'.__doc__')
+            
+            try:    doc = getattr(cls, docstring)
+            except: doc = ''
+            
+            res = cls.renderDocString(doc)
             setattr(cls, docstring, res)
 
+    def renderDocString(cls, string):
+        _processed = cls._preprocessDocString(string)
+        rendered = markup.renderReSText(_processed)
+        return rendered
+         
+
+    def _preprocessDocString(cls, doc):
+        """ Trims leading spaces according to the first line.
+            Helps keep docstring readable in the original python file.
+        """
+        lines = doc.splitlines()
+        try:    
+            firstline = lines[0].strip()
+            spacer_count = len(lines[0]) - len(firstline)
+        except: 
+            return ''
+        
+        result = firstline + "\n"
+        lines.pop(0)
+        
+        for line in lines:
+            result = result + line[spacer_count:] + "\n"
+        
+        return result
+        
 
 # ===========================================================
 # ===========================================================
@@ -56,7 +84,13 @@ class metaWebApi(type):
 
 
 class WebApi( webapp.RequestHandler ):
+    """
+    """
     __metaclass__ = metaWebApi
+    
+    def renderMethodDocString(self, name, prefix='method_'):
+        _doc = self.getDoc(name, prefix)
+        return WebApi.renderDocString(_doc)
     
     def getDoc(self, name, prefix = 'method_'):
         return getattr(self, "%s%s" % (prefix, name)).__doc__
