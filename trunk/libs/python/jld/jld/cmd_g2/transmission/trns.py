@@ -22,11 +22,10 @@ from cmd import TransmissionCmd
 
 # ========================================================================================
 _options =[
-  {'o1':'-s', 'var':'server',        'action':'store',        'help':'config_server',  'reg': True, 'default': None},
-  {'o1':'-p', 'var':'port',          'action':'store',        'help':'config_port',    'reg': True, 'default': None},
+  {'o1':'-s', 'var':'config_server', 'action':'store',        'help':'config_server',  'reg': True, 'default': None},
+  {'o1':'-p', 'var':'config_port',   'action':'store',        'help':'config_port',    'reg': True, 'default': None},
   {'o1':'-q', 'var':'quiet',         'action':'store_true',   'help':'quiet',          'reg': False, 'default': False },          
   {'o1':'-l', 'var':'syslog',        'action':'store_true',   'help':'syslog',         'reg': False, 'default': False },  
-
 ]
 
 def main( args ):
@@ -40,8 +39,8 @@ def main( args ):
     
     # all the exceptions are handled by 'ui'
     try:
-        cmd = TransmissionCmd()       
-
+        cmd = TransmissionCmd()  
+        
         usage_template = """%prog [options] command
     
 version $Id$ by Jean-Lou Dupont

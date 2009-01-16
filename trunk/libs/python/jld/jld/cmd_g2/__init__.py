@@ -10,6 +10,7 @@ __all__ = ['BaseCmd', 'Hook', 'BaseCmdException']
 
 import os
 import sys
+from types import *
 import subprocess
 
 class BaseCmdException(Exception):
@@ -31,8 +32,15 @@ class metaBaseCmd(type):
         cls.cmds = map( lambda X: str(X)[len(cls._prefix):], cls.commands )
 
 
+
 class BaseCmd(object):
     """ Base class for command line utilities
+    
+    >>> b = BaseCmd()
+    >>> print b.commands
+    ['cmd_listconfig']
+    >>> print b.cmds
+    ['listconfig']
     """
 
     __metaclass__ = metaBaseCmd
@@ -45,6 +53,14 @@ class BaseCmd(object):
             and extracts all the ones prefixed with 'cmd_'
         """
         self._genCommandsHelp()
+        self._extractCommandsFromClasse()
+        
+    def _extractCommandsFromClasse(self):
+        commands = filter( lambda X: str(X).startswith(self._prefix), BaseCmd.__dict__)
+        self.commands.extend( commands )
+        cmds = map( lambda X: str(X)[len(self._prefix):], commands )
+        self.cmds.extend( cmds )
+
 
     def _genCommandsHelp(self, padding=15):
         """ Generates the list of commands and their corresponding docstring.
@@ -84,6 +100,10 @@ class BaseCmd(object):
         except:
             raise BaseCmdException('error_eventmgr', {'path':path, 'environ':environ})
 
+
+    def cmd_listconfig(self, *args):
+        """Lists the current configuration"""
+        print "cmd_listconfig"
 
 # ==============================================
 # ==============================================
