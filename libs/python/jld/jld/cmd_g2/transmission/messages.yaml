@@ -11,3 +11,7 @@ config_eventmgr: configure "EventManager script" path
 #=======
 syslog: syslog disable mode
 quiet: quiet mode
+
+#ERRORS
+#======
+error_invalid_command: invalid command [$cmd]
