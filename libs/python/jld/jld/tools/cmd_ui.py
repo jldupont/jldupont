@@ -114,6 +114,7 @@ class UIBase(object):
 
     def copyOptions(self, source, target, _options):
         """ Copies all options from source to target
+
             @param source: the source dictionary
             @param target: the target object with dictionary access
             @param _options: the reference options list
@@ -126,6 +127,7 @@ class UIBase(object):
     def integrateDefaults(self, defs, reg, _options, params):
         """Integrates the default values for each option if
             no value can be found in the registry.
+            
             @param defs: the defaults dictionary
             @param reg: the registry dictionary
             @param _options: the options list

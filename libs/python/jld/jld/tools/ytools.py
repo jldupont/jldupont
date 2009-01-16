@@ -50,7 +50,8 @@ class Yattr(Yfile):
     >>> print y.var1
     value1
     """
-
+    def __init__(self, src_file, name = 'defaults.yaml'):
+        Yfile.__init__(self, src_file, name)
 
 class Ymsg(Yfile):
     """
@@ -62,7 +63,7 @@ class Ymsg(Yfile):
     >>> print m.render2('msg2', ('test',) )
     message2 test
     """
-    def __init__(self, src_file, name):
+    def __init__(self, src_file, name = 'messages.yaml'):
         Yfile.__init__(self, src_file, name)
         
     def render(self, key, params = None):
