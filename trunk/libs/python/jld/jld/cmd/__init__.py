@@ -87,6 +87,7 @@ class BaseCmd(object):
         except:
             raise api.ErrorPopen('', {'path':path, 'environ':environ})
 
+
 # ==============================================
 # ==============================================
 
