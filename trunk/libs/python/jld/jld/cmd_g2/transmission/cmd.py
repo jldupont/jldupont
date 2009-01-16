@@ -16,3 +16,4 @@ class TransmissionCmd(BaseCmd):
 
     def cmd_test(self, *args):
         ""
+        print "cmd_test"

@@ -7,6 +7,7 @@ __author__  = "Jean-Lou Dupont"
 __version__ = "$Id$"
 
 import os
+import logging
 import yaml
 from string import Template
 
@@ -39,7 +40,34 @@ class Yfile(object):
 
     def _process(self, attrs):
         ""
-        self.__dict__.update( attrs )
+        if attrs:
+            self.__dict__.update( attrs )
+    
+    
+    # =========================================================
+    # Iteration & Dict access interfaces
+    #  Used for the command ''listconfig''
+    # =========================================================
+    def __contains__(self, key):
+        return key in self.__dict__
+    
+    def __getitem__(self, key):
+        return getattr(self, key)
+    
+    def __setitem(self, key, value):
+        setattr(self, key, value)
+    
+    def __iter__(self):
+        self.iter = True
+        return self
+    
+    def next(self):
+        if (self.iter):
+            self.iter = False
+            return self
+        else:
+            raise StopIteration
+
     
 
 class Yattr(Yfile):
@@ -73,6 +101,10 @@ class Ymsg(Yfile):
             @param params: the optional parameters
             @return: the rendered message (string)
         """
+        if not key in self.__dict__:
+            logging.warn("Ymsg: missing message key[%s]" % key)
+            return ''
+            
         tpl = Template( self.__dict__[key] )
         return tpl.substitute( params ).lstrip()
     
@@ -83,6 +115,10 @@ class Ymsg(Yfile):
             @param params: the parameters
             @return: rendered string
         """
+        if not key in self.__dict__:
+            logging.warn("Ymsg: missing message key[%s]" % key)
+            return ''
+        
         tpl = self.__dict__[key]
         if (params):
             return tpl % params
@@ -98,5 +134,3 @@ if __name__ == "__main__":
     """
     import doctest
     doctest.testmod()
-
-    

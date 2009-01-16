@@ -31,6 +31,7 @@ class Messages(object):
     
     def render(self, key, params = None):
         """ Renders a message template with optional parameters
+        
             @param key: the message key
             @param params: the optional parameters
             @return: the rendered message (string)

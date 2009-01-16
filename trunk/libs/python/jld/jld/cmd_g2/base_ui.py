@@ -79,7 +79,7 @@ class BaseCmdUI(object):
         
         return None
                 
-    def handleArguments(self, usage, _options):
+    def handleArguments(self, usage, _options, args = None):
         """ Processes command line options
         """ 
         parser = OptionParser( usage=usage )
@@ -91,7 +91,7 @@ class BaseCmdUI(object):
                                help=help_msg, 
                                default=o['default'] )
 
-        (self.options,self.args) = parser.parse_args()
+        (self.options,self.args) = parser.parse_args( args )
         
     def updateRegistry(self, reg, options, args):
         """Updates the registry from the command-line args"""
@@ -130,7 +130,7 @@ class BaseCmdUI(object):
             if (o['reg']):
                 val = reg[key]
                 if val is None:
-                    val = defs.defaults[key] if (key in defs.defaults) else None                    
+                    val = defs[key] if (key in defs) else None                    
                 params[key] = val
 
     def integrateOptions(self, options, params, _options):
