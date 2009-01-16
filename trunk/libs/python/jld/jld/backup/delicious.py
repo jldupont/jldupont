@@ -125,18 +125,25 @@ Commands:
         # == command validation ==
         # ========================
         try: command = ui.args[0]
-        except: command = None       
+        except: command = None
+        
+        if command is None:
+            sys.exit(0)
+
         backup.validateCommand(command)       
                  
         # get rid of command from the arg list
         ui.popArg()
+        
         # == DISPATCHER ==
         # ================
         getattr( backup, "cmd_%s" % command )(ui.args)
         
     except Exception,e:
         ui.handleError( e )
+        sys.exit(1)
         
+    sys.exit(0)
     # === END ===
 
 # =======================================================================
