@@ -58,8 +58,11 @@ class BaseCmdUI(object):
         try:    params = exc.params
         except: params = None            
 
-        try:    msg = self.msgs.render(msg_key, params)
-        except: msg = str(exc)
+        if (msg_key):  
+            try:    msg = self.msgs.render(msg_key, params)
+            except: msg = str(exc)
+        else:
+            msg = str(exc)
                     
         try:    self.logger.error( msg )
         except: pass

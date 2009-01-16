@@ -112,7 +112,6 @@ Commands:
         getattr( cmd, "cmd_%s" % command )(ui.args)
         
     except Exception,e:
-        print e
         ui.handleError( e )
         sys.exit(1)
         
