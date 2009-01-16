@@ -1,12 +1,13 @@
 #!/usr/bin/env python
-"""
+""" BaseCmdUI
     @author: Jean-Lou Dupont
 """
 
 __author__  = "Jean-Lou Dupont"
 __version__ = "$Id$"
 
-import re
+__all__ = ['BaseCmdUI', 'BaseCmdUIConfigError']
+
 import sys
 from types import *
 from string import Template

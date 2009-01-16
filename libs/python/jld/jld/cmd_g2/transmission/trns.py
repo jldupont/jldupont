@@ -12,7 +12,12 @@ import os.path
 from types import *
 from optparse import OptionParser
 
-from jld.tools.ytools import Yattr, Ymsg 
+from jld.tools.ytools import Yattr, Ymsg
+from jld.cmd_g2.base_ui import BaseCmdUI 
+from   jld.tools.template import ExTemplate
+import jld.tools.logger as _logger
+import cmd as TransmissionCmd
+
 
 # ========================================================================================
 _options =[
@@ -24,16 +29,14 @@ def main():
     
     msgs     = Ymsg(__file__)
     defaults = Yattr(__file__)
-    
-    ui     = mui.MM_UI()
-    
+
     # == Config UI ==
-    # ===============
-    ui.setParams( msgs )    
+    # =============== 
+    ui     = BaseCmdUI(msgs)
     
     # all the exceptions are handled by 'ui'
     try:
-        backup = Backup()
+        cmd = TransmissionCmd()
         usage_template = """%prog [options] command
     
 version $Id$ by Jean-Lou Dupont
@@ -43,7 +46,7 @@ version $Id$ by Jean-Lou Dupont
 Commands:
 ^^{commands}"""
             
-        commands_help = backup.genCommandsHelp()
+        commands_help = cmd.genCommandsHelp()
             
         tpl = ExTemplate( usage_template )
         usage = tpl.substitute( {'commands' : commands_help} )
@@ -54,10 +57,10 @@ Commands:
         # Configure ourselves a logger
         _quiet  = True  if ui.options.quiet  else False
         _syslog = False if ui.options.syslog else True        
-        logger = mlogger.logger('mm', include_console = _quiet, include_syslog = _syslog )
+        logger = _logger.logger('trns', include_console = _quiet, include_syslog = _syslog )
 
-        backup.logger = logger
-        ui.logger = logger
+        cmd.logger = logger
+        ui.logger  = logger
 
         # == configuration ==
         #
@@ -72,7 +75,7 @@ Commands:
         #  2) Registry
         #  3) Defaults
         # ===================
-        r = reg.Registry('mindmeister')
+        r = reg.Registry('trns')
         ui.updateRegistry(r, _options, ui.options)
         
         params = {}
@@ -81,31 +84,30 @@ Commands:
         ui.integrateOptions(ui.options, params, _options)
         
         # integrate default config
-        defs = mdef.MM_Defaults()
-        ui.integrateDefaults(defs, r, _options, params)
+        ui.integrateDefaults(defaults, r, _options, params)
 
         # Verify parameter type
         ui.verifyType(params, _options)
         
         # Configure Backup cmd object
-        ui.copyOptions(params, backup, _options)
+        ui.copyOptions(params, cmd, _options)
         
         # == command validation ==
         # ========================
-        try: command = ui.args[0]
+        try:    command = ui.args[0]
         except: command = None
         
         if command is None:
             sys.exit(0)
                
-        backup.validateCommand(command)       
+        cmd.validateCommand(command)       
                  
         # get rid of command from the arg list
         ui.popArg()
         
         # == DISPATCHER ==
         # ================
-        getattr( backup, "cmd_%s" % command )(ui.args)
+        getattr( cmd, "cmd_%s" % command )(ui.args)
         
     except Exception,e:
         ui.handleError( e )
