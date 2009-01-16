@@ -31,4 +31,4 @@ class Defaults(object):
             file.close()
         except Exception,e:
             raise api.ErrorConfig('error_load_file', {'path':path})
-        
+    
