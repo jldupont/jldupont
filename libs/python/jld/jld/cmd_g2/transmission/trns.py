@@ -12,21 +12,25 @@ import os.path
 from types import *
 from optparse import OptionParser
 
+import jld.registry as reg
 from jld.tools.ytools import Yattr, Ymsg
 from jld.cmd_g2.base_ui import BaseCmdUI 
 from   jld.tools.template import ExTemplate
 import jld.tools.logger as _logger
-import cmd as TransmissionCmd
+from cmd import TransmissionCmd
 
 
 # ========================================================================================
 _options =[
   {'o1':'-s', 'var':'server',        'action':'store',        'help':'config_server',  'reg': True, 'default': None},
-  {'o1':'-p', 'var':'port',          'action':'store',        'help':'config_port',    'reg': True, 'default': None}, 
+  {'o1':'-p', 'var':'port',          'action':'store',        'help':'config_port',    'reg': True, 'default': None},
+  {'o1':'-q', 'var':'quiet',         'action':'store_true',   'help':'quiet',          'reg': False, 'default': False },          
+  {'o1':'-l', 'var':'syslog',        'action':'store_true',   'help':'syslog',         'reg': False, 'default': False },  
+
 ]
 
-def main():
-    
+def main( args ):
+
     msgs     = Ymsg(__file__)
     defaults = Yattr(__file__)
 
@@ -36,7 +40,8 @@ def main():
     
     # all the exceptions are handled by 'ui'
     try:
-        cmd = TransmissionCmd()
+        cmd = TransmissionCmd()       
+
         usage_template = """%prog [options] command
     
 version $Id$ by Jean-Lou Dupont
@@ -46,14 +51,12 @@ version $Id$ by Jean-Lou Dupont
 Commands:
 ^^{commands}"""
             
-        commands_help = cmd.genCommandsHelp()
-            
         tpl = ExTemplate( usage_template )
-        usage = tpl.substitute( {'commands' : commands_help} )
+        usage = tpl.substitute( {'commands' : cmd.commands_help} )
     
         # Use OptParse to process arguments
-        ui.handleArguments(usage, _options)
-        
+        ui.handleArguments(usage, _options, args[1:])
+                
         # Configure ourselves a logger
         _quiet  = True  if ui.options.quiet  else False
         _syslog = False if ui.options.syslog else True        
@@ -110,6 +113,7 @@ Commands:
         getattr( cmd, "cmd_%s" % command )(ui.args)
         
     except Exception,e:
+        print e
         ui.handleError( e )
         sys.exit(1)
         
