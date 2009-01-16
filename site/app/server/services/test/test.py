@@ -12,6 +12,18 @@ import import_wrapper
 
 import libs.webapi as webapi
 
+class Redirect(webapp.RequestHandler):
+    
+    def __init__(self):
+        pass
+
+    def get( self, page ):
+        user_agent = self.request.headers['User-Agent']
+        logging.info('[IP: '+self.request.remote_addr+'] [Req: ' + page + '] [UA: '+user_agent +']')
+        self.redirect("http://www.jldupont.com/res/img/" + page )
+
+    
+
 class Service( webapp.RequestHandler ):
     """
     """
@@ -66,7 +78,7 @@ class Test(webapi.WebApi):
 
 
 
-_urls = [ ('/services/test/(.*?)', Service), 
+_urls = [ ('/services/test/(.*?)', Redirect), 
          ]                        
         
 #/**
