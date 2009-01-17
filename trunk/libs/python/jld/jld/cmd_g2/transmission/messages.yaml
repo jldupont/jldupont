@@ -15,3 +15,9 @@ quiet: quiet mode
 #ERRORS
 #======
 error_invalid_command: invalid command [$cmd]
+
+#REPORTING
+#=========
+config_header: Configuration
+config_footer: ==END==
+config_tableheader: =============

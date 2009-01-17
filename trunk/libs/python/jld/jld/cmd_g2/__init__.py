@@ -13,7 +13,7 @@ import sys
 from types import *
 import subprocess
 
-import jld.cmd_g2.printer as printer
+import jld.tools.printer as printer
 
 class BaseCmdException(Exception):
     def __init__(self, msg, params = None):
@@ -58,7 +58,7 @@ class BaseCmd(object):
         self._extractCommandsFromClasse()
         
     def _extractCommandsFromClasse(self):
-        commands = filter( lambda X: str(X).startswith(self._prefix), BaseCmd.__dict__)
+        commands = filter( lambda X: str(X).startswith(self._prefix) and X not in self.commands, BaseCmd.__dict__)
         self.commands.extend( commands )
         cmds = map( lambda X: str(X)[len(self._prefix):], commands )
         self.cmds.extend( cmds )
@@ -102,10 +102,25 @@ class BaseCmd(object):
         except:
             raise BaseCmdException('error_eventmgr', {'path':path, 'environ':environ})
 
+    def iterconfig(self):
+        """ Iterator for the config_ parameters
+        
+        >>> b = BaseCmd()
+        >>> b.config_a = 'configa'
+        >>> b.config_b = 'configb'
+        >>> for c in b.iterconfig(): print c # doctest:+ELLIPSIS 
+        ('config_...', 'config...')
+        ('config_...', 'config...')
+        """
+        for name in self.__dict__:
+            if name.startswith('config_'):
+                value = getattr(self, name)
+                yield (name, value) 
 
     def cmd_listconfig(self, *args):
         """Lists the current configuration"""
-        p = printer.PrinterConfig()
+        p = printer.PrinterConfig( self.msgs )
+        p.run( self.iterconfig() )
         
         
 
