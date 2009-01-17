@@ -40,6 +40,7 @@ def main():
     # all the exceptions are handled by 'ui'
     try:
         cmd = TransmissionCmd()  
+        cmd.msgs = msgs
         
         usage_template = """%prog [options] command
     

@@ -43,4 +43,3 @@ class PrinterConfig(MessagePrinter):
 
     def _processList(self, list):
         return self._dictToList( list )
-        
