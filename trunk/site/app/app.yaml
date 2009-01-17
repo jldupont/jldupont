@@ -17,6 +17,9 @@ handlers:
 
 # SERVICES
 # ========
+- url: /services/stats/(.*)
+  script: server/services/stats/v1.py
+
 - url: /services/pypi/(.*)
   script: server/services/pypi/v1.py
 

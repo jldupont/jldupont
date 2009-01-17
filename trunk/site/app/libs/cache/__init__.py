@@ -12,6 +12,38 @@ _CACHE_KEY_CONTENT  = "/cachefile/content/%s"
 _CACHE_KEY_PAGE     = "/cachefile/page/%s"
 
 
+class memoize(object):
+    """ Memoize decorator
+    
+        @memoize(keyformat [,ttl])
+        def some_get_function(key):
+            return some_data_to_be_cached
+    """
+    _default_ttl = 5*60
+    
+    def __init__(self, keyformat, ttl = self._default_ttl ):
+        self.keyformat = keyformat
+        self.ttl = ttl
+
+    def __call__(self, func):
+        return self.getter
+    
+    def getter(self, *args):
+        """
+        1) Verify the cache first
+        2) Execute func if not hit
+        3) Store result
+        """
+
+        from_orig = self.original_func( *args )
+        return "from new_func params[%s] args[%s]" % (self.params, args) 
+
+
+############################################################################
+############################################################################
+
+
+
 def fetchpage(dirs, fragment_path):
     """ Retrieves a *page* from the cache.
         A *page* corresponds to a processed file,
