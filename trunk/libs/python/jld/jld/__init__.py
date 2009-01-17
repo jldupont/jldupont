@@ -44,11 +44,15 @@ This library contains the following utilities:
 
 * Command-Line tools
 
-  * pypre   (preprocessor based on Mako_ , e.g. useful for pre-processing Apache config files)
+  * pypre_   (preprocessor based on Mako_ , e.g. useful for pre-processing Apache config files)
   
-  * nsvn    (nuke svn: removes svn directories, e.g. useful under Windows where .dot files are difficult to handle)
+  * nsvn_    (nuke svn: removes svn directories, e.g. useful under Windows where .dot files are difficult to handle)
  
 * Cross-platform registry (Windows: uses the win32 registry, Linux: uses a filesystem path) 
+
+.. _pypre: http://www.jldupont.com/doc/lib/jld/pypre
+
+.. _nsvn: http://www.jldupont.com/doc/lib/jld/nsvn
 
 .. _Mako: http://www.makotemplates.org/
 
@@ -57,8 +61,8 @@ This library contains the following utilities:
 .. _Gliffy: http://www.gliffy.com/
 
 .. _Delicious: http://www.delicious.com/
-
 """
+
 __dependencies__ = [] #listed throughout the individual modules
 
 __classifiers__ = [
