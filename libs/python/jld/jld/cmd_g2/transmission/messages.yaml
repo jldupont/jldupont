@@ -21,3 +21,7 @@ error_invalid_command: invalid command [$cmd]
 config_header: Configuration
 config_footer: ==END==
 config_tableheader: =============
+
+list_header: Torrent List
+list_tableheader: Name
+list_footer: ==END==
