@@ -58,7 +58,8 @@ class BaseCmd(object):
         self._extractCommandsFromClasse()
         
     def _extractCommandsFromClasse(self):
-        commands = filter( lambda X: str(X).startswith(self._prefix) and X not in self.commands, BaseCmd.__dict__)
+        #commands = filter( lambda X: str(X).startswith(self._prefix) and X not in self.commands, BaseCmd.__dict__)
+        commands = filter( lambda X: str(X).startswith(self._prefix), self.__dict__)
         self.commands.extend( commands )
         cmds = map( lambda X: str(X)[len(self._prefix):], commands )
         self.cmds.extend( cmds )
