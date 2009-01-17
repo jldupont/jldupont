@@ -24,8 +24,8 @@ from cmd import TransmissionCmd
 _options =[
   {'o1':'-s', 'var':'config_server', 'action':'store',        'help':'config_server',  'reg': True, 'default': None},
   {'o1':'-p', 'var':'config_port',   'action':'store',        'help':'config_port',    'reg': True, 'default': None},
-  {'o1':'-q', 'var':'quiet',         'action':'store_true',   'help':'quiet',          'reg': False, 'default': False },          
-  {'o1':'-l', 'var':'syslog',        'action':'store_true',   'help':'syslog',         'reg': False, 'default': False },  
+  {'o1':'-q', 'var':'config_quiet',  'action':'store_true',   'help':'quiet',          'reg': False, 'default': False },          
+  {'o1':'-l', 'var':'config_syslog', 'action':'store_true',   'help':'syslog',         'reg': False, 'default': False },  
 ]
 
 def main():
@@ -58,8 +58,8 @@ Commands:
         ui.handleArguments(usage, _options)
                 
         # Configure ourselves a logger
-        _quiet  = True  if ui.options.quiet  else False
-        _syslog = False if ui.options.syslog else True        
+        _quiet  = True  if ui.options.config_quiet  else False
+        _syslog = False if ui.options.config_syslog else True        
         logger = _logger.logger('trns', include_console = _quiet, include_syslog = _syslog )
 
         cmd.logger = logger
