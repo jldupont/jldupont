@@ -25,6 +25,7 @@ class BasePrettyPrinter(object):
     
     def run(self, list, page_len = 20, repeat_table_header = True):
         """Default (basic) printer implementation"""
+        list = self._processList(list)
         self.header()
         count = 0
         for item in list:
@@ -34,6 +35,17 @@ class BasePrettyPrinter(object):
             self.line(item)
             count = count - 1
         self.footer()
+
+    def _dictToList(self, dic):
+        ""
+        list = []
+        for k,v in dic:
+            list.append( (k,v) )
+        return list
+
+    def _processList(self, list):
+        """Override this"""
+        return list
 
 # ==================================================================
 
