@@ -13,6 +13,8 @@ import sys
 from types import *
 import subprocess
 
+import jld.cmd_g2.printer as printer
+
 class BaseCmdException(Exception):
     def __init__(self, msg, params = None):
         Exception.__init__(self, msg)
@@ -103,7 +105,9 @@ class BaseCmd(object):
 
     def cmd_listconfig(self, *args):
         """Lists the current configuration"""
-        print "cmd_listconfig"
+        p = printer.PrinterConfig()
+        
+        
 
 # ==============================================
 # ==============================================
