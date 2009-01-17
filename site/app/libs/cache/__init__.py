@@ -31,9 +31,7 @@ class memoize(object):
         def some_get_function(key):
             return some_data_to_be_cached
     """
-    _default_ttl = 5*60
-    
-    def __init__(self, keyprefix, ttl = self._default_ttl, report_freshness = False ):
+    def __init__(self, keyprefix, ttl = 5*60, report_freshness = False ):
         self.keyprefix = keyprefix
         self.ttl = ttl
         self.report_freshness = report_freshness 
