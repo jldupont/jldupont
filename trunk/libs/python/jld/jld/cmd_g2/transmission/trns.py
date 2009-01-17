@@ -28,7 +28,7 @@ _options =[
   {'o1':'-l', 'var':'syslog',        'action':'store_true',   'help':'syslog',         'reg': False, 'default': False },  
 ]
 
-def main( args ):
+def main():
 
     msgs     = Ymsg(__file__)
     defaults = Yattr(__file__)
@@ -54,7 +54,7 @@ Commands:
         usage = tpl.substitute( {'commands' : cmd.commands_help} )
     
         # Use OptParse to process arguments
-        ui.handleArguments(usage, _options, args[1:])
+        ui.handleArguments(usage, _options)
                 
         # Configure ourselves a logger
         _quiet  = True  if ui.options.quiet  else False
