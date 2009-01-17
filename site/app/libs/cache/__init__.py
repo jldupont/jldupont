@@ -14,30 +14,69 @@ _CACHE_KEY_PAGE     = "/cachefile/page/%s"
 
 class memoize(object):
     """ Memoize decorator
+        
+        @param keyprefix
+        @param ttl
+        @param report_freshness
+        
+        @return: 
+            a) when report_freshness = True => (data, freshness)
+                where *freshness* = False when fetched from the cache
+            b) when report_freshness = False => data
+                 
     
-        @memoize(keyformat [,ttl])
+        Example:
+        
+        @memoize(keyprefix [,ttl] [,report_freshness=False])
         def some_get_function(key):
             return some_data_to_be_cached
     """
     _default_ttl = 5*60
     
-    def __init__(self, keyformat, ttl = self._default_ttl ):
-        self.keyformat = keyformat
+    def __init__(self, keyprefix, ttl = self._default_ttl, report_freshness = False ):
+        self.keyprefix = keyprefix
         self.ttl = ttl
+        self.report_freshness = report_freshness 
 
     def __call__(self, func):
+
+        if report_freshness:
+            return self.getter_withfreshness
+
         return self.getter
+            
     
-    def getter(self, *args):
+    def getter(self, *args, **kargs):
         """
         1) Verify the cache first
         2) Execute func if not hit
         3) Store result
         """
+        key = self.keyprefix + '/' + args[0]
+        
+        cached_value = memcache.get(key)
+        if cached_value is not None:
+            return cached_value
+        
+        data = self.func( *args, **kargs )
+        memcache.set(key, data, self.ttl)
+        return data
 
-        from_orig = self.original_func( *args )
-        return "from new_func params[%s] args[%s]" % (self.params, args) 
-
+    def getter_withfreshness(self, *args, **kargs):
+        """
+        1) Verify the cache first
+        2) Execute func if not hit
+        3) Store result
+        """
+        key = self.keyprefix + '/' + args[0]
+        
+        cached_value = memcache.get(key)
+        if cached_value is not None:
+            return (cached_value, False)
+        
+        data = self.func( *args, **kargs )
+        memcache.set(key, data, self.ttl)
+        return (data, True)
 
 ############################################################################
 ############################################################################
@@ -67,8 +106,6 @@ def fetchpage(dirs, fragment_path):
         
     
 def storepage(abs_path, content):
-    """
-    """    
     memcache.set(_CACHE_KEY_PAGE % abs_path, content, _CACHE_TIMEOUT)
     
 

@@ -9,11 +9,12 @@ __version__ = "$Id$"
 
 class deco(object):
     
-    def __init__(self, *params):
+    def __init__(self, *pargs, **kargs):
         """ Grab the parameters to the decorator here
         """
         #print "__init__ params[%s]" % params
-        self.params = params
+        self.pargs = pargs
+        self.kargs = kargs
 
     def __call__(self, func):
         """ Grab the function to decorate here
@@ -22,9 +23,11 @@ class deco(object):
         #print "in-call func[%s]" % func
         return self.new_func
     
-    def new_func(self, *args):
-        from_orig = self.original_func( *args )
-        return "from new_func params[%s] args[%s]" % (self.params, args) 
+    def new_func(self, *pargs, **kargs):
+        """ Acts pretty much as a function replacement
+        """
+        from_orig = self.original_func( *pargs, **kargs )
+        return "from new_func self.pargs[%s] self.kargs[%s] pargs[%s] kargs[%s]" % (self.pargs, self.kargs, pargs, kargs) 
     
 
 @deco('param1')
