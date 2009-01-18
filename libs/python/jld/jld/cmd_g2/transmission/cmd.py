@@ -27,11 +27,14 @@ class TransmissionCmd(BaseCmd):
         self.config_quiet  = None
         
     def cmd_listconfig(self, *args):
-        """Lists the configuration"""
+        """Lists the configuration"""       
         return BaseCmd.cmd_listconfig( self, *args )
     
     def cmd_list(self, *args):
         """Lists the current torrents"""
+        if self.config_quiet:
+            return
+        
         c = self._getClient()
         torrents = c.list()
         liste = ListTorrent( torrents )
@@ -41,6 +44,13 @@ class TransmissionCmd(BaseCmd):
 
     def _getClient(self):
         return transmission.transmission.Client(address=self.config_server, port=self.config_port)
+
+
+
+##################################################################################
+##################################################################################
+
+
 
 class ListTorrent(object):
     def __init__(self, list):
