@@ -21,25 +21,32 @@ class deco(object):
         """
         print "__call__ pargs[%s] kargs[%s]" % (pargs, kargs)
         self.original_func = pargs[0]
-        return self.new_func
+        return deco.new_func(self.original_func, *pargs, **kargs)
     
-    def new_func(self, *pargs, **kargs):
+    @staticmethod
+    def new_func(original_func, *pargs, **kargs):
         """ Acts pretty much as a function replacement
         """
         print "new_func: pargs[%s] kargs[%s]" % (pargs, kargs)
-        from_orig = self.original_func( self, *pargs, **kargs )
-        return "from new_func self.pargs[%s] self.kargs[%s] pargs[%s] kargs[%s]" % (self.pargs, self.kargs, pargs, kargs) 
+        print original_func.func_name
+        #print dir(original_func)
+        #print original_func.__dict__
+        #print original_func.func_globals
+        #from_orig = original_func( original_func.im_self, *pargs, **kargs )
+        #return "from new_func self.pargs[%s] self.kargs[%s] pargs[%s] kargs[%s]" % (self.pargs, self.kargs, pargs, kargs) 
     
 class Foo(object):
-    
+    def __init__(self, init):
+        self.init = init
+
     @deco('deco-param1')
     def fnc1(self):
-        print "in: Foo:fnc1"
+        print "in: Foo:fnc1 init[%s]" % self.init
 
 
 class Tests():
     """
-    >>> f = Foo()
+    >>> f = Foo("allo")
     >>> f.fnc1()
     """
 
