@@ -7,6 +7,36 @@ __version__ = "$Id$"
 
 from types import *
 
+class condprinter(object):
+    """Conditional Printer decorator
+        
+        Usage:
+        @condprinter(attribute-name-to-check)
+        def method(self, ...):
+            ...
+            return "some-message-to-conditionally-print"
+    """
+    
+    def __init__(self, condAttr):
+        "Grab attribute to check"
+        self.condAttr = condAttr
+        
+    def __call__(self, target):
+                
+        def wrapper(*pargs, **kargs):
+            this = pargs[0]
+            result = target(*pargs, **kargs)
+            if not getattr(this, self.condAttr):
+                print result 
+            
+        return wrapper
+
+
+########################################################
+########################################################
+
+
+
 class BasePrettyPrinter(object):
     """Generic Pretty Printer"""
 
@@ -87,6 +117,7 @@ class MessagePrinter(BasePrettyPrinter):
         BasePrettyPrinter.__init__(self, list=list)
         self.msgs = msgs
         self.msgs_prefix = msgs_prefix
+        self.buffer = ""
 
     def _get_msg(self, key):
         if type(self.msgs) is DictType:
@@ -97,30 +128,22 @@ class MessagePrinter(BasePrettyPrinter):
     def header(self):
         """Prints a header"""
         key = self.msgs_prefix + 'header'
-        print self._get_msg(key)
+        self.buffer = self.buffer + self._get_msg(key) + "\n"
         
     def table_header(self, tpl_item = None):
         """Prints a table header"""
         key = self.msgs_prefix + 'tableheader'
-        print self._get_msg(key)
+        self.buffer = self.buffer + self._get_msg(key) + "\n"
     
     def footer(self):
         """Prints a footer"""
         key = self.msgs_prefix + 'footer'
-        print self._get_msg(key)
+        self.buffer = self.buffer + self._get_msg(key) + "\n"
     
-
-class PrinterConfig(MessagePrinter):
-
-    def __init__(self, msgs, msgs_prefix = "config_", list=None ):
-        MessagePrinter.__init__(self, msgs, msgs_prefix, list=list)
-       
-    def line(self, entry):
-        """Prints one line"""
-        print "%s: %s" % (entry[0], entry[1])
-
-    #def _processList(self, list):
-    #    return self._dictToList(list)
+    def run(self, *pargs, **kargs):
+        BasePrettyPrinter.run( self, *pargs, **kargs )
+        return self.buffer
+        
     
 # ==============================================
 # ==============================================

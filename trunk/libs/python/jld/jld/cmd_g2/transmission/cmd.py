@@ -24,23 +24,28 @@ class TransmissionCmd(BaseCmd):
         self.config_port   = None
         self.config_syslog = None
         self.config_quiet  = None
+        
         self._checkDependencies()
 
     def cmd_listconfig(self, *args):
         """Lists the configuration"""       
-        return BaseCmd.cmd_listconfig( self, *args )
+        msg = BaseCmd.cmd_listconfig( self, *args )
+        print msg
     
+    @printer.condprinter('config_quiet')
     def cmd_list(self, *args):
         """Lists the current torrents"""
-        if self.config_quiet:
-            return
         
         c = self._getClient()
         torrents = c.list()
         liste = ListTorrent( torrents )
         
         p = ListPrinter(self.msgs, list=liste.iterlist())
-        p.run()
+        return p.run()
+
+    @printer.condprinter('config_quiet')
+    def cmd_test(self, *args):
+        return "test"
 
 
     # =================================
@@ -75,4 +80,4 @@ class ListPrinter(printer.MessagePrinter):
         printer.MessagePrinter.__init__(self, msgs, 'list_', list=list)
         
     def line(self, entry):
-        print entry
+        self.buffer =  self.buffer + entry + "\n"
