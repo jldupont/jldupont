@@ -10,8 +10,9 @@ from types import *
 class BasePrettyPrinter(object):
     """Generic Pretty Printer"""
 
-    def __init__(self):
+    def __init__(self, list = None):
         self.tbl_hdr = None #cached table header
+        self.list = list
 
     def header(self):
         """Prints a header"""
@@ -25,9 +26,11 @@ class BasePrettyPrinter(object):
     def line(self, entry):
         """Prints one line"""
     
-    def run(self, list, page_len = 20, repeat_table_header = True):
+    def run(self, list = None, page_len = 20, repeat_table_header = True):
         """Default (basic) printer implementation"""
+        list = list if list is not None else self.list
         list = self._processList(list)
+
         self.header()
         count = 0
         for item in list:
@@ -46,7 +49,7 @@ class BasePrettyPrinter(object):
         return sorted( list )
 
     def _processList(self, list):
-        """Override this"""
+        """Override this if needed"""
         return list
 
 # ==================================================================
@@ -80,8 +83,8 @@ class SimplePrettyPrinter(BasePrettyPrinter):
 
 class MessagePrinter(BasePrettyPrinter):
 
-    def __init__(self, msgs, msgs_prefix = ''):
-        BasePrettyPrinter.__init__(self)
+    def __init__(self, msgs, msgs_prefix = '', list=None):
+        BasePrettyPrinter.__init__(self, list=list)
         self.msgs = msgs
         self.msgs_prefix = msgs_prefix
 
@@ -109,8 +112,8 @@ class MessagePrinter(BasePrettyPrinter):
 
 class PrinterConfig(MessagePrinter):
 
-    def __init__(self, msgs, msgs_prefix = "config_" ):
-        MessagePrinter.__init__(self, msgs, msgs_prefix)
+    def __init__(self, msgs, msgs_prefix = "config_", list=None ):
+        MessagePrinter.__init__(self, msgs, msgs_prefix, list=list)
        
     def line(self, entry):
         """Prints one line"""
