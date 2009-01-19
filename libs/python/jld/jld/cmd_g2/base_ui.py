@@ -35,6 +35,7 @@ class BaseCmdUI(object):
         self.msgs = msgs
         self.options = None
         self.args = None
+        self.command = None
     
     def setParams(self, msgs):
         """ Generic parameter setting interface
@@ -95,6 +96,10 @@ class BaseCmdUI(object):
                                default=o['default'] )
 
         (self.options,self.args) = parser.parse_args( args )
+        
+        try:    self.command = self.args[0]
+        except: self.command = None
+        
         
     def updateRegistry(self, reg, options, args):
         """Updates the registry from the command-line args"""

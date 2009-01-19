@@ -97,20 +97,17 @@ Commands:
         
         # == command validation ==
         # ========================
-        try:    command = ui.args[0]
-        except: command = None
-        
-        if command is None:
+        if ui.command is None:
             sys.exit(0)
                
-        cmd.validateCommand(command)       
+        cmd.validateCommand(ui.command)       
                  
         # get rid of command from the arg list
         ui.popArg()
         
         # == DISPATCHER ==
         # ================
-        getattr( cmd, "cmd_%s" % command )(ui.args)
+        getattr( cmd, "cmd_%s" % ui.command )(ui.args)
         
     except Exception,e:
         ui.handleError( e )

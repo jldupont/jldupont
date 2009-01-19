@@ -21,14 +21,13 @@ class deco(object):
         """
         print "__call__ pargs[%s] kargs[%s]" % (pargs, kargs)
         self.original_func = pargs[0]
-        return deco.new_func(self.original_func, *pargs, **kargs)
+        return self.new_func
     
-    @staticmethod
-    def new_func(original_func, *pargs, **kargs):
+    def new_func(self, *pargs, **kargs):
         """ Acts pretty much as a function replacement
         """
         print "new_func: pargs[%s] kargs[%s]" % (pargs, kargs)
-        print original_func.func_name
+        print self.original_func(*pargs, **kargs)
         #print dir(original_func)
         #print original_func.__dict__
         #print original_func.func_globals
@@ -43,7 +42,8 @@ class Foo(object):
     def fnc1(self):
         print "in: Foo:fnc1 init[%s]" % self.init
 
-
+# DOES NOT WORK AS EXPECTED
+# #########################
 class Tests():
     """
     >>> f = Foo("allo")

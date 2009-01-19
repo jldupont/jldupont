@@ -17,8 +17,7 @@ except:
 
 
 class TransmissionCmd(BaseCmd):
-    """
-    """
+
     def __init__(self):
         BaseCmd.__init__(self)
         self.config_server = None
@@ -38,9 +37,14 @@ class TransmissionCmd(BaseCmd):
         c = self._getClient()
         torrents = c.list()
         liste = ListTorrent( torrents )
-        p = ListPrinter(self.msgs)
-        p.run(liste.iterlist())
+        
+        p = ListPrinter(self.msgs, list=liste.iterlist())
+        p.run()
 
+
+    # =================================
+    # PRIVATE
+    # =================================
 
     def _getClient(self):
         return transmission.transmission.Client(address=self.config_server, port=self.config_port)
@@ -54,7 +58,7 @@ class TransmissionCmd(BaseCmd):
 
 class ListTorrent(object):
     def __init__(self, list):
-        self.list =list
+        self.list = list
         
     def iterlist(self):
         for id, torrent in self.list.iteritems():
@@ -62,8 +66,8 @@ class ListTorrent(object):
             
     
 class ListPrinter(printer.MessagePrinter):
-    def __init__(self, msgs):
-        printer.MessagePrinter.__init__(self, msgs, 'list_')
+    def __init__(self, msgs, list):
+        printer.MessagePrinter.__init__(self, msgs, 'list_', list=list)
         
     def line(self, entry):
         print entry
