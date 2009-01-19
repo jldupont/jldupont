@@ -66,7 +66,7 @@ class BaseCmdUI(object):
             msg = str(exc)
                     
         try:    self.logger.error( msg )
-        except: pass
+        except: print msg
         
     def _resolveHelp(self, entry):
         

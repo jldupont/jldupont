@@ -9,12 +9,12 @@ __version__ = "$Id$"
 from jld.cmd_g2 import BaseCmd
 import jld.tools.printer as printer
 
+# imports are checked & errors raised later
 try:
     import transmission
 except:
-    import jld.tools.exceptions as exceptions
-    raise exceptions.ErrorMissingDependency('error_missing_dependency', {'location':'pypi','dep':'transmission'} )
-
+    pass
+        
 
 class TransmissionCmd(BaseCmd):
 
@@ -24,7 +24,8 @@ class TransmissionCmd(BaseCmd):
         self.config_port   = None
         self.config_syslog = None
         self.config_quiet  = None
-        
+        self._checkDependencies()
+
     def cmd_listconfig(self, *args):
         """Lists the configuration"""       
         return BaseCmd.cmd_listconfig( self, *args )
@@ -45,6 +46,10 @@ class TransmissionCmd(BaseCmd):
     # =================================
     # PRIVATE
     # =================================
+    def _checkDependencies(self):
+        if "transmission" not in globals():
+            import jld.tools.exceptions as exceptions
+            raise exceptions.ErrorMissingDependency('error_missing_dependency', {'location':'pypi','dep':'transmission'} )                   
 
     def _getClient(self):
         return transmission.transmission.Client(address=self.config_server, port=self.config_port)
