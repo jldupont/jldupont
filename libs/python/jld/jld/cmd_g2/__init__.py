@@ -121,7 +121,7 @@ class BaseCmd(object):
     def cmd_listconfig(self, *args):
         """Lists the current configuration"""
         p = printer.PrinterConfig( self.msgs, list=self.iterconfig() )
-        p.run()
+        return p.run()
         
         
 
