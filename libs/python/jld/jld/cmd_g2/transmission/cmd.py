@@ -6,6 +6,8 @@
 __author__  = "Jean-Lou Dupont"
 __version__ = "$Id$"
 
+import os
+
 from jld.cmd_g2 import BaseCmd
 import jld.tools.printer as printer
 
@@ -18,7 +20,6 @@ except:
 
 class TransmissionCmd(BaseCmd):
 
-    _status_file      = "report.yaml"
     _status_completed = 8  # "seeding", see "transmission.h"
 
     def __init__(self):
@@ -48,9 +49,8 @@ class TransmissionCmd(BaseCmd):
         p = ListPrinter(self.msgs, list=liste.iterlist())
         return p.run()
 
-    @printer.condprinter('config_quiet')
     def cmd_reportstatus(self, *args):
-        """Reports on the current status of the active torrents"""
+        """Reports on the current status of the active torrents (logged) (event)"""
         
         client  = self._getClient()
         torrents= client.list()
@@ -58,23 +58,47 @@ class TransmissionCmd(BaseCmd):
         dld     = session.fields['download_dir']
         
         details   = self._getDetails(torrents)
-        completed = self._getCompletedList(details)
+        completed_id, completed_name = self._getCompletedList(details)
         
         if self.config_autostop:
-            stopped = len(completed)
-            self._performStop(client, completed)
+            stopped = len(completed_id)
+            self._performStop(client, completed_id)
         else:
             stopped = 0
+
+        completed = len(completed_id)
+                
+        if (self.config_export):
+            exported = completed
+            self._doCompletedReporting(dld, completed_name)
+        else:
+            exported = 0
+
+        params = {'completed':completed, 'stopped':stopped, 'exported':exported, 'download_dir':dld }
+                
+        msg = self.msgs.render( 'log_report_status', params)
+        self.logger.info( msg )
         
-        params = {'completed':len(completed), 'download_dir':dld, 'report_file': self._status_file }
         code = self._fireEvent(self.config_eventmgr, params)
-        return code
+        #return code
 
     # =================================
     # PRIVATE
     # =================================
-    def _writeReportStatus(self, path, status):
+    def _doCompletedReporting(self, download_dir, liste):
         ""
+        for name in liste:
+            self._writeCompletedReport(download_dir, name)
+        
+    def _writeCompletedReport(self, download_dir, name):
+        """Writes a "completed status" report file.
+            This consists in a zero-length file with the .completed extension.
+        """
+        name_completed = "%s.completed" % name
+        path = os.path.join(download_dir, name_completed)
+        
+        #just "touch" the target file
+        open(path, "w").close()
     
     def _getDetails(self, torrents):
         """Returns the name & status of each active torrents"""
@@ -86,12 +110,14 @@ class TransmissionCmd(BaseCmd):
         return details
     
     def _getCompletedList(self, detailed_list):
-        """Returns a list with the id of the completed torrents"""
-        completed = []
+        """Returns 2 lists (id,name) of the completed torrents"""
+        completed_id   = []
+        completed_name = []
         for id, entry in detailed_list.iteritems():
             if entry['status'] == self._status_completed:
-                completed.append(id)
-        return completed
+                completed_name.append(entry['name'])
+                completed_id.append(id)
+        return completed_id, completed_name
     
     def _performStop(self, client, list):
         "Stops (remove) the listed torrents"
