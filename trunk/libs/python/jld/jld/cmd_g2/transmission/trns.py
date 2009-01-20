@@ -22,11 +22,13 @@ from cmd import TransmissionCmd
 
 # ========================================================================================
 _options =[
-  {'o1':'-s', 'var':'config_server', 'action':'store',        'help':'config_server', 'reg': True,  'default': None},
-  {'o1':'-p', 'var':'config_port',   'action':'store',        'help':'config_port',   'reg': True,  'default': None},
-  {'o1':'-q', 'var':'config_quiet',  'action':'store_true',   'help':'config_quiet',  'reg': False, 'default': False },          
-  {'o1':'-l', 'var':'config_syslog', 'action':'store_true',   'help':'config_syslog', 'reg': False, 'default': False },
-  {'o1':'-e', 'var':'config_export', 'action':'store',        'help':'config_export', 'reg': False, 'default': False },  
+  {'o1':'-s', 'var':'config_server',  'action':'store',        'help':'config_server',  'reg': True,  'default': None  },
+  {'o1':'-p', 'var':'config_port',    'action':'store',        'help':'config_port',    'reg': True,  'default': None  },
+  {'o1':'-q', 'var':'config_quiet',   'action':'store_true',   'help':'config_quiet',   'reg': False, 'default': False },          
+  {'o1':'-l', 'var':'config_syslog',  'action':'store_true',   'help':'config_syslog',  'reg': False, 'default': False },
+  {'o1':'-e', 'var':'config_export',  'action':'store',        'help':'config_export',  'reg': False, 'default': False },  
+  {'o1':'-a', 'var':'config_autostop','action':'store_true',   'help':'config_autostop','reg': False, 'default': False },
+  {'o1':'-z', 'var':'config_eventmgr','action':'store',        'help':'config_eventmgr','reg': True,  'default': None, 'type':'string' },  
 ]
 
 def main():
@@ -83,7 +85,7 @@ Commands:
         ui.updateRegistry(r, _options, ui.options)
         
         params = {}
-        
+
         # integrate options which aren't subjected to the registry
         ui.integrateOptions(ui.options, params, _options)
         
