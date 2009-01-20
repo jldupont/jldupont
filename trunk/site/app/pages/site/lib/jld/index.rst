@@ -7,6 +7,7 @@ command-line utilities:
 * mm.py_  : MindMeister_ map backup
 * dlc.py_ : Delicious_   bookmark backup
 * glf.py_ : Gliffy_      diagrams backup
+* trns.py_: Transmission post-processing (Bittorent client)
  
 The underlying WEB APIs are also abstracted in separate modules.
 
@@ -36,4 +37,4 @@ This library is made available through CheeseShop_ with *easy_install*
 .. _glf.py:   /doc/lib/jld/gliffy
 .. _pypre.py: /doc/lib/jld/pypre
 .. _nsvn.py:  /doc/lib/jld/nsvn
-
+.. _trns.py:  /doc/lib/jld/trns
