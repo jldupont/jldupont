@@ -47,8 +47,12 @@ This library contains the following utilities:
   * pypre_   (preprocessor based on Mako_ , e.g. useful for pre-processing Apache config files)
   
   * nsvn_    (nuke svn: removes svn directories, e.g. useful under Windows where .dot files are difficult to handle)
+  
+  * trns_    (Transmission Bittorent client e.g. useful for auto-stopping downloads & post-processing)
  
 * Cross-platform registry (Windows: uses the win32 registry, Linux: uses a filesystem path) 
+
+.. _trns: http://www.jldupont.com/doc/lib/jld/trns
 
 .. _pypre: http://www.jldupont.com/doc/lib/jld/pypre
 
@@ -61,6 +65,15 @@ This library contains the following utilities:
 .. _Gliffy: http://www.gliffy.com/
 
 .. _Delicious: http://www.delicious.com/
+
+Changelog
+=========
+
+0.0.37
+------
+
+* Introduction of trns_
+
 """
 
 __dependencies__ = [] #listed throughout the individual modules
