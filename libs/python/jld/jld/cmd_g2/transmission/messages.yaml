@@ -26,3 +26,7 @@ config_tableheader: =============
 list_header: Torrent List
 list_tableheader: Name
 list_footer: ==END==
+
+report_header: Report
+report_footer: ==END==
+report_tableheader: ======

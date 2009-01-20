@@ -18,6 +18,7 @@ except:
 
 class TransmissionCmd(BaseCmd):
 
+    _status_file      = "report.yaml"
     _status_completed = 8  # "seeding", see "transmission.h"
 
     def __init__(self):
@@ -27,6 +28,7 @@ class TransmissionCmd(BaseCmd):
         self.config_syslog = None
         self.config_quiet  = None
         self.config_eventmgr = None
+        self.config_autostop = None
         
         self._checkDependencies()
 
@@ -55,11 +57,25 @@ class TransmissionCmd(BaseCmd):
         session = client.get_session()
         dld     = session.fields['download_dir']
         
-
+        details   = self._getDetails(torrents)
+        completed = self._getCompletedList(details)
+        
+        if self.config_autostop:
+            stopped = len(completed)
+            self._performStop(client, completed)
+        else:
+            stopped = 0
+        
+        params = {'completed':len(completed), 'download_dir':dld, 'report_file': self._status_file }
+        code = self._fireEvent(self.config_eventmgr, params)
+        return code
 
     # =================================
     # PRIVATE
     # =================================
+    def _writeReportStatus(self, path, status):
+        ""
+    
     def _getDetails(self, torrents):
         """Returns the name & status of each active torrents"""
         details = {}
