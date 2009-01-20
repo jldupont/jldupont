@@ -9,11 +9,7 @@ config_server: configure the http URI of the Transmission server
 config_port: configure the HTTP port of the Transmission server
 config_eventmgr: configure "EventManager script" path
 config_export: configure export status
-
-#OPTIONS
-#=======
-syslog: syslog disable mode
-quiet: quiet mode
+config_autostop: configure auto-stopping of completed torrent(s)
 
 #ERRORS
 #======

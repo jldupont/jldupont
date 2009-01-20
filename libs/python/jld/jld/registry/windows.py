@@ -45,11 +45,12 @@ class WindowsRegistry(object):
 
     def setKey(self, file, key, value):
         try:
+            #print "writing registry: key[%s] val[%s]" % (key,value)
             subkey = self._win % file
             ckey = _winreg.CreateKey( _winreg.HKEY_LOCAL_MACHINE, subkey)
             _winreg.SetValueEx(ckey, key, 0, _winreg.REG_SZ, value)           
         except Exception,e:
-            raise RegistryException("Python Registry: write error key[%s] file[%s] exception msg{%s}" %(key, file,e))
+            raise RegistryException("Python Registry: write error key[%s] file[%s] exception msg{%s}" % (key, file, e))
         
         
 # ============================================

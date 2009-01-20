@@ -18,12 +18,15 @@ except:
 
 class TransmissionCmd(BaseCmd):
 
+    _status_completed = 8  # "seeding", see "transmission.h"
+
     def __init__(self):
         BaseCmd.__init__(self)
         self.config_server = None
         self.config_port   = None
         self.config_syslog = None
         self.config_quiet  = None
+        self.config_eventmgr = None
         
         self._checkDependencies()
 
@@ -57,6 +60,28 @@ class TransmissionCmd(BaseCmd):
     # =================================
     # PRIVATE
     # =================================
+    def _getDetails(self, torrents):
+        """Returns the name & status of each active torrents"""
+        details = {}
+        for id,torrent in torrents.iteritems():
+            status = torrent.fields['status']
+            name   = torrent.fields['name']
+            details[id] = {'name':name, 'status':status}
+        return details
+    
+    def _getCompletedList(self, detailed_list):
+        """Returns a list with the id of the completed torrents"""
+        completed = []
+        for id, entry in detailed_list.iteritems():
+            if entry['status'] == self._status_completed:
+                completed.append(id)
+        return completed
+    
+    def _performStop(self, client, list):
+        "Stops (remove) the listed torrents"
+        for id in list:
+            client.remove( id )
+    
     def _checkDependencies(self):
         if "transmission" not in globals():
             import jld.tools.exceptions as exceptions

@@ -109,6 +109,7 @@ class BaseCmdUI(object):
                 key = o['var']
                 val = getattr( args, key )
                 if (val is not None):
+                    #print "updateRegistry: key[%s] val[%s]" % (key, val)
                     reg[key] = val 
 
     def copyOptions(self, source, target, _options):
