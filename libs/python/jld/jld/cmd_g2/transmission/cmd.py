@@ -44,8 +44,14 @@ class TransmissionCmd(BaseCmd):
         return p.run()
 
     @printer.condprinter('config_quiet')
-    def cmd_test(self, *args):
-        return "test"
+    def cmd_reportstatus(self, *args):
+        """Reports on the current status of the active torrents"""
+        
+        client  = self._getClient()
+        torrents= client.list()
+        session = client.get_session()
+        dld     = session.fields['download_dir']
+        
 
 
     # =================================

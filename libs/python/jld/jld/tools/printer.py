@@ -143,7 +143,14 @@ class MessagePrinter(BasePrettyPrinter):
     def run(self, *pargs, **kargs):
         BasePrettyPrinter.run( self, *pargs, **kargs )
         return self.buffer
-        
+
+class PrinterConfig(MessagePrinter):
+
+    def __init__(self, msgs, list):
+        MessagePrinter.__init__(self, msgs, msgs_prefix="config_", list=list)
+
+    def line(self, entry):
+        self.buffer = self.buffer + "%s: %s\n" % (entry[0], entry[1])
     
 # ==============================================
 # ==============================================
