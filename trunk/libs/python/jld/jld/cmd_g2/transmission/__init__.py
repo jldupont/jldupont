@@ -6,3 +6,4 @@
 __author__  = "Jean-Lou Dupont"
 __version__ = "$Id$"
 
+__dependencies__ = []

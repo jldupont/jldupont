@@ -4,10 +4,10 @@ Python Library jld
 My Python library consists mainly in the following 
 command-line utilities:
 
-* mm.py_  : MindMeister_ map backup
-* dlc.py_ : Delicious_   bookmark backup
-* glf.py_ : Gliffy_      diagrams backup
-* trns.py_: Transmission post-processing (Bittorent client)
+* mm.py_  : |M| MindMeister_ map backup
+* dlc.py_ : |D| Delicious_   bookmark backup
+* glf.py_ : |G| Gliffy_      diagrams backup
+* trns.py_: |TR| Transmission post-processing (Bittorent client)
  
 The underlying WEB APIs are also abstracted in separate modules.
 
@@ -38,3 +38,10 @@ This library is made available through CheeseShop_ with *easy_install*
 .. _pypre.py: /doc/lib/jld/pypre
 .. _nsvn.py:  /doc/lib/jld/nsvn
 .. _trns.py:  /doc/lib/jld/trns
+
+.. |D| image:: /res/img/delicious.jpg
+.. |G| image:: /res/img/gliffy.png
+.. |M| image:: /res/img/mm.png
+.. |T| image:: /res/img/twitter.png
+.. |R| image:: /res/img/rss.png
+.. |TR| image:: /res/img/transmission.png
