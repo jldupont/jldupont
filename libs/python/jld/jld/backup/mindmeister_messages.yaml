@@ -22,7 +22,6 @@ error_load_file: error occured whilst file [$path]
 show_auth_token: auth_token [$auth_token]
 
 syslog: syslog disable mode
-quiet: quiet mode
 configuration: Please configure 'secret' and 'api_key'
 reg_update_error: Unable to update registry
 invalid_command: Invalid command [$cmd]

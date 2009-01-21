@@ -19,7 +19,6 @@ config_maxnum: configuration the maximum number of exports per run
 error_load_file: error occured whilst file [$path]
 
 syslog: syslog disable mode
-quiet: quiet mode
 configuration: 
 reg_update_error: Unable to update registry
 invalid_command: Invalid command [$cmd]

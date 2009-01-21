@@ -39,8 +39,7 @@ _options =[
   {'o1':'-f', 'var':'db_path',       'action':'store',        'help':'config_file',    'reg': True, 'default': None},
   {'o1':'-p', 'var':'export_path',   'action':'store',        'help':'config_path',    'reg': True, 'default': None},
   {'o1':'-z', 'var':'eventmgr_path', 'action':'store',        'help':'config_eventmgr','reg': True, 'default': None},
-  {'o1':'-m', 'var':'export_maxnum', 'action':'store',        'help':'config_maxnum',  'reg': True, 'default': None, 'type':'int'},
-  {'o1':'-q', 'var':'quiet',         'action':'store_true',   'help':'quiet',          'reg': False, 'default': False },          
+  {'o1':'-m', 'var':'export_maxnum', 'action':'store',        'help':'config_maxnum',  'reg': True, 'default': None, 'type':'int'},        
   {'o1':'-l', 'var':'syslog',        'action':'store_true',   'help':'syslog',         'reg': False, 'default': False },  
 ]
 
@@ -84,9 +83,8 @@ Commands:
         ui.handleArguments(usage, _options)
         
         # Configure ourselves a logger
-        _quiet  = True  if ui.options.quiet  else False
         _syslog = False if ui.options.syslog else True        
-        logger = mlogger.logger('mm', include_console = _quiet, include_syslog = _syslog )
+        logger = mlogger.logger('mm', include_console = False, include_syslog = _syslog )
 
         backup.logger = logger
         ui.logger = logger

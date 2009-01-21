@@ -48,6 +48,8 @@ _packages = ['jld',
              'jld.api', 
             'jld.backup', 
             'jld.cmd', 
+            'jld.cmd_g2',
+            'jld.cmd_g2.transmission',
             'jld.registry',
             'jld.template',  
             'jld.tools'
@@ -66,7 +68,9 @@ _scripts = [
             'jld/backup/scripts/glf.bat', 
             'jld/backup/scripts/glf', 
             
-            'jld/cmd/pypre.py',            
+            'jld/cmd/pypre.py',
+            
+            'jld/scripts/trns.py',            
             ]
 
 _dependencies = []

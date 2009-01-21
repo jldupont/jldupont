@@ -18,7 +18,7 @@
 """
 
 __author__  = "Jean-Lou Dupont"
-__version__ = "0.0.36"
+__version__ = "0.0.37"
 __email__   = "python@jldupont.com"
 __url__     = "http://www.jldupont.com/"
 __desc__    = """ Jean-Lou Dupont's Python Library - WEB API & command line tools"""
@@ -34,13 +34,13 @@ Content
 
 This library contains the following utilities:
   
-* MindMeister_ mindmaps Backup command line: for exporting mindmaps from MindMeister_ in FreeMind format
+* |M| MindMeister_ mindmaps Backup command line: for exporting mindmaps from MindMeister_ in FreeMind format
   
   * EventManager script interface
   
-* Delicious_ API & Backup command line utility
+* |D| Delicious_ API & Backup command line utility
 
-* Gliffy_ API & Backup command line utility
+* |G| Gliffy_ API & Backup command line utility
 
 * Command-Line tools
 
@@ -51,6 +51,20 @@ This library contains the following utilities:
   * trns_    (Transmission Bittorent client e.g. useful for auto-stopping downloads & post-processing)
  
 * Cross-platform registry (Windows: uses the win32 registry, Linux: uses a filesystem path) 
+
+Updates
+-------
+
+Follow project news on |T| Twitter_ or subscribe to the |R| RSS_ feed.
+
+Changelog
+---------
+
+**0.0.37**
+
+
+* Introduction of trns_
+* Removed *quiet* mode on mm.py, gliffy.py, delicious.py
 
 .. _trns: http://www.jldupont.com/doc/lib/jld/trns
 
@@ -66,13 +80,15 @@ This library contains the following utilities:
 
 .. _Delicious: http://www.delicious.com/
 
-Changelog
-=========
+.. _Twitter: http://twitter.com/jld_prj_news
 
-0.0.37
-------
+.. _RSS: http://twitter.com/statuses/user_timeline/19252523.rss
 
-* Introduction of trns_
+.. |D| image:: http://www.jldupont.com/res/img/delicious.jpg
+.. |G| image:: http://www.jldupont.com/res/img/gliffy.png
+.. |M| image:: http://www.jldupont.com/res/img/mm.png
+.. |T| image:: http://www.jldupont.com/res/img/twitter.png
+.. |R| image:: http://www.jldupont.com/res/img/rss.png
 
 """
 
