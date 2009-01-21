@@ -67,7 +67,7 @@ def load_template_source(template_name, template_dirs=None):
                     #logging.info( 'got from memcache [%s]' % template_name )
                     return (cached_template, template_name)
         except:
-            logging.info('filesystem miss [%s]' % template_name)  
+            logging.debug('filesystem miss [%s]' % template_name)  
     tried = []
     
     for filepath in get_template_sources(template_name, template_dirs):        
