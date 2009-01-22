@@ -89,6 +89,7 @@ class ServiceStats( webapi.WebApi ):
         ip = self.request.remote_addr
         logging.info("Counter page[%s] count[%s] IP[%s]" % (page, count,ip) )
         
+        self.response.headers['Cache-Control'] = "must-revalidate"
         self.response.headers['Content-Type'] = self._default_image_mime
         self.redirect(self._default_image)
     

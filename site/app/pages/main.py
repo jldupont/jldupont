@@ -20,6 +20,9 @@ import import_wrapper
 # restructuredText
 import libs.markup as markup
 
+# Datastore Counter
+import libs.datastore.counter as counter
+
 # My Django configuration
 # =======================
 _loaders = (    'libs.django.filesystem_template_loader.load_template_source',
@@ -55,6 +58,15 @@ class Base( webapp.RequestHandler ):
     
     _page_error = 'main'
     _page_main  = 'main'
+    
+    def _doIPCount(self):
+        ""
+        ua = self.request.headers['User-Agent']
+        ip = self.request.remote_addr
+        c = counter.Counter( ip )
+        c.increment()
+        count = c.get_count()
+        logging.info("IP[%s] COUNT[%s] UA[%s]" % (ip, count, ua))
     
     def _dolog(self, page):
         ua = self.request.headers['User-Agent']
@@ -92,10 +104,10 @@ class Base( webapp.RequestHandler ):
         self.response.set_status( code )
 
     def _output_page(self, page):
-        if (page is None):
-            page = 'main'        
         
-        self._dolog(page)
+        page = "main" if page is None else page
+        
+        #self._dolog(page)
 
         content,code = self.getPage(page, {'page': page} )
 
@@ -122,6 +134,7 @@ class Main( Base ):
         Base.__init__(self)
 
     def get( self, page = None ):
+        self._doIPCount()
         self._output_page(page)
 
                 
@@ -132,13 +145,15 @@ class Doc( Base ):
         Base.__init__(self)
         
     def get(self, base_name = None):
+        self._doIPCount()
+        
         if not base_name:
             self._output_page( self._page_error )
         
         if (base_name[-1] == "/"):
             base_name = base_name + "index" 
         
-        self._dolog(base_name)
+        #self._dolog(base_name)
         
         page = base_name + '.rst'
         
