@@ -19,80 +19,78 @@ import import_wrapper
 import libs.markup as markup
 import libs.webapi as webapi
 
+import libs.datastore.counter as counter
 
 class ServiceStats( webapi.WebApi ):
     """\
     Help
     ====
     
-     uri: **/services/stats/[method]/[page]**
+     uri: **/services/stats/[stype]/[page]**
     
-    - Supported methods: $methods
+    - Supported stat types (stype): $stypes
     
-    More information for a method can be obtained, e.g.:
-     
-     http://$host/services/stats/[method]
-     
     Testing
     =======
     
-    For a working example, use  http://$host/services/stats/
+    For a working example, use  http://$host/services/stats/image/test
      
     """
     _png_mime   = "image/png"
     
+    _stypes = ['image',]
+    
     def __init__(self):
         webapi.WebApi.__init__(self)
     
-    def get( self, method = None, param1=None):
+    def get( self, stype = None, page = None):
 
-        if method is None or method == '':
-            params = {'methods':self._prefix_methods, 'host':os.environ['HTTP_HOST']}
+        if stype is None or stype == '':
+            params = {'stypes':self._stypes, 'host':os.environ['HTTP_HOST']}
             return self.showServiceHelp( params )
-        
-        if (method not in self._prefix_methods ):
-            self._help_method(method)
-            return
-        
-        resolved_method = "method_%s" % method
-        
+                
+        resolved_method = "method_%s" % stype
+
         try:
-            code, res, mime = getattr(self, resolved_method)( param1 )
+            getattr(self, resolved_method)( page )
         except Exception,e:
             self._output(500, e)
             return
-
-        self._output(code, res, mime)
-
 
     # =================================================
     # HELP
     # =================================================        
     def _help_method(self, method):
         help =  """\
-                **Error**: unsupported method [$method]
+                **Error**: unsupported type [$stype]
                 
                 For more information, consult Help_
                 
                 .. _Help: /services/stats/
                 """
-        params = {'method':method}
+        params = {'stype':method}
         self.showHelp(help, params, True)
-
-    def _help_method_parameters(self, method):
-        ""
-        doc = self.getDoc(method)
-        self._output(200, doc, "text/html")
 
     # =================================================
     # METHODS
     # =================================================
 
-    def method_pagestats(self, package_name):
+    _default_image      = "/res/img/favicon.png"
+    _default_image_mime = "image/png" 
+
+    def method_image(self, page):
         """\
-        **Usage**:  /services/stats/pagestats/page-name
+        **Usage**:  /services/stats/image/[page-name]
         """
-        return 200, "method_pagestats", "text/html"
+        c = counter.Counter( page )
+        c.increment()
+        count = c.get_count()
+        
+        ip = self.request.remote_addr
+        logging.info("Counter page[%s] count[%s] IP[%s]" % (page, count,ip) )
+        
+        self.response.headers['Content-Type'] = self._default_image_mime
+        self.redirect(self._default_image)
     
 
 
