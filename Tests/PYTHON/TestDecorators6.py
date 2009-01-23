@@ -46,6 +46,10 @@ class Test(object):
     def func2(self, *pargs, **kargs):
         print "Test.func2: pargs[%s] kargs[%s] param[%s]" % (pargs, kargs, self.param)
 
+    @deco('deco-to-func3')
+    def func3(self, param31, param32):
+        print "func3: param31[%s] param32[%s]" % (param31,param32)
+
 def tests():
     """
 
@@ -56,6 +60,9 @@ Test.func1: pargs[('fnc1.param',)] kargs[{}] param[param1]
 >>> t.func2("fnc2.param")
 new_func: this.param[param1]
 Test.func2: pargs[('fnc2.param',)] kargs[{}] param[param1]
+>>> t.func3("value1", "value2")
+new_func: this.param[param1]
+func3: param31[value1] param32[value2]
 """
 
 # ==============================================

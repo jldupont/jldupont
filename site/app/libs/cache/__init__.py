@@ -32,49 +32,57 @@ class memoize(object):
             return some_data_to_be_cached
     """
     def __init__(self, keyprefix, ttl = 5*60, report_freshness = False ):
+        #logging.info('memoize.__init__: keyprefix[%s]' % keyprefix)
         self.keyprefix = keyprefix
         self.ttl = ttl
-        self.report_freshness = report_freshness 
+        self.report_freshness = report_freshness
 
-    def __call__(self, func):
-
-        if report_freshness:
-            return self.getter_withfreshness
-
-        return self.getter
+    def __call__(self, *pargs, **kargs ):
+        
+        func = pargs[0]
+        #logging.info('memoize.__call__: func[%s]' % func)
+        
+        keyprefix = self.keyprefix
+        ttl = self.ttl
+        
+        def getter( *args, **kargs ):
+            """
+            1) Verify the cache first
+            2) Execute func if not hit
+            3) Store result
+            """
+            key = keyprefix + args[1]
             
+            cached_value = memcache.get(key)
+            if cached_value is not None:
+                return cached_value
+            
+            data = func( *args, **kargs )
+            memcache.set(key, data, ttl)
+            return data
     
-    def getter(self, *args, **kargs):
-        """
-        1) Verify the cache first
-        2) Execute func if not hit
-        3) Store result
-        """
-        key = self.keyprefix + '/' + args[0]
-        
-        cached_value = memcache.get(key)
-        if cached_value is not None:
-            return cached_value
-        
-        data = self.func( *args, **kargs )
-        memcache.set(key, data, self.ttl)
-        return data
+        def getter_withfreshness( *args, **kargs ):
+            """
+            1) Verify the cache first
+            2) Execute func if not hit
+            3) Store result
+            """           
+            key = keyprefix + args[1]
+                        
+            cached_value = memcache.get(key)
+            if cached_value is not None:
+                return (cached_value, False)
 
-    def getter_withfreshness(self, *args, **kargs):
-        """
-        1) Verify the cache first
-        2) Execute func if not hit
-        3) Store result
-        """
-        key = self.keyprefix + '/' + args[0]
-        
-        cached_value = memcache.get(key)
-        if cached_value is not None:
-            return (cached_value, False)
-        
-        data = self.func( *args, **kargs )
-        memcache.set(key, data, self.ttl)
-        return (data, True)
+            data = func( *args, **kargs )
+            memcache.set(key, data, ttl)
+            return (data, True)
+
+
+        if self.report_freshness:
+            return getter_withfreshness
+
+        return getter
+
 
 ############################################################################
 ############################################################################
