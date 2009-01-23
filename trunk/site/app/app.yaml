@@ -21,7 +21,7 @@ handlers:
   script: server/services/stats/v1.py
 
 - url: /services/pypi/(.*)
-  script: server/services/pypi/v1.py
+  script: server/services/pypi/v2.py
 
 - url: /mm/(.*)
   script: server/services/mindmeister/v1.py

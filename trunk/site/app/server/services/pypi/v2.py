@@ -21,6 +21,8 @@ import libs.simplejson as json
 import libs.markup as markup
 import libs.webapi as webapi
 
+import libs.pypi.api as pypiapi
+
 class ServicePypi( webapi.WebApi ):
     """\
     Help
@@ -45,7 +47,7 @@ class ServicePypi( webapi.WebApi ):
     _formats = [ 'json' ]
     _mimes   = { 'json':'text/javascript' }
     
-    _server = xmlrpclib.ServerProxy('http://pypi.python.org/pypi', gaexmlrpc.GAEXMLRPCTransport())
+    _server = pypiapi.PypiClient()
     
     def __init__(self):
         webapi.WebApi.__init__(self)
@@ -86,6 +88,7 @@ class ServicePypi( webapi.WebApi ):
             res = json.dumps( raw )
             
         except TypeError,e:
+            logging.error( e )
             return self._help_method_parameters(method)
         
         except Exception, e:
@@ -137,19 +140,19 @@ class ServicePypi( webapi.WebApi ):
         """\
         **Usage**:  /services/pypi/[format]/package_releases/[package-name]
         """
-        return self._server.package_releases(package_name,True)
+        return self._server.getPackageReleases(package_name)
     
     def method_release_urls(self, package_name, version):
         """\
         **Usage**:  /services/pypi/[format]/release_urls/[package-name]/[package-version]
         """        
-        return self._server.release_urls(package_name, version)
+        return self._server.getReleaseUrls(package_name, version)
     
     def method_release_data(self, package_name, version):
         """\
         **Usage**:  /services/pypi/[format]/release_data/[package-name]/[package-version]
         """        
-        return self._server.release_data(package_name, version)
+        return self._server.getReleaseData(package_name, version)
 
 
 _urls = [ 
