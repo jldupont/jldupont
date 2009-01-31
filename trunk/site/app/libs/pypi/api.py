@@ -12,7 +12,6 @@ import logging
 import xmlrpclib
 
 import libs.xmlrpc as gaexmlrpc
-
 import libs.cache as cache
 
 class PypiCall(object):
@@ -45,13 +44,9 @@ class PypiClient(object):
     """
     _server = PypiCall()
     
-    def __init__(self):
-        ""
-
     @cache.memoize('/pypi/package_releases/', report_freshness = True, ttl = _package_releases_ttl)
     def getPackageReleases(self, package_name):
         ""
-        logging.info("PypiClient.getPackageReleases: package_name[%s]" % package_name)
         return self._server.package_releases(package_name, True)
     
     @cache.memoize('/pypi/release_data/', report_freshness = True, ttl = _package_release_data_ttl)
