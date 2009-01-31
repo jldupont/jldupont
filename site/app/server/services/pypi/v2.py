@@ -73,7 +73,6 @@ class ServicePypi( webapi.WebApi ):
         resolved_method = "method_%s" % method
         
         ip = self.request.remote_addr
-        logging.info("ip[%s] resolved_method[%s] pkg[%s] version[%s]" % (ip, resolved_method, package_name, version))
         
         parameters = {}
         
@@ -84,8 +83,8 @@ class ServicePypi( webapi.WebApi ):
              parameters['version'] = version
 
         try:
-            raw = getattr(self, resolved_method)( **parameters )
-            res = json.dumps( raw )
+            data, freshness = getattr(self, resolved_method)( **parameters )
+            res = json.dumps( data )
             
         except TypeError,e:
             logging.error( e )
@@ -100,6 +99,7 @@ class ServicePypi( webapi.WebApi ):
             res = "%s(%s)" % (callback, res)
         
         self._output(200, res, mime)
+        logging.info("ip[%s] method[%s] pkg[%s] version[%s] data[%s] freshness[%s]" % (ip, method, package_name, version, data, freshness))        
 
 
     # =================================================
