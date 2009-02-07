@@ -12,21 +12,16 @@ import sys
 import signal
 import time
 
-# =================================================
-try:
-    import jld.api as api
-except:
-    # ASSUME THAT THE REQUIRED LIBS are available
-    # RELATIVE to this script => simplified install
-    levelsUp = 3
-    path = os.path.abspath( __file__ )
-    while levelsUp>0:
-        path = os.path.dirname( path )
-        levelsUp = levelsUp - 1    
-    sys.path.append( path )
-    # =============================================
-    import jld.api as api
-# =================================================
+
+#FIXME
+#TODO
+# FIXME:
+# TODO:
+# FIXME 
+# TODO something
+# eliminate jld.api, use duck-typing
+
+import jld.api as api
 
 def defaultLogger(name):
     """ Default logger factory
