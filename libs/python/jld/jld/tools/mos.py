@@ -36,6 +36,9 @@ def replaceHome(path):
     """ Replaces the '~' string with
         the configured $HOME or $HOMEDRIVE+$HOMEPATH environment variables
     """
+    return os.path.expanduser(path)
+
+    """
     try:
         home      = os.environ['HOME']      if ('HOME' in os.environ ) else None
         homedrive = os.environ['HOMEDRIVE'] if ('HOMEDRIVE' in os.environ ) else None
@@ -50,6 +53,7 @@ def replaceHome(path):
         pass
     
     return path
+    """
 
 def createPathIfNotExists(path):
     """ Creates the required path
