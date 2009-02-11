@@ -24,7 +24,8 @@ from cmd import HomeMonCmd
 
 # ========================================================================================
 _options =[
-  {'o1':'-l', 'var':'config_syslog',  'action':'store_true', 'help':'config_syslog',  'reg': False, 'default': False },
+  {'o1':'-l', 'var':'config_syslog',     'action':'store_true', 'help':'config_syslog',     'reg': False, 'default': False },
+  {'o1':'-c', 'var':'config_configfile', 'action':'store_true', 'help':'config_configfile', 'reg': False, 'default': False },
 ]
 
 def main():

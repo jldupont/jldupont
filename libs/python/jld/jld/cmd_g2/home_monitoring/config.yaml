@@ -1,3 +1,8 @@
-#Default values
-#@author: Jean-Lou Dupont
+# DEFAULT CONFIG FILE
+# HomeMon.py
+# @author: Jean-Lou Dupont
+##########################
 
+-
+ device: default
+ name: homemon
