@@ -1,2 +1,5 @@
 #YAML messages for 'homemon.py' command-line
 #@author: Jean-Lou Dupont
+
+config_syslog: 
+config_configfile:
