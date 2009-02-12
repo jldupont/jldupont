@@ -3,6 +3,19 @@
 # @author: Jean-Lou Dupont
 ##########################
 
+# Naming physical devices
 -
  device: default
  name: homemon
+
+# Naming I/O states
+#  on a per-pin basis
+
+
+homemon: {
+	
+}
+
+-
+ device: homemon
+ 
