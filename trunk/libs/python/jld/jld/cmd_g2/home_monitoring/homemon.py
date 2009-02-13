@@ -33,6 +33,12 @@ def main():
     msgs   = Ymsg(__file__)
     config = Yattr(__file__, 'config.yaml')
 
+    # == defaults
+    # ===========
+    here = os.path.dirname(__file__)
+    configfile = os.path.join(here,'config.yaml')
+    defaults = {'default_syslog':'/var/log/homemon','default_configfile':configfile}
+
     # == Config UI ==
     # =============== 
     ui     = BaseCmdUI(msgs)
@@ -50,13 +56,13 @@ version $Id$ by Jean-Lou Dupont
 
 Commands:
 ^^{commands}"""
-            
+
         tpl = ExTemplate( usage_template )
         usage = tpl.substitute( {'commands' : cmd.commands_help} )
 
         # Use OptParse to process arguments
-        ui.handleArguments(usage, _options)
-                
+        ui.handleArguments(usage, _options, help_params=defaults)
+                        
         # Configure ourselves a logger
         _syslog  = ui.options.config_syslog
         logger = _logger.logger('homemon', include_console = False, include_syslog = _syslog )

@@ -1,5 +1,5 @@
 #YAML messages for 'homemon.py' command-line
 #@author: Jean-Lou Dupont
 
-config_syslog: 
-config_configfile:
+config_syslog: configure syslog filepath [default; $default_syslog]
+config_configfile: configuration filepath [default; $default_configfile]
