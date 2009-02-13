@@ -83,12 +83,12 @@ class BaseCmdUI(object):
         
         return None
                 
-    def handleArguments(self, usage, _options, args = None):
+    def handleArguments(self, usage, _options, args = None, help_params = None):
         """ Processes command line options
         """ 
         parser = OptionParser( usage=usage )
         for o in _options:
-            help_msg = self.msgs.render( o['help'] )
+            help_msg = self.msgs.render( o['help'], params=help_params )
             parser.add_option( o['o1'], 
                                dest=o['var'], 
                                action=o['action'], 
