@@ -26,6 +26,22 @@ class HomeMonCmd(BaseCmd):
         self._checkDependencies()
 
 
+    def cmd_start(self, *args):
+        "Starts the daemon"
+        
+    def cmd_stop(self, *args):
+        "Stops the daemon"
+
+    def cmd_restart(self, *args):
+        "Re-starts the daemon"
+
+    # =================================
+    # PRIVATE
+    # =================================
+    def validate_config(self):
+        ""
+        
+
     # =================================
     # PRIVATE
     # =================================
@@ -34,11 +50,4 @@ class HomeMonCmd(BaseCmd):
         if "Phidgets" not in globals():
             import jld.tools.exceptions as exceptions
             raise exceptions.ErrorMissingDependency('error_missing_dependency', {'location':'http://www.phidgets.com/','dep':'Phidgets'} )                   
-
-
-
-##################################################################################
-##################################################################################
-
-
 
