@@ -21,13 +21,17 @@ class HomeMonCmd(BaseCmd):
 
     def __init__(self):
         BaseCmd.__init__(self)
+        
         self.config_syslog = None
+        self.config_configfile = None
         
         self._checkDependencies()
 
 
     def cmd_start(self, *args):
         "Starts the daemon"
+        self.process_config()
+        
         
     def cmd_stop(self, *args):
         "Stops the daemon"
@@ -38,8 +42,12 @@ class HomeMonCmd(BaseCmd):
     # =================================
     # PRIVATE
     # =================================
+    def process_config(self):
+        """Load & validate config"""
+
     def validate_config(self):
-        ""
+        """
+        """
         
 
     # =================================
