@@ -30,11 +30,21 @@ _options =[
 
 def main():
 
-    msgs   = Ymsg(__file__)
-    config = Yattr(__file__, 'config.yaml')
+    try:
+        msgs   = Ymsg(__file__)
+    except:
+        print "default 'messages.yaml' file corrupted"
+        sys.exit(1)
 
-    # == defaults
-    # ===========
+    try:
+        config = Yattr(__file__, 'config.yaml')
+    except:
+        print "default 'config.yaml' file corrupted"
+        sys.exit(1)
+        
+        
+    # == defaults ==
+    # ==============
     here = os.path.dirname(__file__)
     configfile = os.path.join(here,'config.yaml')
     defaults = {'default_syslog':'/var/log/homemon','default_configfile':configfile}
@@ -71,7 +81,6 @@ Commands:
         ui.logger  = logger
 
         # == configuration ==
-
 
         
         # == command validation ==

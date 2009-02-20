@@ -13,16 +13,6 @@ import signal
 import time
 
 
-#FIXME
-#TODO
-# FIXME:
-# TODO:
-# FIXME 
-# TODO something
-# eliminate jld.api, use duck-typing
-
-import jld.api as api
-
 def defaultLogger(name):
     """ Default logger factory
     """
@@ -37,6 +27,14 @@ def defaultLogger(name):
     logger.addHandler(hdlr)
     return logger
     
+# ==============================================
+
+class BaseDaemonException(Exception):
+    def __init__(self, msg, params = None):
+        Exception.__init__(self, msg)
+        self.msg = msg
+        self.params = params
+
 # ==============================================
 
 class BaseDaemon(object):
@@ -133,7 +131,7 @@ class BaseDaemon(object):
         """
         pid = self.findPID()
         if (pid):
-            raise api.ErrorDaemon('daemon_exists',{'pid':pid})
+            raise BaseDaemonException('daemon_exists',{'pid':pid})
 
         #===============
         return self.daemonize()
@@ -147,7 +145,7 @@ class BaseDaemon(object):
             self._kill( pid )
             self._delPID()
         else:
-            raise api.ErrorDaemon('cant_find_pid',{})
+            raise BaseDaemonException('cant_find_pid',{})
 
     def restart(self):
         self.stop()
@@ -170,7 +168,7 @@ class BaseDaemon(object):
         try:
             pid = os.fork()
         except Exception,e:
-            raise api.ErrorDaemon('cant_fork',{'msg':str(e)})
+            raise BaseDaemonException('cant_fork',{'msg':str(e)})
         
         #in the parent
         if (pid > 0):
@@ -262,4 +260,3 @@ if __name__ == "__main__":
         getattr( daemon, cmd )()
     except Exception,e:
         print "msg: [%s]" % e
-    
