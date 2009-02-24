@@ -24,7 +24,6 @@ from cmd import HomeMonCmd
 
 # ========================================================================================
 _options =[
-  {'o1':'-l', 'var':'config_syslog',     'action':'store_true', 'help':'config_syslog',     'reg': False, 'default': False },
   {'o1':'-c', 'var':'config_configfile', 'action':'store_true', 'help':'config_configfile', 'reg': False, 'default': False },
 ]
 
@@ -47,7 +46,7 @@ def main():
     # ==============
     here = os.path.dirname(__file__)
     configfile = os.path.join(here,'config.yaml')
-    defaults = {'default_syslog':'/var/log/homemon','default_configfile':configfile}
+    defaults = {'default_configfile':configfile}
 
     # == Config UI ==
     # =============== 
@@ -74,8 +73,7 @@ Commands:
         ui.handleArguments(usage, _options, help_params=defaults)
                         
         # Configure ourselves a logger
-        _syslog  = ui.options.config_syslog
-        logger = _logger.logger('homemon', include_console = False, include_syslog = _syslog )
+        logger = _logger.logger('homemon', include_console = True, include_syslog = False )
 
         cmd.logger = logger
         ui.logger  = logger
