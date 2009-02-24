@@ -124,6 +124,52 @@ class BaseCmd(object):
         return p.run()
         
         
+class NullLog(object):
+    """ Placeholder Null Log
+    """
+    def __init__(self):
+        self.debug_flag = True if __name__=="__main__" else False
+
+    def info(self,msg):
+        self._dolog("info: %s" % msg)
+    def debug(self,msg):
+        self._dolog("debug: %s" % msg)
+    def warn(self,msg):
+        self._dolog("warn: %s" % msg)
+    def error(self,msg):
+        self._dolog("error: %s" % msg)
+    def _dolog(self,msg):
+        if self.debug_flag:
+            print msg
+        
+class CmdG2(BaseCmd):
+    """ Base Cmd class with Logging support.
+        A Message object must be provided.
+    """
+    def __init__(self, msgs = None):
+        BaseCmd.__init__(self)
+        self.logger = NullLog()
+        self.msgs = msgs
+        
+    def logdebug(self, msg, params=None):
+        return self._dolog("debug", msg, params)
+    
+    def loginfo(self, msg, params=None):
+        return self._dolog("info", msg, params)
+    
+    def logwarn(self, msg, params=None):
+        return self._dolog("warn", msg, params)
+    
+    def logerror(self, msg, params=None):
+        return self._dolog("error", msg, params)
+    
+    def _dolog(self, fnc, msg, params):
+        if self.msgs:
+            txt = self.msgs.render(msg, params)
+        else:
+            txt = msg
+        return getattr(self.logger, fnc)(txt)
+        
 
 # ==============================================
 # ==============================================
@@ -171,13 +217,7 @@ class EventMgr(object):
 # ==============================================
 
 if __name__ == "__main__":
-    """ Tests
-    
-    >>> c = TestCmd()
-    >>> print c.commands
-    ['cmd_a', 'cmd_b']
 
-    """
     class TestCmd(BaseCmd):
         def __init__(self):
             BaseCmd.__init__(self)
@@ -188,6 +228,22 @@ if __name__ == "__main__":
         def cmd_b(self):
             """help cmd_b"""
             
+    class TestCmdG2(CmdG2):
+        def __init__(self):
+            CmdG2.__init__(self)
+            
+    def tests(self):
+        """ Tests
+        
+        >>> c = TestCmd()
+        >>> print c.commands
+        ['cmd_a', 'cmd_b']
+        >>> g = TestCmdG2()
+        >>> g.logdebug("Test")
+        debug: Test
+        """
+        
+    
     
     import doctest
     doctest.testmod()

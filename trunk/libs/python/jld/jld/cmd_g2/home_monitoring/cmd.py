@@ -7,6 +7,7 @@ __author__  = "Jean-Lou Dupont"
 __version__ = "$Id$"
 
 import os
+import yaml
 
 from   jld.cmd_g2 import BaseCmd
 
@@ -22,7 +23,7 @@ class HomeMonCmd(BaseCmd):
     def __init__(self):
         BaseCmd.__init__(self)
         
-        self.config_syslog = None
+        self.msgs = None
         self.config_configfile = None
         
         self._checkDependencies()
@@ -46,7 +47,8 @@ class HomeMonCmd(BaseCmd):
         """Load & validate config"""
 
     def validate_config(self):
-        """
+        """ Find default-device name
+            Find Inputs & Outputs definition under default-device
         """
         
 
