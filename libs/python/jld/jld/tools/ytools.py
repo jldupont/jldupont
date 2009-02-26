@@ -125,6 +125,28 @@ class Ymsg(Yfile):
         
         return tpl
         
+
+# ==============================================
+# ==============================================
+
+def loadFromFile(path, excp):
+    """ Loads a yaml file.
+        Raises a configurable exception upon any exception.
+        
+    >>> dr = os.path.dirname(__file__)
+    >>> file = os.path.join(dr,'tests/tests.yaml')
+    >>> data = loadFromFile(file,[TestExcp,'err'])
+    >>> print data
+    {'msg1': 'message1 $msg', 'var0': 666, 'msg2': 'message2 %s', 'var1': 'value1', 'var2': 'value2', 'msg0': 'message0'}
+    """
+    try:
+        file = open(path,'r')
+        data = yaml.load(file)
+        file.close()
+    except Exception,e:
+        raise excp[0](excp[1], {'exc':e,'path':path})
+    return data
+
     
 # ==============================================
 # ==============================================
@@ -132,5 +154,13 @@ class Ymsg(Yfile):
 if __name__ == "__main__":
     """ Tests
     """
+    class TestExcp(Exception):
+        def __init__(self, msg, params = None):
+            Exception.__init__(self, msg)
+            self.msg = msg
+            self.params = params
+        def __str__(self):
+            return "%s: %s" % (self.msg, self.params)
+    
     import doctest
     doctest.testmod()
