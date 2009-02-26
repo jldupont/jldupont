@@ -64,7 +64,20 @@ class HomeMonCmd(CmdG2):
         """ Find default-device name
             Find Inputs & Outputs definition under default-device
         """
+        try:    self.devices = self.config['devices']
+        except: raise HomeMonCmdException('error_configfile_missing_devices')
         
+        try:    self.default_device = devices['default']
+        except: raise HomeMonCmdException('error_configfile_missing_default_device')
+        
+        try:    self.ios = self.config[ default_device ]
+        except: raise HomeMonCmdException('error_configfile_missing_ios')
+        
+        try:    self.inputs = ios['inputs']
+        except: raise HomeMonCmdException('error_configfile_missing_inputs')
+        
+        try:    self.outputs = ios['outputs']
+        except: raise HomeMonCmdException('error_configfile_missing_outputs')
 
     # =================================
     # PRIVATE
