@@ -19,22 +19,25 @@ class YattrException(Exception):
         self.params = params
 
 class Yfile(object):
-
+    """ The absolute path is available.
+    """
     def __init__(self, src_file, name):
+        self.path = None
+        
         attrs = self._load(src_file, name)
         self._process(attrs)
         
     def _load(self, src_file, name):
         _base = os.path.dirname(src_file)
-        _path = os.path.join(_base, name)
+        self.path = os.path.join(_base, name)
 
         try:
-            file = open(_path,'r')
+            file = open(self.path,'r')
             defaults = yaml.load(file)
             file.close()
             
         except Exception,e:
-            raise YattrException('error_load_file', {'path':_path})
+            raise YattrException('error_load_file', {'path':self.path})
         
         return defaults
 

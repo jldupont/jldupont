@@ -21,10 +21,15 @@ import jld.tools.logger   as _logger
 
 from cmd import HomeMonCmd
 
+try:
+    config = Yattr(__file__, 'config.yaml')
+except:
+    print "default 'config.yaml' file corrupted"
+    sys.exit(1)
 
 # ========================================================================================
 _options =[
-  {'o1':'-c', 'var':'config_configfile', 'action':'store_true', 'help':'config_configfile', 'reg': False, 'default': False },
+  {'o1':'-c', 'var':'config_configfile', 'action':'store_true', 'help':'config_configfile', 'reg': False, 'default': config.path },
 ]
 
 def main():
@@ -35,19 +40,12 @@ def main():
         print "default 'messages.yaml' file corrupted"
         sys.exit(1)
 
-    try:
-        config = Yattr(__file__, 'config.yaml')
-    except:
-        print "default 'config.yaml' file corrupted"
-        sys.exit(1)
-        
+ 
         
     # == defaults ==
     # ==============
-    here = os.path.dirname(__file__)
-    configfile = os.path.join(here,'config.yaml')
-    defaults = {'default_configfile':configfile}
-
+    defaults = {'default_configfile':config.path}
+    
     # == Config UI ==
     # =============== 
     ui     = BaseCmdUI(msgs)
@@ -79,7 +77,7 @@ Commands:
         ui.logger  = logger
 
         # == configuration ==
-
+        cmd.config_configfile = ui.getOption('config_configfile')
         
         # == command validation ==
         # ========================

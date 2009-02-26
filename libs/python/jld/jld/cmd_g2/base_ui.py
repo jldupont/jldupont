@@ -47,6 +47,18 @@ class BaseCmdUI(object):
         """
         return self.args.pop(0)
 
+    def getOption(self, key):
+        
+        if self.options is None:
+            return None
+        
+        try:
+            return getattr(self.options, key)
+        except:
+            pass
+        
+        return None
+
     def handleError( self, exc ):
         """ Displays, if required, an appropriate user message
             corresponding to an error condition.
