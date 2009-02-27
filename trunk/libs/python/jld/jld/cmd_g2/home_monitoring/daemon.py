@@ -21,11 +21,13 @@ import jld.tools.daemon as daemon
 # - Write event to log
 
 class HomeMonDaemon(daemon.BaseDaemon):
-    """
+    """ Serves one device
     """
     def __init__(self):
         daemon.BaseDaemon.__init__(self)
         self.ikit = None
+        
+        self.deviceName = None
     
     def run(self):
         ""
