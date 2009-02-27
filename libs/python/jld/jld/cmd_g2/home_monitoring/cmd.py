@@ -32,8 +32,15 @@ class HomeMonCmd(CmdG2):
     def __init__(self):
         CmdG2.__init__(self)
         
+        self.daemon = None
+        
         self.config_configfile = None
         self.config = None
+        self.devices = None
+        self.default_device = None
+        self.ios = None
+        self.inputs = None
+        self.outputs = None
         
         self._checkDependencies()
 
@@ -48,6 +55,8 @@ class HomeMonCmd(CmdG2):
 
     def cmd_restart(self, *args):
         "Re-starts the daemon"
+        self.cmd_stop()
+        self.cmd_start()
 
     # =================================
     # PRIVATE
@@ -67,17 +76,17 @@ class HomeMonCmd(CmdG2):
         try:    self.devices = self.config['devices']
         except: raise HomeMonCmdException('error_configfile_missing_devices')
         
-        try:    self.default_device = devices['default']
+        try:    self.default_device = self.devices['default']
         except: raise HomeMonCmdException('error_configfile_missing_default_device')
         
-        try:    self.ios = self.config[ default_device ]
-        except: raise HomeMonCmdException('error_configfile_missing_ios')
+        try:    self.ios = self.config[ self.default_device ]
+        except: raise HomeMonCmdException('error_configfile_missing_ios', {'device':self.default_device})
         
-        try:    self.inputs = ios['inputs']
-        except: raise HomeMonCmdException('error_configfile_missing_inputs')
+        try:    self.inputs = self.ios['inputs']
+        except: raise HomeMonCmdException('error_configfile_missing_inputs', {'device':self.default_device})
         
-        try:    self.outputs = ios['outputs']
-        except: raise HomeMonCmdException('error_configfile_missing_outputs')
+        try:    self.outputs = self.ios['outputs']
+        except: raise HomeMonCmdException('error_configfile_missing_outputs', {'device':self.default_device})
 
     # =================================
     # PRIVATE

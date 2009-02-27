@@ -63,8 +63,7 @@ class BaseDaemon(object):
         self.logger = self.loggerFactory(self.name)
 
     def _format(self, msg):
-        """ Performs as first pass formatting
-            of log messages.
+        """ Performs a first pass formatting of log messages.
         """
         return "[%s] - %s" % (self.name, msg)
 

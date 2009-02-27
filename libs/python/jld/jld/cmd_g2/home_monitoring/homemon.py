@@ -20,6 +20,7 @@ from   jld.tools.template import ExTemplate
 import jld.tools.logger   as _logger
 
 from cmd import HomeMonCmd
+from daemon import HomeMonDaemon
 
 try:
     config = Yattr(__file__, 'config.yaml')
@@ -85,6 +86,9 @@ Commands:
             sys.exit(0)
                
         cmd.validateCommand(ui.command)       
+
+        # inject a daemon instance 
+        cmd.daemon = HomeMonDaemon()
                  
         # get rid of command from the arg list
         ui.popArg()
