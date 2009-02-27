@@ -28,23 +28,21 @@ class HomeMonDaemon(daemon.BaseDaemon):
         self.ikit = None
         
         self.deviceName = None
+        self.inputs = None
+        self.outputs = None
     
-    def run(self):
-        ""
-        self.init()
-
     def init(self):
         """ Init 
         """
         try:
             self.ikit = InterfaceKit()
             
-            self.ikit .setOnAttachHandler(self.inferfaceKitAttached)
-            self.ikit .setOnDetachHandler(self.interfaceKitDetached)
-            self.ikit .setOnErrorhandler(self.interfaceKitError)
-            self.ikit .setOnInputChangeHandler(self.interfaceKitInputChanged)
-            self.ikit .setOnOutputChangeHandler(self.interfaceKitOutputChanged)
-            self.ikit .setOnSensorChangeHandler(self.interfaceKitSensorChanged)
+            self.ikit.setOnAttachHandler(self.inferfaceKitAttached)
+            self.ikit.setOnDetachHandler(self.interfaceKitDetached)
+            self.ikit.setOnErrorhandler(self.interfaceKitError)
+            self.ikit.setOnInputChangeHandler(self.interfaceKitInputChanged)
+            self.ikit.setOnOutputChangeHandler(self.interfaceKitOutputChanged)
+            self.ikit.setOnSensorChangeHandler(self.interfaceKitSensorChanged)
         except Exception,e:
             pass
         
@@ -66,4 +64,11 @@ class HomeMonDaemon(daemon.BaseDaemon):
         
 
     def loop(self):
+        pass
+    
+    def before_run(self):
+        self.init()
+    
+    def run(self):
+        pass
         ""

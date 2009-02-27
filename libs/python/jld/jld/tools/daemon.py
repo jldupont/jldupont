@@ -221,8 +221,15 @@ class BaseDaemon(object):
         self.logdebug('Daemonize: writing PID')
         self._writePID()
         self.logdebug('Daemonize: issuing run()')
+        
+        self.before_run()
         self.run()
 
+    def before_run(self):
+        """ Called before actually passing control to run().
+            Should be subclassed if required.
+        """
+        pass
         
     def run(self):
         """ Run - to subclass
