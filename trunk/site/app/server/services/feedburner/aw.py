@@ -45,7 +45,8 @@ class ServiceAw( webapp.RequestHandler ):
             where "feed-id" would match: http://feeds.feedburner.com/feed-id/
     """
     
-    api = 'http://api.feedburner.com/awareness/1.0/GetFeedData?uri=http://feeds.feedburner.com/%s';
+    #api = 'https://api.feedburner.com/awareness/1.0/GetFeedData?uri=http://feeds.feedburner.com/%s';
+    api = 'https://api.feedburner.com/awareness/1.0/GetFeedData?uri=%s';
     
     _template = Template(_tpl)
     
@@ -131,6 +132,9 @@ class ServiceAw( webapp.RequestHandler ):
             reach= entry[0].getAttribute( 'reach' )
 
         except:
+            error = page.getElementsByTagName( 'err' )
+            code  = error[0].getAttribute( 'code' )
+            logging.error( "aw: error code(%s)" % code )
             return None
 
         link = 'http://feeds.feedburner.com/%s' % uri
