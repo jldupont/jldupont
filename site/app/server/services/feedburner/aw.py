@@ -46,7 +46,7 @@ class ServiceAw( webapp.RequestHandler ):
     """
     
     #api = 'https://api.feedburner.com/awareness/1.0/GetFeedData?uri=http://feeds.feedburner.com/%s';
-    api = 'https://api.feedburner.com/awareness/1.0/GetFeedData?uri=%s';
+    api = 'https://feedburner.google.com/api/awareness/1.0/GetFeedData?uri=%s';
     
     _template = Template(_tpl)
     
@@ -120,6 +120,8 @@ class ServiceAw( webapp.RequestHandler ):
         return [ rawPage.content, page ]
 
     def extractParams( self, feed_id, rawPage, page ):
+        
+        logging.warning(rawPage)
         try:
             feed = page.getElementsByTagName( 'feed' )
         
