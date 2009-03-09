@@ -121,7 +121,6 @@ class ServiceAw( webapp.RequestHandler ):
 
     def extractParams( self, feed_id, rawPage, page ):
         
-        logging.warning(rawPage)
         try:
             feed = page.getElementsByTagName( 'feed' )
         
