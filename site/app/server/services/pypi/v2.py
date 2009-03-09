@@ -9,6 +9,7 @@ import os
 import sys
 import logging
 import xmlrpclib
+from types import *
 
 import wsgiref.handlers
 from google.appengine.ext import webapp
@@ -84,6 +85,8 @@ class ServicePypi( webapi.WebApi ):
 
         try:
             data, freshness = getattr(self, resolved_method)( **parameters )
+            #logging.info( data )
+            self._prepareForJson(data)
             res = json.dumps( data )
             
         except TypeError,e:
@@ -101,6 +104,18 @@ class ServicePypi( webapi.WebApi ):
         self._output(200, res, mime)
         logging.info("ip[%s] method[%s] pkg[%s] version[%s] data[%s] freshness[%s]" % (ip, method, package_name, version, data, freshness))        
 
+    def _prepareForJson(self, data):
+        """ Go through the list of dict and make sure every item can be serialized.
+            Every object of non-primitive type will be __str__.
+            Currently, only DateTime class objects are found.
+        """ 
+        for list_entry in data:
+            for key,value in list_entry.iteritems():
+                t = type( list_entry[key] )
+                it = t is InstanceType
+                if (it):
+                    list_entry[key] = str(list_entry[key])
+                #logging.info("key[%s] type[%s] it[%s]" % (key,t,it) )
 
     # =================================================
     # HELP
