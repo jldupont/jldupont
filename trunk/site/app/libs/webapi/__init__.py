@@ -122,11 +122,14 @@ class WebApi( webapp.RequestHandler ):
         """
         self.showHelp(self.__doc__, params)
         
-    def showHelp(self, doc, params, convert = False):
+    def showHelp(self, doc, params=None, convert = False):
         if convert:
             doc = WebApi.renderDocString(doc)
         t = Template(doc)
-        self._output(200, t.substitute(params), self._mime_html)
+        if params is not None:
+            self._output(200, t.substitute(params), self._mime_html)
+        else:
+            self._output(200, t.substitute(), self._mime_html)
         
     def conditionalHeaders(self):
         """ Retrieves the conditional headers

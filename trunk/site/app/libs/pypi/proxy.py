@@ -11,7 +11,10 @@ __version__ = "$Id$"
 
 __all__ = ['getPackageReleases', 'getPackageReleaseData']
 
+import datetime as datetime
+
 import api as api
+import db as db
 
 
 class ProxyException(Exception):
@@ -19,6 +22,13 @@ class ProxyException(Exception):
         Exception.__init__(self, msg)
         self.msg = msg
         self.params = params
+
+def getLatestDownloads(name):
+    """ Retrieves the latest download count for latest release of package.
+    """ 
+    latest = getPackageReleases(name)[0]
+    downloads = getPackageReleaseData(name, latest)
+    return downloads
 
 def getPackageReleases(name):
     """ Gets the available releases for a given package.
@@ -31,13 +41,38 @@ def getPackageReleases(name):
     
     return liste
         
-def getPackageReleaseData(name, version):
+def getPackageReleaseData(name, release):
     """ Get the available data for a given [package;version].
         The retrieved data is stored in the datastore.
         
-        1) 
+        1) Looks in memcache/datastore
+        2) Looks on Pypi directly
+        
+        @return: downloads count (Integer) or None
     """
+    try:
+        entity, freshness = db.getPackageReleaseData(name, release)
+    except Exception,e:
+        raise ProxyException("error_package_release_data_datastore_access", {"exc:":e} )
     
+    if entity is not None:
+        return entity.downloads
+    
+    try:
+        data, freshness = PypiClient().getReleaseUrls(name, release)
+    except Exception,e:
+        raise ProxyException("error_package_release_data", {"exc:":e} )
+    
+    try:
+        downloads = data['downloads']
+    except:
+        raise ProxyException("error_package_release_data_downloads", {"exc:":e} )
+
+    last_update = datetime.datetime.now()
+    
+    db.setPackageReleaseData(name, release, downloads, last_update)
+    
+    return downloads
 
 ## =======================================================================
 ## PRIVATE

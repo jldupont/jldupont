@@ -26,5 +26,16 @@ def getPackageReleaseData(name, release):
     q.filter("release =", release)
     result = q.fetch(1)
     
+    try:
+        return [result[0], True]
+    except:
+        pass
     
+    return [None, True]
+
+def setPackageReleaseData(name, release, downloads, last_update):
+    """ Stores package release data
+    """
+    d = PackageReleaseData(name=name, release=release, downloads=downloads, last_update=last_update)
+    d.put()
     
