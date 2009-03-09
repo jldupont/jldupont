@@ -5,6 +5,7 @@
 
     @author: Jean-Lou Dupont
 """
+import logging
 
 __author__  = "Jean-Lou Dupont"
 __version__ = "$Id$"
@@ -35,10 +36,10 @@ def getPackageReleases(name):
         The release list is not recorded in the datastore.
     """
     try:
-        liste = api.PypiClient().getPackageReleases(name)
+        liste, freshness = api.PypiClient().getPackageReleases(name)
     except Exception,e:
         raise ProxyException("error_package_releases", {"exc":e} )
-    
+
     return liste
         
 def getPackageReleaseData(name, release):
@@ -51,7 +52,7 @@ def getPackageReleaseData(name, release):
         @return: downloads count (Integer) or None
     """
     try:
-        entity, freshness = db.getPackageReleaseData(name, release)
+        entity = db.getPackageReleaseData(name, release)
     except Exception,e:
         raise ProxyException("error_package_release_data_datastore_access", {"exc:":e} )
     
@@ -59,7 +60,7 @@ def getPackageReleaseData(name, release):
         return entity.downloads
     
     try:
-        data, freshness = PypiClient().getReleaseUrls(name, release)
+        data, freshness = api.PypiClient().getReleaseUrls(name, release)
     except Exception,e:
         raise ProxyException("error_package_release_data", {"exc:":e} )
     

@@ -105,7 +105,12 @@ class ServicePypiRss( webapi.WebApi ):
         """\
         **Usage**:  /services/pypirss/rss/[package-name]
         """
-        return proxy.getLatestDownloads(package_name)
+        try:
+            data = proxy.getLatestDownloads(package_name)
+        except Exception,e:
+            msg = str(e)
+            params = e.params if hasattr(e,'params') else None
+            logging.error("pypirss: msg[%s] params[%s]" % (msg, params) )
 
 
 _urls = [ 
