@@ -2,6 +2,7 @@
 """
     @author: Jean-Lou Dupont
 """
+import logging
 
 __author__  = "Jean-Lou Dupont"
 __version__ = "$Id$"
@@ -17,7 +18,7 @@ class PackageReleaseData(db.Model):
     downloads   = db.IntegerProperty(default=0)
     last_update = db.DateTimeProperty()
 
-@cache.memoize('/pypi/db/release_data/', ttl= 15*60, report_freshness=True)
+#cache.memoize('/pypi/db/release_data/', ttl= 15*60, report_freshness=False)
 def getPackageReleaseData(name, release):
     """ Database look-up with memcaching
     """
@@ -27,11 +28,12 @@ def getPackageReleaseData(name, release):
     result = q.fetch(1)
     
     try:
-        return [result[0], True]
-    except:
+        return result[0]
+    except Exception,e:
         pass
+        #logging.error(">%s" % e)
     
-    return [None, True]
+    return None
 
 def setPackageReleaseData(name, release, downloads, last_update):
     """ Stores package release data
