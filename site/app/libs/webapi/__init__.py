@@ -128,3 +128,21 @@ class WebApi( webapp.RequestHandler ):
         t = Template(doc)
         self._output(200, t.substitute(params), self._mime_html)
         
+    def conditionalHeaders(self):
+        """ Retrieves the conditional headers
+        """
+        try:    if_modified_since = self.request.headers['If-Modified-Since']
+        except: if_modified_since = ''
+        try:    if_none_match     = self.request.headers['If-None-Match']
+        except: if_none_match     = ''
+
+        return [if_modified_since, if_none_match]
+    
+    def doBaseResponse(self, etag, last_modified, content_type, code): 
+        """ Basic response
+        """
+        self.response.headers['ETag']          = '"' + etag + '"'
+        self.response.headers['Last-Modified'] = last_modified
+        self.response.headers['Content-Type']  = content_type
+        self.response.set_status( code );
+    
