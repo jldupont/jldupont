@@ -38,7 +38,7 @@ _package_release_urls_ttl = 5*60
             
 class PypiClient(object):
     """
-        >>> s = Pypi()
+        >>> s = PypiClient()
         >>> print s.package_releases("jld") # doctest:+ELLIPSIS
         [...]
     """

@@ -23,6 +23,9 @@ handlers:
 - url: /services/pypi/(.*)
   script: server/services/pypi/v2.py
 
+- url: /services/pypirss/(.*)
+  script: server/services/pypirss/v1.py
+
 - url: /mm/(.*)
   script: server/services/mindmeister/v1.py
   

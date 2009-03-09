@@ -108,8 +108,14 @@ class ServicePypi( webapi.WebApi ):
         """ Go through the list of dict and make sure every item can be serialized.
             Every object of non-primitive type will be __str__.
             Currently, only DateTime class objects are found.
-        """ 
+        """
+        if type(data) is not ListType:
+            return
+        
         for list_entry in data:
+            if type(list_entry) is not DictType:
+                continue
+            
             for key,value in list_entry.iteritems():
                 t = type( list_entry[key] )
                 it = t is InstanceType
