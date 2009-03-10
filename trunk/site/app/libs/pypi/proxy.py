@@ -29,7 +29,7 @@ def getLatestDownloads(name):
     """ 
     latest = getPackageReleases(name)[0]
     downloads = getPackageReleaseData(name, latest)
-    return downloads
+    return [latest, downloads]
 
 def getPackageReleases(name):
     """ Gets the available releases for a given package.
@@ -65,8 +65,8 @@ def getPackageReleaseData(name, release):
         raise ProxyException("error_package_release_data", {"exc:":e} )
     
     try:
-        downloads = data['downloads']
-    except:
+        downloads = data[0]['downloads']
+    except Exception,e:
         raise ProxyException("error_package_release_data_downloads", {"exc:":e} )
 
     last_update = datetime.datetime.now()
