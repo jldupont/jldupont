@@ -17,7 +17,7 @@ import import_wrapper
 import libs.webapi as webapi
 import libs.pypi.proxy as proxy
 
-from rss import feed as feed
+import services.pypirss.rss as feed
 
 class ServicePypiRss( webapi.WebApi ):
     """\
@@ -109,14 +109,12 @@ class ServicePypiRss( webapi.WebApi ):
         **Usage**:  /services/pypirss/rss/[package-name]
         """
         try:
-            latest, data = proxy.getLatestDownloads(package_name)
+            latest, data = proxy.getLatestDownloads(package_name)           
         except Exception,e:
             msg = str(e)
             params = e.params if hasattr(e,'params') else None
             logging.error("pypirss: msg[%s] params[%s]" % (msg, params) )
 
-        logging.info(latest)
-        logging.info(data)
 
 
 _urls = [ 

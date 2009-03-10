@@ -35,9 +35,13 @@ def getPackageReleaseData(name, release):
     
     return None
 
-def setPackageReleaseData(name, release, downloads, last_update):
+def setPackageReleaseData(name, release, downloads, last_update, entity=None):
     """ Stores package release data
     """
-    d = PackageReleaseData(name=name, release=release, downloads=downloads, last_update=last_update)
-    d.put()
-    
+    if entity is None:
+        d = PackageReleaseData(name=name, release=release, downloads=downloads, last_update=last_update)
+        d.put()
+    else:
+        entity.downloads = downloads
+        entity.last_update = last_update
+        entity.put()
