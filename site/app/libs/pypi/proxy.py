@@ -49,7 +49,7 @@ def getPackageReleaseData(name, release):
         1) Looks in memcache/datastore
         2) Looks on Pypi directly
         
-        @return: downloads count (Integer) or None
+        @return: [last_update, downloads]
     """
     try:
         entity = db.getPackageReleaseData(name, release)
@@ -57,7 +57,7 @@ def getPackageReleaseData(name, release):
         raise ProxyException("error_package_release_data_datastore_access", {"exc:":e} )
     
     if entity is not None:
-        return entity.downloads
+        return [entity.last_update, entity.downloads]
     
     try:
         data, freshness = api.PypiClient().getReleaseUrls(name, release)
@@ -73,7 +73,7 @@ def getPackageReleaseData(name, release):
     
     db.setPackageReleaseData(name, release, downloads, last_update)
     
-    return downloads
+    return [last_update, downloads]
 
 ## =======================================================================
 ## PRIVATE
