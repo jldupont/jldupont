@@ -36,4 +36,4 @@ _item_template = """
 """
 
 def prepareFeed():
-    return FeedRss( feed_template, item_template )
+    return FeedRss( _feed_template, _item_template )

@@ -42,7 +42,7 @@ def getPackageReleases(name):
 
     return liste
         
-def getPackageReleaseData(name, release):
+def getPackageReleaseData(name, release, ttl=60*60):
     """ Get the available data for a given [package;version].
         The retrieved data is stored in the datastore.
         
@@ -54,24 +54,30 @@ def getPackageReleaseData(name, release):
     try:
         entity = db.getPackageReleaseData(name, release)
     except Exception,e:
-        raise ProxyException("error_package_release_data_datastore_access", {"exc:":e} )
+        raise ProxyException("error_package_release_data_datastore_access", {"name":name,"release":release, "exc:":e} )
     
+    now = datetime.datetime.now()
+    
+    # fresh enough?
     if entity is not None:
-        return [entity.last_update, entity.downloads]
+        delta = now - entity.last_update
+        logging.info("delta[%s]" % delta)
+        if (delta.seconds < ttl):
+            return [entity.last_update, entity.downloads]
     
     try:
         data, freshness = api.PypiClient().getReleaseUrls(name, release)
     except Exception,e:
-        raise ProxyException("error_package_release_data", {"exc:":e} )
+        raise ProxyException("error_package_release_data", {"name":name,"release":release, "exc:":e} )
     
     try:
         downloads = data[0]['downloads']
     except Exception,e:
-        raise ProxyException("error_package_release_data_downloads", {"exc:":e} )
+        raise ProxyException("error_package_release_data_downloads", {"name":name,"release":release,"exc:":e} )
 
-    last_update = datetime.datetime.now()
+    last_update = now
     
-    db.setPackageReleaseData(name, release, downloads, last_update)
+    db.setPackageReleaseData(name, release, downloads, last_update, entity=entity)
     
     return [last_update, downloads]
 
