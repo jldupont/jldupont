@@ -17,6 +17,7 @@ import import_wrapper
 import libs.webapi as webapi
 import libs.pypi.proxy as proxy
 
+from rss import feed as feed
 
 class ServicePypiRss( webapi.WebApi ):
     """\
@@ -39,7 +40,7 @@ class ServicePypiRss( webapi.WebApi ):
     """
     _formats = [ 'rss' ]
     
-    _feed = feed.FeedRss()
+    _feed = feed.prepareFeed()
     
     def __init__(self):
         webapi.WebApi.__init__(self)
