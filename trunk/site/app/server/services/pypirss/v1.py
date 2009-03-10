@@ -120,8 +120,8 @@ class ServicePypiRss( webapi.WebApi ):
 
 
 _urls = [ 
-          ('/services/pypirss/(.*?)/(.*?)',             ServicePypiRss),
-          ('/services/pypirss/(.*?)',                   ServicePypiRss),  
+          ('/services/pypirss/(.*?)/(.*?)', ServicePypiRss),
+          ('/services/pypirss/(.*?)',       ServicePypiRss),  
          ]                        
         
 #/**
