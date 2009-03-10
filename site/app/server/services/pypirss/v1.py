@@ -2,6 +2,17 @@
     Service Pypi RSS
     
     @author Jean-Lou Dupont
+    
+    Conditions to account for:
+    ==========================
+    * network error
+    * Pypi RPC error
+    * package not found
+    * package with no releases
+    * package with no release X
+    * Pypi RPC API change eg. the 'downloads' attribute is not found
+    * Wrong format requested
+    * ALL OTHERS
 """
 import os
 import sys

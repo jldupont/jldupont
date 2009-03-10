@@ -18,7 +18,7 @@ class PackageReleaseData(db.Model):
     downloads   = db.IntegerProperty(default=0)
     last_update = db.DateTimeProperty()
 
-#cache.memoize('/pypi/db/release_data/', ttl= 15*60, report_freshness=False)
+cache.memoize('/pypi/db/release_data/', ttl= 15*60, report_freshness=False)
 def getPackageReleaseData(name, release):
     """ Database look-up with memcaching
     """

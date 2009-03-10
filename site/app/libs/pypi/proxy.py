@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 """ Serves as proxy to Pypi
 
-    Caches package release data
+    Caches package release data through
+    a combination of memcache & datastore.
 
     @author: Jean-Lou Dupont
 """
@@ -11,6 +12,14 @@ __author__  = "Jean-Lou Dupont"
 __version__ = "$Id$"
 
 __all__ = ['getPackageReleases', 'getPackageReleaseData']
+
+# Exceptions raised by this module
+# ================================
+__errors = ['error_package_not_found',
+            'error_package_releases', 
+            'error_package_release_data_datastore_access',
+            'error_package_release_data',
+            'error_package_release_data_downloads', ]
 
 import datetime as datetime
 
@@ -27,7 +36,11 @@ class ProxyException(Exception):
 def getLatestDownloads(name):
     """ Retrieves the latest download count for latest release of package.
     """ 
-    latest = getPackageReleases(name)[0]
+    liste = getPackageReleases(name)
+    try:    latest = liste[0]
+    except:
+        raise ProxyException("error_package_not_found", {"name":name})
+    
     downloads = getPackageReleaseData(name, latest)
     return [latest, downloads]
 
@@ -38,7 +51,7 @@ def getPackageReleases(name):
     try:
         liste, freshness = api.PypiClient().getPackageReleases(name)
     except Exception,e:
-        raise ProxyException("error_package_releases", {"exc":e} )
+        raise ProxyException("error_package_releases", {"exc":e, 'name':name} )
 
     return liste
         
@@ -51,6 +64,8 @@ def getPackageReleaseData(name, release, ttl=60*60):
         
         @return: [last_update, downloads]
     """
+    
+    # First, try the datastore
     try:
         entity = db.getPackageReleaseData(name, release)
     except Exception,e:
@@ -61,28 +76,23 @@ def getPackageReleaseData(name, release, ttl=60*60):
     # fresh enough?
     if entity is not None:
         delta = now - entity.last_update
-        logging.info("delta[%s]" % delta)
         if (delta.seconds < ttl):
             return [entity.last_update, entity.downloads]
     
+    # Retrieve from Pypi
     try:
         data, freshness = api.PypiClient().getReleaseUrls(name, release)
     except Exception,e:
         raise ProxyException("error_package_release_data", {"name":name,"release":release, "exc:":e} )
     
+    # Extract the needed data
     try:
         downloads = data[0]['downloads']
     except Exception,e:
         raise ProxyException("error_package_release_data_downloads", {"name":name,"release":release,"exc:":e} )
 
+    # Update the datastore
     last_update = now
-    
     db.setPackageReleaseData(name, release, downloads, last_update, entity=entity)
     
     return [last_update, downloads]
-
-## =======================================================================
-## PRIVATE
-## =======================================================================
-
- 
