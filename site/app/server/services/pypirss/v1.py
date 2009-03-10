@@ -15,8 +15,8 @@ from google.appengine.ext import webapp
 import import_wrapper
 
 import libs.webapi as webapi
-
 import libs.pypi.proxy as proxy
+
 
 class ServicePypiRss( webapi.WebApi ):
     """\
@@ -38,6 +38,8 @@ class ServicePypiRss( webapi.WebApi ):
      
     """
     _formats = [ 'rss' ]
+    
+    _feed = feed.FeedRss()
     
     def __init__(self):
         webapi.WebApi.__init__(self)
@@ -106,11 +108,14 @@ class ServicePypiRss( webapi.WebApi ):
         **Usage**:  /services/pypirss/rss/[package-name]
         """
         try:
-            data = proxy.getLatestDownloads(package_name)
+            latest, data = proxy.getLatestDownloads(package_name)
         except Exception,e:
             msg = str(e)
             params = e.params if hasattr(e,'params') else None
             logging.error("pypirss: msg[%s] params[%s]" % (msg, params) )
+
+        logging.info(latest)
+        logging.info(data)
 
 
 _urls = [ 
