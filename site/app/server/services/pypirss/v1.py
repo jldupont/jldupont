@@ -27,9 +27,27 @@ import import_wrapper
 
 import libs.webapi as webapi
 import libs.pypi.proxy as proxy
+import libs.system as system
 
 import services.pypirss.rss as feed
 import services.pypirss.messages as msg
+
+class ServiceMessageOutput(object):
+    """ Wrapper used along with Exception Handler
+    """
+    def __init__(self, msg_output, code_output, code=500):
+        self.code = code
+        self.msg_output = msg_output
+        self.code_output = code_output
+        
+    def out(self, msg):
+        self.msg_output(msg)
+        
+    def after_out(self):
+        """ Called after the 'out' method has been used.
+        """
+        self.code_output(self.code)
+
 
 class ServicePypiRss( webapi.WebApi ):
     """\
@@ -52,12 +70,24 @@ class ServicePypiRss( webapi.WebApi ):
     """
     _formats = [ 'rss' ]
     
-    _feed = feed.prepareFeed()
+    _feedTemplate = feed.prepareFeedTemplate()
+    
+    
     
     def __init__(self):
         webapi.WebApi.__init__(self)
-    
+
+        
     def get( self, format = None, package_name = None ):
+
+        self.msgOutput = ServiceMessageOutput(self.response.out.write, 
+                                              self.response.set_status)
+        
+        #setup an exception handler... just in case
+        self._excHandler = system.ExceptionHandler(msg.messages, 
+                                                   msg.message_template, 
+                                                   output=self.msgOutput)
+    
 
         if format is None or format == '':
             params = {'formats':self._formats, 'host':os.environ['HTTP_HOST']}
@@ -123,10 +153,7 @@ class ServicePypiRss( webapi.WebApi ):
         try:
             latest, data = proxy.getLatestDownloads(package_name)           
         except Exception,e:
-            msg = str(e)
-            params = e.params if hasattr(e,'params') else None
-            logging.error("pypirss: msg[%s] params[%s]" % (msg, params) )
-
+            self._excHandler.handleException(e)
 
 
 _urls = [ 

@@ -6,7 +6,7 @@
 __author__  = "Jean-Lou Dupont"
 __version__ = "$Id$"
 
-__all__ = ['prepareFeed',]
+__all__ = ['prepareFeedTemplate',]
 
 from libs.feed.type0 import FeedRss
 
@@ -35,5 +35,5 @@ _item_template = """
         </item>
 """
 
-def prepareFeed():
+def prepareFeedTemplate():
     return FeedRss( _feed_template, _item_template )
