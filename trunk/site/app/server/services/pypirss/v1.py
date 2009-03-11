@@ -28,6 +28,7 @@ import import_wrapper
 import libs.webapi as webapi
 import libs.pypi.proxy as proxy
 import libs.system as system
+from libs.system.datetimeutils import datetimeToRFC822
 
 import services.pypirss.rss as feed
 import services.pypirss.messages as msg
@@ -80,15 +81,6 @@ class ServicePypiRss( webapi.WebApi ):
         
     def get( self, format = None, package_name = None ):
 
-        self.msgOutput = ServiceMessageOutput(self.response.out.write, 
-                                              self.response.set_status)
-        
-        #setup an exception handler... just in case
-        self._excHandler = system.ExceptionHandler(msg.messages, 
-                                                   msg.message_template, 
-                                                   output=self.msgOutput)
-    
-
         if format is None or format == '':
             params = {'formats':self._formats, 'host':os.environ['HTTP_HOST']}
             return self.showServiceHelp( params )
@@ -108,7 +100,6 @@ class ServicePypiRss( webapi.WebApi ):
             
         try:
             result = getattr(self, resolved_method)( package_name )
-        
         except Exception, e:
             logging.error( "EXCEPTION type[%s] [%s]" % (type(e),e) )
             self.response.set_status(500)
@@ -146,15 +137,43 @@ class ServicePypiRss( webapi.WebApi ):
     # METHODS
     # =================================================
 
-    def method_rss(self, package_name):
+    def method_rss(self, package):
         """\
         **Usage**:  /services/pypirss/rss/[package-name]
         """
         try:
-            latest, data = proxy.getLatestDownloads(package_name)           
+            latest, downloads, last_update = proxy.getLatestDownloads(package)           
         except Exception,e:
-            self._excHandler.handleException(e)
+            self._handleException(e)
+            return
 
+        itemGUID = "%s-%s-%downloads" % (package, latest, downloads)
+        pubDate = datetimeToRFC822(last_update)
+
+        params = {'package':package, 
+                  'release':latest, 
+                  'downloads':downloads,
+                  'itemPubDate': pubDate,
+                  'itemGUID': itemGUID
+                  }
+        res = self._feedTemplate.produce(params, [params])       
+        return res
+
+
+    # =================================================
+    # HANDLERS
+    # =================================================
+    def _handleException(self, exc):
+        msgOutput = ServiceMessageOutput(self.response.out.write, 
+                                              self.response.set_status)
+        
+        #setup an exception handler... just in case
+        excHandler = system.ExceptionHandler(msg.messages, 
+                                             msg.message_template, 
+                                             output=msgOutput)
+        
+        excHandler.handleException(exc)
+      
 
 _urls = [ 
           ('/services/pypirss/(.*?)/(.*?)', ServicePypiRss),

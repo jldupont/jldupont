@@ -23,9 +23,9 @@ class FeedRss(object):
         """        
         result = ''
         for params in item_params_list:
-            result = result + self.item_template.substitute( params )
+            result = result + self.item_template.safe_substitute( params )
            
         feed_params['items'] = result
-        feed = self.feed_template.substitute( feed_params ) 
+        feed = self.feed_template.safe_substitute( feed_params ) 
         
         return feed

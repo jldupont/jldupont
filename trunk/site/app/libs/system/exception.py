@@ -45,16 +45,19 @@ class ExceptionHandler( object ):
 
         # Combine the dictionaries
         params.update( add_params )
-        
-        # First, render the message string
-        msg = Template( msg_tpl ).safe_substitute( params )
-        
-        # insert the message in the template parameters
-        params['msg'] = msg
-        
-        # render template... but don't crash if we are missing 
-        # some parameters
-        res    = self.template.safe_substitute( params )
+
+        if msg_tpl:
+            # First, render the message string
+            msg = Template( msg_tpl ).safe_substitute( params )
+            
+            # insert the message in the template parameters
+            params['msg'] = msg
+            
+            # render template... but don't crash if we are missing 
+            # some parameters
+            res    = self.template.safe_substitute( params )
+        else:
+            res = str(exc)
         
         # send complete message to output handler
         self._doOutput(res, output)
