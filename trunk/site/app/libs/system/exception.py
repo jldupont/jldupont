@@ -16,13 +16,13 @@ class ExceptionHandler( object ):
         - template filling
         - template rendering
     """
-    def __init__(self, messages, template, output, 
+    def __init__(self, messages, template, output=None, 
                  template_class = Template,
                  logger_function = logging.debug ):
         """
             messages: string dictionary
             template: string template
-            output:   output device supporting the 'out' method
+            output:   output function
             template_class: string template class
                             useful when, for example, the delimiter must be changed.
         """
@@ -31,7 +31,10 @@ class ExceptionHandler( object ):
         self.output = output
         self.logger_function = logger_function
         
-    def handleException(self, exc, add_params={}):
+    def setOutput(self, output):
+        self.output = output
+        
+    def handleException(self, exc, add_params={}, output=None):
         """ Exception Handler
         
             add_params: additional parameters, normally template specific
@@ -39,6 +42,9 @@ class ExceptionHandler( object ):
         # extract msg_id and template parameters
         msg_tpl = self._getMessageFromId( exc.message )
         params  = exc.params if hasattr(exc, 'params') else {}
+
+        # Combine the dictionaries
+        params.update( add_params )
         
         # First, render the message string
         msg = Template( msg_tpl ).safe_substitute( params )
@@ -46,18 +52,30 @@ class ExceptionHandler( object ):
         # insert the message in the template parameters
         params['msg'] = msg
         
-        # Combine the dictionaries
-        params.update( add_params )
-        
         # render template... but don't crash if we are missing 
         # some parameters
         res    = self.template.safe_substitute( params )
         
         # send complete message to output handler
-        self.output.out( res )
+        self._doOutput(res, output)
         
         # help debugging process
         self._processForMissingParameters( exc, res )
+
+    def _doOutput(self, res, output=None):
+        """ Performs the output through the 'out' method
+            of the specified 'output' object. If a
+            "after_out" method is present, it is called-back.
+        """
+        if output is not None:
+            output.out( res )
+            cb = output
+        else:
+            self.output.out( res )
+            cb = self.output
+        
+        if hasattr(cb, 'after_out'):
+            cb.after_out()    
 
     def _getMessageFromId(self, msg_id):
         """ Retrieves, if possible, a message text

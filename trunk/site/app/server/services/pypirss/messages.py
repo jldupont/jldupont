@@ -5,31 +5,27 @@
 __author__  = "Jean-Lou Dupont"
 __version__ = "$Id$"
 
-__all__ = ['prepareMessage',]
+__all__ = ['messages','message_template']
 
 from string import Template
 
 # MESSAGES
 # ========
-_messages = {
-'error_package_not_found':'',
-'error_package_releases':'',
-'error_package_release_data_datastore_access':'',
-'error_package_release_data':'',
-'error_package_release_data_downloads':'',             
+messages = {
+'error_package_not_found':'Package [$name] was not found',
+'error_package_releases':'No release for package [$name]',
+'error_package_release_data_datastore_access':'Error accessing the datastore',
+'error_package_release_data':'Error accessing package release data',
+'error_package_release_data_downloads':'Error accessing "downloads" attribute from package[$name]',
 }
 
 
 # BASE PAGE TEMPLATE
 # ==================
-_message_template = """
-
+message_template = """
+<html>
+ <body>
+  <b>ERROR:</b> $msg
+ </body>
+</html> 
 """
-
-_template = Template( _message_template )
-
-def prepareMessage(msg_id, params):
-    """ Prepares a message.
-    """
-    params['msg'] = _messages[msg_id]
-    return _template.substitute(params)
