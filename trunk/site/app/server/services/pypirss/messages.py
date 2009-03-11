@@ -2,13 +2,15 @@
 """
     @author: Jean-Lou Dupont
 """
-from string import Template
-
 __author__  = "Jean-Lou Dupont"
 __version__ = "$Id$"
 
 __all__ = ['prepareMessage',]
 
+from string import Template
+
+# MESSAGES
+# ========
 _messages = {
 'error_package_not_found':'',
 'error_package_releases':'',
@@ -18,6 +20,8 @@ _messages = {
 }
 
 
+# BASE PAGE TEMPLATE
+# ==================
 _message_template = """
 
 """
