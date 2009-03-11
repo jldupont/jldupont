@@ -29,6 +29,7 @@ import libs.webapi as webapi
 import libs.pypi.proxy as proxy
 
 import services.pypirss.rss as feed
+import services.pypirss.messages as msg
 
 class ServicePypiRss( webapi.WebApi ):
     """\
