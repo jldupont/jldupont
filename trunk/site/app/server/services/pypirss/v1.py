@@ -100,7 +100,7 @@ class ServicePypiRss( webapi.WebApi ):
             self._help_format(format)
             return
                 
-        if package_name is None:
+        if package_name is None or package_name=='':
             self._help_package()
             return
         
@@ -129,7 +129,7 @@ class ServicePypiRss( webapi.WebApi ):
             self._output(304, '', "application/rss+xml")
 
         self.doBaseResponse(result.result, result.etag, "application/rss+xml", 200)
-        logging.info("ip[%s] pkg[%s] release[%s] downloads[%s]" % (ip, package_name, result.release, result.downloads))        
+        logging.info("ip[%s] match[%s] pkg[%s] release[%s] downloads[%s]" % (ip, if_none_match, package_name, result.release, result.downloads))        
 
     # =================================================
     # HELP

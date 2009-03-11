@@ -16,7 +16,7 @@ _feed_template = """<?xml version="1.0" encoding="UTF-8" ?>
     <channel>
         <atom:link href="http://www.jldupont.com/services/pypirss/rss/$package" rel="self" type="application/rss+xml" />
         
-        <title>Package [$package]</title>
+        <title>Pypi Statistics for Package [$package]</title>
         <description>RSS feed for PYPI package [$package]</description>
         <link>http://www.jldupont.com/services/pypirss/rss/$package</link>
 
@@ -28,7 +28,7 @@ _feed_template = """<?xml version="1.0" encoding="UTF-8" ?>
 
 _item_template = """
         <item>
-            <title>Statistics for [$package]</title>
+            <title>Pypi statistics for [$package]</title>
             <description>Release[$release] Downloads[$downloads]</description>
             <link>http://pypi.python.org/pypi/pypp/$package</link>
             <pubDate>$itemPubDate</pubDate>

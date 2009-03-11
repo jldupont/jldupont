@@ -95,9 +95,9 @@ class ExceptionHandler( object ):
         """
         delimiter = self.template.delimiter
         try:    found=buffer.find( delimiter )
-        except: found=False
-        if found:
-            self.logger_function("Template parameter(s) missing: exception class[%s]" % type(exc))
+        except: found=-1
+        if found <> -1:
+            self.logger_function("Template parameter(s) missing: exception class[%s] message[%s]" % (type(exc), str(exc)))
             
 # ==============================================
 # ==============================================
