@@ -40,8 +40,8 @@ def getLatestDownloads(name):
     except:
         raise ProxyException("error_package_not_found", {"name":name})
     
-    downloads = getPackageReleaseData(name, latest)
-    return [latest, downloads]
+    last_update, downloads = getPackageReleaseData(name, latest)
+    return [latest, downloads, last_update]
 
 def getPackageReleases(name):
     """ Gets the available releases for a given package.

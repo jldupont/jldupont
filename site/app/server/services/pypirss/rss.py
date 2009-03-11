@@ -8,6 +8,7 @@ __version__ = "$Id$"
 
 __all__ = ['prepareFeedTemplate',]
 
+from string import Template
 from libs.feed.type0 import FeedRss
 
 _feed_template = """<?xml version="1.0" encoding="UTF-8" ?>
@@ -15,8 +16,8 @@ _feed_template = """<?xml version="1.0" encoding="UTF-8" ?>
     <channel>
         <atom:link href="http://www.jldupont.com/services/pypirss/rss/$package" rel="self" type="application/rss+xml" />
         
-        <title>Package <$package></title>
-        <description>RSS feed for PYPI package <$package></description>
+        <title>Package [$package]</title>
+        <description>RSS feed for PYPI package [$package]</description>
         <link>http://www.jldupont.com/services/pypirss/rss/$package</link>
 
         $items
@@ -27,7 +28,7 @@ _feed_template = """<?xml version="1.0" encoding="UTF-8" ?>
 
 _item_template = """
         <item>
-            <title>Statistics for <$package></title>
+            <title>Statistics for [$package]</title>
             <description>Release[$release] Downloads[$downloads]</description>
             <link>http://pypi.python.org/pypi/pypp/$package</link>
             <pubDate>$itemPubDate</pubDate>
@@ -36,4 +37,5 @@ _item_template = """
 """
 
 def prepareFeedTemplate():
-    return FeedRss( _feed_template, _item_template )
+    return FeedRss( Template(_feed_template), 
+                    Template(_item_template) )
