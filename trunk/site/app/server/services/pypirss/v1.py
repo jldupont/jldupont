@@ -50,6 +50,17 @@ class ServiceMessageOutput(object):
         self.code_output(self.code)
 
 
+
+class MethodRssResult(object):
+    def __init__(self, unchanged, result, etag):
+        self.unchanged = unchanged
+        self.result = result
+        self.etag = etag
+        self.release = None
+        self.downloads = None
+
+        
+
 class ServicePypiRss( webapi.WebApi ):
     """\
     Help
@@ -98,15 +109,27 @@ class ServicePypiRss( webapi.WebApi ):
         
         ip = self.request.remote_addr
             
+        #if_modified_since, if_none_match = self.getConditionalHeaders()
+        condHeaders = self.getConditionalHeaders()
+        if_none_match = condHeaders[1]
+            
         try:
-            result = getattr(self, resolved_method)( package_name )
+            result = getattr(self, resolved_method)( if_none_match, package_name )
         except Exception, e:
             logging.error( "EXCEPTION type[%s] [%s]" % (type(e),e) )
             self.response.set_status(500)
             return
+        
+        if result is None:
+            self.response.set_status(500)
+            return
 
-        self._output(200, result, "application/rss+xml")
-        logging.info("ip[%s] pkg[%s]" % (ip, package_name))        
+        if result.unchanged:
+            logging.info("ip[%s] pkg[%s] UNCHANGED" % (ip, package_name))
+            self._output(304, '', "application/rss+xml")
+
+        self.doBaseResponse(result.result, result.etag, "application/rss+xml", 200)
+        logging.info("ip[%s] pkg[%s] release[%s] downloads[%s]" % (ip, package_name, result.release, result.downloads))        
 
     # =================================================
     # HELP
@@ -137,7 +160,7 @@ class ServicePypiRss( webapi.WebApi ):
     # METHODS
     # =================================================
 
-    def method_rss(self, package):
+    def method_rss(self, ref_etag, package):
         """\
         **Usage**:  /services/pypirss/rss/[package-name]
         """
@@ -145,9 +168,14 @@ class ServicePypiRss( webapi.WebApi ):
             latest, downloads, last_update = proxy.getLatestDownloads(package)           
         except Exception,e:
             self._handleException(e)
-            return
+            return None
 
-        itemGUID = "%s-%s-%downloads" % (package, latest, downloads)
+        itemGUID = "[%s][%s][%s]" % (package, latest, downloads)
+        
+        # same as before?
+        if ref_etag == itemGUID:
+            return MethodRssResult(True, '', ref_etag)
+        
         pubDate = datetimeToRFC822(last_update)
 
         params = {'package':package, 
@@ -156,9 +184,18 @@ class ServicePypiRss( webapi.WebApi ):
                   'itemPubDate': pubDate,
                   'itemGUID': itemGUID
                   }
-        res = self._feedTemplate.produce(params, [params])       
-        return res
+        res = self._feedTemplate.produce(params, [params])   
+        
+        result = MethodRssResult(False, res, itemGUID)
+        result.release = latest
+        result.downloads = downloads
+        
+        return result    
 
+    # =================================================
+    # HELPERS
+    # =================================================
+    
 
     # =================================================
     # HANDLERS

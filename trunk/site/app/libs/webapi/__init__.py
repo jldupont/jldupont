@@ -131,8 +131,10 @@ class WebApi( webapp.RequestHandler ):
         else:
             self._output(200, t.substitute(), self._mime_html)
         
-    def conditionalHeaders(self):
+    def getConditionalHeaders(self):
         """ Retrieves the conditional headers
+        
+            @return: [if_modified_since, if_none_match]
         """
         try:    if_modified_since = self.request.headers['If-Modified-Since']
         except: if_modified_since = ''
@@ -141,11 +143,11 @@ class WebApi( webapp.RequestHandler ):
 
         return [if_modified_since, if_none_match]
     
-    def doBaseResponse(self, etag, last_modified, content_type, code): 
+    def doBaseResponse(self, result, etag, content_type, code): 
         """ Basic response
         """
         self.response.headers['ETag']          = '"' + etag + '"'
-        self.response.headers['Last-Modified'] = last_modified
         self.response.headers['Content-Type']  = content_type
         self.response.set_status( code );
+        self.response.out.write(result)
     
