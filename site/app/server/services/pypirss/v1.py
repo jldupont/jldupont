@@ -173,8 +173,11 @@ class ServicePypiRss( webapi.WebApi ):
         itemGUID = "[%s][%s][%s]" % (package, latest, downloads)
         
         # same as before?
-        if ref_etag == itemGUID:
-            return MethodRssResult(True, '', ref_etag)
+        try:
+            if ref_etag.strip('"') == itemGUID:
+                return MethodRssResult(True, '', ref_etag)
+        except:
+            pass
         
         pubDate = datetimeToRFC822(last_update)
 
