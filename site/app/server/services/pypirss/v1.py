@@ -17,7 +17,6 @@
 import os
 import sys
 import logging
-import xmlrpclib
 from types import *
 
 import wsgiref.handlers
@@ -117,8 +116,7 @@ class ServicePypiRss( webapi.WebApi ):
             result = getattr(self, resolved_method)( if_none_match, package_name )
         except Exception, e:
             logging.error( "EXCEPTION type[%s] [%s]" % (type(e),e) )
-            self.response.set_status(500)
-            return
+            result = None
         
         if result is None:
             self.response.set_status(500)
@@ -173,9 +171,10 @@ class ServicePypiRss( webapi.WebApi ):
         itemGUID = "[%s][%s][%s]" % (package, latest, downloads)
         
         # same as before?
+        etag = ref_etag.strip('"')
         try:
-            if ref_etag.strip('"') == itemGUID:
-                return MethodRssResult(True, '', ref_etag)
+            if etag == itemGUID:
+                return MethodRssResult(True, '', etag)
         except:
             pass
         
@@ -194,11 +193,6 @@ class ServicePypiRss( webapi.WebApi ):
         result.downloads = downloads
         
         return result    
-
-    # =================================================
-    # HELPERS
-    # =================================================
-    
 
     # =================================================
     # HANDLERS

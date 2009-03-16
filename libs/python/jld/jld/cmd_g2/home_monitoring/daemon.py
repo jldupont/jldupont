@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 """
     @author: Jean-Lou Dupont
+    
+    States:
+        Init:     daemon is being initialized
+        Waiting:  daemon is waiting to serve
+        Serving:  daemon is serving 
+        Error:    daemon can't serve because of an error
 """
 
 __author__  = "Jean-Lou Dupont"
@@ -20,6 +26,13 @@ import jld.tools.daemon as daemon
 # - Lookup event
 # - Write event to log
 
+
+states = {  'init':     0,     
+            'waiting':  1,
+            'serving':  2,
+            'error':    3,
+          }
+
 class HomeMonDaemon(daemon.BaseDaemon):
     """ Serves one device
     """
@@ -30,6 +43,8 @@ class HomeMonDaemon(daemon.BaseDaemon):
         self.deviceName = None
         self.inputs = None
         self.outputs = None
+    
+        self.state = states['init']
     
     def init(self):
         """ Init 
@@ -50,19 +65,26 @@ class HomeMonDaemon(daemon.BaseDaemon):
     # interface kit callbacks
     #=========================
     def interfaceKitAttached(self):
-        """ """
-    def interfaceKitDetached(self):
-        """ """
-    def interfaceKitError(self):
-        """ """
-    def interfaceKitInputChanged(self):
-        """ """
-    def interfaceKitOutputChanged(self):
-        """ """
-    def interfaceKitSensorChanged(self):
-        """ """
-        
+        """
+        """
 
+    def interfaceKitDetached(self):
+        """
+        """
+        
+    def interfaceKitError(self):
+        """
+        """
+    def interfaceKitInputChanged(self):
+        """
+        """
+    def interfaceKitOutputChanged(self):
+        """
+        """
+    def interfaceKitSensorChanged(self):
+        """ 
+        """
+        
     def loop(self):
         pass
     
@@ -71,4 +93,3 @@ class HomeMonDaemon(daemon.BaseDaemon):
     
     def run(self):
         pass
-        ""
