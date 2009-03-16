@@ -18,7 +18,7 @@
 """
 
 __author__  = "Jean-Lou Dupont"
-__version__ = "0.0.37"
+__version__ = "0.0.38"
 __email__   = "python@jldupont.com"
 __url__     = "http://www.jldupont.com/"
 __desc__    = """ Jean-Lou Dupont's Python Library - WEB API & command line tools"""
@@ -59,6 +59,10 @@ Follow project news on |T| Twitter_ or subscribe to the |R| RSS_ feed.
 
 Changelog
 ---------
+
+**0.0.38**
+
+* mm: Corrected missing information message when performing 'auth' command 
 
 **0.0.37**
 
