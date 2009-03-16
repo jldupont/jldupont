@@ -27,7 +27,10 @@ class Messages(object):
     def __getitem__(self, key):
         if (self.msgs is None):
             self._load()
-        return self.msgs[key]
+        try:
+            return self.msgs[key]
+        except:
+            raise RuntimeError('missing message [%s]' % key)
     
     def render(self, key, params = None):
         """ Renders a message template with optional parameters

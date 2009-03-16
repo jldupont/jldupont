@@ -2,6 +2,9 @@
 # for MindMeister backup utility
 # @author: Jean-Lou Dupont
 
+# Commands related
+cmd_auth: Authorization request with frob[$frob]
+
 # Reporting related
 report_update: cmd[updatedb] Total     [%(total)04d]   Updated[%(updated)04d]       New[%(new)04d]
 report_export: cmd[export]   Exportable[%(total)04d] Successes[%(successes)04d] Failure[%(failures)04d]
