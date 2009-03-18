@@ -144,7 +144,8 @@ class ServiceAw( webapp.RequestHandler ):
         pubDate = strftime( "%a, %d %b %Y %H:%M:%S +0000", sDate )
         pubTime = strftime( "%H:%M:%S", time.localtime() )
 
-        etag = "[%s-%s-%s-%s]" % (feed_id, circ, hits, reach)
+
+        etag = "%s-%s-%s-%s" % (feed_id, circ, hits, reach)
 
         params = {  'feed_id':         feed_id,
                     'itemTitle':       uri,
@@ -154,7 +155,7 @@ class ServiceAw( webapp.RequestHandler ):
                     'itemReach':       reach, 
                     'itemPubDate':     pubDate,
                     'rawData' :        rawPage,
-                    'etag':            etag,
+                    'etag':            str( etag ),
                     'itemGuid':        uri + '-' + date + '-' + pubTime
                 }
         return params 
