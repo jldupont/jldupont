@@ -6,6 +6,8 @@ __author__  = "Jean-Lou Dupont"
 __version__ = "$Id$"
 
 
+__all__ = ['ProxyCallback', 'ProxyBaseClass']
+
 
         
 class ProxyCallback(object):
@@ -33,7 +35,6 @@ class ProxyBaseClass(object):
         magic method __getattr__: a prefix can
         be configured for these methods.    
     """
-    
     def __init__(self, target, prefix = 'event_'):
         self.target = target
         self.prefix = prefix
@@ -62,12 +63,15 @@ class ProxyBaseClass(object):
             # retrieve attach method
             methodInstance  = self._getMethodInstance(source, attachMethodName)
             
+            # generate event method instance local to this proxy
             eventMethodName = self.prefix + eventName
-            
             eventMethodInstance = self._getMethodInstance(self, eventMethodName)
             
             # wire the event source to the proxy
-            methodInstance( eventMethodInstance ) 
+            try:
+                methodInstance( eventMethodInstance )
+            except:
+                raise RuntimeError('ProxyBaseClass: exception whilst trying to wire source[%s] with event[%s]' % (type(source), eventName) ) 
             
         
     def _getMethodInstance(self, source, name):
@@ -77,6 +81,8 @@ class ProxyBaseClass(object):
             raise RuntimeError("ProxyBaseClass: can't find attach method[%s]" % name)
         
         return methodInstance
+
+
 
 # ==============================================
 # ==============================================
