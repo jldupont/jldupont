@@ -21,8 +21,16 @@ class HomeMonController(Controller):
     def __init__(self, table):
         Controller.__init__(self, table)
 
+"""
+wiring = [('setOnAttachHandler',        'ikit_attach'),
+              ('setOnDetachHandler',        'ikit_detach'),
+              ('setOnErrorhandler',         'ikit_error'),
+              ('setOnInputChangeHandler',   'ikit_input'),
+              ('setOnOutputChangeHandler',  'ikit_output'),
+              ('setOnSensorChangeHandler',  'ikit_sensor')]
+"""
 
-_transistion_table = {
+_transition_table = {
     ():'',
     ():'',
 }
