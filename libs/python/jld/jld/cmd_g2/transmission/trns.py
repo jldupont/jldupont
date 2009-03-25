@@ -115,12 +115,12 @@ Commands:
         
     except Exception,e:
         ui.handleError( e )
-        sys.exit(1)
+        return 1
         
-    sys.exit(0)
+    return 0
     # === END ===
 
 # =======================================================================
 
 if __name__== "__main__":   
-    main()
+    sys.exit( main() )

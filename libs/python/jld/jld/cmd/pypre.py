@@ -7,6 +7,7 @@ __author__  = "Jean-Lou Dupont"
 __version__ = "$Id$"
 
 import os
+import sys
 from optparse import OptionParser
 
 import jld.template as tpl
@@ -32,20 +33,20 @@ def main():
 
     if len(args) < 1:
         print "Error: not enough arguments"
-        exit(0)
+        return 0
 
     input  = args[0]
     
     if (not os.path.isfile(input)):
         print "Error: invalid input_file parameter"
-        exit(0)
+        return 0
     
     try:    
         template = tpl.Tpl( input )
         result = template.render()
     except Exception,e:
         print "Error: template processing failed [%s]" % e
-        exit(0)
+        return 0
         
     print result
     
@@ -53,4 +54,4 @@ def main():
 # ==============================================
 
 if __name__ == "__main__":
-    main()
+    sys.exit( main() )
