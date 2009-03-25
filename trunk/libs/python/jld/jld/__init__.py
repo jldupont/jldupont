@@ -13,12 +13,13 @@
        - dlc.py   [delicious backup]
        - mm.py    [mindmeister backup]
        - glf.py   [gliffy backup]
+       - trns.py  [BT Transmission auto-stop upon completion]
     
     @author: Jean-Lou Dupont
 """
 
 __author__  = "Jean-Lou Dupont"
-__version__ = "0.0.38"
+__version__ = "0.0.39"
 __email__   = "python@jldupont.com"
 __url__     = "http://www.jldupont.com/"
 __desc__    = """ Jean-Lou Dupont's Python Library - WEB API & command line tools"""
@@ -60,15 +61,11 @@ Follow project news on |T| Twitter_ or subscribe to the |R| RSS_ feed.
 Changelog
 ---------
 
+**0.0.39**
+* better exception handling for all command line tools: trns.py used to hang cron when web service wasn't available
+
 **0.0.38**
-
 * mm: Corrected missing information message when performing 'auth' command 
-
-**0.0.37**
-
-
-* Introduction of trns_
-* Removed *quiet* mode on mm.py, gliffy.py, delicious.py
 
 .. _trns: http://www.jldupont.com/doc/lib/jld/trns
 

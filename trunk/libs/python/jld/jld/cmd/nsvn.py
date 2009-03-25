@@ -9,6 +9,7 @@ __version__ = "$Id$"
 
 import glob
 import os
+import sys
 from optparse import OptionParser
 from jld.tools.mos import nukedir
 
@@ -41,7 +42,7 @@ def main():
     
     if (not os.path.isdir(input)):
         print "Error: invalid input_directory parameter"
-        exit(0)
+        return 0
     
     if options.force:
         prepend = "deleting: [%s]"
@@ -61,13 +62,13 @@ def main():
                 nukedir( directory )
     except Exception,e:
         print "Error: [%s]" % e
-        exit(0)
+        return 0
         
-    exit(1)
+    return 1
 
     
 # ==============================================
 # ==============================================
 
 if __name__ == "__main__":
-    main()
+    sys.exit( main() )
