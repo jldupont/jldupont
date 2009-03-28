@@ -62,9 +62,11 @@ Changelog
 ---------
 
 **0.0.39**
+
 * better exception handling for all command line tools: trns.py used to hang cron when web service wasn't available
 
 **0.0.38**
+
 * mm: Corrected missing information message when performing 'auth' command 
 
 .. _trns: http://www.jldupont.com/doc/lib/jld/trns

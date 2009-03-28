@@ -18,20 +18,34 @@ __all__ = ['HomeMonController',]
 
 
 class HomeMonController(Controller):
-    def __init__(self, table):
-        Controller.__init__(self, table)
+    def __init__(self, table, actions):
+        Controller.__init__(self, table, actions)
 
-"""
-wiring = [('setOnAttachHandler',        'ikit_attach'),
-              ('setOnDetachHandler',        'ikit_detach'),
-              ('setOnErrorhandler',         'ikit_error'),
-              ('setOnInputChangeHandler',   'ikit_input'),
-              ('setOnOutputChangeHandler',  'ikit_output'),
-              ('setOnSensorChangeHandler',  'ikit_sensor')]
-"""
-
+# (current_state, event) : (next_state, action)
+# =============================================
 _transition_table = {
-    ():'',
-    ():'',
+         
+    # Startup            
+    ('', None): ('state_WAIT_ATTACH', None),
+
+    # Waiting for Phidget Attach event
+    ('state_WAIT_ATTACH','ikit_attach'):    'state_ATTACHED',
+
+    # Phidget is attached... waiting for some changes
+    ('state_ATTACHED', 'ikit_attach'):      'state_ATTACHED',
+    ('state_ATTACHED', 'ikit_error'):       ('state_ERROR',),       
+    ('state_ATTACHED', 'ikit_input'):       ('state_ATTACHED',      'do_input_change'),
+    ('state_ATTACHED', 'ikit_output'):      ('state_ATTACHED',      'do_output_change'),
+    ('state_ATTACHED', 'ikit_sensor'):      ('state_ATTACHED',      None),
+    ('state_ATTACHED', 'ikit_detach'):      ('state_WAIT_ATTACH',   'do_detach'),    
+    
+    # Error handling
+    ('state_ERROR', None):                   '',
+    
+    # 
+    ('state_WAIT', ''):'',
+    ('state_WAIT', ''):'',
+    ('state_WAIT', ''):'',
+    ('state_WAIT', ''):'',
 }
 

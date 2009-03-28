@@ -78,17 +78,17 @@ class PypiClient(object):
     """
     _server = PypiCall()
     
-    #@cache.memoize('/pypi/package_releases/', report_freshness = True, ttl = _package_releases_ttl)
+    @cache.memoize('/pypi/package_releases/', report_freshness = True, ttl = _package_releases_ttl)
     def getPackageReleases(self, package_name):
         ""
         return self._server.package_releases(package_name, True)
     
-    #@cache.memoize('/pypi/release_data/', report_freshness = True, ttl = _package_release_data_ttl)
+    @cache.memoize('/pypi/release_data/', report_freshness = True, ttl = _package_release_data_ttl)
     def getReleaseData(self, package_name, version):
         ""
         return self._server.release_data(package_name, version)
     
-    #@cache.memoize('/pypi/release_urls/', report_freshness = True, ttl = _package_release_urls_ttl)
+    @cache.memoize('/pypi/release_urls/', report_freshness = True, ttl = _package_release_urls_ttl)
     def getReleaseUrls(self, package_name, version):
         ""
         return self._server.release_urls(package_name, version)
@@ -103,8 +103,10 @@ def computeTotalDownloads(data):
     33
     """
     def add(x,y):
-        xt = x.get('downloads',0)
-        yt = y.get('downloads',0)
+        try:    xt = x.get('downloads',0)
+        except: xt = x
+        try:    yt = y.get('downloads',0)
+        except: yt = y
         return xt+yt
         
     return reduce(add, data)
