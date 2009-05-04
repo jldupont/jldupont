@@ -9,16 +9,32 @@ class A:
         for i in keys:
             print "i=%s" % i
 
-if (__name__ == "__main__" ):
-    a=A()
-    a.m(1,2,3,k1="v1",k2="v2")
+
+class Test(object):
     
-"""
-args length= 3
-keys length= 2
-a=1
-a=2
-a=3
-i=k2
-i=k1
-"""
+    def __init__(self, p1=None, p2=None, **kwargs):
+        
+        self.__dict__.update( kwargs )
+
+
+def test1():
+    """
+    >>> t=Test()
+    >>> t.__dict__
+    {}
+    >>> t2=Test(p1="v1")
+    >>> t2.__dict__
+    {}
+    >>> t3=Test(other="other")
+    >>> t3.__dict__
+    {'other': 'other'}
+    """
+
+# ==============================================
+# ==============================================
+
+if __name__ == "__main__":
+    """ Tests
+    """
+    import doctest
+    doctest.testmod(optionflags=doctest.ELLIPSIS)
