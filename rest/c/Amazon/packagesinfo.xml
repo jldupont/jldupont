@@ -7,7 +7,7 @@
 <pi>
 	<p>
 		 <n>AmazonS3</n>
-		 <c>pear.jldupont.com</c>
+		 <c>jldupont.googlecode.com/svn</c>
 		 <ca xlink:href="/rest/c/Amazon">Amazon</ca>
 		 <l></l>
 		 <s>Class for handling REST request to Amazon S3</s>

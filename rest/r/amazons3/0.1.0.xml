@@ -6,7 +6,7 @@
     http://pear.php.net/dtd/rest.release.xsd">
 
  <!-- customize here -->
- <c>pear.jldupont.com</c>
+ <c>jldupont.googlecode.com/svn</c>
  
  <p xlink:href="/rest/p/amazons3">AmazonS3</p>
 
@@ -21,6 +21,6 @@
  <n>$notes</n>
  <f>0</f>
 
- <g>http://pear.jldupont.com/tags/AmazonS3/AmazonS3-0.1.0</g> <!--base name of tgz file -->
+ <g>http://jldupont.googlecode.com/svn/tags/AmazonS3/AmazonS3-0.1.0</g> <!--base name of tgz file -->
  <x xlink:href="package.0.1.0.xml"/>
 </r>

@@ -9,7 +9,7 @@
 
   <!-- $Id -->
  <name>PearTools</name>
- <channel>pear.jldupont.com</channel>
+ <channel>jldupont.googlecode.com/svn</channel>
  <summary>PEAR tools</summary>
  <description>PHING tasks, PEAR REST channel objects etc.</description>
 
@@ -88,13 +88,13 @@
  
 	<package>
 		<name>Directory</name>
-		<channel>pear.jldupont.com</channel>
+		<channel>jldupont.googlecode.com/svn</channel>
 		<min>1.0.1</min>
 	</package>
 
 	<package>
 		<name>PhingTools</name>
-		<channel>pear.jldupont.com</channel>
+		<channel>jldupont.googlecode.com/svn</channel>
 		<min>1.0.1</min>
 	</package>
 

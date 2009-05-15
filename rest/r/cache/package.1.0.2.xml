@@ -8,7 +8,7 @@
 		http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
 
  <name>Cache</name>
- <channel>pear.jldupont.com</channel>
+ <channel>jldupont.googlecode.com/svn</channel>
  <summary>Memory based cache using either APC or eAccelerator</summary>
  <description>This package offers a simple interface to a memory base cache</description>
 

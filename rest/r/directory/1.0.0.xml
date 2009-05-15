@@ -6,7 +6,7 @@
     http://pear.php.net/dtd/rest.release.xsd">
 
  <!-- customize here -->
- <c>pear.jldupont.com</c>
+ <c>jldupont.googlecode.com/svn</c>
 
  <p xlink:href="/rest/p/directory">Directory</p>
 
@@ -21,6 +21,6 @@
  <n>$notes</n>
  <f>0</f>
 
- <g>http://pear.jldupont.com/tags/Directory/Directory-1.0.0</g> <!--base name of tgz file -->
+ <g>http://jldupont.googlecode.com/svn/tags/Directory/Directory-1.0.0</g> <!--base name of tgz file -->
  <x xlink:href="package.1.0.0.xml"/>
 </r>

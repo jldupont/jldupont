@@ -9,7 +9,7 @@
 
   <!-- $Id$ -->
  <name>PhingTools</name>
- <channel>pear.jldupont.com</channel>
+ <channel>jldupont.googlecode.com/svn</channel>
  <summary>PHING tools</summary>
  <description>PearPathTask, JsMinTask, SvnAddTask, SvnPropsetTask, DateTask, TrimTask, SortTask etc.</description>
 

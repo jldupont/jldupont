@@ -9,7 +9,7 @@
 
   <!-- $Id$ -->
  <name>Validate</name>
- <channel>pear.jldupont.com</channel>
+ <channel>jldupont.googlecode.com/svn</channel>
  <summary>PHING tools</summary>
  <description>Parameter validation</description>
 

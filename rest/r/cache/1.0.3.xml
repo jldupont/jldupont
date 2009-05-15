@@ -6,7 +6,7 @@
     http://pear.php.net/dtd/rest.release.xsd">
     
  <p xlink:href="/rest/p/cache">Cache</p>
- <c>pear.jldupont.com</c>
+ <c>jldupont.googlecode.com/svn</c>
  
  <v>1.0.3</v>
  <st>stable</st>
@@ -19,6 +19,6 @@
  <n>Release Notes:</n>
  <f></f>
 
- <g>http://pear.jldupont.com/tags/Cache/Cache-1.0.3</g>
+ <g>http://jldupont.googlecode.com/svn/tags/Cache/Cache-1.0.3</g>
  <x xlink:href="package.1.0.3.xml"/>
 </r>

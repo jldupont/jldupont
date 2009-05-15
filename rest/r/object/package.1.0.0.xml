@@ -8,7 +8,7 @@
 		http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
 
  <name>Object</name>
- <channel>pear.jldupont.com</channel>
+ <channel>jldupont.googlecode.com/svn</channel>
  <summary>Base class for all JLD namespace</summary>
  <description></description>
 
@@ -62,7 +62,7 @@
 
 	<package>
 		<name>System</name>
-		<channel>pear.jldupont.com</channel>
+		<channel>jldupont.googlecode.com/svn</channel>
 		<min>1.0.0</min>
 	</package>
 

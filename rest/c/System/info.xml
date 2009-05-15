@@ -5,7 +5,7 @@
     xsi:schemaLocation="http://pear.php.net/dtd/rest.category
     http://pear.php.net/dtd/rest.category.xsd">
  <n>System</n>
- <c>pear.jldupont.com</c>
+ <c>jldupont.googlecode.com/svn</c>
  <a>System</a> <!-- alias? -->
  <d>This package offers a simple interface to a memory base cache</d>
 </c>
