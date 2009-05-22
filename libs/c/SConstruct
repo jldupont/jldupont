@@ -1,4 +1,6 @@
 """
+CJLD
+
 scons build file
 
 @author: Jean-Lou Dupont
@@ -22,11 +24,11 @@ Help("""\
 """)
 
 
-env_release = Environment(CPPPATH='#includes')
+env_release = Environment(CPPPATH='#include')
 SConscript('#src/SConscript', build_dir='.release', exports={'env':env_release})
 
 
-env_debug   = Environment(CPPPATH='#project/includes', CPPFLAGS="-D_DEBUG -g")
+env_debug   = Environment(CPPPATH='#include', CPPFLAGS="-D_DEBUG -g")
 SConscript('#src/SConscript', build_dir='.debug', exports={'env':env_debug})
 
 
