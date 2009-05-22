@@ -1,1 +1,0 @@
-rsync -avzC --timeout=600 --include='manual/en/' --include='manual/en/**' --exclude='manual/**' --exclude='archive/**' --exclude='distributions/**' rsync.php.net::phpweb $1
