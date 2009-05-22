@@ -69,6 +69,7 @@ _scripts = [
             'jld/backup/scripts/glf', 
             
             'jld/cmd/pypre.py',
+            'jld/cmd/nsvn.py',
             
             'jld/scripts/trns.py',            
             ]
