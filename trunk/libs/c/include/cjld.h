@@ -15,6 +15,19 @@
 
 #include <errno.h>
 #include <pthread.h>
+#include <stdlib.h>
+#include <sys/types.h>
+
+#ifdef _DEBUG
+#	include <syslog.h>
+#	define DEBUG_LOG(...) doLog( __VA_ARGS__ )
+#	define DEBUG_LOG_PTR(ptr, ...) if (NULL==ptr) doLog( __VA_ARGS__ )
+	void doLog(int priority, char *message, ...);
+#else
+#	define DEBUG_LOG(...)
+#	define DEBUG_LOG_PTR(...)
+#endif
+
 
 	/**
 	 * Single linked-list node
@@ -29,6 +42,14 @@
 
 	} cjld_snode;
 
+
+	typedef struct _cjld_queue_node {
+
+		void *node;
+		struct _cjld_queue_node *next;
+
+	} cjld_queue_node;
+
 	/**
 	 * Queue - thread-safe
 	 *
@@ -42,7 +63,7 @@
 		pthread_mutex_t *cond_mutex;
 		pthread_mutex_t *mutex;
 
-		struct _cjld_snode *head, *tail;
+		struct _cjld_queue_node *head, *tail;
 		int num;
 		int id;
 		int total_in;
@@ -52,6 +73,7 @@
 
 	/******************************************************
 	 * QUEUE related
+	 * Thread-safe
 	 *****************************************************/
 
 	cjld_queue *cjld_queue_create(int id);
@@ -74,6 +96,20 @@
 	int   cjld_queue_peek(cjld_queue *q);
 	void  cjld_queue_signal(cjld_queue *q);
 
+
+	/********************************************************
+	 * LIST related
+	 *******************************************************/
+
+	typedef struct _cjld_list {
+
+		int id;
+		cjld_snode *head;
+		cjld_snode *tail;
+
+	} cjld_list;
+
+	cjld_list *cjld_create_list(int id);
 
 
 #endif /* CJLD_H_ */

@@ -9,9 +9,9 @@
 
 // PRIVATE
 // =======
-void *__queue_get_safe(queue *q);
-int   __queue_put_head_safe( queue *q, void *node );
-int   __queue_put_safe( queue *q, void *node );
+void *__cjld_queue_get_safe( cjld_queue *q);
+int   __cjld_queue_put_head_safe( cjld_queue *q, void *node );
+int   __cjld_queue_put_safe( cjld_queue *q, void *node );
 
 
 
@@ -113,7 +113,7 @@ void cjld_queue_destroy(cjld_queue *q) {
  * @return 0 => error
  *
   */
-int cjld_queue_put(queue *q, void *node) {
+int cjld_queue_put(cjld_queue *q, void *node) {
 
 	if ((NULL==q) || (NULL==node)) {
 		DEBUG_LOG(LOG_DEBUG, "cjld_queue_put: NULL queue/node ptr");
