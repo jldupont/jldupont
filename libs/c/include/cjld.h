@@ -198,6 +198,9 @@
 	/**
 	 * Extends an existing list to an existing list
 	 *
+	 * IMPORTANT NOTE: the inherited 'cleaner' comes from
+	 *                 the list 'dest'
+	 *
 	 * @return dest
 	 */
 	cjld_list *cjld_list_extend( cjld_list *dest, cjld_list *src );
