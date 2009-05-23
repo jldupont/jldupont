@@ -166,8 +166,8 @@ void *cjld_list_remove(cjld_list *list, int id) {
 	//case 2a
 	if (list->tail == removed_node) {
 		previous_node->next = NULL;
-		list->count--;
 		list->tail = previous_node;
+		list->count--;
 		return removed_node;
 	}
 
@@ -188,3 +188,37 @@ void *cjld_list_remove(cjld_list *list, int id) {
 }//
 
 
+/**
+ * Pointers 'list' and 'el' should already have been validated
+ */
+void __cjld_list_destroy_element(cjld_list *list, void *el, int id) {
+
+	void (*cleaner)(void *el, int id);
+	cleaner = list->cleaner;
+
+	if (NULL==cleaner) {
+		free(el);
+	}
+
+	*cleaner(el, id);
+
+}//
+
+
+
+int cjld_list_remove_destroy(cjld_list *list, int id) {
+
+	cjld_snode	*removed_node;
+
+	removed_node = cjld_list_remove( list, id );
+
+	//not found =>error
+	if (NULL==removed_node) {
+		return 0;
+	}
+
+
+	__cjld_list_destroy_element( removed_node );
+
+	return 1;
+}//
