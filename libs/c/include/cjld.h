@@ -39,6 +39,7 @@
 
 		ECJLD_MALLOC,
 		ECJLD_NULL_POINTER,
+		ECJLD_INVALID_INDEX,
 
 	};
 
@@ -65,7 +66,7 @@
 	typedef struct _cjld_snode {
 
 		int id;
-		void *node;
+		void *el;
 		struct _cjld_snode *next;
 
 	} cjld_snode;
@@ -171,6 +172,11 @@
 	int cjld_list_getid(cjld_list *list);
 
 	/**
+	 * Returns the element count
+	 */
+	int cjld_list_count(cjld_list *list);
+
+	/**
 	 * Destroys a list along with its elements
 	 * Applies the 'cleaner' function to each element (@see cjld_list_create)
 	 *
@@ -224,6 +230,8 @@
 
 	/**
 	 * Pops the last element from the list
+	 *
+	 * @return element
 	 */
 	void *cjld_list_pop(cjld_list *list);
 
@@ -232,23 +240,24 @@
 	 * Inserts an element at a specific index in the list
 	 *
 	 * Use pos=0 for inserting at the head of the list
+	 *
+	 * @return 0 ERROR
+	 * @return 1 SUCCESS
 	 */
 	int cjld_list_insert(cjld_list *list, void *el, int id, int pos);
 
 
 	/**
-	 * TODO Slices a list
+	 * Slices a list
 	 *
-	 * Removes (and cleans) elements from the list starting
-	 * inclusively at index position 'start' and ending at
-	 * index position 'stop'.
-	 *
-	 * If index position 'start' is out-of-bounds, an error
-	 * code 'ECJLD_ ' is returned.
+	 * Breaks a list in two lists. The extracted slice
+	 * starts at 'start' and ends at 'stop' index positions.
 	 *
 	 * If index position 'stop' is out-of-bounds
+	 *
+	 * @return sliced list
 	 */
-	int *cjld_list_slice(cjld_list *list, int start, int stop);
+	cjld_list *cjld_list_slice(cjld_list *list, int start, int stop);
 
 
 	/**
