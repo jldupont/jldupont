@@ -17,6 +17,7 @@ const char *__cjld_errors[] = {
 
 		"memory allocation [malloc]",
 		"NULL pointer",
+		"invalid index",
 
 };
 

@@ -35,6 +35,16 @@ int cjld_list_getid(cjld_list *list) {
 
 }//
 
+
+int cjld_list_count(cjld_list *list) {
+
+	TESTPTR(cjld_list_get_id, list);
+
+	return list->count;
+}//
+
+
+
 void __cjld_cleaner_free(void *el, int id) {
 	if (NULL==el) {
 		DEBUG_LOG(LOG_ERR, "cjld_cleaner_free: NULL pointer" );
@@ -73,7 +83,7 @@ int cjld_list_append( cjld_list *dest, void *el, int id ) {
 	if (NULL!=new_node) {
 
 		// new node...
-		new_node->node = el;
+		new_node->el   = el;
 		new_node->next = NULL;
 
 		// there is a tail... put at the end
@@ -130,6 +140,7 @@ void *cjld_list_remove(cjld_list *list, int id) {
 
 	TESTPTR(cjld_list_remove, list);
 
+	void *element=NULL;
 	cjld_snode	*current_node=list->head,
 				*previous_node=NULL,
 				*removed_node=NULL;
@@ -160,7 +171,9 @@ void *cjld_list_remove(cjld_list *list, int id) {
 		list->head = NULL;
 		list->tail = NULL;
 		list->count = 0;
-		return removed_node;
+		element = removed_node->el;
+		free(removed_node);
+		return element;
 	}
 
 	//case 2a
@@ -168,23 +181,28 @@ void *cjld_list_remove(cjld_list *list, int id) {
 		previous_node->next = NULL;
 		list->tail = previous_node;
 		list->count--;
-		return removed_node;
+		element = removed_node->el;
+		free(removed_node);
+		return element;
 	}
 
 	//case 2b
 	if (list->head == removed_node) {
 		list->head = (list->head)->next;
 		list->count--;
-		return removed_node;
+		element = removed_node->el;
+		free(removed_node);
+		return element;
 	}
 
 	//case 2c
 	// must join the two list segments
 	previous_node->next = removed_node->next;
 	list->count--;
+	element = removed_node->el;
+	free(removed_node);
 
-
-	return removed_node;
+	return element;
 }//
 
 
@@ -208,17 +226,111 @@ void __cjld_list_destroy_element(cjld_list *list, void *el, int id) {
 
 int cjld_list_remove_destroy(cjld_list *list, int id) {
 
-	cjld_snode	*removed_node;
+	void *removed_element;
 
-	removed_node = cjld_list_remove( list, id );
+	removed_element = cjld_list_remove( list, id );
 
 	//not found =>error
-	if (NULL==removed_node) {
+	if (NULL==removed_element) {
 		return 0;
 	}
 
 
-	__cjld_list_destroy_element( removed_node );
+	__cjld_list_destroy_element( list, removed_element, id );
 
 	return 1;
 }//
+
+
+
+void *cjld_list_pop(cjld_list *list) {
+
+	TESTPTRV(cjld_list_pop, list);
+
+	void *element=NULL;
+	cjld_snode  *node=NULL,
+				*next=NULL;
+
+	next = list->head->next;
+	node = list->head;
+	list->head = next;
+
+	el=node->el;
+
+	free(node);
+
+	return element;
+}//
+
+
+/**
+ * Case 1: HEAD insertion
+ * Case 2: TAIL insertion
+ * Case 3: In between
+ */
+int cjld_list_insert(cjld_list *list, void *el, int id, int pos) {
+
+	TESTPTR(cjld_list_insert, list);
+	TESTINDEX(cjld_list_insert, pos);
+	TESTINDEXU(cjld_list_insert, pos, list->count );
+
+	int i=0;
+	cjld_snode  *current  = NULL,
+				*previous = NULL,
+				*node     = NULL;
+
+	//create node
+	node = (cjld_snode *) malloc( sizeof(cjld_snode *) );
+	node->el = el;
+	node->id = id;
+
+	//case 1
+	if (0==pos) {
+		node->next = list->head;
+		list->head = node;
+		list->count++;
+		return 1;
+	}
+
+	//case 2 & 3: need to walk the list
+	// as it is single-linked
+	// NOTE: tail pointer never needs to be updated
+	current  = list->head;
+	previous = NULL;
+
+	//walk till pos
+	while( i != pos ) {
+		previous=current;
+		current=current->next;
+		i++;
+	}//while
+
+	//insert in-between
+	previous->next = node;
+	node->next = current;
+
+	return 1;
+}//
+
+
+/**
+ *
+ * s[i:j]
+ * s[
+ *
+ * Case 1: empty list
+ * Case 2: one element
+ * Case 3:
+ *
+ */
+int *cjld_list_slice(cjld_list *list, int start, int stop) {
+
+	TESTPTR(cjld_list_insert, list);
+	TESTINDEX(cjld_list_insert, start);
+	TESTINDEX(cjld_list_insert, stop);
+
+
+}//
+
+
+
