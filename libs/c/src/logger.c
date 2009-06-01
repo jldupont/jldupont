@@ -15,7 +15,7 @@ char *_LOGGER_IDENTITY = "cjld";
 /**
  * Crude logging function
  */
-void doLog(int priority, char *message, ...) {
+void doLog(int priority, const char *message, ...) {
 
 	openlog(_LOGGER_IDENTITY, LOG_PID, LOG_LOCAL1);
 
