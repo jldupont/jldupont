@@ -72,6 +72,23 @@
 	} cjld_snode;
 
 
+	/**
+	 * Double linked-list node
+	 *
+	 * @param node pointer to node
+	 * @param next pointer to next node
+	 */
+	typedef struct _cjld_dnode {
+
+		int id;
+		void *el;
+		struct _cjld_snode	*previous,
+							*next;
+
+	} cjld_dnode;
+
+
+
 	typedef struct _cjld_queue_node {
 
 		void *node;
