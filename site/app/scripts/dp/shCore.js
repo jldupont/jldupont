@@ -1,19 +1,20 @@
 /**
  * Code Syntax Highlighter.
- * Version 1.5.1
- * Copyright (C) 2004-2007 Alex Gorbatchev.
+ * Version 1.5.2
+ * Copyright (C) 2004-2008 Alex Gorbatchev
  * http://www.dreamprojections.com/syntaxhighlighter/
- * 
- * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General 
- * Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option) 
- * any later version.
  *
- * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied 
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more 
- * details.
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, version 3 of the License.
  *
- * You should have received a copy of the GNU Lesser General Public License along with this library; if not, write to 
- * the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA 
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 //
@@ -27,10 +28,10 @@ var dp = {
 		RegexLib: {},
 		Brushes	: {},
 		Strings : {
-			AboutDialog : '<html><head><title>About...</title></head><body class="dp-about"><table cellspacing="0"><tr><td class="copy"><p class="title">dp.SyntaxHighlighter</div><div class="para">Version: {V}</p><p><a href="http://www.dreamprojections.com/syntaxhighlighter/?ref=about" target="_blank">http://www.dreamprojections.com/syntaxhighlighter</a></p>&copy;2004-2007 Alex Gorbatchev.</td></tr><tr><td class="footer"><input type="button" class="close" value="OK" onClick="window.close()"/></td></tr></table></body></html>'
+			AboutDialog : '<html><head><title>About...</title></head><body class="dp-about"><table cellspacing="0"><tr><td class="copy"><p class="title">dp.SyntaxHighlighter</div><div class="para">Version: {V}</p><p><a href="http://www.dreamprojections.com/syntaxhighlighter/?ref=about" target="_blank">http://www.dreamprojections.com/syntaxhighlighter</a></p>&copy;2004-2008 Alex Gorbatchev.</td></tr><tr><td class="footer"><input type="button" class="close" value="OK" onClick="window.close()"/></td></tr></table></body></html>'
 		},
 		ClipboardSwf : null,
-		Version : '1.5.1'
+		Version : '1.5.2'
 	}
 };
 
@@ -84,7 +85,7 @@ dp.sh.Toolbar.Commands = {
 			{
 				var flashcopier = highlighter.flashCopier;
 				
-				if(flashcopier == null)
+				if(flashcopier === null)
 				{
 					flashcopier = document.createElement('div');
 					highlighter.flashCopier = flashcopier;
@@ -261,7 +262,7 @@ dp.sh.Highlighter.prototype.GetMatches = function(regex, css)
 
 dp.sh.Highlighter.prototype.AddBit = function(str, css)
 {
-	if(str == null || str.length == 0)
+	if(str === null || str.length === 0)
 		return;
 
 	var span = this.CreateElement('SPAN');
@@ -311,14 +312,14 @@ dp.sh.Highlighter.prototype.AddBit = function(str, css)
 // checks if one match is inside any other match
 dp.sh.Highlighter.prototype.IsInside = function(match)
 {
-	if(match == null || match.length == 0)
+	if(match === null || match.length === 0)
 		return false;
 	
 	for(var i = 0; i < this.matches.length; i++)
 	{
 		var c = this.matches[i];
 		
-		if(c == null)
+		if(c === null)
 			continue;
 
 		if((match.index > c.index) && (match.index < c.index + c.length))
@@ -402,7 +403,7 @@ dp.sh.Highlighter.prototype.SwitchToList = function()
 		
 		while(i <= 150)
 		{
-			if(i % showEvery == 0)
+			if(i % showEvery === 0)
 			{
 				div.innerHTML += i;
 				i += (i + '').length;
@@ -414,18 +415,18 @@ dp.sh.Highlighter.prototype.SwitchToList = function()
 			}
 		}
 		
-		columns.className = 'columns';
+		columns.className = 'cumns';
 		columns.appendChild(div);
 		this.bar.appendChild(columns);
 	}
 
-	for(var i = 0, lineIndex = this.firstLine; i < lines.length - 1; i++, lineIndex++)
+	for(var i = 0; i < lines.length - 1; i++)
 	{
 		var li = this.CreateElement('LI');
 		var span = this.CreateElement('SPAN');
 		
 		// uses .line1 and .line2 css styles for alternating lines
-		li.className = (i % 2 == 0) ? 'alt' : '';
+		li.className = (i % 2 === 0) ? 'alt' : '';
 		span.innerHTML = lines[i] + '&nbsp;';
 
 		li.appendChild(span);
@@ -457,7 +458,7 @@ dp.sh.Highlighter.prototype.Highlight = function(code)
 		// go through every line and check for common number of indents
 		for(var i = 0; i < lines.length && min > 0; i++)
 		{
-			if(Trim(lines[i]).length == 0)
+			if(Trim(lines[i]).length === 0)
 				continue;
 				
 			var matches = regex.exec(lines[i]);
@@ -482,7 +483,7 @@ dp.sh.Highlighter.prototype.Highlight = function(code)
 
 	var pos	= 0;
 	
-	if(code == null)
+	if(code === null)
 		code = '';
 	
 	this.originalCode = code;
@@ -498,7 +499,8 @@ dp.sh.Highlighter.prototype.Highlight = function(code)
 	this.bar.className = 'bar';
 	
 	// set the first line
-	this.ol.start = this.firstLine;
+	if (this.firstLine != null)
+		this.ol.start = this.firstLine;
 
 	if(this.CssClass != null)
 		this.ol.className = this.CssClass;
@@ -516,7 +518,7 @@ dp.sh.Highlighter.prototype.Highlight = function(code)
 	this.ProcessRegexList();	
 
 	// if no matches found, add entire code as plain text
-	if(this.matches.length == 0)
+	if(this.matches.length === 0)
 	{
 		this.AddBit(this.code, null);
 		this.SwitchToList();
@@ -541,7 +543,7 @@ dp.sh.Highlighter.prototype.Highlight = function(code)
 	{
 		var match = this.matches[i];
 
-		if(match == null || match.length == 0)
+		if(match === null || match.length === 0)
 			continue;
 
 		this.AddBit(Copy(this.code, pos, match.index), null);
@@ -576,7 +578,7 @@ dp.sh.HighlightAll = function(name, showGutter /* optional */, showControls /* o
 		
 		for(var i = 0; i < a.length; i++)
 		{
-			if(a[i] == null)
+			if(a[i] === null)
 				continue;
 				
 			if(typeof(a[i]) == 'string' && a[i] != '')
@@ -628,7 +630,7 @@ dp.sh.HighlightAll = function(name, showGutter /* optional */, showControls /* o
 	FindTagsByName(elements, name, 'pre');
 	FindTagsByName(elements, name, 'textarea');
 
-	if(elements.length == 0)
+	if(elements.length === 0)
 		return;
 
 	// register all brushes
@@ -636,7 +638,7 @@ dp.sh.HighlightAll = function(name, showGutter /* optional */, showControls /* o
 	{
 		var aliases = dp.sh.Brushes[brush].Aliases;
 
-		if(aliases == null)
+		if(aliases === null)
 			continue;
 		
 		for(var i = 0; i < aliases.length; i++)
@@ -651,15 +653,15 @@ dp.sh.HighlightAll = function(name, showGutter /* optional */, showControls /* o
 				element.attributes['language'], element.language
 				);
 		var language = '';
-		
-		if(options == null)
+
+		if(options === null)
 			continue;
 		
 		options = options.split(':');
 		
 		language = options[0].toLowerCase();
 
-		if(registered[language] == null)
+		if(registered[language] === null)
 			continue;
 		
 		// instantiate a brush
@@ -668,10 +670,29 @@ dp.sh.HighlightAll = function(name, showGutter /* optional */, showControls /* o
 		// hide the original element
 		element.style.display = 'none';
 
-		highlighter.noGutter = (showGutter == null) ? IsOptionSet('nogutter', options) : !showGutter;
-		highlighter.addControls = (showControls == null) ? !IsOptionSet('nocontrols', options) : showControls;
-		highlighter.collapse = (collapseAll == null) ? IsOptionSet('collapse', options) : collapseAll;
-		highlighter.showColumns = (showColumns == null) ? IsOptionSet('showcolumns', options) : showColumns;
+        if (typeof(showGutter) === 'undefined') {
+            highlighter.noGutter = IsOptionSet('nogutter', options);
+        } else {
+            highlighter.noGutter = !showGutter;
+        }
+
+        if (typeof(showControls) === 'undefined') {
+            highlighter.addControls = !IsOptionSet('nocontrols', options);
+        } else {
+            highlighter.addControls = showControls;
+        }
+
+        if (typeof(collapseAll) === 'undefined') {
+            highlighter.collapse = IsOptionSet('collapse', options);
+        } else {
+            highlighter.collapse = collapseAll;
+        }
+
+        if (typeof(showColumns) === 'undefined') {
+            highlighter.showColumns = IsOptionSet('showcolumns', options);
+        } else {
+            highlighter.showColumns = showColumns;
+        }
 
 		// write out custom brush style
 		var headNode = document.getElementsByTagName('head')[0];
@@ -694,7 +715,7 @@ dp.sh.HighlightAll = function(name, showGutter /* optional */, showControls /* o
 		}
 		
 		// first line idea comes from Andrew Collington, thanks!
-		highlighter.firstLine = (firstLine == null) ? parseInt(GetOptionValue('firstline', options, 1)) : firstLine;
+		highlighter.firstLine = (firstLine === null) ? parseInt(GetOptionValue('firstline', options, 1)) : firstLine;
 
 		highlighter.Highlight(element[propertyName]);
 		
