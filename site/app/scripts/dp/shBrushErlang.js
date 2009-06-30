@@ -22,29 +22,26 @@
  */
 dp.sh.Brushes.Erlang = function()
 {
+	// According to: http://erlang.org/doc/reference_manual/introduction.html#1.5
     var keywords = 'after and andalso band begin bnot bor bsl bsr bxor '+
     				'case catch cond div end fun if let not of or orelse '+
-    				'query receive rem try when xor';
-
-    var special =  '';
+    				'query receive rem try when xor module export import';
 
     this.regexList = [
-        { regex: dp.sh.RegexLib.SingleLinePerlComments, css: 'comment' },
-        { regex: new RegExp("^\\s*@\\w+", 'gm'), css: 'decorator' },
-        { regex: new RegExp("(['\"]{3})([^\\1])*?\\1", 'gm'), css: 'comment' },
+        { regex: new RegExp("[A-Z][A-Za-z0-9_]+",      'g'), css: 'vars' },
+        { regex: new RegExp("\\%.+",                  'gm'), css: 'comment' },
+        { regex: new RegExp("\\?[A-Za-z0-9_]+",        'g'), css: 'preprocessor' },
+        { regex: new RegExp("[a-z0-9_]+:[a-z0-9_]+",   'g'), css: 'mod_func' },
+        
         { regex: new RegExp('"(?!")(?:\\.|\\\\\\"|[^\\""\\n\\r])*"', 'gm'), css: 'string' },
         { regex: new RegExp("'(?!')(?:\\.|(\\\\\\')|[^\\''\\n\\r])*'", 'gm'), css: 'string' },
-        { regex: new RegExp("\\b\\d+\\.?\\w*", 'g'), css: 'number' },
+
         { regex: new RegExp(this.GetKeywords(keywords), 'gm'), css: 'keyword' },
-        { regex: new RegExp(this.GetKeywords(special), 'gm'), css: 'special' }
         ];
 
     this.CssClass = 'dp-erl';
-        this.Style =    '.dp-erl .builtins { color: #ff1493; }' +
-                        '.dp-erl .magicmethods { color: #808080; }' +
-                        '.dp-erl .exceptions { color: brown; }' +
-                        '.dp-erl .types { color: brown; font-style: italic; }' +
-                        '.dp-erl .commonlibs { color: #8A2BE2; font-style: italic; }';
+    this.Style =    '.dp-erl .vars     { color: rgb(184,134,11); }' +
+                    '.dp-erl .mod_func { color: #CC00FF; }';
 };
 
 dp.sh.Brushes.Erlang.prototype  = new dp.sh.Highlighter();

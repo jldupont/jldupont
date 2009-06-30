@@ -91,9 +91,9 @@
 
 
 var db = google.gears.factory.create('beta.database');
-db.open('database-test');
-db.execute('create table if not exists Test' +
-           ' (Phrase text, Timestamp int)');
+db.open('database-sites');
+db.execute('create table if not exists Sites' +
+           ' (domain text, Enable int)');
 db.execute('insert into Test values (?, ?)', ['Monkey!', new Date().getTime()]);
 var rs = db.execute('select * from Test order by Timestamp desc');
 

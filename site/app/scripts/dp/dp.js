@@ -8,9 +8,9 @@
  *   // place JS code here
  * </textarea>
  * 
- * <script language="javascript" src="http://www.jldupont.com/scripts/dp/shCore.js"></script>
- * <script class="javascript" src="http://www.jldupont.com/scripts/dp/shBrushJScript.js"></script>
- * <script class="javascript" src="http://www.jldupont.com/scripts/dp/dp.js"></script>
+ * <script type="text/javascript" src="http://www.jldupont.com/scripts/dp/shCore.js"></script>
+ * <script type="text/javascript" src="http://www.jldupont.com/scripts/dp/shBrushJScript.js"></script>
+ * <script type="text/javascript" src="http://www.jldupont.com/scripts/dp/dp.js"></script>
  * 
  * @author Jean-Lou Dupont
  * @version 0.2
