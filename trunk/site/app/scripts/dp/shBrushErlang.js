@@ -30,6 +30,7 @@ dp.sh.Brushes.Erlang = function()
     				' module export import define';
 
     this.regexList = [
+                      
         { regex: new RegExp("[A-Z][A-Za-z0-9_]+",      'g'), css: 'vars' },
         { regex: new RegExp("\\%.+",                  'gm'), css: 'comment' },
         { regex: new RegExp("\\?[A-Za-z0-9_]+",        'g'), css: 'preprocessor' },
