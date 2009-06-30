@@ -25,7 +25,9 @@ dp.sh.Brushes.Erlang = function()
 	// According to: http://erlang.org/doc/reference_manual/introduction.html#1.5
     var keywords = 'after and andalso band begin bnot bor bsl bsr bxor '+
     				'case catch cond div end fun if let not of or orelse '+
-    				'query receive rem try when xor module export import';
+    				'query receive rem try when xor'+
+    				// additional
+    				' module export import define';
 
     this.regexList = [
         { regex: new RegExp("[A-Z][A-Za-z0-9_]+",      'g'), css: 'vars' },
