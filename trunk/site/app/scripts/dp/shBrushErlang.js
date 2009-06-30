@@ -14,20 +14,23 @@
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *  along with this program.  If not, see http://www.gnu.org/licenses/.
  */
 
 /*   
  * Erlang syntax contributed by Jean-Lou Dupont  http://www.jldupont.com/  
+ * 
+ * @file:    shBrushErlang.js
+ * @version: 0.3
  */
 dp.sh.Brushes.Erlang = function()
 {
 	// According to: http://erlang.org/doc/reference_manual/introduction.html#1.5
     var keywords = 'after and andalso band begin bnot bor bsl bsr bxor '+
     				'case catch cond div end fun if let not of or orelse '+
-    				'query receive rem try when xor'+
-    				// additional
-    				' module export import define';
+    				'query receive rem try when xor '+
+    				// preprocessor related
+    				'module export import define behavior';
 
     this.regexList = [
                       
