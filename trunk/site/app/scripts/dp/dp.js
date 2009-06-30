@@ -8,14 +8,14 @@
  *   // place JS code here
  * </textarea>
  * 
- * <script language="javascript" src="http://jeanlou.dupont.googlepages.com/shCore.js"></script>
- * <script class="javascript" src="http://jeanlou.dupont.googlepages.com/shBrushJScript.js"></script>
- * <script class="javascript" src="http://jeanlou.dupont.googlepages.com/dp.js"></script>
+ * <script language="javascript" src="http://www.jldupont.com/scripts/dp/shCore.js"></script>
+ * <script class="javascript" src="http://www.jldupont.com/scripts/dp/shBrushJScript.js"></script>
+ * <script class="javascript" src="http://www.jldupont.com/scripts/dp/dp.js"></script>
  * 
  * @author Jean-Lou Dupont
- * @version 0.1
+ * @version 0.2
  */
 dp.SyntaxHighlighter.BloggerMode();
-dp.SyntaxHighlighter.ClipboardSwf = 'http://jeanlou.dupont.googlepages.com/clipboard.swf';
+dp.SyntaxHighlighter.ClipboardSwf = 'http://www.jldupont.com/scripts/clipboard.swf';
 dp.SyntaxHighlighter.HighlightAll('code');
-document.write('<link type="text/css" rel="stylesheet" href="http://jeanlou.dupont.googlepages.com/SyntaxHighlighter.css">');
+document.write('<link type="text/css" rel="stylesheet" href="http://www.jldupont.com/scripts/dp/SyntaxHighlighter.css">');
