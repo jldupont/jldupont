@@ -8,7 +8,7 @@ import logging
 from types import *
 
 import google.appengine.ext.webapp.template as template
-from libs.django import verifyQuotes
+from libs.mydjango import verifyQuotes
 from django.template import NodeList
 
 register = template.create_template_register()

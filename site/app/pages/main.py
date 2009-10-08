@@ -26,7 +26,7 @@ import libs.datastore.counter as counter
 # My Django configuration
 # =======================
 _loaders = (    'libs.django.filesystem_template_loader.load_template_source',
-                'libs.django.url_template_loader.load_template_source',
+                #'libs.django.url_template_loader.load_template_source',
                 )
 _thisPath = os.path.dirname( __file__ )
 _dirTpl   = os.path.join( _thisPath, 'templates' ) 
@@ -94,14 +94,13 @@ class Base( webapp.RequestHandler ):
         return (None,500)
 
     def _output(self, content, code):
-        """
-        """
         if (code == 200):
             self.response.headers["Cache-Control"] = self._MAX_AGE
             self.response.out.write( content );
             
         self.response.headers["Content-Type"] = "text/html"
         self.response.set_status( code )
+
 
     def _output_page(self, page):
         
@@ -134,6 +133,7 @@ class Main( Base ):
         Base.__init__(self)
 
     def get( self, page = None ):
+        logging.info(self.request.environ["HTTP_HOST"])
         self._doIPCount()
         self._output_page(page)
 

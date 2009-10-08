@@ -4,8 +4,8 @@ import os
 import logging
 
 import google.appengine.ext.webapp.template as template
-from libs.django import verifyQuotes, unquote
-from libs.django.tags import BaseTag
+from libs.mydjango import verifyQuotes, unquote
+from libs.mydjango.tags import BaseTag
 
 register = template.create_template_register()
 

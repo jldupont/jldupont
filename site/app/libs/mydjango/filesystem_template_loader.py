@@ -55,7 +55,6 @@ def get_template_sources(template_name, template_dirs=None):
                 yield os.path.join(template_dir, template_name + extension)
 
 def load_template_source(template_name, template_dirs=None):
-    
     if (not _DEBUG):
         try:
             cached_template      = memcache.get(_CACHE_TEMPLATE_KEY_CONTENT % template_name)        
@@ -78,7 +77,7 @@ def load_template_source(template_name, template_dirs=None):
         #firstPart = part2[2]
         #path = firstPart + os.sep + lastPart
         
-        #logging.debug('processing template_name[%s] path[%s]' % (template_name, path))
+        #logging.info('processing template_name[%s] path[%s]' % (template_name, filepath))
         try:
             tpl = (open(filepath,'r').read(), filepath)
             ts  = os.path.getmtime(filepath)
