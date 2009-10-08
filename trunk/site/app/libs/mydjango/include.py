@@ -6,7 +6,7 @@
 import os
 import google.appengine.ext.webapp.template as template
 import libs.wiki.page as Page
-from libs.django import verifyQuotes
+from libs.mydjango import verifyQuotes
 
 
 register = template.create_template_register()

@@ -7,6 +7,7 @@ from types import *
 import django
 import django.conf
 
+
 try:
   django.conf.settings.configure(
     DEBUG=False,
@@ -15,10 +16,13 @@ try:
 except (EnvironmentError, RuntimeError):
   pass
 
+
 import django.template
 import django.template.loader
 
 def render(template_name, template_dict, debug=False):
+    #logging.info("template_name: %s" % template_name)
+    #logging.info("template dict: %s" % str(template_dict))
     tpl = django.template.loader.get_template(template_name)
     try:
         rendered = tpl.render( django.template.Context(template_dict) )
@@ -73,16 +77,16 @@ def setConfig( name, value ):
     try:
         setattr(django.conf.settings, name, value )
     except (EnvironmentError, RuntimeError):
-        logging.error('libs.django: error setConfig[%s, %s]' % (name, value))   
+        logging.error('libs.mydjango: error setConfig[%s, %s]' % (name, value))   
 
 # =====================================================
 
 # === TAGS ===
-django.template.add_to_builtins( "libs.django.anchor" )
-django.template.add_to_builtins( "libs.django.include" )
-django.template.add_to_builtins( "libs.django.vars" )
-django.template.add_to_builtins( "libs.django.loadpage" )
+django.template.add_to_builtins( "libs.mydjango.anchor" )
+django.template.add_to_builtins( "libs.mydjango.include" )
+django.template.add_to_builtins( "libs.mydjango.vars" )
+django.template.add_to_builtins( "libs.mydjango.loadpage" )
 
 # === FILTERS ===
-django.template.add_to_builtins( "libs.django.filters" )
+django.template.add_to_builtins( "libs.mydjango.filters" )
 

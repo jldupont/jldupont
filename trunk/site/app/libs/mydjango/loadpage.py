@@ -12,8 +12,8 @@ from google.appengine.api import memcache
 import google.appengine.ext.webapp.template as template
 from google.appengine.api import urlfetch
 
-from libs.django import verifyQuotes, unquote
-from libs.django.tags import BaseTag
+from libs.mydjango import verifyQuotes, unquote
+from libs.mydjango.tags import BaseTag
 from libs.tools import web
 
 register = template.create_template_register()

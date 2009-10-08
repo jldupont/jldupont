@@ -8,6 +8,7 @@ import sys
 import logging
 
 root = os.path.split(__file__)[0]
+sys.path.insert(0, os.path.join(root, 'subdomains'))
 sys.path.insert(0, os.path.join(root, 'libs'))
 sys.path.insert(0, os.path.join(root, 'server'))
 for ziplib_fn in glob.glob(os.path.join(root, 'libs', '*.zip')):
