@@ -33,7 +33,7 @@ from google.appengine.ext import db
 
 class DebianRepos(db.Model):
     """
-    Debian Repository Information
+    Debian Repository Information  -- CONFIGURED
     
     List of source Repos forming the Virtual Repository.
     """
@@ -41,6 +41,11 @@ class DebianRepos(db.Model):
     component=    db.StringListProperty(required=True)
     distribution= db.StringListProperty(required=True)
     
+
+## ================================================================================
+## ================================================================================
+## ================================================================================
+
 
 
 class DebianRepoVersions(db.Model):
@@ -55,23 +60,19 @@ class DebianRepoVersions(db.Model):
     The field 'state' is used to record when all the
     individual entries from the source `Packages.gz` file
     of the repo have been written to `DebianPackageEntries`.
+    
+    When all `Packages.gz` file is processed for a
+    specific version, the `state` field corresponding to the
+    (source repo; version) is updated.  From this point,
+    the next stage can progress.    
     """
+    timestamp   = db.DateProperty(required=True)
     repo        = db.ReferenceProperty(DebianRepo, required=True)
     version     = db.StringListProperty(required=True)
     entry_count = db.IntegerProperty(default=0)
     state       = db.StringListProperty(default=None)
-   
-    
-"""
 
-    When all `Packages.gz` file is processed for a
-    specific version, the `state` field corresponding to the
-    (source repo; version) is updated.  From this point,
-    the next stage can progress.
-    
-"""
-    
-    
+   
     
 class DebianPackageEntries(db.Model):
     """
@@ -121,6 +122,9 @@ class DebianVirtualRepositoryVersion(db.Model):
 class DebianVirtualRepository(db.Model):
     """
     Virtual Repository State Information
+
+    When a new source repo version is detected,
+    an entry is added to this table.
     
     When a complete version of the VR is ready, a row
     is appended to this table.
