@@ -185,8 +185,6 @@ _URLS = [   ('/', Main),
          ]
 
 def main():
-    import logging
-    logging.info("subdomain www:main")
     application = webapp.WSGIApplication(_URLS, debug=True)
     wsgiref.handlers.CGIHandler().run(application)
 
