@@ -1,5 +1,32 @@
 """
     @author: Jean-Lou Dupont
+    
+    Processing Steps:
+    
+    - Fetch Repo Version (e.g. ETag information)
+        - IF same  THEN pass
+        - IF newer THEN download `Packages.gz`
+            - WRITE new version in 'DebianRepoVersions'
+            - EXTRACT each package entry into 'DebianPackageEntries'
+            - Once finished, UPDATE state in 'DebianRepoVersions'
+    
+    - Each change results in an entry being created in 'DebianVirtualRepository'
+        - ACCUMULATE the most up-to-date _and_ complete 'DebianRepoVersions' in
+            the table 'DebianVirtualRepositoryVersion'
+        - When a complete set is available in 'DebianVirtualRepositoryVersion',
+            UDPDATE 'active' field in 'DebianVirtualRepository'
+
+    
+    AGENTS:
+    =======
+    
+        - SourceRepoChecker
+        
+        - VR_Aggregator
+        
+        - VR_Releaser
+
+    
 """
 
 from google.appengine.ext import db
@@ -10,9 +37,9 @@ class DebianRepos(db.Model):
     
     List of source Repos forming the Virtual Repository.
     """
-    url=db.StringListProperty(required=True)
-    component=db.StringListProperty(required=True)
-    distribution=db.StringListProperty(required=True)
+    url=          db.StringListProperty(required=True)
+    component=    db.StringListProperty(required=True)
+    distribution= db.StringListProperty(required=True)
     
 
 
@@ -24,10 +51,26 @@ class DebianRepoVersions(db.Model):
     of the source repository.  An 'entry_count' is 
     maintained to track the number of entries written
     in the table `DebianPackageEntries'. 
+    
+    The field 'state' is used to record when all the
+    individual entries from the source `Packages.gz` file
+    of the repo have been written to `DebianPackageEntries`.
     """
-    repo        = db.ReferenceProperty(DebianRepo)
+    repo        = db.ReferenceProperty(DebianRepo, required=True)
     version     = db.StringListProperty(required=True)
     entry_count = db.IntegerProperty(default=0)
+    state       = db.StringListProperty(default=None)
+   
+    
+"""
+
+    When all `Packages.gz` file is processed for a
+    specific version, the `state` field corresponding to the
+    (source repo; version) is updated.  From this point,
+    the next stage can progress.
+    
+"""
+    
     
     
 class DebianPackageEntries(db.Model):
@@ -37,17 +80,26 @@ class DebianPackageEntries(db.Model):
     Each row corresponds to a package from a specific
     source repository of a specific version.
     
-    The field `version` corresponds to the field
-    of the same name in the table `DebianRepoVersions'.
+    The field `repo_entry` is used to correlate a specific
+    version of the source repository where the present entry
+    is sourced from.
     
     The field `data` corresponds to the textual entry
     associated with the package entry taken from the
     `Packages.gz` file from the source Repository.
     """   
-    version         = db.StringListProperty(required=True)
+    repo_entry      = db.ReferenceProperty(DebianRepoVersions, required=True)
     package_name    = db.StringListProperty(required=True)
     package_version = db.StringListProperty(required=True)
     data            = db.StringListProperty(default=None)
+
+
+
+## ======================================================================================
+## ======================================================================================
+## ======================================================================================
+
+
       
 
 class DebianVirtualRepositoryVersion(db.Model):
@@ -60,5 +112,21 @@ class DebianVirtualRepositoryVersion(db.Model):
     each VR Version is made up of a list of specific
     packages from the source repositories.
     """
-    vr_version = db.StringListProperty(required=True)
+    vr_version = db.ReferenceProperty(DebianVirtualRepository, required=True)
+    repo       = db.ReferenceProperty(DebianRepoVersions, required=True)
+
+
+
+
+class DebianVirtualRepository(db.Model):
+    """
+    Virtual Repository State Information
+    
+    When a complete version of the VR is ready, a row
+    is appended to this table.
+    """
+    timestamp  = db.DateProperty(required=True)
+    active     = db.BooleanProperty(default=False)
+
+    
     
