@@ -1,4 +1,0 @@
-#cron:
-#- description: repos fetcher
-#  url: /tasks/debian/repo_fetcher
-#  schedule: every 1 minutes

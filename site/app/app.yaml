@@ -104,11 +104,11 @@ handlers:
 #- url: /tasks/debian/repo_fetcher
 #  script: server/tasks/debian/repo_fetcher.py
 
-- url: /doc/(.*)
-  script: pages/main.py
+#- url: /doc/(.*)
+#  script: pages/main.py
   
-- url: /page/(.*)
-  script: pages/main.py
+#- url: /page/(.*)
+#  script: pages/main.py
 
 - url: /res/(.*)
   static_files: res/\1
