@@ -1,0 +1,140 @@
+<html>
+	<head>
+		<script type="text/javascript">
+			// defaults
+			var timer_min=30;
+
+			var tab_context={};
+			var tab_defaults={"state": false, "timer":timer_min, "timer_id":null, "port": null};
+			var tab_elements={"state": {"id": "reload_cb",    "prop":"checked"}, 
+							  "timer": {"id": "reload_timer", "prop":"value"}
+							  };
+			
+			/**
+			 *   Context change
+			 */
+			chrome.tabs.onSelectionChanged.addListener(function(tabId, selectInfo) {
+
+				context=tab_context[tabId];
+				if (undefined==context) {
+					console.log(" new context, tabId: " + tabId);
+					checkContext(tabId);
+				}
+				console.log("selection, tab: "+tabId);
+				checkContext(tabId);
+				setElements(tabId);
+			});
+
+			/** 
+			 *  Initializes / checks a tab context
+			 */
+			function checkContext(tabId) {
+				context=tab_context[tabId] || {};
+				tab_context[tabId]=context;
+				
+				for (var key in tab_defaults) {
+					//console.log("checkContext: key: "+key);
+					value=tab_context[tabId][key];
+					tab_context[tabId][key]=value || tab_defaults[key];
+				}
+			}
+
+			function setContextKeyValue(tabId, key, value) {
+				checkContext(tabId);
+				tab_context[tabId][key]=value;				
+			}
+
+			function getContextKeyValue(tabId, key) {
+				checkContext(tabId);
+				return tab_context[tabId][key];
+			}
+
+			function setElements(tabId) {
+				for (var key in tab_context[tabId]) {
+					value=tab_context[tabId][key];
+					base=tab_elements[key];
+					if (base != undefined) {
+						id=base["id"];
+						prop=base["prop"];
+						element=document.getElementById(id);
+						element[prop]=value;
+					}
+				}
+			}
+		
+			function reload_change() {
+				state=document.getElementById("reload_cb").checked;
+				console.log("reload_change! state: "+state);
+				
+				chrome.tabs.getSelected(null, function(tab) {
+					console.log("updating state, tab: "+tab.id);
+					setContextKeyValue(tab.id, "state", state);
+					handle_timer(tab.id);	
+				});
+				
+						
+			}
+			function handle_timer(tabId) {
+				state=getContextKeyValue(tabId, "state");
+				console.log("handle_timer, state: "+state);
+				if (state==false) {
+					timer_id=getContextKeyValue(tabId, "timer_id");
+					if ((timer_id != undefined) && (timer_id != null)) {
+						clearInterval(timer_id);
+						setContextKeyValue(tabId, "timer_id", null);
+					}
+				} else {
+					interval=getContextKeyValue(tabId, "timer");
+					console.log("timer interval: "+interval);
+					timer_id=setInterval(function(){
+						console.log("timer: tabId: "+tabId);
+						port=getContextKeyValue(tabId, "port");
+						if ((undefined!=port) && (null!=port)) {
+							port.postMessage("reload");
+							console.log("reload message sent!");
+						} else {
+							console.log("cannot find port for tabId: "+tabId);
+						}						
+					}, interval*1000);
+					setContextKeyValue(tabId, "timer_id", timer_id);				
+				}
+			}
+			function timer_change() {
+				timerElement=document.getElementById("reload_timer");
+				stringValue=timerElement.value;
+				value=parseInt(stringValue);
+				if ((isNaN(value)) || (0==value) || (timer_min>value)) {
+					timerElement.value=timer_min;
+				}
+				
+				chrome.tabs.getSelected(null, function(tab) {
+					console.log("updating timer, tab: "+tab.id);
+					setContextKeyValue(tab.id, "timer", timerElement.value);
+				});
+			}//
+			
+			function listener(port) {
+				
+				tabId=port.tab.id;
+				console.log("listener, port: " + port + " tabId: " + tabId);
+				
+				checkContext(tabId);
+				setContextKeyValue(tabId, "port", port);
+			}
+			
+			chrome.self.onConnect.addListener(listener);
+			
+			
+		</script>
+	</head>
+	<body>
+		<div class="toolstrip-button" id="reload_div">
+			<form>
+				<LABEL for="reload_state">Reload</LABEL>
+				<input id="reload_cb" type="checkbox" name="reload_state" value="Reload" onchange="reload_change();"/>
+				<LABEL for="reload_timer">Timeout</LABEL>
+				<input id="reload_timer" type="text" name="reload_timer" value="30" maxlength="4" size="4" onblur="timer_change();" />
+			</form>
+		</div>
+	</body>
+</html>
