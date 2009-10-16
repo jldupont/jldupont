@@ -1,0 +1,1 @@
+ruby buildex.rb --pack-extension=./ext --extension-output=auto-reload.crx

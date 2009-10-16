@@ -1,6 +1,8 @@
 /**
- * @author: Jean-Lou Dupont
- *  Auto-Reload: Content.js
+ * @title  Chrome Extension: Auto-Reload
+ * @file   content.js
+ * @author Jean-Lou Dupont
+ * @desc   Content Script
  */
 
 var timer_id;
