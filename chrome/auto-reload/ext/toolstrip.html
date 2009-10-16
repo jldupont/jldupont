@@ -1,4 +1,12 @@
 <html>
+	<!--
+	/**
+	 * @title  Chrome Extension: Auto-Reload
+	 * @file   toolstrip.html
+	 * @author Jean-Lou Dupont
+	 * @desc   Toolstrip html page
+	 */
+	 -->
 	<head>
 		<script type="text/javascript">
 			// defaults
@@ -37,17 +45,17 @@
 					value=tab_context[tabId][key];
 					tab_context[tabId][key]=value || tab_defaults[key];
 				}
-			}
+			}//
 
 			function setContextKeyValue(tabId, key, value) {
 				checkContext(tabId);
 				tab_context[tabId][key]=value;				
-			}
+			}//
 
 			function getContextKeyValue(tabId, key) {
 				checkContext(tabId);
 				return tab_context[tabId][key];
-			}
+			}//
 
 			function setElements(tabId) {
 				for (var key in tab_context[tabId]) {
@@ -60,7 +68,7 @@
 						element[prop]=value;
 					}
 				}
-			}
+			}//
 		
 			function reload_change() {
 				state=document.getElementById("reload_cb").checked;
@@ -71,9 +79,7 @@
 					setContextKeyValue(tab.id, "state", state);
 					safe_send(tab.id);	
 				});
-				
-						
-			}
+			}//
 			
 			function timer_change() {
 				timerElement=document.getElementById("reload_timer");
@@ -97,7 +103,7 @@
 				checkContext(tabId);
 				setContextKeyValue(tabId, "port", port);
 				safe_send(tabId);
-			}
+			}//
 
 			function safe_send(tabId) {
 				port=getContextKeyValue(tabId, "port");
@@ -107,7 +113,7 @@
 				} else {
 					console.log("cannot send to content script of tabId: "+tabId);
 				}
-			}
+			}//
 			
 			chrome.self.onConnect.addListener(listener);
 			
@@ -115,12 +121,11 @@
 		</script>
 	</head>
 	<body>
-		<div class="toolstrip-button" id="reload_div">
+		<div class="toolstrip-button">
 			<form>
-				<LABEL for="reload_state">Reload</LABEL>
 				<input id="reload_cb" type="checkbox" name="reload_state" value="Reload" onchange="reload_change();"/>
-				<LABEL for="reload_timer">Timeout</LABEL>
-				<input id="reload_timer" type="text" name="reload_timer" value="30" maxlength="4" size="4" onblur="timer_change();" />
+				<LABEL for="reload_timer">Secs</LABEL>
+				<input id="reload_timer" type="text" name="reload_timer" value="30" maxlength="4" size="2" onblur="timer_change();" />
 			</form>
 		</div>
 	</body>
