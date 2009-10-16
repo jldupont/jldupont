@@ -21,14 +21,14 @@ function reloader(msg) {
 			window.location.reload(true);
 		}, inter );
 		
-		console.log("reload scheduled in "+inter+" ms.");
+		console.log("auto-reload: scheduled in "+inter+" ms.");
 	} else {
 		if (timer_id) {
 			clearInterval(timer_id);
 			timer_id=undefined;
 		}
 		
-		console.log("no reload scheduled");
+		console.log("auto-reload: none scheduled");
 	}
 }//
 
