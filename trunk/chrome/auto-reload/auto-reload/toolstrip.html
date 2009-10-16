@@ -110,6 +110,7 @@
 				if (port) {
 					port.postMessage(tab_context[tabId]);
 					console.log("sent reload context to content script tabId: "+tabId);
+					console.log("context: state:"+tab_context[tabId]["state"]);
 				} else {
 					console.log("cannot send to content script of tabId: "+tabId);
 				}
