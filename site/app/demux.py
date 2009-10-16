@@ -1,5 +1,9 @@
 """
- @author Jean-Lou Dupont
+    Demultiplexes requests based on the sub-domain
+    
+    Defaults to 'www'
+
+    @author Jean-Lou Dupont
 """
 import os
 import sys
@@ -27,7 +31,8 @@ def main():
         handler.main()
     except Exception,e:
         logging.error("subdomain not found: <%s> Exception<%s>" % (subdomain, str(e)))
-
+        handler=__import__("subdomains.www", fromlist=["subdomains",])
+        handler.main()
 
 if __name__ == "__main__":
     main()
