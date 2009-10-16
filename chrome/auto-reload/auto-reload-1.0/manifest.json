@@ -2,7 +2,7 @@
 	"name": "Auto-Reload",
 	"version": "1.0",
 	"description": "Time interval page auto-reloader", 
-	"icons" {"24": "reload24-off.png"},
+	"icons": {"24": "reload24-off.png"},
 	"update_url":"http://jldupont.googlecode.com/svn/trunk/chrome/auto-reload/updates.xml",
 	"background_page": "background.html",
 	"content_scripts": [{
