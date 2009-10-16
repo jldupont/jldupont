@@ -5,7 +5,7 @@
 			var timer_min=30;
 
 			var tab_context={};
-			var tab_defaults={"state": false, "timer":timer_min, "timer_id":null, "port": null};
+			var tab_defaults={"state": false, "timer":timer_min, "port": null};
 			var tab_elements={"state": {"id": "reload_cb",    "prop":"checked"}, 
 							  "timer": {"id": "reload_timer", "prop":"value"}
 							  };
@@ -69,36 +69,12 @@
 				chrome.tabs.getSelected(null, function(tab) {
 					console.log("updating state, tab: "+tab.id);
 					setContextKeyValue(tab.id, "state", state);
-					handle_timer(tab.id);	
+					safe_send(tab.id);	
 				});
 				
 						
 			}
-			function handle_timer(tabId) {
-				state=getContextKeyValue(tabId, "state");
-				console.log("handle_timer, state: "+state);
-				if (state==false) {
-					timer_id=getContextKeyValue(tabId, "timer_id");
-					if ((timer_id != undefined) && (timer_id != null)) {
-						clearInterval(timer_id);
-						setContextKeyValue(tabId, "timer_id", null);
-					}
-				} else {
-					interval=getContextKeyValue(tabId, "timer");
-					console.log("timer interval: "+interval);
-					timer_id=setInterval(function(){
-						console.log("timer: tabId: "+tabId);
-						port=getContextKeyValue(tabId, "port");
-						if ((undefined!=port) && (null!=port)) {
-							port.postMessage("reload");
-							console.log("reload message sent!");
-						} else {
-							console.log("cannot find port for tabId: "+tabId);
-						}						
-					}, interval*1000);
-					setContextKeyValue(tabId, "timer_id", timer_id);				
-				}
-			}
+			
 			function timer_change() {
 				timerElement=document.getElementById("reload_timer");
 				stringValue=timerElement.value;
@@ -120,6 +96,17 @@
 				
 				checkContext(tabId);
 				setContextKeyValue(tabId, "port", port);
+				safe_send(tabId);
+			}
+
+			function safe_send(tabId) {
+				port=getContextKeyValue(tabId, "port");
+				if (port) {
+					port.postMessage(tab_context[tabId]);
+					console.log("sent reload context to content script tabId: "+tabId);
+				} else {
+					console.log("cannot send to content script of tabId: "+tabId);
+				}
 			}
 			
 			chrome.self.onConnect.addListener(listener);
