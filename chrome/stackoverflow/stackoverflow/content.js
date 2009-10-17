@@ -84,11 +84,12 @@ var getElementsByClassName = function (className, tag, elm){
 	return getElementsByClassName(className, tag, elm);
 };
 
+/**
+ * Get rid of the "ignored" questions
+ */
 var elements = getElementsByClassName('question-summary tagged-ignored', "div");
 console.log("* Stackoverflow Tweaks, ignored count:" + elements.length );
 
 for (i=0; i<elements.length; i++){
 		elements[i].style.display="none"
 }
-
-port=chrome.extension.connect();
