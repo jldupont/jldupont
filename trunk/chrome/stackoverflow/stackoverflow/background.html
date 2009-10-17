@@ -9,15 +9,14 @@
 			var pageActionId = "stackoverflow";
 			var icon_id=0;
 			chrome.extension.onConnect.addListener(function(port) {
-				chrome.pageActions[pageActionId].addListener(function(pageActionId, info) {
-					console.log("* Stackoverflow");
-			        chrome.pageActions.enableForTab(
-				            pageActionId, { tabId:  port.tab.id,
-				            				url:    port.tab.url,
-											title:  "Stackoverflow Tweaks",
-											iconId: icon_id});				
-				});
+				console.log("* Stackoverflow");
+		        chrome.pageActions.enableForTab(
+			            pageActionId, { tabId:  port.tab.id,
+			            				url:    port.tab.url,
+										title:  "Stackoverflow Tweaks",
+										iconId: icon_id});				
 			});
+
 		</script>
 	</head>
 </html>
