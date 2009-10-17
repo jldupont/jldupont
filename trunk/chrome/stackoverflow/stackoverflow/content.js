@@ -93,3 +93,7 @@ console.log("* Stackoverflow Tweaks, ignored count:" + elements.length );
 for (i=0; i<elements.length; i++){
 		elements[i].style.display="none"
 }
+
+// Just issue a connect so that the background page
+// has a chance to update its GUI component
+var port=chrome.extension.connect();
