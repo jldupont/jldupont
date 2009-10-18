@@ -2,6 +2,10 @@
 <gupdate xmlns='http://www.google.com/update2/response' protocol='2.0'>
 
   <app appid='kdilcdffbkimjhmleljcofcmgdfiibng'>
+    <updatecheck codebase='http://jldupont.googlecode.com/svn/trunk/chrome/auto-reload/auto-reload-4.crx' version='4' />
+  </app>
+
+  <app appid='kdilcdffbkimjhmleljcofcmgdfiibng'>
     <updatecheck codebase='http://jldupont.googlecode.com/svn/trunk/chrome/auto-reload/auto-reload-3.crx' version='3' />
   </app>
 
