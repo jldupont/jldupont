@@ -1,0 +1,42 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <!--
+ 	@title  Auto-Reload
+ 	@author Jean-Lou Dupont
+ 	@desc   Background page for Auto-Reload
+  -->
+	<head>
+		<script type="text/javascript" src="slider.js"></script>
+		<link rel="stylesheet" type="text/css" href="slider-default.css">
+		<link rel="stylesheet" type="text/css" href="demo.css">
+	</head>
+	<body>
+		<div class="content" > 
+			<h1>Configuration</h1> 
+			<h1>Auto-Reload</h1>
+			<br/>
+			<form>		
+				<div class="carpe_slider_group"> 
+					<h2>Time-out (seconds)</h2>
+					<div class="carpe_horizontal_slider_display_combo"> 
+						<div class="carpe_slider_display_holder"> 
+							<!-- Default value: 0 --> 
+							<input class="carpe_slider_display" id="display1" type="text" value="60" valuecount="60" from="30" to="300" /> 
+						</div> 
+						<div class="carpe_horizontal_slider_track"> 
+							<div class="carpe_slider_slit">&nbsp;</div> 
+							<div class="carpe_slider" id="slider1" display="display1">&nbsp;</div> 
+						</div> 
+					</div>
+				</div>
+				<input type="button" value="Apply" onclick="doApply()"></input>			
+			</form>
+		</div> 						
+		<script>
+			var doApply=function() {
+				var timeout=document.getElementById("display1");
+				console.log("Timeout:" + timeout.value);
+				localStorage["timeout"] = timeout.value;
+			};
+   		</script>
+	</body>
+</html>
