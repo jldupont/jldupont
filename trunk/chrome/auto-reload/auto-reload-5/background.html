@@ -30,7 +30,10 @@
 				
 				//we just received this 'connect' request so
 				//the port must be ok to use: assume safe.
-				port.postMessage(state);
+				var timeout=localStorage["timeout"];
+				var cmd={"state":state, "timeout":timeout};
+				
+				port.postMessage(cmd);
 			    
 		        chrome.pageActions.enableForTab(pageActionId, {tabId: tid,
 																url: port.tab.url,
@@ -64,7 +67,10 @@
 
 				console.log("* Auto-Reload: tab<"+tabId+"> updated, state:"+state);
 
-				port.postMessage(state);
+				var timeout=localStorage["timeout"];
+				var cmd={"state":state, "timeout":timeout};
+				
+				port.postMessage(cmd);
 			});
 			
 			chrome.pageActions[pageActionId].addListener(function(paId, pageActionInfo) {
@@ -83,10 +89,14 @@
 				    
 				    var new_params={"port":port, "urls":urls};
 				    tabParams[tab.id] = new_params;
+
+					//v5
+					var timeout=localStorage["timeout"];
+					var cmd={"state":new_state, "timeout":timeout};
 				    
 				    //console.log( new_params );
 				    if (port) {
-						port.postMessage(new_state);
+						port.postMessage(cmd);
 						console.log("* Auto-Reload: Sent Message - tabId<"+tab.id+">  state<"+new_state+">");
 						
 						chrome.pageActions.enableForTab(pageActionId, {tabId: tab.id,
