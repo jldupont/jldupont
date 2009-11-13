@@ -7,10 +7,15 @@
 
 var timer_id;
 var port;
-var inter=30*1000;
+var default_inter=30;
 
-function reloader(state) {
+function reloader(cmd) {
 
+	var state  = cmd.state   || false;
+	var timeout= cmd.timeout || default_inter; 
+	
+	timeout = timeout * 1000;
+	
 	//we already are waiting to be reloaded
 	if (state && timer_id) 
 		return;
@@ -18,9 +23,9 @@ function reloader(state) {
 	if (state) {
 		timer_id=setTimeout(function() {
 			window.location.reload(true);
-		}, inter );
+		}, timeout );
 		
-		console.log(" > auto-reload: scheduled in "+inter+" ms.");
+		console.log(" > auto-reload: scheduled in "+timeout+" ms.");
 	} else {
 		if (timer_id) {
 			clearInterval(timer_id);

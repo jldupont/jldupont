@@ -199,4 +199,4 @@ function carpeInit() // Set up the sliders and the displays.
 		carpedisplays[i].onfocus = focusDisplay; // Attach event listener.
 	}
 }
-carpeAddLoadEvent(carpeInit);
+//carpeAddLoadEvent(carpeInit);
