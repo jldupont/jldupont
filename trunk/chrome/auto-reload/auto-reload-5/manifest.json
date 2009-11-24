@@ -4,7 +4,6 @@
 	"id" : "kdilcdffbkimjhmleljcofcmgdfiibng",
 	"description": "Time interval page auto-reloader", 
 	"icons": {"24": "reload24-off.png"},
-	"update_url":"http://jldupont.googlecode.com/svn/trunk/chrome/auto-reload/updates.xml",
 	"background_page": "background.html",
 	"options_page": "options.html",
 	"content_scripts": [{
