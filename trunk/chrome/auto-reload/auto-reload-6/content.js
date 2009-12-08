@@ -12,8 +12,8 @@ var default_randomize=0;
 
 function reloader(cmd) {
 
-	var state     = cmd.state   || false;
-	var timeout   = cmd.timeout || default_inter;
+	var state     = cmd.state     || false;
+	var timeout   = cmd.timeout   || default_inter;
 	var randomize = cmd.randomize || default_randomize;
 	
 	timeout = timeout * 1000;
