@@ -4,19 +4,30 @@
  	@author Jean-Lou Dupont
  	@desc   Background page for Auto-Reload
   -->
-	<head>
-		<link type="text/css" rel="stylesheet" href="http://yui.yahooapis.com/3.0.0/build/cssfonts/fonts-min.css" /> 
-		<script type="text/javascript" src="http://yui.yahooapis.com/3.0.0/build/yui/yui-min.js"></script>
+	<head> 
+		<script type="text/javascript" src="yui-min.js"></script>
 		
 		<!-- DEFAULTS -->
 		<script>
 			var defaults={};
+			defaults.timeout = 60;
 			defaults.timeoutmin = 30;
 			defaults.timeoutmax = 300;
 			defaults.randomizemin=0;
 			defaults.randomizemax=100;
+			defaults.disabled_time_range=false;
+			defaults.begin_hour=23;
+			defaults.end_hour=06;
+			defaults.begin_min=00;
+			defaults.end_min=30;			
 		</script> 
 		<style>
+			/* http://yui.yahooapis.com/3.0.0/build/cssfonts/fonts-min.css */
+			body{font:13px/1.231 arial,helvetica,clean,sans-serif;*font-size:small;*font:x-small;}
+			select,input,button,textarea{font:99% arial,helvetica,clean,sans-serif;}
+			table{font-size:inherit;font:100%;}
+			pre,code,kbd,samp,tt{font-family:monospace;*font-size:108%;line-height:100%;}
+		
 			#footer {
 				margin-top: 1em;
 				text-align: right;
@@ -54,7 +65,7 @@
  	</head>
 	<body class=" yui-skin-sam">
 		<div class="content" > 
-			<h1><img src="reload24-off.png"></img>  Auto-Reload</h1> 
+			<h1><img src="reload24-off.png"/>  Auto-Reload</h1> 
 			<br/>
 
 			<div id="extensionTemplate">
@@ -77,11 +88,17 @@
 						<tr><td><div id="timeout_slider" class="horiz_slider"></div></td></tr>
 						<tr><td id="randomize_value">Randomize</td></tr>
 						<tr><td><div id="randomize_slider" class="horiz_slider"></div></td></tr>
+						
+						<tr><td><input type="checkbox" id=""/><span>Disabled Time Range</span></td></tr>
+						<tr><td id="begin_hour_value">Begin (hour):</td><td><div id="begin_hour_slider" class="horiz_slider"></div></td></tr>
+						<tr><td id="begin_min_value">Begin (min):</td><td><div id="begin_min_slider" class="horiz_slider"></div></td></tr>
+						<tr><td id="end_hour_value">End (hour):</td><td><div id="end_hour_slider" class="horiz_slider"></div></td></tr>
+						<tr><td id="end_min_value">End (min):</td><td><div id="end_min_slider" class="horiz_slider"></div></td></tr>
+						
+						<tr><td><hr/></td></tr>
 						<tr>
 							<td>				   		
-								<form>
-						   			<input id="button_apply" type="button" value="Apply" onclick="doApply()" disabled="disabled" />
-								</form>							
+						   		<input id="button_apply" type="button" value="Apply" onclick="doApply()" disabled="disabled" />				
 							</td>
 						</tr>
 					</table>
@@ -94,15 +111,37 @@
  		<div id="footer">by: <a href="http://jldupont.blogspot.com/">Jean-Lou Dupont</a> - help me "beautify" this GUI!</div>
  		
 		<script>
-		var timeout=localStorage["timeout"];
-		console.log("initial timeout: "+timeout);
-		var hv=document.getElementById("timeout_value");
-		hv.innerHTML = "Timeout (seconds): "+ timeout;
+		var timeout=localStorage["timeout"] || defaults.timeout;
+		var randomize=localStorage["randomize"] || defaults.randomize;
+		
+		var disabled_time_range=localStorage["disabled_time_range"] || defaults.disabled_time_range;
+		
+		var begin_hour= localStorage["begin_hour"] || defaults.begin_hour;
+		var end_hour  = localStorage["end_hour"]   || defaults.end_hour;
+		var begin_min = localStorage["begin_min"]  || defaults.begin_min;
+		var end_min   = localStorage["end_min"]    || defaults.end_min;
 
-		var randomize=localStorage["randomize"];
-		console.log("initial randomize: "+randomize);
-		var rv=document.getElementById("randomize_value");
-		rv.innerHTML = "Randomize (percent): "+ randomize;
+		var labels={
+			"timeout":   "Timeout (seconds):",
+			"randomize": "Randomize (%): ",
+			"begin_hour":"Begin (hour): ",
+			"begin_min" :"Begin (min): ",
+			"end_hour":  "End (hour): ",
+			"end_min" :  "End (min): ",			
+		};
+
+		var updateLabel = function(label, value) {
+			var labelid=label+"_value";
+			var e=document.getElementById(labelid);
+			e.innerHTML = labels[label] + value;
+		};
+
+		updateLabel("timeout", timeout);
+		updateLabel("randomize", randomize);
+		updateLabel("begin_hour", begin_hour);
+		updateLabel("end_hour", end_hour);
+		updateLabel("begin_min", begin_min);
+		updateLabel("end_min", end_min);
 		
 		
 		// Create a YUI instance and request the slider module and its dependencies
@@ -116,7 +155,7 @@
 					min: defaults.timeoutmin,
 			        railSize: '200px',
 			        value: parseInt(timeout),
-			        thumbImage: 'http://yui.yahooapis.com/3.0.0/build/slider/assets/skins/sam/thumb-classic-x.png'
+			        thumbImage: 'thumb-classic-x.png'
 			    }).
 			    render('#timeout_slider').
 			    after('valueChange',function (e) {
@@ -130,7 +169,7 @@
 				min: defaults.randomizemin,
 		        railSize: '200px',
 		        value: parseInt(randomize),
-		        thumbImage: 'http://yui.yahooapis.com/3.0.0/build/slider/assets/skins/sam/thumb-classic-x.png'
+		        thumbImage: 'thumb-classic-x.png'
 		    }).
 		    render('#randomize_slider').
 		    after('valueChange',function (e) {
@@ -139,6 +178,52 @@
 		        setApplyButton(false);
 		    });
 
+			// BEGIN disabled time range
+			new Y.Slider({
+				max: 23, min: 0,
+		        railSize: '200px',
+		        value: parseInt(begin_hour),
+		        thumbImage: 'thumb-classic-x.png'
+		    }).
+		    render('#begin_hour_slider').
+		    after('valueChange',function (e) {
+		    	setApplyButton(false);
+		    });
+
+			new Y.Slider({
+				max: 59, min: 0,
+		        railSize: '200px',
+		        value: parseInt(begin_min),
+		        thumbImage: 'thumb-classic-x.png'
+		    }).
+		    render('#begin_min_slider').
+		    after('valueChange',function (e) {
+		    	setApplyButton(false);
+		    });
+
+			// END disabled time range
+			new Y.Slider({
+				max: 23, min: 0,
+		        railSize: '200px',
+		        value: parseInt(end_hour),
+		        thumbImage: 'thumb-classic-x.png'
+		    }).
+		    render('#end_hour_slider').
+		    after('valueChange',function (e) {
+		    	setApplyButton(false);
+		    });
+
+			new Y.Slider({
+				max: 59, min: 0,
+		        railSize: '200px',
+		        value: parseInt(end_min),
+		        thumbImage: 'thumb-classic-x.png'
+		    }).
+		    render('#end_min_slider').
+		    after('valueChange',function (e) {
+		    	setApplyButton(false);
+		    });
+			
 			
 		});
 
@@ -152,6 +237,13 @@
 			localStorage["timeout"] = timeout;
 			console.log("Randomize: " + randomize);
 			localStorage["randomize"] = randomize;
+
+			localStorage["disabled_time_range"]=disabled_time_range;
+			localStorage["begin_hour"]=begin_hour;
+			localStorage["end_hour"]=end_hour;
+			localStorage["begin_min"]=begin_min;
+			localStorage["end_min"]=end_min;
+			
 			setApplyButton(true);
 		};
 		
