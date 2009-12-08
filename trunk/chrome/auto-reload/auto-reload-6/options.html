@@ -1,0 +1,160 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <!--
+ 	@title  Auto-Reload
+ 	@author Jean-Lou Dupont
+ 	@desc   Background page for Auto-Reload
+  -->
+	<head>
+		<link type="text/css" rel="stylesheet" href="http://yui.yahooapis.com/3.0.0/build/cssfonts/fonts-min.css" /> 
+		<script type="text/javascript" src="http://yui.yahooapis.com/3.0.0/build/yui/yui-min.js"></script>
+		
+		<!-- DEFAULTS -->
+		<script>
+			var defaults={};
+			defaults.timeoutmin = 30;
+			defaults.timeoutmax = 300;
+			defaults.randomizemin=0;
+			defaults.randomizemax=100;
+		</script> 
+		<style>
+			#footer {
+				margin-top: 1em;
+				text-align: right;
+				font-weight: bold;
+			}
+			.section-header {
+			  background: #ebeff9;
+			  border-top: 1px solid #b5c7de;
+			  font-size: 95%;
+			  padding-bottom: 2px;
+			  padding-left: 5px;
+			  padding-top: 3px;
+			  width: 100%;
+			}
+			 
+			.section-header-title {
+			  font-weight: bold;
+			}	
+			.wbox-dev-mode {
+				-webkit-box-align: stretch;
+				-webkit-box-flex: 1;
+			}
+			.vbox-container {
+			  display: -webkit-box;
+			  -webkit-box-orient: vertical;
+			}
+			 
+			.wbox {
+			  display: -webkit-box;
+			  -webkit-box-align: stretch;
+			  -webkit-box-flex: 1;
+			}			
+		</style>
+
+ 	</head>
+	<body class=" yui-skin-sam">
+		<div class="content" > 
+			<h1><img src="reload24-off.png"></img>  Auto-Reload</h1> 
+			<br/>
+
+			<div id="extensionTemplate">
+				<div id="container" class="vbox-container"> 
+					<div id="top" class="wbox" style="padding-right: 5px"> 
+
+						<div class="section-header"> 
+						  <table cellpadding="0" cellspacing="0" width="100%"> 
+							  <tr valign="center"> 
+							    <td> 
+							      <span class="section-header-title">Options</span> 
+							    </td> 
+							  </tr> 
+						  </table> 
+						</div> 
+					</div>
+					<br/>
+					<table>
+						<tr><td id="timeout_value">Timeout</td></tr>
+						<tr><td><div id="timeout_slider" class="horiz_slider"></div></td></tr>
+						<tr><td id="randomize_value">Randomize</td></tr>
+						<tr><td><div id="randomize_slider" class="horiz_slider"></div></td></tr>
+						<tr>
+							<td>				   		
+								<form>
+						   			<input id="button_apply" type="button" value="Apply" onclick="doApply()" disabled="disabled" />
+								</form>							
+							</td>
+						</tr>
+					</table>
+						
+					</div>
+				
+			</div>
+
+ 		</div>	
+ 		<div id="footer">by: <a href="http://jldupont.blogspot.com/">Jean-Lou Dupont</a> - help me "beautify" this GUI!</div>
+ 		
+		<script>
+		var timeout=localStorage["timeout"];
+		console.log("initial timeout: "+timeout);
+		var hv=document.getElementById("timeout_value");
+		hv.innerHTML = "Timeout (seconds): "+ timeout;
+
+		var randomize=localStorage["randomize"];
+		console.log("initial randomize: "+randomize);
+		var rv=document.getElementById("randomize_value");
+		rv.innerHTML = "Randomize (percent): "+ randomize;
+		
+		
+		// Create a YUI instance and request the slider module and its dependencies
+		YUI({combine: true, timeout: 10000}).use("slider", function (Y) {
+		 
+			// instantiate the horizontal Slider, render it, and subscribe to its
+			// valueChange event via method chaining.  No need to store the created Slider
+			// in this case.
+			new Y.Slider({
+					max: defaults.timeoutmax,
+					min: defaults.timeoutmin,
+			        railSize: '200px',
+			        value: parseInt(timeout),
+			        thumbImage: 'http://yui.yahooapis.com/3.0.0/build/slider/assets/skins/sam/thumb-classic-x.png'
+			    }).
+			    render('#timeout_slider').
+			    after('valueChange',function (e) {
+			        Y.one('#timeout_value').set('innerHTML', 'Timeout (seconds): ' + e.newVal);
+			        timeout=e.newVal;
+			        setApplyButton(false);
+			    });
+
+			new Y.Slider({
+				max: defaults.randomizemax,
+				min: defaults.randomizemin,
+		        railSize: '200px',
+		        value: parseInt(randomize),
+		        thumbImage: 'http://yui.yahooapis.com/3.0.0/build/slider/assets/skins/sam/thumb-classic-x.png'
+		    }).
+		    render('#randomize_slider').
+		    after('valueChange',function (e) {
+		        Y.one('#randomize_value').set('innerHTML', 'Randomize (percent): ' + e.newVal);
+		        randomize=e.newVal;
+		        setApplyButton(false);
+		    });
+
+			
+		});
+
+		var setApplyButton=function(value) {
+	        var button_apply=document.getElementById("button_apply");
+	        button_apply.disabled=value;			
+		}
+		
+		var doApply=function() {
+			console.log("Timeout:" + timeout);
+			localStorage["timeout"] = timeout;
+			console.log("Randomize: " + randomize);
+			localStorage["randomize"] = randomize;
+			setApplyButton(true);
+		};
+		
+   		</script>
+	</body>
+</html>
