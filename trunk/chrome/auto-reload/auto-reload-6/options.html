@@ -15,19 +15,15 @@
 			defaults.timeoutmax = 300;
 			defaults.randomizemin=0;
 			defaults.randomizemax=100;
-			defaults.disabled_time_range=false;
-			defaults.begin_hour=23;
-			defaults.end_hour=06;
-			defaults.begin_min=00;
-			defaults.end_min=30;
+			defaults.active_time_range=false;
+			defaults.begin_range=7*60; //  7:00
+			defaults.end_range=20*60;  // 20:00
 			
 			var labels={
 					"timeout":   "Timeout (seconds):",
 					"randomize": "Randomize (%): ",
-					"begin_hour":"Begin (hour): ",
-					"begin_min" :"Begin (min): ",
-					"end_hour":  "End (hour): ",
-					"end_min" :  "End (min): ",			
+					"begin":"Begin (hour:min): ",
+					"end":  "End (hour:min): ",		
 				};
 		</script> 
 		<style>
@@ -98,11 +94,9 @@
 						<tr><td id="randomize_value">Randomize</td></tr>
 						<tr><td><div id="randomize_slider" class="horiz_slider"></div></td></tr>
 						
-						<tr><td><input type="checkbox" id="disabled_time_range" onclick="doDisabledTimeRangeChange(this)"/><span>Disabled Time Range (check to enable)</span></td></tr>
-						<tr><td id="begin_hour_value">Begin (hour):</td><td><div id="begin_hour_slider" class="horiz_slider"></div></td></tr>
-						<tr><td id="begin_min_value">Begin (min):</td><td><div id="begin_min_slider" class="horiz_slider"></div></td></tr>
-						<tr><td id="end_hour_value">End (hour):</td><td><div id="end_hour_slider" class="horiz_slider"></div></td></tr>
-						<tr><td id="end_min_value">End (min):</td><td><div id="end_min_slider" class="horiz_slider"></div></td></tr>
+						<tr><td><input type="checkbox" id="active_time_range" onclick="doActiveTimeRangeChange(this)"/><span>Active Time Range (check to enable check)</span></td></tr>
+						<tr><td id="begin_value">Begin:</td><td><div id="begin_slider" class="horiz_slider"></div></td></tr>
+						<tr><td id="end_value">End:</td><td><div id="end_slider" class="horiz_slider"></div></td></tr>
 						
 						<tr><td><hr/></td></tr>
 						<tr>
@@ -117,18 +111,17 @@
 			</div>
 
  		</div>	
+ 		<hr/>
  		<div id="footer">by: <a href="http://jldupont.blogspot.com/">Jean-Lou Dupont</a> - help me "beautify" this GUI!</div>
  		
 		<script>
 		var timeout=localStorage["timeout"] || defaults.timeout;
 		var randomize=localStorage["randomize"] || defaults.randomize;
 		
-		var disabled_time_range=localStorage["disabled_time_range"] || defaults.disabled_time_range;
+		var active_time_range=localStorage["active_time_range"] || defaults.active_time_range;
 		
-		var begin_hour= localStorage["begin_hour"] || defaults.begin_hour;
-		var end_hour  = localStorage["end_hour"]   || defaults.end_hour;
-		var begin_min = localStorage["begin_min"]  || defaults.begin_min;
-		var end_min   = localStorage["end_min"]    || defaults.end_min;
+		var begin_range = parseInt(localStorage["begin_range"]) || defaults.begin_range;
+		var end_range   = parseInt(localStorage["end_range"])   || defaults.end_range;
 
 		var updateLabel = function(label, value) {
 			var labelid=label+"_value";
@@ -136,15 +129,19 @@
 			e.innerHTML = labels[label] + value;
 		};
 
-		var ed=document.getElementById("disabled_time_range");
-		ed.value=disabled_time_range;
+		var updateRangeLabel = function(label, value) {
+			var labelid=label+"_value";
+			var e=document.getElementById(labelid);
+			e.innerHTML = labels[label] + Math.floor(value/60)+":"+Math.floor(value % 60);
+		};
+		
+		var ed=document.getElementById("active_time_range");
+		ed.checked=active_time_range;
 		
 		updateLabel("timeout", timeout);
 		updateLabel("randomize", randomize);
-		updateLabel("begin_hour", begin_hour);
-		updateLabel("end_hour", end_hour);
-		updateLabel("begin_min", begin_min);
-		updateLabel("end_min", end_min);
+		updateRangeLabel("begin", begin_range);
+		updateRangeLabel("end", end_range);
 		
 		
 		// Create a YUI instance and request the slider module and its dependencies
@@ -181,66 +178,39 @@
 		        setApplyButton(false);
 		    });
 
-			// BEGIN disabled time range
-			var begin_hour_slider = new Y.Slider({
-				max: 23, min: 0,
+			// BEGIN  time range
+			var begin_slider = new Y.Slider({
+				max: 24*60, min: 0,
 		        railSize: '200px',
-		        value: parseInt(begin_hour),
+		        value: parseInt(begin_range),
 		        thumbImage: 'thumb-classic-x.png'
 		    }).
-		    render('#begin_hour_slider').
+		    render('#begin_slider').
 		    after('valueChange',function (e) {
-			    begin_hour=e.newVal;
-			    updateLabel("begin_hour", begin_hour);
+			    begin_range=e.newVal;
+			    updateRangeLabel("begin", begin_range);
 		    	setApplyButton(false);
 		    });
 
-			new Y.Slider({
-				max: 59, min: 0,
+			// END  time range
+			var end_slider = new Y.Slider({
+				max: 24*60, min: 0,
 		        railSize: '200px',
-		        value: parseInt(begin_min),
+		        value: parseInt(end_range),
 		        thumbImage: 'thumb-classic-x.png'
 		    }).
-		    render('#begin_min_slider').
+		    render('#end_slider').
 		    after('valueChange',function (e) {
-			    begin_min=e.newVal;
-			    updateLabel("begin_min", begin_min);			    
+			    end_range=e.newVal;
+			    updateRangeLabel("end", end_range);			    
 		    	setApplyButton(false);
-		    });
-
-			// END disabled time range
-			new Y.Slider({
-				max: 23, min: 0,
-		        railSize: '200px',
-		        value: parseInt(end_hour),
-		        thumbImage: 'thumb-classic-x.png'
-		    }).
-		    render('#end_hour_slider').
-		    after('valueChange',function (e) {
-			    end_hour=e.newVal;
-			    updateLabel("end_hour", end_hour);			    
-		    	setApplyButton(false);
-		    });
-
-			new Y.Slider({
-				max: 59, min: 0,
-		        railSize: '200px',
-		        value: parseInt(end_min),
-		        thumbImage: 'thumb-classic-x.png'
-		    }).
-		    render('#end_min_slider').
-		    after('valueChange',function (e) {
-			    end_min=e.newVal;
-			    updateLabel("end_min", end_min);			    
-		    	setApplyButton(false);
-		    });
-			
+		    });		
 			
 		});
 
-		var doDisabledTimeRangeChange=function(e) {
-			disabled_time_range=e.value || false;
-			console.log("disabled: "+disabled_time_range);
+		var doActiveTimeRangeChange=function(e) {
+			active_time_range=e.checked || false;
+			console.log("active: "+active_time_range);
 			setApplyButton(false);
 		}
 		
@@ -252,11 +222,9 @@
 		var doApply=function() {
 			localStorage["timeout"] = timeout;
 			localStorage["randomize"] = randomize;
-			localStorage["disabled_time_range"]=disabled_time_range;
-			localStorage["begin_hour"]=begin_hour;
-			localStorage["end_hour"]=end_hour;
-			localStorage["begin_min"]=begin_min;
-			localStorage["end_min"]=end_min;
+			localStorage["active_time_range"]=active_time_range;
+			localStorage["begin_range"]=begin_range;
+			localStorage["end_range"]=end_range;
 			
 			setApplyButton(true);
 		};

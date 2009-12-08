@@ -13,19 +13,16 @@
 						"false":"Click to start auto-reload"};
 
 			var _sendCmd=function(state, port) {
-				var timeout=localStorage["timeout"];
-				var randomize=localStorage["randomize"];
+				var timeout=parseInt(localStorage["timeout"]);
+				var randomize=parseInt(localStorage["randomize"]);
 
-				var disabled_time_range=localStorage["disabled_time_range"];
-				var begin_hour=localStorage["begin_hour"];
-				var end_hour=localStorage["end_hour"];
-				var begin_min=localStorage["begin_min"];
-				var end_min=localStorage["end_min"];
+				var active_time_range=localStorage["active_time_range"];
+				var begin_range=parseInt(localStorage["begin_range"]);
+				var end_range=parseInt(localStorage["end_range"]);
 				
 				var cmd={"state":state, "timeout":timeout, "randomize":randomize,
-						"begin_hour":begin_hour, "end_hour":end_hour,  
-						"begin_min":begin_min, "end_min":end_min,
-						"disabled_time_range":disabled_time_range
+						"begin_range":begin_range, "end_range":end_range,  
+						"active_time_range":active_time_range
 						};
 				
 				port.postMessage(cmd);				
