@@ -5,7 +5,7 @@
  	@desc   Background page for Auto-Reload
   -->
 	<head> 
-		<script type="text/javascript" src="yui-min.js"></script>
+		<script type="text/javascript" src="yui-min3.0.0.js"></script>
 		
 		<!-- DEFAULTS -->
 		<script>
@@ -19,7 +19,16 @@
 			defaults.begin_hour=23;
 			defaults.end_hour=06;
 			defaults.begin_min=00;
-			defaults.end_min=30;			
+			defaults.end_min=30;
+			
+			var labels={
+					"timeout":   "Timeout (seconds):",
+					"randomize": "Randomize (%): ",
+					"begin_hour":"Begin (hour): ",
+					"begin_min" :"Begin (min): ",
+					"end_hour":  "End (hour): ",
+					"end_min" :  "End (min): ",			
+				};
 		</script> 
 		<style>
 			/* http://yui.yahooapis.com/3.0.0/build/cssfonts/fonts-min.css */
@@ -89,7 +98,7 @@
 						<tr><td id="randomize_value">Randomize</td></tr>
 						<tr><td><div id="randomize_slider" class="horiz_slider"></div></td></tr>
 						
-						<tr><td><input type="checkbox" id=""/><span>Disabled Time Range</span></td></tr>
+						<tr><td><input type="checkbox" id="disabled_time_range" onclick="doDisabledTimeRangeChange(this)"/><span>Disabled Time Range (check to enable)</span></td></tr>
 						<tr><td id="begin_hour_value">Begin (hour):</td><td><div id="begin_hour_slider" class="horiz_slider"></div></td></tr>
 						<tr><td id="begin_min_value">Begin (min):</td><td><div id="begin_min_slider" class="horiz_slider"></div></td></tr>
 						<tr><td id="end_hour_value">End (hour):</td><td><div id="end_hour_slider" class="horiz_slider"></div></td></tr>
@@ -121,21 +130,15 @@
 		var begin_min = localStorage["begin_min"]  || defaults.begin_min;
 		var end_min   = localStorage["end_min"]    || defaults.end_min;
 
-		var labels={
-			"timeout":   "Timeout (seconds):",
-			"randomize": "Randomize (%): ",
-			"begin_hour":"Begin (hour): ",
-			"begin_min" :"Begin (min): ",
-			"end_hour":  "End (hour): ",
-			"end_min" :  "End (min): ",			
-		};
-
 		var updateLabel = function(label, value) {
 			var labelid=label+"_value";
 			var e=document.getElementById(labelid);
 			e.innerHTML = labels[label] + value;
 		};
 
+		var ed=document.getElementById("disabled_time_range");
+		ed.value=disabled_time_range;
+		
 		updateLabel("timeout", timeout);
 		updateLabel("randomize", randomize);
 		updateLabel("begin_hour", begin_hour);
@@ -159,8 +162,8 @@
 			    }).
 			    render('#timeout_slider').
 			    after('valueChange',function (e) {
-			        Y.one('#timeout_value').set('innerHTML', 'Timeout (seconds): ' + e.newVal);
 			        timeout=e.newVal;
+			        updateLabel("timeout", timeout);
 			        setApplyButton(false);
 			    });
 
@@ -173,13 +176,13 @@
 		    }).
 		    render('#randomize_slider').
 		    after('valueChange',function (e) {
-		        Y.one('#randomize_value').set('innerHTML', 'Randomize (percent): ' + e.newVal);
 		        randomize=e.newVal;
+		        updateLabel("randomize", randomize);
 		        setApplyButton(false);
 		    });
 
 			// BEGIN disabled time range
-			new Y.Slider({
+			var begin_hour_slider = new Y.Slider({
 				max: 23, min: 0,
 		        railSize: '200px',
 		        value: parseInt(begin_hour),
@@ -187,6 +190,8 @@
 		    }).
 		    render('#begin_hour_slider').
 		    after('valueChange',function (e) {
+			    begin_hour=e.newVal;
+			    updateLabel("begin_hour", begin_hour);
 		    	setApplyButton(false);
 		    });
 
@@ -198,6 +203,8 @@
 		    }).
 		    render('#begin_min_slider').
 		    after('valueChange',function (e) {
+			    begin_min=e.newVal;
+			    updateLabel("begin_min", begin_min);			    
 		    	setApplyButton(false);
 		    });
 
@@ -210,6 +217,8 @@
 		    }).
 		    render('#end_hour_slider').
 		    after('valueChange',function (e) {
+			    end_hour=e.newVal;
+			    updateLabel("end_hour", end_hour);			    
 		    	setApplyButton(false);
 		    });
 
@@ -221,23 +230,28 @@
 		    }).
 		    render('#end_min_slider').
 		    after('valueChange',function (e) {
+			    end_min=e.newVal;
+			    updateLabel("end_min", end_min);			    
 		    	setApplyButton(false);
 		    });
 			
 			
 		});
 
+		var doDisabledTimeRangeChange=function(e) {
+			disabled_time_range=e.value || false;
+			console.log("disabled: "+disabled_time_range);
+			setApplyButton(false);
+		}
+		
 		var setApplyButton=function(value) {
 	        var button_apply=document.getElementById("button_apply");
 	        button_apply.disabled=value;			
 		}
 		
 		var doApply=function() {
-			console.log("Timeout:" + timeout);
 			localStorage["timeout"] = timeout;
-			console.log("Randomize: " + randomize);
 			localStorage["randomize"] = randomize;
-
 			localStorage["disabled_time_range"]=disabled_time_range;
 			localStorage["begin_hour"]=begin_hour;
 			localStorage["end_hour"]=end_hour;
